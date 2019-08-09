@@ -1,12 +1,12 @@
 # ideaLab
-This is a queuing app for 3D printing. It includes a user facing form that allows someone to request a print jbo. It also includes a employee facing app that allows them to change statuses of print jobs, view print jobs, and modify print jobs.
+This is a queuing app for 3D printing. It includes a user facing form that allows someone to request a print job. It also includes a employee facing app that allows them to change statuses of print jobs, view print jobs, and modify print jobs.
 
 The web app is frontend React and backend Java Spring.
 
 
 # Cloning
-To get started, clone our repo. Using CD and DIR (or LS if not on Windows) in your command line, go to the folder you want to store your local repo and start by typing
-```GIT CLONE http://github.com/codefordenver/ideaLab``` in your command line.
+To get started, clone our repo. Using cd and dir (or ls if not on Windows) in you command line, got to the folder you want to clone the repo into and start by typing:  
+```git clone http://github.com/codefordenver/ideaLab```.
 
 # Code for Denver: Getting Started on Helping Project
 To understand more about this project & how you can join, read this PowerPoint: https://docs.google.com/presentation/d/13J6mfre2-HwBbnY5ozxYmMI5CZcK1R_OdZiDlbpZNEA/edit#slide=id.g5e3ebcd7e4_0_111.
