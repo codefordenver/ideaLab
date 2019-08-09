@@ -1,0 +1,28 @@
+version: '3.4'
+services:
+  api:
+    container_name: "ideaLab-api"
+    build:
+      context: .
+    volumes:
+      - ./pgdata:/app
+    working_dir: /app
+    ports:
+      - "4000:4000"
+    depends_on:
+      - postgres
+    restart: on-failure
+  postgres:
+    container_name: "ideaLab-postgres"
+    image: postgres:10.6
+    restart: always
+    volumes:
+      - ideaLab-data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: ideaLab
+      POSTGRES_USER: postgres
+    ports:
+      - 5432:5432
+
+volumes:
+  ideaLab-data:
