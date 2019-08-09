@@ -20,8 +20,11 @@ Our backend is split into 2 sections: our API app & our database. Our API is wri
 ### API & Java Spring & Gradle
 1. Make sure you have everything downloaded appropriately the first time. Go to our Google docs presentation if you still need to do that.
 2. Using CD and DIR (or LS) in your command line, navigate to your local repo of ideaLab/Backend.
-3. Once you are in the appropriate folder, type gradlew bootRun in your command line. (You do not need to start up our Docker container with the database because Gradle is automatically doing that for us.)
-4. In your browser, type localhost:8080/greeting. You have arrived at our Hello World page.
+3. run ./gradlew clean
+5. run ./gradlew build
+6. run docker build -f Dockerfile -t idealab-api .
+7. run docker-compose up
+4. In your browser, type localhost:4000/greeting. You have arrived at our Hello World page.
 
 ### Database & POSTGRES & Docker
 <i>In general, you should not have to go into this section. If for some reason you do, here are the instructions.</i>

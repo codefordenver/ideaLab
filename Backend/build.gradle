@@ -7,11 +7,19 @@ buildscript {
     }
 }
 
+
+apply plugin: 'application'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+
+mainClassName = 'idealab.IdeaLabMain'
+
+bootJar {
+    baseName = 'idealab'
+}
 
 repositories {
     mavenCentral()
@@ -22,14 +30,5 @@ targetCompatibility = 1.8
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-}
-
-bootJar {
-  manifest {
-    attributes(
-      'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
-      'Main-Class': 'ideaLab.IdeaLabMain'
-    )
-  }
+    testCompile("junit:junit")
 }
