@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.6.RELEASE")
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:2.1.6.RELEASE')
     }
 }
 
@@ -19,6 +19,7 @@ mainClassName = 'idealab.IdeaLabMain'
 
 bootJar {
     baseName = 'idealab'
+    excludeDevtools = false //TODO(e-carlin): In production this should be removed
 }
 
 repositories {
@@ -29,6 +30,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web")
-    testCompile("junit:junit")
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-devtools')
+    testCompile('junit:junit')
 }

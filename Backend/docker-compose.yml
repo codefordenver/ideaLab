@@ -9,7 +9,7 @@ services:
       - ./pgdata:/app
     working_dir: /app
     ports:
-      - "4000:8080"
+      - "8080:8080"
     depends_on:
       - postgres
     restart: on-failure
