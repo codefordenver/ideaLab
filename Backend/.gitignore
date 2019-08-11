@@ -1,3 +1,9 @@
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
 # Created by https://www.gitignore.io/api/java
 # Edit at https://www.gitignore.io/?templates=java
 
@@ -161,7 +167,9 @@ local.properties
 .externalToolBuilders/
 
 # Locally stored "Eclipse launch configurations"
-*.launch
+# Store launch configurations in the repo. This makes it easier for newcomers
+# to quickly start working
+# *.launch
 
 # PyDev specific (Python IDE for Eclipse)
 *.pydevproject

@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - IdeaLabMain",
+            "request": "launch",
+            "mainClass": "idealab.IdeaLabMain",
+            "projectName": "Backend"
+        },
+        {
+            "type": "java",
+            "name": "Remote",
+            "request": "launch",
+            "mainClass": "org.springframework.boot.devtools.RemoteSpringApplication",
+            "projectName": "Backend",
+            "args": "http://localhost:8080"
+        }
+    ]
+}
