@@ -5,7 +5,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+<<<<<<< HEAD:Backend/src/main/java/idealab/api/controller/GreetingController.java
 import idealab.api.models.Greeting;
+=======
+import ideaLab.api.models.Greeting;
+>>>>>>> add hibernate, add all models+enum files:Backend/src/main/java/ideaLab/api/controller/GreetingController.java
 
 @RestController
 public class GreetingController {
