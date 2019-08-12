@@ -49,9 +49,27 @@ Our spring boot application is running inside of a Docker container. In order to
 18. Back in Eclipse click "Run"
 19. Hopefully everything worked! You should now be able to edit the Java files and see the changes appear immediately. Try going to `localhost:8080/greeting` and see the current output of our app. Then go to src/main/java/idealab/api/controller/GreetingController.java. Edit the String template to something like "Hello <your-name>". Save the file and go back to your browser. Reload the window and your should see the new greeting!
 #### IntelliJ
-Coming soon please reach out to e-carlin if you would like it prioritized
+1. Open intellij
+2. Select Import project
+3. Select "From existing sources" and select gradle
+4. For all of the settings the defaults will do.
+5. Open the intellij settings (ctrl+alt+s on linux)
+6. In the left hand nav select Build, Execution, Deployment > Compiler
+7. Select the checkbox next to "Build project automatically"
+8. Click Apply then Ok
+9. Open the intellij Actions window (shift+ctrl+a on linux)
+10. In the popup window type "Registry"
+11. In the registry window find the setting "compiler.automake.allow.when.app.running" and add a checkmark to it. 
+12. Select Ok
+13. In your terminal in the backend folder enter `docker-compose up`
+13. Back in intellij in the run configurations dropdown on the right hand side of the top nav bar select the "Remote" run configuration and run it by clicking the little green play arrow
+14. Hopefully everything worked! You should now be able to edit the Java files and see the changes appear immediately. Try going to `localhost:8080/greeting` and see the current output of our app. Then go to src/main/java/idealab/api/controller/GreetingController.java. Edit the String template to something like "Hello <your-name>". Save the file and go back to your browser. Reload the window and your should see the new greeting!
 #### VSCode
-Coming soon please reach out to e-carlin if you would like it prioritized
+1. Open vscode to the Backend folder
+2. Select the debug icon on the left hand nav (it looks like a little bug)
+3. In the window that is now open in the dropdown on the top left select the "Remote" run configuration
+4. Select the green play arrow.
+5. Hopefully everything worked! You should now be able to edit the Java files and see the changes appear immediately. Try going to `localhost:8080/greeting` and see the current output of our app. Then go to src/main/java/idealab/api/controller/GreetingController.java. Edit the String template to something like "Hello <your-name>". Save the file and go back to your browser. Reload the window and your should see the new greeting!
 
 
 ### Database & POSTGRES & Docker

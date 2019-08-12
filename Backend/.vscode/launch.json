@@ -2,7 +2,7 @@
     "configurations": [
         {
             "type": "java",
-            "name": "CodeLens (Launch) - IdeaLabMain",
+            "name": "IdeaLabMain",
             "request": "launch",
             "mainClass": "idealab.IdeaLabMain",
             "projectName": "Backend"
