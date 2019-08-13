@@ -1,18 +1,28 @@
 package ideaLab.api.models;
 
 import javax.persistence.*;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
-@Table(name = "employee")
-public class Employee {
+@Table(name = "employee_logins")
+public class EmployeeLogins {
     @Id
+    @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
+
+    @Column(name = "login", nullable = false)
+    @Length (min = 1, max = 254)
     private String login;
+
+    @Column(name = "password_hash", nullable = false)
     private String passwordHash;
+
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
     private EmployeeRole role;
 
-    public Employee(Integer id, String login, String passwordHash, EmployeeRole role) {
+    public EmployeeLogins(Integer id, String login, String passwordHash, EmployeeRole role) {
         this.id = id;
         this.login = login;
         this.passwordHash = passwordHash;

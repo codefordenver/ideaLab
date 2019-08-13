@@ -7,18 +7,28 @@ import javax.persistence.*;
 @Table(name = "print_status")
 public class PrintStatus {
     @Id
+    @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
-    private Integer queue;
+
+    @Column(name = "print_model_id", nullable = false)
     private Integer printModelId;
+
+    @Column(name = "status_date",  nullable = false)
     private LocalDateTime statusDate;
+
+    @Column(name = "status",  nullable = false)
+    @Enumerated(EnumType.STRING)
     private Status status;
+
+    @Column(name = "employee_id",  nullable = false)
     private Integer employeeId;
+
+    @Column(name = "employee_notes",  nullable = false)
     private String employeeNotes;
 
     public PrintStatus(Integer id, Integer queue, Integer printModelId, LocalDateTime statusDate, Status status, Integer employeeId, String employeeNotes) {
         this.id = id;
-        this.queue = queue;
         this.printModelId = printModelId;
         this.statusDate = statusDate;
         this.status = status;
@@ -33,14 +43,6 @@ public class PrintStatus {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getQueue() {
-        return queue;
-    }
-
-    public void setQueue(Integer queue) {
-        this.queue = queue;
     }
 
     public Integer getPrintModelId() {

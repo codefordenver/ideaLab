@@ -6,8 +6,11 @@ import javax.persistence.*;
 @Table(name = "email_hash")
 public class EmailHash {
     @Id
+    @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
+
+    @Column(name = "email_hash", nullable = false)
     private String emailHash;
 
     public EmailHash(Integer id, String emailHash) {

@@ -2,20 +2,35 @@ package ideaLab.api.models;
 
 import java.time.LocalDateTime;
 import javax.persistence.*;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "print_model")
 public class PrintModel {
     @Id
+    @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
-    private String emailHashId;
-    private ColorChoice color;
-    private String comments;
-    private String dropboxLink;
-    private LocalDateTime updatedAt;
-    private LocalDateTime createdAt;
 
+    @Column(name = "email_hash_id", nullable = false)
+    private String emailHashId;
+
+    @Column(name = "color", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ColorChoice color;
+
+    @Column(name = "comments")
+    private String comments;
+
+    @Column(name = "dropbox_link", nullable = false)
+    @Length(min = 1, max = 254)
+    private String dropboxLink;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+    @Column(name = "created_at",  nullable = false)
+    private LocalDateTime createdAt;
 
     public PrintModel(Integer id, String emailHashId, ColorChoice color, String comments, String dropboxLink, LocalDateTime updatedAt, LocalDateTime createdAt) {
         this.id = id;

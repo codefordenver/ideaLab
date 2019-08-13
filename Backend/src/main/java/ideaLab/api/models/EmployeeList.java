@@ -4,15 +4,12 @@ import javax.persistence.*;
 import org.hibernate.validator.constraints.Length;
 
 @Entity
-@Table(name = "customer_info")
-public class CustomerInfo {
+@Table(name = "employee_logins")
+public class EmployeeList {
     @Id
     @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
-
-    @Column(name = "email_hash_id", nullable = false)
-    private String emailHashId;
 
     @Column(name = "first_name", nullable = false)
     @Length(min = 1, max = 254)
@@ -22,19 +19,11 @@ public class CustomerInfo {
     @Length(min = 1,  max = 254)
     private String lastName;
 
-    @Column(name = "email", nullable = false)
-    @Length(min = 1,  max = 254)
-    private String email;
-
-    public CustomerInfo(Integer id, String emailHashId, String firstName, String lastName, String email) {
+    public EmployeeList(Integer id, String firstName, String lastName) {
         this.id = id;
-        this.emailHashId = emailHashId;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
     }
-
-    //getters and setters
 
     public Integer getId() {
         return id;
@@ -42,14 +31,6 @@ public class CustomerInfo {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getEmailHashId() {
-        return emailHashId;
-    }
-
-    public void setEmailHashId(String emailHashId) {
-        this.emailHashId = emailHashId;
     }
 
     public String getFirstName() {
@@ -67,13 +48,4 @@ public class CustomerInfo {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }
-
