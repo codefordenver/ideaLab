@@ -26,5 +26,8 @@ Our backend is split into 2 sections: our API app & our database. Our API is wri
 ### Database & POSTGRES & Docker
 <i>In general, you should not have to go into this section. If for some reason you do, here are the instructions.</i>
 1. Make sure you have everything downloaded appropriately the first time. Go to our Google docs presentation if you still need to do that.
+3. Run `docker run --rm   --name postgres -e POSTGRES_PASSWORD=docker -d -p 54320:5432 -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data  postgres:12` # This starts the postgres docker container
+4. In your IDE of choice run the app.
+
 
 ## Frontend
