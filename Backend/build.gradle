@@ -3,15 +3,24 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.6.RELEASE")
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:2.1.6.RELEASE')
     }
 }
 
+
+apply plugin: 'application'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+
+mainClassName = 'idealab.IdeaLabMain'
+
+bootJar {
+    baseName = 'idealab'
+    excludeDevtools = false //TODO(e-carlin): In production this should be removed
+}
 
 repositories {
     mavenCentral()
@@ -21,15 +30,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web")
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-}
-
-bootJar {
-  manifest {
-    attributes(
-      'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
-      'Main-Class': 'ideaLab.IdeaLabMain'
-    )
-  }
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-devtools') // TODO(e-carlin): Make sure this isn't pulled in in the production jar
+    testCompile('junit:junit')
 }
