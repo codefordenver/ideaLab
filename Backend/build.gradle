@@ -33,6 +33,6 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-devtools') // TODO(e-carlin): Make sure this isn't pulled in in the production jar
     testCompile('junit:junit')
-    compile ('com.fasterxml.jackson.core:jackson-core:2.7.4')
+    compile ('com.fasterxml.jackson.core:jackson-core:2.9.9')
     implementation('com.dropbox.core:dropbox-core-sdk:3.1.1')
 }

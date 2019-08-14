@@ -17,6 +17,15 @@ Our project is split into 2 sections: frontend & backend.
 ## Backend
 Our backend is split into 2 sections: our API app & our database. Our API is written in Java Spring & Gradle. Our database uses open source POSTGRES and we have containerized it in Docker.
 
+### Setting up Resource File
+1. Request the latest dev resource file (if starting a new project see Backend/src/main/resources/sample_application.properties) 
+2. Place the resource file and values in /Backend/src/main/resources/application.properties (delete "sample_" if starting a new project)
+3. Values can be accessed using the @Value annotation.  i.e.
+```
+  @Value("${dropbox.ACCESS_TOKEN}")
+  private String ACCESS_TOKEN;
+```
+
 ### API & Java Spring & Gradle
 1. Make sure you have everything downloaded appropriately the first time. Go to our Google docs presentation if you still need to do that.
 2. Using CD and DIR (or LS) in your command line, navigate to your local repo of ideaLab/Backend.
