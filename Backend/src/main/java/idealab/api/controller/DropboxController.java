@@ -18,14 +18,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/api")
 public class DropboxController {
   @Value("${dropbox.ACCESS_TOKEN}")
   private String ACCESS_TOKEN;
 
-  @GetMapping("/api/dropbox")
+  @GetMapping("dropbox")
   ResponseEntity<?> getDropboxFileList() {
     // Create Dropbox client
     DbxRequestConfig config = DbxRequestConfig.newBuilder("dropbox/java-tutorial").build();
@@ -61,7 +63,7 @@ public class DropboxController {
     return new ResponseEntity<>(dropboxFiles, HttpStatus.OK);
   }
 
-  @PostMapping("/api/dropbox")
+  @PostMapping("dropbox")
   ResponseEntity<?> uploadDropboxFile() {
     // Create Dropbox client
     DbxRequestConfig config = DbxRequestConfig.newBuilder("dropbox/java-tutorial").build();
