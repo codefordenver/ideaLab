@@ -1,5 +1,7 @@
 package idealab.api.dto;
 
+import java.util.Objects;
+
 public class GenericResponse {
 
     private boolean isSuccess;
@@ -28,4 +30,14 @@ public class GenericResponse {
                 ", message='" + message + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GenericResponse that = (GenericResponse) o;
+        return isSuccess == that.isSuccess &&
+                Objects.equals(message, that.message);
+    }
+
 }

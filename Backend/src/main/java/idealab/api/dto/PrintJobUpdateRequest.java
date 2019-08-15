@@ -1,5 +1,9 @@
 package idealab.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.Objects;
+
 import static idealab.api.models.Status.*;
 
 public class PrintJobUpdateRequest {
@@ -32,6 +36,7 @@ public class PrintJobUpdateRequest {
         this.status = status;
     }
 
+    @JsonIgnore
     public boolean isValidStatus() {
         if(this.status != null && !this.status.isEmpty()) {
             if(this.status.equalsIgnoreCase(ARCHIVED.toString()))
@@ -50,6 +55,17 @@ public class PrintJobUpdateRequest {
                 return true;
         }
         return false;
+    }
+
+    //Currently needed for test classes
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PrintJobUpdateRequest that = (PrintJobUpdateRequest) o;
+        return Objects.equals(employeeId, that.employeeId) &&
+                Objects.equals(printStatusId, that.printStatusId) &&
+                Objects.equals(status, that.status);
     }
 
 }
