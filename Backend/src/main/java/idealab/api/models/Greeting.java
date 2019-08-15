@@ -1,4 +1,4 @@
-package idealab.api.entity;
+package idealab.api.models;
 
 public class Greeting {
 
