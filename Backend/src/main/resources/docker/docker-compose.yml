@@ -1,0 +1,14 @@
+version: '2'
+services:
+  app:
+    image: app
+    ports:
+    - "8080:8080"
+  mypostgres:
+    image: postgres
+    ports:
+     - "54320:5432"
+    environment:
+     - POSTGRES_PASSWORD=docker
+     - POSTGRES_USER=postgres
+     - POSTGRES_DB=postgres
