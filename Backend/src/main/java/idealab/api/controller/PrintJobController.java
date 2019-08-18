@@ -1,15 +1,14 @@
 package idealab.api.controller;
 
-import idealab.api.dto.GenericResponse;
-import idealab.api.dto.PrintJobUpdateRequest;
+import idealab.api.dto.response.GenericResponse;
+import idealab.api.dto.request.PrintJobUpdateRequest;
 import idealab.api.operations.PrintJobOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/printjob")
 public class PrintJobController {
 
     private final PrintJobOperations printJobOperations;
@@ -18,7 +17,7 @@ public class PrintJobController {
         this.printJobOperations = printJobOperations;
     }
 
-    @PutMapping("/api/printjob/status")
+    @PutMapping("/status")
     public ResponseEntity<?> printJobUpdateStatus(@RequestBody PrintJobUpdateRequest dto)
     {
         GenericResponse response = printJobOperations.updatePrintJob(dto);
@@ -28,4 +27,8 @@ public class PrintJobController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping
+    public ResponseEntity<?> getAllPrintJobs(){
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 }

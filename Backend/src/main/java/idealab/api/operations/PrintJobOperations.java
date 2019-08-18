@@ -1,7 +1,8 @@
 package idealab.api.operations;
 
-import idealab.api.dto.GenericResponse;
-import idealab.api.dto.PrintJobUpdateRequest;
+import idealab.api.dto.response.GenericResponse;
+import idealab.api.dto.request.PrintJobUpdateRequest;
+import idealab.api.dto.response.GetAllPrintJobResponse;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,6 +26,13 @@ public class PrintJobOperations {
             response.setMessage("Invalid Status");
         }
         return response;
+    }
+
+    public GetAllPrintJobResponse getAllPrintJobs(){
+        // Some magic happened here !
+        //TODO: Repo class should be coded !
+        //TODO: They should be connected !
+        return new GetAllPrintJobResponse();
     }
 
 }
