@@ -2,8 +2,10 @@ package idealab.api.controller;
 
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.request.PrintJobUpdateRequest;
+import idealab.api.dto.response.GetAllPrintJobListResponse;
 import idealab.api.operations.PrintJobOperations;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +30,11 @@ public class PrintJobController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllPrintJobs(){
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<GetAllPrintJobListResponse> getAllPrintJobs(){
+        GetAllPrintJobListResponse response = printJobOperations.getAllPrintJobs();
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
     }
 }
