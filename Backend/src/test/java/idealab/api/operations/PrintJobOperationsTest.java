@@ -24,7 +24,7 @@ public class PrintJobOperationsTest {
         //Given
         PrintJobUpdateRequest request = new PrintJobUpdateRequest();
         request.setEmployeeId(1);
-        request.setPrintStatusId("testid");
+        request.setPrintStatusId(2);
         request.setStatus("Completed");
 
         //When
@@ -40,7 +40,7 @@ public class PrintJobOperationsTest {
         //Given
         PrintJobUpdateRequest request = new PrintJobUpdateRequest();
         request.setEmployeeId(1);
-        request.setPrintStatusId("testid");
+        request.setPrintStatusId(2);
         request.setStatus("asfdkjasdlkfjasdf");
 
         //When

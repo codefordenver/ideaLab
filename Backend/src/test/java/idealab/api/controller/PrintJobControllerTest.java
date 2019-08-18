@@ -33,7 +33,7 @@ public class PrintJobControllerTest {
     public void updatePrintJobStatusSuccess() throws Exception {
         PrintJobUpdateRequest printJobUpdateRequest = new PrintJobUpdateRequest();
         printJobUpdateRequest.setEmployeeId(1);
-        printJobUpdateRequest.setPrintStatusId("testId");
+        printJobUpdateRequest.setPrintStatusId(2);
         printJobUpdateRequest.setStatus("Completed");
 
         GenericResponse genericResponse = new GenericResponse();
@@ -60,7 +60,7 @@ public class PrintJobControllerTest {
     public void updatePrintJobStatusFail() throws Exception {
         PrintJobUpdateRequest printJobUpdateRequest = new PrintJobUpdateRequest();
         printJobUpdateRequest.setEmployeeId(1);
-        printJobUpdateRequest.setPrintStatusId("testId");
+        printJobUpdateRequest.setPrintStatusId(2);
         printJobUpdateRequest.setStatus("asdfasdfads");
 
         GenericResponse genericResponse = new GenericResponse();

@@ -9,7 +9,7 @@ import static idealab.api.models.Status.*;
 public class PrintJobUpdateRequest {
 
     private Integer employeeId;
-    private String printStatusId;
+    private Integer printStatusId;
     private String status;
 
     public Integer getEmployeeId() {
@@ -20,11 +20,11 @@ public class PrintJobUpdateRequest {
         this.employeeId = employeeId;
     }
 
-    public String getPrintStatusId() {
+    public Integer getPrintStatusId() {
         return printStatusId;
     }
 
-    public void setPrintStatusId(String printStatusId) {
+    public void setPrintStatusId(Integer printStatusId) {
         this.printStatusId = printStatusId;
     }
 
