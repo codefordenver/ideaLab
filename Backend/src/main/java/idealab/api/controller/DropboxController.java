@@ -1,6 +1,8 @@
 package idealab.api.controller;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -111,15 +113,27 @@ public class DropboxController {
     DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
 
     try {
-      // TODO: Send file to frontend
-      FileOutputStream out = new FileOutputStream("static/" + filename);
+      File file = new File("temp_files/" + filename);
+      FileOutputStream out = new FileOutputStream(file);
       DbxDownloader<FileMetadata> downloader = client.files().download("/" + filename);
-      FileMetadata response = downloader.download(out);
+      downloader.download(out);
 
-      return ResponseEntity.ok()
-          .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"").body(response);
+      FileInputStream fis = new FileInputStream(file);
+
+      byte[] b = new byte[256];
+      int i=0;
+      String result = "";
+      while ((i = fis.read(b)) != -1) {
+        result += new String(b);
+        System.out.print(new String(b));
+      }
+      fis.close();
+      file.delete();
+
+      return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+          .body(result);
     } catch (DbxException | IOException e) {
-      return new ResponseEntity<>("Could not download file <p/>" + e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+      return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
