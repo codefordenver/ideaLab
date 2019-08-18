@@ -1,17 +1,12 @@
 package idealab.api.controller;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
-
-import javax.annotation.Resource;
 
 import com.dropbox.core.DbxDownloader;
 import com.dropbox.core.DbxException;
@@ -20,11 +15,7 @@ import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.ListFolderResult;
 import com.dropbox.core.v2.files.Metadata;
-import com.dropbox.core.v2.sharing.GetSharedLinksResult;
-import com.dropbox.core.v2.sharing.ListSharedLinksBuilder;
-import com.dropbox.core.v2.sharing.ListSharedLinksErrorException;
 import com.dropbox.core.v2.sharing.ListSharedLinksResult;
-import com.dropbox.core.v2.sharing.SharedLinkErrorException;
 import com.dropbox.core.v2.sharing.SharedLinkMetadata;
 
 import org.springframework.beans.factory.annotation.Value;
