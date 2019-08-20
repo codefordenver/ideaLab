@@ -33,8 +33,4 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-devtools') // TODO(e-carlin): Make sure this isn't pulled in in the production jar
     testCompile('junit:junit')
-
-    // LOMBOK
-    compileOnly 'org.projectlombok:lombok:1.18.8'
-    annotationProcessor 'org.projectlombok:lombok:1.18.8'
 }
