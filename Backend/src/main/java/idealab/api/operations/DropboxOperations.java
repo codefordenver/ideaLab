@@ -1,4 +1,4 @@
-package idealab.api.controller;
+package idealab.api.operations;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -34,7 +34,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
 @RequestMapping("/api")
-public class DropboxController {
+public class DropboxOperations {
   @Value("${dropbox.ACCESS_TOKEN}")
   private String ACCESS_TOKEN;
 
