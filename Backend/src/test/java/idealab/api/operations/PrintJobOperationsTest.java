@@ -1,12 +1,18 @@
 package idealab.api.operations;
 
-import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.request.PrintJobUpdateRequest;
+import idealab.api.dto.response.GenericResponse;
+import idealab.api.dto.response.GetAllPrintJobListResponse;
+import idealab.api.dto.response.GetAllPrintJobResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -51,4 +57,22 @@ public class PrintJobOperationsTest {
         assertTrue("print job was updated", response.getMessage().equalsIgnoreCase("Invalid Status"));
     }
 
+    @Test
+    public void getAllPrintJobs(){
+        // Given
+        GetAllPrintJobResponse printJobResponse =
+                new GetAllPrintJobResponse(null, null, null, null, null,
+                        null, null, null);
+
+        List<GetAllPrintJobResponse> printJobResponses = new ArrayList<GetAllPrintJobResponse>();
+        printJobResponses.add(printJobResponse);
+
+        GetAllPrintJobListResponse expectedResponse = new GetAllPrintJobListResponse(printJobResponses);
+
+        // When
+        GetAllPrintJobListResponse actualResponse = operations.getAllPrintJobs();
+
+        // Then
+        assertEquals(expectedResponse.getPrintJobs().get(0).getId(), actualResponse.getPrintJobs().get(0).getId());
+    }
 }
