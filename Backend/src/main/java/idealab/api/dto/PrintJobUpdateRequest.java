@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Objects;
 
-import static idealab.api.models.Status.*;
+import static idealab.api.model.Status.*;
 
 public class PrintJobUpdateRequest {
 
