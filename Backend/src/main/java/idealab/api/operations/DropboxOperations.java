@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 
 import com.dropbox.core.DbxDownloader;
 import com.dropbox.core.DbxException;
@@ -37,20 +38,18 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class DropboxOperations {
   @Value("${dropbox.ACCESS_TOKEN}")
   private String ACCESS_TOKEN;
+  DbxRequestConfig config = DbxRequestConfig.newBuilder("dropbox/java-tutorial").build();
+  DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
 
-  @GetMapping("dropbox")
-  ResponseEntity<?> getDropboxFileList() {
+  public HashMap<Number, String> getDropboxFileList() {
     // Create Dropbox client
-    DbxRequestConfig config = DbxRequestConfig.newBuilder("dropbox/java-tutorial").build();
-    DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
-
     System.out.println("---- List Files and Folders ----");
     ListFolderResult result;
     try {
       // This current implementation lists both folders and files together
       result = client.files().listFolder("");
     } catch (DbxException e) {
-      return new ResponseEntity<>("Unable to return dropbox files", HttpStatus.INTERNAL_SERVER_ERROR);
+      return null;
     }
 
     HashMap<Number, String> dropboxFiles = new HashMap<>();
@@ -67,19 +66,13 @@ public class DropboxOperations {
       try {
         result = client.files().listFolderContinue(result.getCursor());
       } catch (DbxException e) {
-        return new ResponseEntity<>("Unable to return dropbox files", HttpStatus.INTERNAL_SERVER_ERROR);
+        return null;
       }
     }
-    System.out.println(dropboxFiles);
-    return new ResponseEntity<>(dropboxFiles, HttpStatus.OK);
+    return dropboxFiles;
   }
 
-  @GetMapping("/dropbox/share/{filename:.+}")
-  @ResponseBody
-  public ResponseEntity<?> getSharableLink(@PathVariable String filename) {
-    DbxRequestConfig config = DbxRequestConfig.newBuilder("dropbox/java-tutorial").build();
-    DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
-
+  public List getSharableLink(String filename) {
     ListSharedLinksResult listSharedLinksResult;
     try {
       // Gets current shared links
@@ -91,15 +84,13 @@ public class DropboxOperations {
         listSharedLinksResult = client.sharing().listSharedLinksBuilder().withPath("/" + filename).withDirectOnly(true)
             .start();
       }
-      return new ResponseEntity<>(listSharedLinksResult.getLinks(), HttpStatus.OK);
+      return listSharedLinksResult.getLinks();
     } catch (DbxException e) {
-      return new ResponseEntity<>("Could not get shared link <p/>" + e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+      return null;
     }
   }
 
-  @GetMapping("/dropbox/download/{filename:.+}")
-  @ResponseBody
-  public ResponseEntity<?> downloadFile(@PathVariable String filename) {
+  public File downloadFile(String filename) {
     DbxRequestConfig config = DbxRequestConfig.newBuilder("dropbox/java-tutorial").build();
     DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
 
