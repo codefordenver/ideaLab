@@ -9,7 +9,6 @@ import static idealab.api.model.Status.*;
 public class PrintJobUpdateRequest {
 
     private Integer employeeId;
-    private Integer printStatusId;
     private String status;
 
     public Integer getEmployeeId() {
@@ -18,14 +17,6 @@ public class PrintJobUpdateRequest {
 
     public void setEmployeeId(Integer employeeId) {
         this.employeeId = employeeId;
-    }
-
-    public Integer getPrintStatusId() {
-        return printStatusId;
-    }
-
-    public void setPrintStatusId(Integer printStatusId) {
-        this.printStatusId = printStatusId;
     }
 
     public String getStatus() {
@@ -64,7 +55,6 @@ public class PrintJobUpdateRequest {
         if (o == null || getClass() != o.getClass()) return false;
         PrintJobUpdateRequest that = (PrintJobUpdateRequest) o;
         return Objects.equals(employeeId, that.employeeId) &&
-                Objects.equals(printStatusId, that.printStatusId) &&
                 Objects.equals(status, that.status);
     }
 
@@ -72,7 +62,6 @@ public class PrintJobUpdateRequest {
     public String toString() {
         return "PrintJobUpdateRequest{" +
                 "employeeId=" + employeeId +
-                ", printStatusId=" + printStatusId +
                 ", status='" + status + '\'' +
                 '}';
     }

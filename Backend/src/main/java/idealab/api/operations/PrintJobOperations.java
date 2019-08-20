@@ -11,7 +11,7 @@ public class PrintJobOperations {
 //    EmployeeListRepo employeeListRepo;
 //    PrintStatusRepo printStatusRepo;
 
-    public GenericResponse updatePrintJob(PrintJobUpdateRequest dto)
+    public GenericResponse updatePrintJob(Integer printId, PrintJobUpdateRequest dto)
     {
         GenericResponse response = new GenericResponse();
 
@@ -53,7 +53,7 @@ public class PrintJobOperations {
         return response;
     }
 
-    public GenericResponse deletePrintJob(PrintJobDeleteRequest dto) {
+    public GenericResponse deletePrintJob(Integer printId, PrintJobDeleteRequest dto) {
 
         GenericResponse response = new GenericResponse();
         response.setSuccess(false);
