@@ -63,7 +63,11 @@ public class PrintJobOperations {
         //TODO: They should be connected !
         //TODO: Domain entity (model) should be mapped response. It will be better if we use dto then map to response to make it more flexible for future use.
         //TODO: but now we don't need dto as mid entity between response entity and database entity.
-        GetAllPrintJobResponse printJobResponse =  new GetAllPrintJobResponse();
+
+        //TODO: Tempporary
+        GetAllPrintJobResponse printJobResponse =
+                new GetAllPrintJobResponse(null, null, null, null, null,
+                null, null, null);
 
         List<GetAllPrintJobResponse> printJobResponses = new ArrayList<GetAllPrintJobResponse>();
         printJobResponses.add(printJobResponse);

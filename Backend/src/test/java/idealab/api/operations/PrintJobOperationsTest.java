@@ -1,7 +1,7 @@
 package idealab.api.operations;
 
-import idealab.api.dto.GenericResponse;
-import idealab.api.dto.PrintJobUpdateRequest;
+import idealab.api.dto.response.GenericResponse;
+import idealab.api.dto.request.PrintJobUpdateRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

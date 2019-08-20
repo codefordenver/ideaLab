@@ -9,6 +9,8 @@ public class GetAllPrintJobListResponse {
         this.printJobs = printJobs;
     }
 
+    public GetAllPrintJobListResponse(){}
+
     public List<GetAllPrintJobResponse> getPrintJobs() {
         return printJobs;
     }

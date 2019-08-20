@@ -1,105 +1,74 @@
 package idealab.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import idealab.api.dto.GenericResponse;
-import idealab.api.dto.PrintJobUpdateRequest;
+import idealab.api.dto.response.GetAllPrintJobListResponse;
+import idealab.api.dto.response.GetAllPrintJobResponse;
 import idealab.api.operations.PrintJobOperations;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@WebMvcTest(PrintJobController.class)
+@RunWith(MockitoJUnitRunner.class)
+@EnableAutoConfiguration
 public class PrintJobControllerTest {
-
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-    @MockBean
-    PrintJobOperations operations;
+    @Mock
+    private PrintJobOperations printJobOperations;
 
-    @Test
-    public void updatePrintJobStatusSuccess() throws Exception {
-        PrintJobUpdateRequest printJobUpdateRequest = new PrintJobUpdateRequest();
-        printJobUpdateRequest.setEmployeeId(1);
-        printJobUpdateRequest.setPrintStatusId(2);
-        printJobUpdateRequest.setStatus("Completed");
+    @InjectMocks
+    private PrintJobController controller;
 
-        GenericResponse genericResponse = new GenericResponse();
-        genericResponse.setSuccess(true);
-        genericResponse.setMessage("Print Job Updated");
-
-        String inputJson = printJobUpdateRequestAsJsonString(printJobUpdateRequest);
-
-        when(operations.updatePrintJob(printJobUpdateRequest)).thenReturn(genericResponse);
-
-        ResultActions response = mockMvc.perform(put("/api/printjob/status")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(inputJson)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is2xxSuccessful());
-
-        MvcResult result = response.andReturn();
-        String content = result.getResponse().getContentAsString();
-        GenericResponse returnedResponse = stringToGenericResponse(content);
-        assert (returnedResponse.equals(genericResponse));
+    @Before
+    public void setUp() throws Exception {
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(controller).build();
     }
 
     @Test
-    public void updatePrintJobStatusFail() throws Exception {
-        PrintJobUpdateRequest printJobUpdateRequest = new PrintJobUpdateRequest();
-        printJobUpdateRequest.setEmployeeId(1);
-        printJobUpdateRequest.setPrintStatusId(2);
-        printJobUpdateRequest.setStatus("asdfasdfads");
+    public void getAllPrintJobs() throws Exception {
+        // given
+        GetAllPrintJobResponse printJob = new GetAllPrintJobResponse(1, null, null, null,
+                null, null, null, null);
+        List<GetAllPrintJobResponse> printJobResponses = new ArrayList<GetAllPrintJobResponse>();
+        printJobResponses.add(printJob);
+        GetAllPrintJobListResponse expectedResponse = new GetAllPrintJobListResponse(printJobResponses);
 
-        GenericResponse genericResponse = new GenericResponse();
-        genericResponse.setSuccess(false);
-        genericResponse.setMessage("Invalid Status");
+        when(printJobOperations.getAllPrintJobs()).thenReturn(expectedResponse);
 
-        String inputJson = printJobUpdateRequestAsJsonString(printJobUpdateRequest);
+        // act
+        String jsonString = mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/printjob")
+                        .accept(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk())
+        .andReturn().getResponse().getContentAsString();
 
-        when(operations.updatePrintJob(printJobUpdateRequest)).thenReturn(genericResponse);
+        ObjectMapper mapper = new ObjectMapper();
+        GetAllPrintJobListResponse actualResponse = mapper.readValue(jsonString, GetAllPrintJobListResponse.class);
 
-        ResultActions response = mockMvc.perform(put("/api/printjob/status")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(inputJson)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is4xxClientError());
+        int actualId = actualResponse.getPrintJobs().get(0).getId();
+        int expectedId = expectedResponse.getPrintJobs().get(0).getId();
 
-        MvcResult result = response.andReturn();
-        String content = result.getResponse().getContentAsString();
-        GenericResponse returnedResponse = stringToGenericResponse(content);
-        assert (returnedResponse.equals(genericResponse));
+        // assert
+        assertEquals(expectedId, actualId);
     }
-
-    public String printJobUpdateRequestAsJsonString(PrintJobUpdateRequest obj) {
-        try {
-            final ObjectMapper mapper = new ObjectMapper();
-            return mapper.writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public GenericResponse stringToGenericResponse(String s) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            GenericResponse response = mapper.readValue(s, GenericResponse.class);
-            return response;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 }
