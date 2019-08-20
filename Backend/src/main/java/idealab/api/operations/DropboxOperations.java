@@ -83,23 +83,23 @@ public class DropboxOperations {
   //   return dropboxFiles;
   // }
 
-  // public List<SharedLinkMetadata> getSharableLink(String filename) {
-  //   ListSharedLinksResult listSharedLinksResult;
-  //   try {
-  //     // Gets current shared links
-  //     listSharedLinksResult = client.sharing().listSharedLinksBuilder().withPath("/" + filename).withDirectOnly(true)
-  //         .start();
-  //     if (listSharedLinksResult.getLinks().isEmpty()) {
-  //       // If no shared link exists create one
-  //       SharedLinkMetadata sharedLinkMetadata = client.sharing().createSharedLinkWithSettings("/" + filename);
-  //       listSharedLinksResult = client.sharing().listSharedLinksBuilder().withPath("/" + filename).withDirectOnly(true)
-  //           .start();
-  //     }
-  //     return listSharedLinksResult.getLinks();
-  //   } catch (DbxException e) {
-  //     return null;
-  //   }
-  // }
+  public List<SharedLinkMetadata> getSharableLink(String filename) {
+    ListSharedLinksResult listSharedLinksResult;
+    try {
+      // Gets current shared links
+      listSharedLinksResult = client.sharing().listSharedLinksBuilder().withPath("/" + filename).withDirectOnly(true)
+          .start();
+      if (listSharedLinksResult.getLinks().isEmpty()) {
+        // If no shared link exists create one
+        SharedLinkMetadata sharedLinkMetadata = client.sharing().createSharedLinkWithSettings("/" + filename);
+        listSharedLinksResult = client.sharing().listSharedLinksBuilder().withPath("/" + filename).withDirectOnly(true)
+            .start();
+      }
+      return listSharedLinksResult.getLinks();
+    } catch (DbxException e) {
+      return null;
+    }
+  }
 
   // //  TODO: Figure out how to send file
 
@@ -129,6 +129,8 @@ public class DropboxOperations {
   // // }
 
   public String uploadDropboxFile(int id, MultipartFile file) {
+    String dropboxFilePath = "/" + id + "-" + file.getOriginalFilename();
+
     InputStream in;
     try {
       in = new BufferedInputStream(file.getInputStream());
@@ -136,15 +138,12 @@ public class DropboxOperations {
       return "";
     }
 
-    // TODO See if file already exists.
-    // If file has same content (hash checked) it will be successful, but different
-    // content with same name will fail
+    // TODO See if file already exists
     FileMetadata metadata;
     try {
       // TODO getOriginalFilename may return path. Test with opera?
-      String dropboxFilePath = "/" + id + "-" + file.getOriginalFilename();
       metadata = client.files().uploadBuilder(dropboxFilePath).uploadAndFinish(in);
-      return metadata.toStringMultiline();
+      return metadata.getPathLower();
     } catch (DbxException | IOException e) {
       return "";
     }

@@ -24,11 +24,36 @@ public class PrintJobOperations {
         return response;
     }
 
-
-    public GenericResponse newPrintJobFile(int id, MultipartFile file)
+    public GenericResponse newPrintJobFile(int file_Id, MultipartFile file)
     {
         GenericResponse response = new GenericResponse();
-        String fileProperties = dropboxOperations.uploadDropboxFile(id, file);
+        String fileProperties = dropboxOperations.uploadDropboxFile(file_Id, file);
+
+        if(!fileProperties.isEmpty())
+        {
+            response.setSuccess(true);
+            response.setMessage(fileProperties);
+        }
+        else
+        {
+            response.setSuccess(false);
+            response.setMessage("File could not be uploaded");
+        }
+        return response;
+
+    }
+
+    public GenericResponse updateFile(int fileId, MultipartFile file)
+    {
+        GenericResponse response = new GenericResponse();
+
+        // //Get existing filePath from the Print Job model and delete the old file
+        // String fileDeleted = dropboxOperations.deletedropboxFile(filePath);
+
+        //Create a new file with the fileId and new filename
+        String fileProperties = dropboxOperations.uploadDropboxFile(fileId, file);
+
+        //Associate file with 
 
         if(!fileProperties.isEmpty())
         {

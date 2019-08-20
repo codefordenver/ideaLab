@@ -6,9 +6,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class PrintJobNewRequest {
 
-    private MultipartFile file;
     private String name;
     private String email;
+    private MultipartFile file;
 
     public String getName() {
         return name;
