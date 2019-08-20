@@ -1,4 +1,4 @@
-package ideaLab.api.models;
+package idealab.api.model;
 
 public enum EmployeeRole {
     ADMIN ("Admin"),

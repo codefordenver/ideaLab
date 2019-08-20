@@ -1,4 +1,4 @@
-package idealab.api.models;
+package idealab.api.model;
 
 public enum Status {
     PENDING_REVIEW ("Pending Review"),
