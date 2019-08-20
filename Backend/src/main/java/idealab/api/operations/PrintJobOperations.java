@@ -7,17 +7,21 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PrintJobOperations {
+    private final DropboxOperations dropboxOperations;
+   
+    public PrintJobOperations(DropboxOperations dropboxOperations) {
+        this.dropboxOperations = dropboxOperations;
+    }
+
     public GenericResponse newPrintJob(PrintJobNewRequest dto)
     {
         GenericResponse response = new GenericResponse();
+        String fileProperties = dropboxOperations.uploadDropboxFile(dto.getFile());
 
-        if(dto.isValidStatus())
+        if(!fileProperties.isEmpty())
         {
-            //check if employee id is valid
-            //check if print id is valid
-            //do any other logic to determine if the update is valid
             response.setSuccess(true);
-            response.setMessage("Print Job Updated");
+            response.setMessage(fileProperties);
         }
         else
         {
@@ -25,6 +29,7 @@ public class PrintJobOperations {
             response.setMessage("Invalid Status");
         }
         return response;
+
     }
 
     public GenericResponse updatePrintJob(PrintJobUpdateRequest dto)
@@ -46,5 +51,6 @@ public class PrintJobOperations {
         }
         return response;
     }
+
 
 }

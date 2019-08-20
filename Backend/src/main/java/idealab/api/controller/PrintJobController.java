@@ -20,8 +20,9 @@ public class PrintJobController {
         this.printJobOperations = printJobOperations;
     }
 
-    @PostMapping("/api/printjob/new")
+    @PostMapping("/api/printjob")
     public ResponseEntity<?> printJobNew(@RequestBody PrintJobNewRequest dto){
+
         GenericResponse response = printJobOperations.newPrintJob(dto);
         if(response.isSuccess())
             return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
