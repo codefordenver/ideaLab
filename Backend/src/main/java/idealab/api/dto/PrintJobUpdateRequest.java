@@ -68,4 +68,12 @@ public class PrintJobUpdateRequest {
                 Objects.equals(status, that.status);
     }
 
+    @Override
+    public String toString() {
+        return "PrintJobUpdateRequest{" +
+                "employeeId=" + employeeId +
+                ", printStatusId=" + printStatusId +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }
