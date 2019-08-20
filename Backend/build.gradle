@@ -30,9 +30,10 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-devtools') // TODO(e-carlin): Make sure this isn't pulled in in the production jar
-    compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile('org.postgresql:postgresql')
+	implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+	implementation('org.springframework.boot:spring-boot-starter-web')
+	implementation('org.postgresql:postgresql')
+
     testCompile('junit:junit')
 }
