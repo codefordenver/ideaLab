@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import com.dropbox.core.DbxDownloader;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
@@ -20,6 +22,7 @@ import com.dropbox.core.v2.sharing.ListSharedLinksResult;
 import com.dropbox.core.v2.sharing.SharedLinkMetadata;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Component
+@PropertySource("classpath:dropbox.properties")
 public class DropboxOperations {
 
   @Value("${dropbox.ACCESS_TOKEN}")
@@ -42,8 +46,8 @@ public class DropboxOperations {
   DbxRequestConfig config;
   DbxClientV2 client;
 
-  public DropboxOperations(){
-    System.out.println(ACCESS_TOKEN);
+  @PostConstruct
+  public void postConstruct(){
     config = DbxRequestConfig.newBuilder("dropbox/java-tutorial").build();
     client = new DbxClientV2(config, ACCESS_TOKEN);
   }
@@ -124,12 +128,12 @@ public class DropboxOperations {
   // //   }
   // // }
 
-  public String uploadDropboxFile(MultipartFile file) {
+  public String uploadDropboxFile(int id, MultipartFile file) {
     InputStream in;
     try {
       in = new BufferedInputStream(file.getInputStream());
     } catch (IOException e) {
-      return null;
+      return "";
     }
 
     // TODO See if file already exists.
@@ -138,11 +142,11 @@ public class DropboxOperations {
     FileMetadata metadata;
     try {
       // TODO getOriginalFilename may return path. Test with opera?
-      String dropboxFilePath = "/" + file.getOriginalFilename();
+      String dropboxFilePath = "/" + id + "-" + file.getOriginalFilename();
       metadata = client.files().uploadBuilder(dropboxFilePath).uploadAndFinish(in);
       return metadata.toStringMultiline();
     } catch (DbxException | IOException e) {
-      return null;
+      return "";
     }
   }
 }

@@ -4,6 +4,7 @@ import idealab.api.dto.GenericResponse;
 import idealab.api.dto.PrintJobNewRequest;
 import idealab.api.dto.PrintJobUpdateRequest;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class PrintJobOperations {
@@ -16,7 +17,18 @@ public class PrintJobOperations {
     public GenericResponse newPrintJob(PrintJobNewRequest dto)
     {
         GenericResponse response = new GenericResponse();
-        String fileProperties = dropboxOperations.uploadDropboxFile(dto.getFile());
+
+        System.out.println(dto.getName()); 
+        System.out.println(dto.getEmail());
+
+        return response;
+    }
+
+
+    public GenericResponse newPrintJobFile(int id, MultipartFile file)
+    {
+        GenericResponse response = new GenericResponse();
+        String fileProperties = dropboxOperations.uploadDropboxFile(id, file);
 
         if(!fileProperties.isEmpty())
         {
@@ -26,7 +38,7 @@ public class PrintJobOperations {
         else
         {
             response.setSuccess(false);
-            response.setMessage("Invalid Status");
+            response.setMessage("File could not be uploaded");
         }
         return response;
 
