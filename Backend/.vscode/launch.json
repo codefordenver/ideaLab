@@ -5,7 +5,7 @@
             "name": "CodeLens (Launch) - IdeaLabMain",
             "request": "launch",
             "mainClass": "idealab.IdeaLabMain",
-            "projectName": "Backend"
+            "projectName": "ideaLab"
         }
     ]
 }
