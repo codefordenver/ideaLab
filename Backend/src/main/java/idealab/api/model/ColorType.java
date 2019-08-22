@@ -21,7 +21,7 @@ public class ColorType {
     private Integer id;
 
     @OneToMany(targetEntity=PrintModel.class, mappedBy="colorTypeId")   
-    private Set<StatusType> colorType;
+    private Set<PrintModel> printModel;
 
     @Column(name = "color", nullable = false)
     private String color;

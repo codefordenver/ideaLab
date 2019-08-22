@@ -32,20 +32,17 @@ public class PrintStatus {
 
     @Column(name = "status",  nullable = false)
     @Enumerated(EnumType.STRING)
-    private StatusType status;
+    private Status status;
 
     @ManyToOne()
     @JoinColumn(name="fk_employee_id", referencedColumnName = "id", nullable = false)
     private Employee employeeId;
 
-    @ManyToOne()
-    @JoinColumn(name="fk_status_type_id", referencedColumnName = "id", nullable = false)
-    private StatusType statusTypeId;
 
     @Column(name = "employee_notes",  nullable = false)
     private String employeeNotes;
 
-    public PrintStatus(Integer queue, PrintModel printModelId, LocalDateTime statusDate, StatusType status, Employee employeeId, String employeeNotes) {   
+    public PrintStatus(Integer queue, PrintModel printModelId, LocalDateTime statusDate, Status status, Employee employeeId, String employeeNotes) {   
         this.printModelId = printModelId;
         this.statusDate = statusDate;
         this.status = status;
@@ -70,11 +67,11 @@ public class PrintStatus {
         this.statusDate = statusDate;
     }
 
-    public StatusType getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(StatusType status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
