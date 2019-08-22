@@ -17,7 +17,7 @@ import javax.persistence.Table;
 public class StatusType {
     @Id
     @Column(name = "id", updatable = false, nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @OneToMany(targetEntity=StatusType.class, mappedBy="statusTypeId")   
@@ -29,8 +29,7 @@ public class StatusType {
     @Column(name = "send_email", nullable = false)
     private Boolean sendEmail;
 
-    public StatusType(Integer id, String status, Boolean sendEmail) {
-        this.id = id;
+    public StatusType(String status, Boolean sendEmail) {
         this.status = status;
         this.sendEmail = sendEmail;
     }

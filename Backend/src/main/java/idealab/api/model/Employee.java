@@ -18,7 +18,7 @@ import org.hibernate.validator.constraints.Length;
 public class Employee {
     @Id
     @Column(name = "id", updatable = false, nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @OneToMany(targetEntity=PrintStatus.class, mappedBy="employeeId")   
@@ -32,20 +32,12 @@ public class Employee {
     @Length(min = 1,  max = 254)
     private String lastName;
 
-    public Employee(Integer id, String firstName, String lastName) {
-        this.id = id;
+    public Employee(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
+    //getter & setter
     public String getFirstName() {
         return firstName;
     }

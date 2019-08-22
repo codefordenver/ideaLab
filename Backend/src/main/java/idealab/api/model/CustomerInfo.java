@@ -16,7 +16,7 @@ import org.hibernate.validator.constraints.Length;
 public class CustomerInfo {
     @Id
     @Column(name = "id", updatable = false, nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne()
@@ -35,8 +35,7 @@ public class CustomerInfo {
     @Length(min = 1,  max = 254)
     private String email;
 
-    public CustomerInfo(Integer id, EmailHash emailHashId, String firstName, String lastName, String email) {
-        this.id = id;
+    public CustomerInfo(EmailHash emailHashId, String firstName, String lastName, String email) {
         this.emailHashId = emailHashId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -44,15 +43,6 @@ public class CustomerInfo {
     }
 
     //getters and setters
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public EmailHash getEmailHashId() {
         return emailHashId;
     }

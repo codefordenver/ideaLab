@@ -16,7 +16,7 @@ import org.hibernate.validator.constraints.Length;
 public class EmployeeLogins {
     @Id
     @Column(name = "id", updatable = false, nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "login", nullable = false)
@@ -30,23 +30,13 @@ public class EmployeeLogins {
     @Enumerated(EnumType.STRING)
     private EmployeeRole role;
 
-    public EmployeeLogins(Integer id, String login, String passwordHash, EmployeeRole role) {
-        this.id = id;
+    public EmployeeLogins(String login, String passwordHash, EmployeeRole role) {
         this.login = login;
         this.passwordHash = passwordHash;
         this.role = role;
     }
 
     //getters and setters
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getLogin() {
         return login;
     }

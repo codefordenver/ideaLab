@@ -17,7 +17,7 @@ import javax.persistence.Table;
 public class EmailHash {
     @Id
     @Column(name = "id", updatable = false, nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @OneToMany(targetEntity=CustomerInfo.class, mappedBy="emailHashId")   
@@ -29,20 +29,11 @@ public class EmailHash {
     @Column(name = "email_hash", nullable = false)
     private String emailHash;
 
-    public EmailHash(Integer id, String emailHash) {
-        this.id = id;
+    public EmailHash(String emailHash) {
         this.emailHash = emailHash;
     }
 
     //getters and setters
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getEmailHash() {
         return emailHash;
     }

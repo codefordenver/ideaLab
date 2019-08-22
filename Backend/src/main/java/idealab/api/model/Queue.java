@@ -16,7 +16,7 @@ import javax.persistence.Table;
 public class Queue {
     @Id
     @Column(name = "id", updatable = false, nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @OneToOne()
@@ -26,20 +26,11 @@ public class Queue {
     @Column(name = "rank", nullable = false)
     private Integer rank;
 
-    public Queue(Integer id, Integer rank) {
-        this.id = id;
+    public Queue(Integer rank) {
         this.rank = rank;
     }
 
     //getters and setters
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public Integer getRank() {
         return rank;
     }

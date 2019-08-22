@@ -27,7 +27,7 @@ public class ColorType {
     private String color;
 
     public ColorType(Integer id, String color) {
-        this.id = id;
+        
         this.color = color;
     }
 

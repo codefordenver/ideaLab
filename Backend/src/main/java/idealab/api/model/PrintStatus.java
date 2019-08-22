@@ -20,7 +20,7 @@ import javax.persistence.Table;
 public class PrintStatus {
     @Id
     @Column(name = "id", updatable = false, nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne()
@@ -45,24 +45,15 @@ public class PrintStatus {
     @Column(name = "employee_notes",  nullable = false)
     private String employeeNotes;
 
-    public PrintStatus(Integer id, Integer queue, PrintModel printModelId, LocalDateTime statusDate, StatusType status, Employee employeeId, String employeeNotes) {
-        this.id = id;
+    public PrintStatus(Integer queue, PrintModel printModelId, LocalDateTime statusDate, StatusType status, Employee employeeId, String employeeNotes) {   
         this.printModelId = printModelId;
         this.statusDate = statusDate;
         this.status = status;
         this.employeeId = employeeId;
         this.employeeNotes = employeeNotes;
     }
+    
     //getters and setters
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public PrintModel getPrintModelId() {
         return printModelId;
     }

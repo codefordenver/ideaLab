@@ -5,8 +5,6 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,7 +21,7 @@ import org.hibernate.validator.constraints.Length;
 public class PrintModel {
     @Id
     @Column(name = "id", updatable = false, nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne()
@@ -53,8 +51,7 @@ public class PrintModel {
     @Column(name = "created_at",  nullable = false)
     private LocalDateTime createdAt;
 
-    public PrintModel(Integer id, EmailHash emailHashId, ColorType color, String comments, String dropboxLink, LocalDateTime updatedAt, LocalDateTime createdAt) {
-        this.id = id;
+    public PrintModel(EmailHash emailHashId, ColorType color, String comments, String dropboxLink, LocalDateTime updatedAt, LocalDateTime createdAt) {
         this.emailHashId = emailHashId;
         this.comments = comments;
         this.dropboxLink = dropboxLink;
@@ -64,15 +61,6 @@ public class PrintModel {
     }
 
     //getters and setters
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public EmailHash getEmailHashId() {
         return emailHashId;
     }
