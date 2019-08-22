@@ -1,15 +1,28 @@
 package idealab.api.model;
 
-import javax.persistence.*;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 import org.hibernate.validator.constraints.Length;
 
+
 @Entity
-@Table(name = "employee_logins")
-public class EmployeeList {
+@Table(name = "employee")
+public class Employee {
     @Id
     @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
+
+    @OneToMany(targetEntity=PrintStatus.class, mappedBy="employeeId")   
+    private Set<PrintStatus> printStatus;
 
     @Column(name = "first_name", nullable = false)
     @Length(min = 1, max = 254)
@@ -19,7 +32,7 @@ public class EmployeeList {
     @Length(min = 1,  max = 254)
     private String lastName;
 
-    public EmployeeList(Integer id, String firstName, String lastName) {
+    public Employee(Integer id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

@@ -1,18 +1,27 @@
 package idealab.api.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import org.hibernate.validator.constraints.Length;
 
 @Entity
-@Table(name = "customer_info")
+@Table(name ="customer_info")
 public class CustomerInfo {
     @Id
     @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
-    @Column(name = "email_hash_id", nullable = false)
-    private String emailHashId;
+    @ManyToOne()
+    @JoinColumn(name="fk_email_hash_id", referencedColumnName = "id", nullable = false)    
+    private EmailHash emailHashId;
 
     @Column(name = "first_name", nullable = false)
     @Length(min = 1, max = 254)
@@ -26,7 +35,7 @@ public class CustomerInfo {
     @Length(min = 1,  max = 254)
     private String email;
 
-    public CustomerInfo(Integer id, String emailHashId, String firstName, String lastName, String email) {
+    public CustomerInfo(Integer id, EmailHash emailHashId, String firstName, String lastName, String email) {
         this.id = id;
         this.emailHashId = emailHashId;
         this.firstName = firstName;
@@ -44,11 +53,11 @@ public class CustomerInfo {
         this.id = id;
     }
 
-    public String getEmailHashId() {
+    public EmailHash getEmailHashId() {
         return emailHashId;
     }
 
-    public void setEmailHashId(String emailHashId) {
+    public void setEmailHashId(EmailHash emailHashId) {
         this.emailHashId = emailHashId;
     }
 

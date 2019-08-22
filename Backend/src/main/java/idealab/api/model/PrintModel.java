@@ -1,7 +1,21 @@
 package idealab.api.model;
 
 import java.time.LocalDateTime;
-import javax.persistence.*;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
 import org.hibernate.validator.constraints.Length;
 
 @Entity
@@ -12,12 +26,19 @@ public class PrintModel {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
-    @Column(name = "email_hash_id", nullable = false)
-    private String emailHashId;
+    @ManyToOne()
+    @JoinColumn(name="fk_email_hash_id", referencedColumnName = "id", nullable = false)   
+    private EmailHash emailHashId;
 
-    @Column(name = "color", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private ColorChoice color;
+    @ManyToOne()
+    @JoinColumn(name="fk_color_type_id", referencedColumnName = "id", nullable = false)   
+    private ColorType colorType;
+
+    @OneToMany(targetEntity=PrintStatus.class, mappedBy="printModelId")   
+    private Set<PrintStatus> printModel;
+
+    @OneToOne(targetEntity=Queue.class, mappedBy="printModelId")
+    private Queue queueId;
 
     @Column(name = "comments")
     private String comments;
@@ -32,14 +53,14 @@ public class PrintModel {
     @Column(name = "created_at",  nullable = false)
     private LocalDateTime createdAt;
 
-    public PrintModel(Integer id, String emailHashId, ColorChoice color, String comments, String dropboxLink, LocalDateTime updatedAt, LocalDateTime createdAt) {
+    public PrintModel(Integer id, EmailHash emailHashId, ColorType color, String comments, String dropboxLink, LocalDateTime updatedAt, LocalDateTime createdAt) {
         this.id = id;
         this.emailHashId = emailHashId;
-        this.color = color;
         this.comments = comments;
         this.dropboxLink = dropboxLink;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
+        this.colorType = color;
     }
 
     //getters and setters
@@ -52,20 +73,20 @@ public class PrintModel {
         this.id = id;
     }
 
-    public String getEmailHashId() {
+    public EmailHash getEmailHashId() {
         return emailHashId;
     }
 
-    public void setEmailHashId(String emailHashId) {
+    public void setEmailHashId(EmailHash emailHashId) {
         this.emailHashId = emailHashId;
     }
 
-    public ColorChoice getColor() {
-        return color;
+    public ColorType getColorType() {
+        return colorType;
     }
 
-    public void setColor(ColorChoice color) {
-        this.color = color;
+    public void setColorType(ColorType color) {
+        this.colorType = color;
     }
 
     public String getComments() {
