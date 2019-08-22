@@ -30,7 +30,7 @@ public class PrintModel {
 
     @ManyToOne()
     @JoinColumn(name="fk_color_type_id", referencedColumnName = "id", nullable = false)   
-    private ColorType colorType;
+    private ColorType colorTypeId;
 
     @OneToMany(targetEntity=PrintStatus.class, mappedBy="printModelId")   
     private Set<PrintStatus> printModel;
@@ -57,7 +57,7 @@ public class PrintModel {
         this.dropboxLink = dropboxLink;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
-        this.colorType = color;
+        this.colorTypeId = color;
     }
 
     //getters and setters
@@ -70,11 +70,11 @@ public class PrintModel {
     }
 
     public ColorType getColorType() {
-        return colorType;
+        return colorTypeId;
     }
 
     public void setColorType(ColorType color) {
-        this.colorType = color;
+        this.colorTypeId = color;
     }
 
     public String getComments() {
