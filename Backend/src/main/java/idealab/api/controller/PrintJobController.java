@@ -25,14 +25,7 @@ public class PrintJobController {
     public ResponseEntity<?> printJobNew(@ModelAttribute PrintJobNewRequest model) {
         // TODO Create new print job
         // ! Returning response for now until database is setup
-        GenericResponse temp_response = printJobOperations.newPrintJob(model);
-
-        // TODO Read id of returned print job
-        int idNumber = 102;
-
-        // TODO Save dropbox file w/ new ID
-
-        GenericResponse response = printJobOperations.newPrintJobFile(idNumber, model.getFile());
+        GenericResponse response = printJobOperations.newPrintJob(model);
         if(response.isSuccess())
             return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         else
