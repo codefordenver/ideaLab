@@ -27,7 +27,7 @@ Our backend is split into 2 sections: our API app & our database. Our API is wri
 <i>In general, you should not have to go into this section. If for some reason you do, here are the instructions.</i>
 1. Make sure you have everything downloaded appropriately the first time. Go to our Google docs presentation if you still need to do that.
 2. Run `docker create -v /var/lib/postgresql/data --name PostgresData alpine`
-3. And then run `docker run --rm  --name postgres -e POSTGRES_PASSWORD=docker -d -p 54320:5432 --volumes-from PostgresData  postgres:12`
+3. And then run `docker run --rm  --name postgres -e POSTGRES_PASSWORD=docker -d -p 5432:5432 --volumes-from PostgresData  postgres:12`
 4. In your IDE of choice run the app.
 
 

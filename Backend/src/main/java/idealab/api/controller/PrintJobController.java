@@ -4,16 +4,19 @@ import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.request.PrintJobUpdateRequest;
 import idealab.api.dto.response.GetAllPrintJobListResponse;
 import idealab.api.operations.PrintJobOperations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/api/printjob")
 public class PrintJobController {
 
     private final PrintJobOperations printJobOperations;
+
 
     public PrintJobController(PrintJobOperations printJobOperations) {
         this.printJobOperations = printJobOperations;
