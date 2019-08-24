@@ -1,8 +1,10 @@
 package idealab.api.controller;
 
-import idealab.api.model.EmployeeLogins;
-import idealab.api.repositories.EmployeeLoginsRepo;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import idealab.api.dto.GenericResponse;
+import idealab.api.model.Employee;
+import idealab.api.operations.UserOperations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,17 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserController {
 
-    private EmployeeLoginsRepo employeeLoginsRepo;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private UserOperations userOperations;
 
-    public UserController(EmployeeLoginsRepo employeeLoginsRepo, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.employeeLoginsRepo = employeeLoginsRepo;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    public UserController(UserOperations userOperations) {
+        this.userOperations = userOperations;
     }
 
     @PostMapping("/sign-up")
-    public void signUp(@RequestBody EmployeeLogins user) {
-        user.setPasswordHash(bCryptPasswordEncoder.encode(user.getPasswordHash()));
-        employeeLoginsRepo.save(user);
+    public ResponseEntity<?> signUp(@RequestBody Employee user) {
+        GenericResponse response = userOperations.userSignUp(user);
+        if(response.isSuccess())
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        else
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }
