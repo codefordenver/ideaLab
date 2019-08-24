@@ -1,6 +1,6 @@
-package idealab.api.models;
+package idealab.api.model;
 
-public enum Status {
+ public enum Status {
     PENDING_REVIEW ("Pending Review"),
     FAILED ("Failed"),
     PRINTING ("Printing"),
@@ -9,14 +9,9 @@ public enum Status {
     COMPLETED ("Completed"),
     ARCHIVED ("Archived");
 
-    private final String name;
+     private final String name;
 
-    Status(String name) {
+     Status(String name) {
         this.name = name;
     }
-
-    @Override
-    public String toString() {
-        return name;
-    }
-}
+} 
