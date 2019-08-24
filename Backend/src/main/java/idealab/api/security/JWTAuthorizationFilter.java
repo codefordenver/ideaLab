@@ -2,8 +2,12 @@ package idealab.api.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import idealab.api.model.Employee;
+import idealab.api.repositories.EmployeeRepo;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -13,13 +17,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static idealab.api.security.SecurityConstants.*;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
-    public JWTAuthorizationFilter(AuthenticationManager authManager) {
+    private EmployeeRepo employeeRepo;
+
+    public JWTAuthorizationFilter(AuthenticationManager authManager, EmployeeRepo employeeRepo) {
         super(authManager);
+        this.employeeRepo = employeeRepo;
     }
 
     @Override
@@ -49,7 +57,12 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                     .getSubject();
 
             if (user != null) {
-                return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
+                //return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
+                Employee e = employeeRepo.getEmployeeByLoginEquals(user);
+                GrantedAuthority ga = new SimpleGrantedAuthority("ROLE_" + e.getRole().getText());
+                List<GrantedAuthority> gaList = new ArrayList<>();
+                gaList.add(ga);
+                return new UsernamePasswordAuthenticationToken(user, null, gaList);
             }
             return null;
         }
