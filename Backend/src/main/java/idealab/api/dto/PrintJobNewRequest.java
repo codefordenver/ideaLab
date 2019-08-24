@@ -1,13 +1,15 @@
 package idealab.api.dto;
 
-import static idealab.api.models.Status.*;
-
 import org.springframework.web.multipart.MultipartFile;
+
+import idealab.api.model.ColorType;
 
 public class PrintJobNewRequest {
 
     private String name;
     private String email;
+    private String color;
+    private String comments;
     private MultipartFile file;
 
     public String getName() {
@@ -32,5 +34,21 @@ public class PrintJobNewRequest {
 
     public void setFile(MultipartFile file) {
         this.file = file;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }
