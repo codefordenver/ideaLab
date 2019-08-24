@@ -1,4 +1,4 @@
-package idealab.api.models;
+package idealab.api.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

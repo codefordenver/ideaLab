@@ -1,7 +1,7 @@
 package idealab.api.controller;
 
-import idealab.api.models.ApplicationUser;
-import idealab.api.repositories.ApplicationUserRepo;
+import idealab.api.model.EmployeeLogins;
+import idealab.api.repositories.EmployeeLoginsRepo;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,18 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserController {
 
-    private ApplicationUserRepo applicationUserRepo;
+    private EmployeeLoginsRepo employeeLoginsRepo;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserController(ApplicationUserRepo applicationUserRepository,
-                          BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.applicationUserRepo = applicationUserRepository;
+    public UserController(EmployeeLoginsRepo employeeLoginsRepo, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.employeeLoginsRepo = employeeLoginsRepo;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @PostMapping("/sign-up")
-    public void signUp(@RequestBody ApplicationUser user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        applicationUserRepo.save(user);
+    public void signUp(@RequestBody EmployeeLogins user) {
+        user.setPasswordHash(bCryptPasswordEncoder.encode(user.getPasswordHash()));
+        employeeLoginsRepo.save(user);
     }
 }

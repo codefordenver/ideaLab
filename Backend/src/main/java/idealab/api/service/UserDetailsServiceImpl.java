@@ -1,7 +1,7 @@
 package idealab.api.service;
 
-import idealab.api.models.ApplicationUser;
-import idealab.api.repositories.ApplicationUserRepo;
+import idealab.api.model.EmployeeLogins;
+import idealab.api.repositories.EmployeeLoginsRepo;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,18 +12,19 @@ import static java.util.Collections.emptyList;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private ApplicationUserRepo applicationUserRepo;
 
-    public UserDetailsServiceImpl(ApplicationUserRepo applicationUserRepository) {
-        this.applicationUserRepo = applicationUserRepository;
+    private EmployeeLoginsRepo employeeLoginsRepo;
+
+    public UserDetailsServiceImpl(EmployeeLoginsRepo employeeLoginsRepo) {
+        this.employeeLoginsRepo = employeeLoginsRepo;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        ApplicationUser applicationUser = applicationUserRepo.findByUsername(username);
-        if (applicationUser == null) {
+        EmployeeLogins login = employeeLoginsRepo.getEmployeeLoginsByLogin(username);
+        if (login == null) {
             throw new UsernameNotFoundException(username);
         }
-        return new User(applicationUser.getUsername(), applicationUser.getPassword(), emptyList());
+        return new User(login.getLogin(), login.getPasswordHash(), emptyList());
     }
 }
