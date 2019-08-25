@@ -10,6 +10,7 @@ import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
+import com.dropbox.core.v2.sharing.ListSharedLinksErrorException;
 import com.dropbox.core.v2.sharing.ListSharedLinksResult;
 import com.dropbox.core.v2.sharing.SharedLinkMetadata;
 
@@ -33,9 +34,8 @@ public class DropboxOperations {
     client = new DbxClientV2(config, ACCESS_TOKEN);
   }
 
-  public String getSharableLink(String filePath) {
+  public String getSharableLink(String filePath) throws ListSharedLinksErrorException, DbxException {
     ListSharedLinksResult listSharedLinksResult;
-    try {
       // Gets current shared links
       listSharedLinksResult = client.sharing().listSharedLinksBuilder().withPath(filePath).withDirectOnly(true).start();
       if (listSharedLinksResult.getLinks().isEmpty()) {
@@ -46,9 +46,6 @@ public class DropboxOperations {
             .start();
       }
       return listSharedLinksResult.getLinks().get(0).getUrl();
-    } catch (DbxException e) {
-      return null;
-    }
   }
 
   public String uploadDropboxFile(int id, MultipartFile file) {

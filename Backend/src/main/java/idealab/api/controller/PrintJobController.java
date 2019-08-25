@@ -27,8 +27,6 @@ public class PrintJobController {
 
     @PostMapping("/api/printjob")
     public ResponseEntity<?> printJobNew(@ModelAttribute PrintJobNewRequest model) {
-        // TODO Create new print job
-        // ! Returning response for now until database is setup
         PrintJobData response = printJobOperations.newPrintJob(model);
         if(response.isSuccess())
             return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
