@@ -53,11 +53,11 @@ public class PrintJobOperations {
 
     }
 
-    public GenericResponse deletePrintJob(PrintJobDeleteRequest dto) {
+    public GenericResponse deletePrintJobStatus(PrintJobDeleteRequest dto) {
 
         GenericResponse response = new GenericResponse();
         response.setSuccess(false);
-        response.setMessage("Print Job Delete Failed");
+        response.setMessage("Print Job Status Delete Failed");
 
         //check if employee id is valid
         Employee employee = employeeRepo.getEmployeeById(dto.getEmployeeId());
@@ -71,7 +71,7 @@ public class PrintJobOperations {
 
             //return success message
             response.setSuccess(true);
-            response.setMessage("Deleted Successfully");
+            response.setMessage("Print Job Status Deleted Successfully");
         }
 
         return response;

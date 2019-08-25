@@ -40,7 +40,7 @@ public class PrintJobController {
     {
         LOGGER.info("PrintJobDelete request is " + dto.toString());
 
-        GenericResponse response = printJobOperations.deletePrintJob(dto);
+        GenericResponse response = printJobOperations.deletePrintJobStatus(dto);
 
         if(response.isSuccess())
             return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
