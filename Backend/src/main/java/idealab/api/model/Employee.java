@@ -1,16 +1,9 @@
 package idealab.api.model;
 
-import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import org.hibernate.validator.constraints.Length;
+
+import javax.persistence.*;
+import java.util.Set;
 
 
 @Entity
@@ -20,6 +13,17 @@ public class Employee {
     @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "login", nullable = false)
+    @Length (min = 1, max = 254)
+    private String login;
+
+    @Column(name = "password_hash", nullable = false)
+    private String passwordHash;
+
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private EmployeeRole role;
 
     @OneToMany(targetEntity=PrintStatus.class, mappedBy="employeeId")   
     private Set<PrintStatus> printStatus;
@@ -32,7 +36,19 @@ public class Employee {
     @Length(min = 1,  max = 254)
     private String lastName;
 
-    public Employee(String firstName, String lastName) {
+    public Employee() {
+    }
+
+    public Employee(@Length(min = 1, max = 254) String login,
+                    String passwordHash,
+                    EmployeeRole role,
+                    Set<PrintStatus> printStatus,
+                    @Length(min = 1, max = 254) String firstName,
+                    @Length(min = 1, max = 254) String lastName) {
+        this.login = login;
+        this.passwordHash = passwordHash;
+        this.role = role;
+        this.printStatus = printStatus;
         this.firstName = firstName;
         this.lastName = lastName;
     }

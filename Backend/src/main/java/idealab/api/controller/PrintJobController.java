@@ -29,7 +29,7 @@ public class PrintJobController {
     {
         LOGGER.info("PrintJobUpdateStatus request is " + dto.toString());
 
-        GenericResponse response = printJobOperations.updatePrintJob(printId, dto);
+        GenericResponse response = printJobOperations.updatePrintJobStatus(printId, dto);
 
         if(response.isSuccess())
             return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
@@ -37,12 +37,12 @@ public class PrintJobController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @DeleteMapping("/{printId}")
-    public ResponseEntity<?> printJobDelete(@PathParam("printId") Integer printId, @RequestBody PrintJobDeleteRequest dto)
+    @DeleteMapping
+    public ResponseEntity<?> printJobDelete(@RequestBody PrintJobDeleteRequest dto)
     {
         LOGGER.info("PrintJobDelete request is " + dto.toString());
 
-        GenericResponse response = printJobOperations.deletePrintJob(printId, dto);
+        GenericResponse response = printJobOperations.deletePrintJob(dto);
 
         if(response.isSuccess())
             return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
