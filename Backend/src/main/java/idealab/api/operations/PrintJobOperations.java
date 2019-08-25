@@ -24,18 +24,18 @@ public class PrintJobOperations {
     {
         GenericResponse response = new GenericResponse();
         response.setSuccess(false);
-        response.setMessage("Print Job Update Failed");
+        response.setMessage("Print Job Status Update Failed");
 
         //Prep for when we get data models merged to master
         if(dto.isValidStatus())
         {
             //check if employee id is valid
-            Employee employeeList = employeeRepo.getEmployeeById(dto.getEmployeeId());
+            Employee employee = employeeRepo.getEmployeeById(dto.getEmployeeId());
 
             //check if print id is valid
             PrintStatus printStatus = printStatusRepo.getPrintStatusById(printId);
 
-            if(employeeList != null && printStatus != null) {
+            if(employee != null && printStatus != null) {
                 //Update print status
                 printStatus = printStatusRepo.save(printStatus);
 
@@ -45,7 +45,8 @@ public class PrintJobOperations {
                     response.setMessage("Print Job Status Updated");
                 }
             }
-
+        } else {
+            response.setMessage("Print Job Status Update Failed - Invalid Status");
         }
 
         return response;

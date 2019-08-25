@@ -1,17 +1,7 @@
 package idealab.api.model;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
 
 
@@ -42,7 +32,10 @@ public class PrintStatus {
     @Column(name = "employee_notes",  nullable = false)
     private String employeeNotes;
 
-    public PrintStatus(Integer queue, PrintModel printModelId, LocalDateTime statusDate, Status status, Employee employeeId, String employeeNotes) {   
+    public PrintStatus() {
+    }
+
+    public PrintStatus(Integer queue, PrintModel printModelId, LocalDateTime statusDate, Status status, Employee employeeId, String employeeNotes) {
         this.printModelId = printModelId;
         this.statusDate = statusDate;
         this.status = status;
@@ -51,6 +44,14 @@ public class PrintStatus {
     }
     
     //getters and setters
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public PrintModel getPrintModelId() {
         return printModelId;
     }
