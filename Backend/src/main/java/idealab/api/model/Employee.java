@@ -18,8 +18,8 @@ public class Employee {
     @Length (min = 1, max = 254)
     private String login;
 
-    @Column(name = "password_hash", nullable = false)
-    private String passwordHash;
+    @Column(name = "password", nullable = false)
+    private String password;
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -40,13 +40,13 @@ public class Employee {
     }
 
     public Employee(@Length(min = 1, max = 254) String login,
-                    String passwordHash,
+                    String password,
                     EmployeeRole role,
                     Set<PrintJob> printJobs,
                     @Length(min = 1, max = 254) String firstName,
                     @Length(min = 1, max = 254) String lastName) {
         this.login = login;
-        this.passwordHash = passwordHash;
+        this.password = password;
         this.role = role;
         this.printJobs = printJobs;
         this.firstName = firstName;
@@ -88,12 +88,12 @@ public class Employee {
         this.login = login;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public EmployeeRole getRole() {
