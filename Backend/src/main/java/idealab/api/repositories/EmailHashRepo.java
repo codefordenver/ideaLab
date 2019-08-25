@@ -5,4 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 import idealab.api.model.EmailHash;
 
 public interface EmailHashRepo extends CrudRepository<EmailHash, Integer> {
+  EmailHash findByEmailHash(String emailHash);
 }

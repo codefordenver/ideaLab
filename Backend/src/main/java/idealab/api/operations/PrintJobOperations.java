@@ -33,32 +33,41 @@ public class PrintJobOperations {
     public GenericResponse newPrintJob(PrintJobNewRequest printJobNewRequest) {
         GenericResponse response = new GenericResponse();
         // Create new record based off of the printJobNewRequest
-        EmailHash emailHash = new EmailHash(printJobNewRequest.getEmail());
-        EmailHash newEmailHash = emailHashRepo.save(emailHash);
-
+        String emailHash = printJobNewRequest.getEmail();
         String color = printJobNewRequest.getColor();
         String comments = printJobNewRequest.getComments();
         String dropboxLink = "temp";
         LocalDateTime currentTime = LocalDateTime.now();
 
-        // Get Id of the request
-        int file_Id = 103;
-        // Save file to dropbox and return file path
-        ColorType colorType = new ColorType(color);
-        ColorType newColor = colorTypeRepo.save(colorType);
+        // Check if EmailHash Exists otherwise make a new record
+        // TODO: Hash email so it is not in plaintext
+        EmailHash databaseEmail = emailHashRepo.findByEmailHash(emailHash);
+        if (databaseEmail == null) {
+            EmailHash newEmailHash = new EmailHash(emailHash);
+            databaseEmail = emailHashRepo.save(newEmailHash);
+        }
 
-        // Create a model first with temp link
-        PrintModel printModel = new PrintModel(newEmailHash, newColor, comments, dropboxLink, currentTime, currentTime);
-        // Get id from new
-        PrintModel newPrintModel = printModelRepo.save(printModel);
-        // String filePath = dropboxOperations.uploadDropboxFile(file_Id,
-        // printJobNewRequest.getFile());
-        System.out.println(newPrintModel.toString());
-        // Add file path to the record
+        // Check if Color exists otherwise make a new record
+        ColorType databaseColor = colorTypeRepo.findByColor(color);
+        if (databaseColor == null) {
+            ColorType colorType = new ColorType(color);
+            databaseColor = colorTypeRepo.save(colorType);
+        }
+
+        // Create a new print model first with temp dropbox link
+        PrintModel printModel = new PrintModel(databaseEmail, databaseColor, comments, dropboxLink, currentTime,
+                currentTime);
+        printModelRepo.save(printModel);
+
+        // Make a dropbox sharable link here using the ID of the database record
+        String filePath = dropboxOperations.uploadDropboxFile(printModel.getId(), printJobNewRequest.getFile());
+        printModel.setDropboxLink(filePath);
+        printModelRepo.save(printModel);
+
         // Return success and new record to the frontend
-        if (!newPrintModel.toString().isEmpty()) {
+        if (printModel != null) {
             response.setSuccess(true);
-            response.setMessage(newPrintModel.toString());
+            response.setMessage(printModel.getDropboxLink());
         } else {
             response.setSuccess(false);
             response.setMessage("File could not be uploaded");

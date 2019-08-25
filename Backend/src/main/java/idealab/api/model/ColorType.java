@@ -26,6 +26,9 @@ public class ColorType {
     @Column(name = "color", nullable = false)
     private String color;
 
+    public ColorType() {
+    }
+    
     public ColorType(String color) {
         this.color = color;
     }

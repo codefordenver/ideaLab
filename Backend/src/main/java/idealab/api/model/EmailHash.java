@@ -29,6 +29,9 @@ public class EmailHash {
     @Column(name = "email_hash", nullable = false)
     private String emailHash;
 
+    public EmailHash() {
+    }
+
     public EmailHash(String emailHash) {
         this.emailHash = emailHash;
     }
