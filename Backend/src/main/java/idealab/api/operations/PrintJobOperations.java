@@ -4,9 +4,11 @@ import idealab.api.dto.GenericResponse;
 import idealab.api.dto.PrintJobNewRequest;
 import idealab.api.dto.PrintJobUpdateRequest;
 import idealab.api.model.ColorType;
+import idealab.api.model.CustomerInfo;
 import idealab.api.model.EmailHash;
 import idealab.api.model.PrintModel;
 import idealab.api.repositories.ColorTypeRepo;
+import idealab.api.repositories.CustomerInfoRepo;
 import idealab.api.repositories.EmailHashRepo;
 import idealab.api.repositories.PrintModelRepo;
 
@@ -21,19 +23,23 @@ public class PrintJobOperations {
     private PrintModelRepo printModelRepo;
     private ColorTypeRepo colorTypeRepo;
     private EmailHashRepo emailHashRepo;
+    private CustomerInfoRepo customerInfoRepo;
 
     public PrintJobOperations(DropboxOperations dropboxOperations, PrintModelRepo printModelRepo,
-            ColorTypeRepo colorTypeRepo, EmailHashRepo emailHashRepo) {
+            ColorTypeRepo colorTypeRepo, EmailHashRepo emailHashRepo, CustomerInfoRepo customerInfoRepo) {
         this.dropboxOperations = dropboxOperations;
         this.printModelRepo = printModelRepo;
         this.colorTypeRepo = colorTypeRepo;
         this.emailHashRepo = emailHashRepo;
+        this.customerInfoRepo = customerInfoRepo;
     }
 
     public GenericResponse newPrintJob(PrintJobNewRequest printJobNewRequest) {
         GenericResponse response = new GenericResponse();
         // Create new record based off of the printJobNewRequest
-        String emailHash = printJobNewRequest.getEmail();
+        String firstName = printJobNewRequest.getFirstName();
+        String lastName = printJobNewRequest.getLastName();
+        String email = printJobNewRequest.getEmail();
         String color = printJobNewRequest.getColor();
         String comments = printJobNewRequest.getComments();
         String dropboxLink = "temp";
@@ -41,11 +47,19 @@ public class PrintJobOperations {
 
         // Check if EmailHash Exists otherwise make a new record
         // TODO: Hash email so it is not in plaintext
+        String emailHash = printJobNewRequest.getEmail();
         EmailHash databaseEmail = emailHashRepo.findByEmailHash(emailHash);
         if (databaseEmail == null) {
             EmailHash newEmailHash = new EmailHash(emailHash);
             databaseEmail = emailHashRepo.save(newEmailHash);
         }
+
+        // // Create customer record with email hash if it does not already exist
+        // CustomerInfo customer = customerInfoRepo.findByEmailHash(emailHash);
+        // if (customer == null) {
+        //     CustomerInfo newCustomer = new CustomerInfo(databaseEmail, firstName, lastName, email);
+        //     databaseEmail = emailHashRepo.save(newCustomer);
+        // }
 
         // Check if Color exists otherwise make a new record
         ColorType databaseColor = colorTypeRepo.findByColor(color);
