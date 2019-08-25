@@ -71,6 +71,22 @@ public class DropboxOperations {
     }
   }
 
+  public String deleteDropboxFile(int id, MultipartFile file) {
+    //TODO:  Delete a dropbox file based on print job id (or filepath?)
+    return null;
+  }
+
+  public String updateDropboxFile(int id, MultipartFile file) {
+    //TODO: Update a dropbox file, should return a new sharable link.
+
+    // 1. Delete existing dropbox file using deleteDropboxFile() method
+
+    // 2. Create new dropbox file using uploadDropboxFile() method
+
+    // 3. Create a new sharable link using the getSharableLink method
+    return null;
+  }
+
   // TODO: Determine if we even need to return every file on dropbox. All the data
   // should be stored in the database now.
 
