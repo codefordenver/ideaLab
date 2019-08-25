@@ -1,6 +1,7 @@
 package idealab.api.operations;
 
 import idealab.api.dto.GenericResponse;
+import idealab.api.dto.PrintJobData;
 import idealab.api.dto.PrintJobNewRequest;
 import idealab.api.dto.PrintJobUpdateRequest;
 import idealab.api.model.ColorType;
@@ -13,6 +14,8 @@ import idealab.api.repositories.EmailHashRepo;
 import idealab.api.repositories.PrintModelRepo;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,15 +37,15 @@ public class PrintJobOperations {
         this.customerInfoRepo = customerInfoRepo;
     }
 
-    public GenericResponse newPrintJob(PrintJobNewRequest printJobNewRequest) {
-        GenericResponse response = new GenericResponse();
+    public PrintJobData newPrintJob(PrintJobNewRequest printJobNewRequest) {
+        PrintJobData response = new PrintJobData();
         // Create new record based off of the printJobNewRequest
         String firstName = printJobNewRequest.getFirstName();
         String lastName = printJobNewRequest.getLastName();
         String email = printJobNewRequest.getEmail();
         String color = printJobNewRequest.getColor();
         String comments = printJobNewRequest.getComments();
-        String dropboxLink = "temp";
+        String dropboxLink = "temp"; // ! This should always be temporary and the actual file is uploaded with the id of the record!
         LocalDateTime currentTime = LocalDateTime.now();
 
         // Check if EmailHash Exists otherwise make a new record
@@ -77,11 +80,13 @@ public class PrintJobOperations {
         String filePath = dropboxOperations.uploadDropboxFile(printModel.getId(), printJobNewRequest.getFile());
         printModel.setDropboxLink(filePath);
         printModelRepo.save(printModel);
+        
+        List<PrintModel> printModelData = Arrays.asList(printModel);
 
-        // Return success and new record to the frontend
         if (printModel != null) {
             response.setSuccess(true);
-            response.setMessage(printModel.getDropboxLink());
+            response.setMessage("Successfully saved new file to database!");
+            response.setData(printModelData);
         } else {
             response.setSuccess(false);
             response.setMessage("File could not be uploaded");

@@ -1,6 +1,7 @@
 package idealab.api.controller;
 
 import idealab.api.dto.GenericResponse;
+import idealab.api.dto.PrintJobData;
 import idealab.api.dto.PrintJobNewRequest;
 import idealab.api.dto.PrintJobUpdateRequest;
 import idealab.api.operations.PrintJobOperations;
@@ -28,7 +29,7 @@ public class PrintJobController {
     public ResponseEntity<?> printJobNew(@ModelAttribute PrintJobNewRequest model) {
         // TODO Create new print job
         // ! Returning response for now until database is setup
-        GenericResponse response = printJobOperations.newPrintJob(model);
+        PrintJobData response = printJobOperations.newPrintJob(model);
         if(response.isSuccess())
             return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         else
