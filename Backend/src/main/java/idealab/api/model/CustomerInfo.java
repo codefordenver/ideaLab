@@ -35,6 +35,9 @@ public class CustomerInfo {
     @Length(min = 1,  max = 254)
     private String email;
 
+    public CustomerInfo() {
+    }
+
     public CustomerInfo(EmailHash emailHashId, String firstName, String lastName, String email) {
         this.emailHashId = emailHashId;
         this.firstName = firstName;

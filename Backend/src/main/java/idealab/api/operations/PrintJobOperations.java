@@ -50,22 +50,22 @@ public class PrintJobOperations {
         String emailHash = printJobNewRequest.getEmail();
         EmailHash databaseEmail = emailHashRepo.findByEmailHash(emailHash);
         if (databaseEmail == null) {
-            EmailHash newEmailHash = new EmailHash(emailHash);
-            databaseEmail = emailHashRepo.save(newEmailHash);
+            databaseEmail = new EmailHash(emailHash);
+            emailHashRepo.save(databaseEmail);
         }
 
-        // // Create customer record with email hash if it does not already exist
-        // CustomerInfo customer = customerInfoRepo.findByEmailHash(emailHash);
-        // if (customer == null) {
-        //     CustomerInfo newCustomer = new CustomerInfo(databaseEmail, firstName, lastName, email);
-        //     databaseEmail = emailHashRepo.save(newCustomer);
-        // }
+        // Create customer record with email hash if it does not already exist
+        CustomerInfo customer = customerInfoRepo.findByEmailHashId(databaseEmail);
+        if (customer == null) {
+            customer = new CustomerInfo(databaseEmail, firstName, lastName, email);
+            customerInfoRepo.save(customer);
+        }
 
         // Check if Color exists otherwise make a new record
         ColorType databaseColor = colorTypeRepo.findByColor(color);
         if (databaseColor == null) {
-            ColorType colorType = new ColorType(color);
-            databaseColor = colorTypeRepo.save(colorType);
+            databaseColor = new ColorType(color);
+            colorTypeRepo.save(databaseColor);
         }
 
         // Create a new print model first with temp dropbox link

@@ -51,6 +51,9 @@ public class PrintModel {
     @Column(name = "created_at",  nullable = false)
     private LocalDateTime createdAt;
 
+    public PrintModel() {
+    }
+
     public PrintModel(EmailHash emailHashId, ColorType color, String comments, String dropboxLink, LocalDateTime updatedAt, LocalDateTime createdAt) {
         this.emailHashId = emailHashId;
         this.comments = comments;
