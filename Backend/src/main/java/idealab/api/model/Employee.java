@@ -1,16 +1,9 @@
 package idealab.api.model;
 
-import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import org.hibernate.validator.constraints.Length;
+
+import javax.persistence.*;
+import java.util.Set;
 
 
 @Entity
@@ -21,8 +14,19 @@ public class Employee {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToMany(targetEntity=PrintStatus.class, mappedBy="employeeId")   
-    private Set<PrintStatus> printStatus;
+    @Column(name = "login", nullable = false)
+    @Length (min = 1, max = 254)
+    private String login;
+
+    @Column(name = "password_hash", nullable = false)
+    private String passwordHash;
+
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private EmployeeRole role;
+
+    @OneToMany(targetEntity=PrintJob.class, mappedBy="employeeId")
+    private Set<PrintJob> printJobs;
 
     @Column(name = "first_name", nullable = false)
     @Length(min = 1, max = 254)
@@ -32,12 +36,34 @@ public class Employee {
     @Length(min = 1,  max = 254)
     private String lastName;
 
-    public Employee(String firstName, String lastName) {
+    public Employee() {
+    }
+
+    public Employee(@Length(min = 1, max = 254) String login,
+                    String passwordHash,
+                    EmployeeRole role,
+                    Set<PrintJob> printJobs,
+                    @Length(min = 1, max = 254) String firstName,
+                    @Length(min = 1, max = 254) String lastName) {
+        this.login = login;
+        this.passwordHash = passwordHash;
+        this.role = role;
+        this.printJobs = printJobs;
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
     //getter & setter
+
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -52,5 +78,37 @@ public class Employee {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public EmployeeRole getRole() {
+        return role;
+    }
+
+    public void setRole(EmployeeRole role) {
+        this.role = role;
+    }
+
+    public Set<PrintJob> getPrintJobs() {
+        return printJobs;
+    }
+
+    public void setPrintJobs(Set<PrintJob> printJobs) {
+        this.printJobs = printJobs;
     }
 }

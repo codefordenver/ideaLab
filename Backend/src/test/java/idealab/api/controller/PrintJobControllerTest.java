@@ -1,7 +1,7 @@
-
 package idealab.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import idealab.api.dto.request.PrintJobDeleteRequest;
 import idealab.api.dto.request.PrintJobUpdateRequest;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.GetAllPrintJobListResponse;
@@ -16,12 +16,9 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -30,14 +27,15 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@WebMvcTest(PrintJobController.class)
 @RunWith(MockitoJUnitRunner.class)
 @EnableAutoConfiguration
 public class PrintJobControllerTest {
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -57,26 +55,26 @@ public class PrintJobControllerTest {
     public void updatePrintJobStatusSuccess() throws Exception {
         PrintJobUpdateRequest printJobUpdateRequest = new PrintJobUpdateRequest();
         printJobUpdateRequest.setEmployeeId(1);
-        printJobUpdateRequest.setPrintStatusId(2);
         printJobUpdateRequest.setStatus("Completed");
+
+        Integer printJobId = 3;
 
         GenericResponse genericResponse = new GenericResponse();
         genericResponse.setSuccess(true);
         genericResponse.setMessage("Print Job Updated");
 
-        String inputJson = printJobUpdateRequestAsJsonString(printJobUpdateRequest);
+        String inputJson = printJobRequestAsJsonString(printJobUpdateRequest);
 
-        when(printJobOperations.updatePrintJob(printJobUpdateRequest)).thenReturn(genericResponse);
+        when(printJobOperations.updatePrintJobStatus(printJobId, printJobUpdateRequest)).thenReturn(genericResponse);
 
-        ResultActions response = mockMvc.perform(put("/api/printjob/status")
+        String returnJson = mockMvc.perform(put("/api/printjobs/3/status")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(inputJson)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().is2xxSuccessful())
+                .andReturn().getResponse().getContentAsString();
 
-        MvcResult result = response.andReturn();
-        String content = result.getResponse().getContentAsString();
-        GenericResponse returnedResponse = stringToGenericResponse(content);
+        GenericResponse returnedResponse = stringToGenericResponse(returnJson);
         assert (returnedResponse.equals(genericResponse));
     }
 
@@ -84,30 +82,80 @@ public class PrintJobControllerTest {
     public void updatePrintJobStatusFail() throws Exception {
         PrintJobUpdateRequest printJobUpdateRequest = new PrintJobUpdateRequest();
         printJobUpdateRequest.setEmployeeId(1);
-        printJobUpdateRequest.setPrintStatusId(2);
         printJobUpdateRequest.setStatus("asdfasdfads");
+
+        Integer printJobId = 3;
 
         GenericResponse genericResponse = new GenericResponse();
         genericResponse.setSuccess(false);
         genericResponse.setMessage("Invalid Status");
 
-        String inputJson = printJobUpdateRequestAsJsonString(printJobUpdateRequest);
+        String inputJson = printJobRequestAsJsonString(printJobUpdateRequest);
 
-        when(printJobOperations.updatePrintJob(printJobUpdateRequest)).thenReturn(genericResponse);
+        when(printJobOperations.updatePrintJobStatus(printJobId, printJobUpdateRequest)).thenReturn(genericResponse);
 
-        ResultActions response = mockMvc.perform(put("/api/printjob/status")
+        String returnJson = mockMvc.perform(put("/api/printjobs/3/status")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(inputJson)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().is4xxClientError())
+                .andReturn().getResponse().getContentAsString();
 
-        MvcResult result = response.andReturn();
-        String content = result.getResponse().getContentAsString();
-        GenericResponse returnedResponse = stringToGenericResponse(content);
+        GenericResponse returnedResponse = stringToGenericResponse(returnJson);
         assert (returnedResponse.equals(genericResponse));
     }
 
-    public String printJobUpdateRequestAsJsonString(PrintJobUpdateRequest obj) {
+    @Test
+    public void deletePrintJobStatusSuccess() throws Exception {
+        PrintJobDeleteRequest printJobDeleteRequest = new PrintJobDeleteRequest();
+        printJobDeleteRequest.setEmployeeId(1);
+        printJobDeleteRequest.setPrintJobId(2);
+
+        GenericResponse genericResponse = new GenericResponse();
+        genericResponse.setSuccess(true);
+        genericResponse.setMessage("Print Job Deleted");
+
+        String inputJson = printJobRequestAsJsonString(printJobDeleteRequest);
+
+        when(printJobOperations.deletePrintJobStatus(printJobDeleteRequest)).thenReturn(genericResponse);
+
+        String returnJson = mockMvc.perform(delete("/api/printjobs")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(inputJson)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andReturn().getResponse().getContentAsString();
+
+        GenericResponse returnedResponse = stringToGenericResponse(returnJson);
+        assert (returnedResponse.equals(genericResponse));
+    }
+
+    @Test
+    public void deletePrintJobStatusFail() throws Exception {
+        PrintJobDeleteRequest printJobDeleteRequest = new PrintJobDeleteRequest();
+        printJobDeleteRequest.setEmployeeId(1);
+        printJobDeleteRequest.setPrintJobId(2);
+
+        GenericResponse genericResponse = new GenericResponse();
+        genericResponse.setSuccess(false);
+        genericResponse.setMessage("Print Job Delete Failed");
+
+        String inputJson = printJobRequestAsJsonString(printJobDeleteRequest);
+
+        when(printJobOperations.deletePrintJobStatus(printJobDeleteRequest)).thenReturn(genericResponse);
+
+        String returnJson = mockMvc.perform(delete("/api/printjobs")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(inputJson)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError())
+                .andReturn().getResponse().getContentAsString();
+
+        GenericResponse returnedResponse = stringToGenericResponse(returnJson);
+        assert (returnedResponse.equals(genericResponse));
+    }
+
+    public String printJobRequestAsJsonString(Object obj) {
         try {
             final ObjectMapper mapper = new ObjectMapper();
             return mapper.writeValueAsString(obj);
@@ -139,7 +187,7 @@ public class PrintJobControllerTest {
 
         // act
         String jsonString = mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/printjob")
+                MockMvcRequestBuilders.get("/api/printjobs")
                         .accept(MediaType.APPLICATION_JSON)
         )
         .andExpect(status().isOk())
@@ -163,7 +211,7 @@ public class PrintJobControllerTest {
 
         // act
         int actualResponseStatus = mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/printjob")
+                MockMvcRequestBuilders.get("/api/printjobs")
                         .accept(MediaType.APPLICATION_JSON)
         ).andReturn().getResponse().getStatus();
 
