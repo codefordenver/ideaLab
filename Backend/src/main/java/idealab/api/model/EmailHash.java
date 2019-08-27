@@ -1,14 +1,7 @@
 package idealab.api.model;
 
+import javax.persistence.*;
 import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 
 
@@ -23,8 +16,8 @@ public class EmailHash {
     @OneToMany(targetEntity=CustomerInfo.class, mappedBy="emailHashId")   
     private Set<CustomerInfo> customerInfo;
 
-    @OneToMany(targetEntity=PrintModel.class, mappedBy="emailHashId")   
-    private Set<PrintModel> printModel;
+    @OneToMany(targetEntity=PrintJob.class, mappedBy="emailHashId")
+    private Set<PrintJob> printJobs;
 
     @Column(name = "email_hash", nullable = false)
     private String emailHash;

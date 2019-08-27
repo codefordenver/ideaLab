@@ -9,9 +9,22 @@ package idealab.api.model;
     COMPLETED ("Completed"),
     ARCHIVED ("Archived");
 
-     private final String name;
+    private final String name;
 
-     Status(String name) {
+    Status(String name) {
         this.name = name;
     }
+
+    public String getName() {
+        return this.name;
+    }
+
+     public static Status fromName(String text) {
+         for (Status s : Status.values()) {
+             if (s.name.equalsIgnoreCase(text)) {
+                 return s;
+             }
+         }
+         return null;
+     }
 } 
