@@ -4,11 +4,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class PrintJobNewRequest {
 
-    private String firstName;
-    private String lastName;
+    private String customerFirstName;
+    private String customerLastName;
     private String email;
     private String color;
     private String comments;
+    private String employeeNotes;
     private MultipartFile file;
 
     public String getEmail() {
@@ -35,6 +36,14 @@ public class PrintJobNewRequest {
         this.comments = comments;
     }
 
+    public String getEmployeeNotes() {
+        return employeeNotes;
+    }
+
+    public void setEmployeeNotes(String employeeNotes) {
+        this.employeeNotes = employeeNotes;
+    }
+
     public String getColor() {
         return color;
     }
@@ -43,19 +52,19 @@ public class PrintJobNewRequest {
         this.color = color;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getCustomerFirstName() {
+        return customerFirstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setCustomerFirstName(String customerFirstName) {
+        this.customerFirstName = customerFirstName;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getCustomerLastName() {
+        return customerLastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setCustomerLastName(String customerLastName) {
+        this.customerLastName = customerLastName;
     }
 }

@@ -27,7 +27,8 @@ public class PrintJobOperations {
     private EmployeeRepo employeeRepo;
 
     public PrintJobOperations(DropboxOperations dropboxOperations, PrintJobRepo printJobRepo,
-                              ColorTypeRepo colorTypeRepo, EmailHashRepo emailHashRepo, CustomerInfoRepo customerInfoRepo, EmployeeRepo employeeRepo) {
+                              ColorTypeRepo colorTypeRepo, EmailHashRepo emailHashRepo, CustomerInfoRepo customerInfoRepo,
+                              EmployeeRepo employeeRepo) {
         this.dropboxOperations = dropboxOperations;
         this.printJobRepo = printJobRepo;
         this.colorTypeRepo = colorTypeRepo;
@@ -41,15 +42,16 @@ public class PrintJobOperations {
         response.setSuccess(false);
         response.setMessage("File could not be uploaded");
         // Create new record based off of the printJobNewRequest
-        String firstName = printJobNewRequest.getFirstName();
-        String lastName = printJobNewRequest.getLastName();
         String email = printJobNewRequest.getEmail();
+        String customerFirstName = printJobNewRequest.getCustomerFirstName();
+        String customerLastName = printJobNewRequest.getCustomerLastName();
         String color = printJobNewRequest.getColor();
         String comments = printJobNewRequest.getComments();
+        String employeeNotes = printJobNewRequest.getEmployeeNotes();
         LocalDateTime currentTime = LocalDateTime.now();
 
         // Check if EmailHash Exists otherwise make a new record
-        // TODO: Hash email so it is not in plaintext
+        // TODO: Hash email so it is not in plaintext!!
         String emailHash = printJobNewRequest.getEmail();
         EmailHash databaseEmail = emailHashRepo.findByEmailHash(emailHash);
         if (databaseEmail == null) {
@@ -60,7 +62,7 @@ public class PrintJobOperations {
         // Create customer record with email hash if it does not already exist
         CustomerInfo customer = customerInfoRepo.findByEmailHashId(databaseEmail);
         if (customer == null) {
-            customer = new CustomerInfo(databaseEmail, firstName, lastName, email);
+            customer = new CustomerInfo(databaseEmail, customerFirstName, customerLastName, email);
             customerInfoRepo.save(customer);
         }
 
@@ -71,9 +73,21 @@ public class PrintJobOperations {
             colorTypeRepo.save(databaseColor);
         }
 
+        // TODO: Remove temp employee, this should be taken directly from the employee making the request through the token.
+        String tempEmployeeFirstName = "Temp John";
+        String tempEmployeeLastName = "Temp Joe";
+        String tempEmployeeLogin = "Temp Cotton Eyed Joe";
+        Employee employee = new Employee(tempEmployeeLogin, "such secure, wow!", EmployeeRole.STAFF, tempEmployeeFirstName, tempEmployeeLastName);
+        Employee databaseEmployee = employeeRepo.findByLogin(employee.getLogin());
+        if (databaseEmployee == null) {
+            databaseEmployee = employeeRepo.save(employee);
+        }
+
         // Create a new print model first with temp dropbox link
-        PrintJob printJob = new PrintJob(databaseEmail, databaseColor, EmployeeId, Status.PENDING_REVIEW, "employeeNotes", QueueId, comments, currentTime, currentTime);
+        PrintJob printJob = new PrintJob(databaseEmail, databaseColor, databaseEmployee, Status.PENDING_REVIEW, employeeNotes, comments, currentTime, currentTime);
         printJobRepo.save(printJob);
+
+        // TODO: set the queue position of the new job to be at the end of the list.
 
         // Make a dropbox sharable link here using the ID of the database record
         Map<String, String> data = null;

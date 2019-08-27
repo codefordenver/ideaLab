@@ -1,5 +1,7 @@
 package idealab.api.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -32,6 +34,7 @@ public class PrintJob {
     private Status status;
 
     @Column(name = "employee_notes")
+    @JsonManagedReference
     private String employeeNotes;
 
     @OneToOne(targetEntity=Queue.class, mappedBy="printJobId")
@@ -58,13 +61,12 @@ public class PrintJob {
     }
 
     public PrintJob(EmailHash emailHashId, ColorType colorTypeId, Employee employeeId, Status status,
-                    String employeeNotes, Queue queueId, String comments, LocalDateTime updatedAt, LocalDateTime createdAt) {
+                    String employeeNotes, String comments, LocalDateTime updatedAt, LocalDateTime createdAt) {
         this.emailHashId = emailHashId;
         this.colorTypeId = colorTypeId;
         this.employeeId = employeeId;
         this.status = status;
         this.employeeNotes = employeeNotes;
-        this.queueId = queueId;
         this.comments = comments;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;

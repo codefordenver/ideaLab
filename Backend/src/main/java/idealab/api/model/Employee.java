@@ -1,5 +1,7 @@
 package idealab.api.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -26,6 +28,7 @@ public class Employee {
     private EmployeeRole role;
 
     @OneToMany(targetEntity=PrintJob.class, mappedBy="employeeId")
+    @JsonBackReference
     private Set<PrintJob> printJobs;
 
     @Column(name = "first_name", nullable = false)
@@ -42,13 +45,11 @@ public class Employee {
     public Employee(@Length(min = 1, max = 254) String login,
                     String passwordHash,
                     EmployeeRole role,
-                    Set<PrintJob> printJobs,
                     @Length(min = 1, max = 254) String firstName,
                     @Length(min = 1, max = 254) String lastName) {
         this.login = login;
         this.passwordHash = passwordHash;
         this.role = role;
-        this.printJobs = printJobs;
         this.firstName = firstName;
         this.lastName = lastName;
     }
