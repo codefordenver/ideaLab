@@ -3,6 +3,8 @@ package idealab.api.operations;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -53,27 +55,20 @@ public class DropboxOperations {
     return listSharedLinksResult.getLinks().get(0).getUrl();
   }
 
-  public String uploadDropboxFile(int id, MultipartFile file) {
+  public Map<String, String> uploadDropboxFile(int id, MultipartFile file) throws IOException, DbxException {
     String dropboxFilePath = "/" + id + "-" + file.getOriginalFilename();
-    InputStream in;
-    FileMetadata metadata;
 
-    try {
-      in = new BufferedInputStream(file.getInputStream());
-    } catch (IOException e) {
-      return "Upload Error";
-    }
-
+    InputStream in = new BufferedInputStream(file.getInputStream());
     // TODO See if file already exists to delete and replace it.
-    try {
-      metadata = client.files().uploadBuilder(dropboxFilePath).uploadAndFinish(in);
-      String filePath = metadata.getPathLower();
-      String sharableLink = getSharableLink(filePath);
+    FileMetadata metadata = client.files().uploadBuilder(dropboxFilePath).uploadAndFinish(in);
+    String filePath = metadata.getPathLower();
+    String sharableLink = getSharableLink(filePath);
 
-      return sharableLink;
-    } catch (DbxException | IOException e) {
-      return "Link Error";
-    }
+    Map<String, String> data = new HashMap<>();
+
+    data.put("filePath", filePath);
+    data.put("sharableLink", sharableLink);
+    return data;
   }
 
   public String deleteDropboxFile(PrintModel printModel) {

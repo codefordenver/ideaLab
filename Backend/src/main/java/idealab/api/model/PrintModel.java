@@ -21,49 +21,68 @@ import org.hibernate.validator.constraints.Length;
 public class PrintModel {
     @Id
     @Column(name = "id", updatable = false, nullable = false)
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne()
-    @JoinColumn(name="fk_email_hash_id", referencedColumnName = "id", nullable = false)   
+    @JoinColumn(name = "fk_email_hash_id", referencedColumnName = "id", nullable = false)
     private EmailHash emailHashId;
 
     @ManyToOne()
-    @JoinColumn(name="fk_color_type_id", referencedColumnName = "id", nullable = false)   
+    @JoinColumn(name = "fk_color_type_id", referencedColumnName = "id", nullable = false)
     private ColorType colorTypeId;
 
-    @OneToMany(targetEntity=PrintStatus.class, mappedBy="printModelId")   
+    @OneToMany(targetEntity = PrintStatus.class, mappedBy = "printModelId")
     private Set<PrintStatus> printModel;
 
-    @OneToOne(targetEntity=Queue.class, mappedBy="printModelId")
+    @OneToOne(targetEntity = Queue.class, mappedBy = "printModelId")
     private Queue queueId;
 
     @Column(name = "comments")
     private String comments;
 
-    @Column(name = "dropbox_link", nullable = false)
+    @Column(name = "dropbox_sharable_link")
     @Length(min = 1, max = 254)
-    private String dropboxLink;
+    private String dropboxSharableLink;
+
+    @Column(name = "dropbox_path")
+    @Length(min = 1, max = 254)
+    private String dropboxPath;
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @Column(name = "created_at",  nullable = false)
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     public PrintModel() {
     }
 
-    public PrintModel(EmailHash emailHashId, ColorType color, String comments, String dropboxLink, LocalDateTime updatedAt, LocalDateTime createdAt) {
+    public PrintModel(EmailHash emailHashId, ColorType color, String comments, LocalDateTime updatedAt, LocalDateTime createdAt) {
         this.emailHashId = emailHashId;
         this.comments = comments;
-        this.dropboxLink = dropboxLink;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
         this.colorTypeId = color;
     }
 
     //getters and setters
+    public String getDropboxSharableLink() {
+        return dropboxSharableLink;
+    }
+
+    public void setDropboxSharableLink(String dropboxSharableLink) {
+        this.dropboxSharableLink = dropboxSharableLink;
+    }
+
+    public String getDropboxPath() {
+        return dropboxPath;
+    }
+
+    public void setDropboxPath(String dropboxPath) {
+        this.dropboxPath = dropboxPath;
+    }
+
     public EmailHash getEmailHashId() {
         return emailHashId;
     }
@@ -86,14 +105,6 @@ public class PrintModel {
 
     public void setComments(String comments) {
         this.comments = comments;
-    }
-
-    public String getDropboxLink() {
-        return dropboxLink;
-    }
-
-    public void setDropboxLink(String dropboxLink) {
-        this.dropboxLink = dropboxLink;
     }
 
     public LocalDateTime getUpdatedAt() {

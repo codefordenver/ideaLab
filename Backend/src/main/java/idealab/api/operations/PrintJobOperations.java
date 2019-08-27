@@ -1,5 +1,6 @@
 package idealab.api.operations;
 
+import com.dropbox.core.DbxException;
 import idealab.api.dto.GenericResponse;
 import idealab.api.dto.PrintJobData;
 import idealab.api.dto.PrintJobNewRequest;
@@ -13,9 +14,11 @@ import idealab.api.repositories.CustomerInfoRepo;
 import idealab.api.repositories.EmailHashRepo;
 import idealab.api.repositories.PrintModelRepo;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,13 +42,14 @@ public class PrintJobOperations {
 
     public PrintJobData newPrintJob(PrintJobNewRequest printJobNewRequest) {
         PrintJobData response = new PrintJobData();
+        response.setSuccess(false);
+        response.setMessage("File could not be uploaded");
         // Create new record based off of the printJobNewRequest
         String firstName = printJobNewRequest.getFirstName();
         String lastName = printJobNewRequest.getLastName();
         String email = printJobNewRequest.getEmail();
         String color = printJobNewRequest.getColor();
         String comments = printJobNewRequest.getComments();
-        String dropboxLink = "temp"; // ! This should always be temporary and the actual file is uploaded with the id of the record!
         LocalDateTime currentTime = LocalDateTime.now();
 
         // Check if EmailHash Exists otherwise make a new record
@@ -72,13 +76,21 @@ public class PrintJobOperations {
         }
 
         // Create a new print model first with temp dropbox link
-        PrintModel printModel = new PrintModel(databaseEmail, databaseColor, comments, dropboxLink, currentTime,
+        PrintModel printModel = new PrintModel(databaseEmail, databaseColor, comments, currentTime,
                 currentTime);
         printModelRepo.save(printModel);
 
         // Make a dropbox sharable link here using the ID of the database record
-        String filePath = dropboxOperations.uploadDropboxFile(printModel.getId(), printJobNewRequest.getFile());
-        printModel.setDropboxLink(filePath);
+        Map<String, String> data = null;
+        try {
+            data = dropboxOperations.uploadDropboxFile(printModel.getId(), printJobNewRequest.getFile());
+            printModel.setDropboxPath(data.get("filePath"));
+            printModel.setDropboxSharableLink(data.get("sharableLink"));
+        } catch (IOException | DbxException e) {
+            printModel.setDropboxPath("Error");
+            printModel.setDropboxSharableLink("Error");
+        }
+
         printModelRepo.save(printModel);
         
         List<PrintModel> printModelData = Arrays.asList(printModel);
@@ -94,31 +106,6 @@ public class PrintJobOperations {
         }
         return response;
     }
-
-    public GenericResponse updateFile(int fileId, MultipartFile file) {
-        GenericResponse response = new GenericResponse();
-
-        // //Get existing filePath from the Print Job model and delete the old file
-        // String fileDeleted = dropboxOperations.deletedropboxFile(filePath);
-
-        // Create a new file with the fileId and new filename
-        String fileProperties = dropboxOperations.uploadDropboxFile(fileId, file);
-
-        // Associate file with
-
-        if (!fileProperties.isEmpty()) {
-            response.setSuccess(true);
-            response.setMessage(fileProperties);
-        } else {
-            response.setSuccess(false);
-            response.setMessage("File could not be uploaded");
-        }
-        return response;
-
-    }
-
-    // EmployeeListRepo employeeListRepo;
-    // PrintStatusRepo printStatusRepo;
 
     public GenericResponse updatePrintJob(PrintJobUpdateRequest dto) {
         GenericResponse response = new GenericResponse();
