@@ -25,6 +25,12 @@ public enum ErrorType {
         4,
         "Print job couldn't be deleted !",
         HttpStatus.INTERNAL_SERVER_ERROR
+    ),
+
+    PRINT_JOB_UPDATE_FAILED(
+            5,
+            "Print Job Update Failed - Invalid Status",
+            HttpStatus.INTERNAL_SERVER_ERROR
     );
 
     ErrorType(int errorCode, String errorMessage, HttpStatus responseStatus){

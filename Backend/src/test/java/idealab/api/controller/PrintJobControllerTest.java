@@ -2,8 +2,8 @@ package idealab.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import idealab.api.dto.requests.PrintJobDeleteRequest;
-import idealab.api.dto.request.PrintJobUpdateRequest;
-import idealab.api.dto.response.GenericResponse;
+import idealab.api.dto.requests.PrintJobUpdateRequest;
+import idealab.api.dto.responses.GenericResponse;
 import idealab.api.dto.responses.GetAllPrintJobListResponse;
 import idealab.api.dto.responses.GetAllPrintJobResponse;
 import idealab.api.operations.PrintJobOperations;
