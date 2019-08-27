@@ -1,4 +1,4 @@
-package idealab.api.dto.request;
+package idealab.api.dto.requests;
 
 import java.util.Objects;
 

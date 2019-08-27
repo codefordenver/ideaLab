@@ -1,4 +1,4 @@
-package idealab.api.dto.response;
+package idealab.api.dto.responses;
 
 import java.util.List;
 
