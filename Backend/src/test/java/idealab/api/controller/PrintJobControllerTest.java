@@ -47,7 +47,7 @@ public class PrintJobControllerTest {
         printJobUpdateRequest.setEmployeeId(1);
         printJobUpdateRequest.setStatus("Completed");
 
-        Integer printStatusId = 3;
+        Integer printJobId = 3;
 
         GenericResponse genericResponse = new GenericResponse();
         genericResponse.setSuccess(true);
@@ -55,7 +55,7 @@ public class PrintJobControllerTest {
 
         String inputJson = printJobRequestAsJsonString(printJobUpdateRequest);
 
-        when(printJobOperations.updatePrintJobStatus(printStatusId, printJobUpdateRequest)).thenReturn(genericResponse);
+        when(printJobOperations.updatePrintJobStatus(printJobId, printJobUpdateRequest)).thenReturn(genericResponse);
 
         String returnJson = mockMvc.perform(put("/api/printjobs/3/status")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -74,7 +74,7 @@ public class PrintJobControllerTest {
         printJobUpdateRequest.setEmployeeId(1);
         printJobUpdateRequest.setStatus("asdfasdfads");
 
-        Integer printStatusId = 3;
+        Integer printJobId = 3;
 
         GenericResponse genericResponse = new GenericResponse();
         genericResponse.setSuccess(false);
@@ -82,7 +82,7 @@ public class PrintJobControllerTest {
 
         String inputJson = printJobRequestAsJsonString(printJobUpdateRequest);
 
-        when(printJobOperations.updatePrintJobStatus(printStatusId, printJobUpdateRequest)).thenReturn(genericResponse);
+        when(printJobOperations.updatePrintJobStatus(printJobId, printJobUpdateRequest)).thenReturn(genericResponse);
 
         String returnJson = mockMvc.perform(put("/api/printjobs/3/status")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -99,7 +99,7 @@ public class PrintJobControllerTest {
     public void deletePrintJobStatusSuccess() throws Exception {
         PrintJobDeleteRequest printJobDeleteRequest = new PrintJobDeleteRequest();
         printJobDeleteRequest.setEmployeeId(1);
-        printJobDeleteRequest.setPrintStatusId(2);
+        printJobDeleteRequest.setPrintJobId(2);
 
         GenericResponse genericResponse = new GenericResponse();
         genericResponse.setSuccess(true);
@@ -124,7 +124,7 @@ public class PrintJobControllerTest {
     public void deletePrintJobStatusFail() throws Exception {
         PrintJobDeleteRequest printJobDeleteRequest = new PrintJobDeleteRequest();
         printJobDeleteRequest.setEmployeeId(1);
-        printJobDeleteRequest.setPrintStatusId(2);
+        printJobDeleteRequest.setPrintJobId(2);
 
         GenericResponse genericResponse = new GenericResponse();
         genericResponse.setSuccess(false);

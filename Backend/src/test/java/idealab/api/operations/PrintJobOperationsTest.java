@@ -94,7 +94,7 @@ public class PrintJobOperationsTest {
     public void deletePrintJobSuccess() {
         PrintJobDeleteRequest request = new PrintJobDeleteRequest();
         request.setEmployeeId(1);
-        request.setPrintStatusId(2);
+        request.setPrintJobId(2);
 
         Employee employee = new Employee();
         employee.setId(1);
@@ -117,7 +117,7 @@ public class PrintJobOperationsTest {
     public void deletePrintJobFailEmployeeNull() {
         PrintJobDeleteRequest request = new PrintJobDeleteRequest();
         request.setEmployeeId(1);
-        request.setPrintStatusId(2);
+        request.setPrintJobId(2);
 
         Employee employee = new Employee();
         employee.setId(1);
@@ -139,7 +139,7 @@ public class PrintJobOperationsTest {
     public void deletePrintJobFailPrintJobStatusNull() {
         PrintJobDeleteRequest request = new PrintJobDeleteRequest();
         request.setEmployeeId(1);
-        request.setPrintStatusId(2);
+        request.setPrintJobId(2);
 
         Employee employee = new Employee();
         employee.setId(1);

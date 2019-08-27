@@ -5,7 +5,7 @@ import java.util.Objects;
 public class PrintJobDeleteRequest {
 
     private Integer employeeId;
-    private Integer printStatusId;
+    private Integer printJobId;
 
     public Integer getEmployeeId() {
         return employeeId;
@@ -15,12 +15,12 @@ public class PrintJobDeleteRequest {
         this.employeeId = employeeId;
     }
 
-    public Integer getPrintStatusId() {
-        return printStatusId;
+    public Integer getPrintJobId() {
+        return printJobId;
     }
 
-    public void setPrintStatusId(Integer printStatusId) {
-        this.printStatusId = printStatusId;
+    public void setPrintJobId(Integer printJobId) {
+        this.printJobId = printJobId;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class PrintJobDeleteRequest {
         if (o == null || getClass() != o.getClass()) return false;
         PrintJobDeleteRequest that = (PrintJobDeleteRequest) o;
         return Objects.equals(employeeId, that.employeeId) &&
-                Objects.equals(printStatusId, that.printStatusId);
+                Objects.equals(printJobId, that.printJobId);
     }
 
 
@@ -37,7 +37,7 @@ public class PrintJobDeleteRequest {
     public String toString() {
         return "PrintJobDeleteRequest{" +
                 "employeeId=" + employeeId +
-                ", printStatusId=" + printStatusId +
+                ", printJobId=" + printJobId +
                 '}';
     }
 }

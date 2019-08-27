@@ -29,11 +29,11 @@ public class PrintJobOperations {
         if(dto.isValidStatus())
         {
             Employee employee = employeeRepo.findEmployeeById(dto.getEmployeeId());
-            PrintJob printStatus = printJobRepo.findPrintJobById(printId);
+            PrintJob printJob = printJobRepo.findPrintJobById(printId);
 
-            if(employee != null && printStatus != null) {
-                printStatus = printJobRepo.save(printStatus);
-                if(printStatus.getStatus().getName().equalsIgnoreCase(dto.getStatus())) {
+            if(employee != null && printJob != null) {
+                printJob = printJobRepo.save(printJob);
+                if(printJob.getStatus().getName().equalsIgnoreCase(dto.getStatus())) {
                     response.setSuccess(true);
                     response.setMessage("Print Job Updated");
                 }
@@ -53,7 +53,7 @@ public class PrintJobOperations {
         response.setMessage("Print Job Delete Failed");
 
         Employee employee = employeeRepo.findEmployeeById(dto.getEmployeeId());
-        PrintJob printJob = printJobRepo.findPrintJobById(dto.getPrintStatusId());
+        PrintJob printJob = printJobRepo.findPrintJobById(dto.getPrintJobId());
 
         if(employee != null && printJob != null) {
             printJobRepo.delete(printJob);
