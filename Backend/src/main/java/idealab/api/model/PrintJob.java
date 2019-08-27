@@ -34,7 +34,7 @@ public class PrintJob {
     @Column(name = "employee_notes",  nullable = false)
     private String employeeNotes;
 
-    @OneToOne(targetEntity=Queue.class, mappedBy="printModelId")
+    @OneToOne(targetEntity=Queue.class, mappedBy="printJobId")
     private Queue queueId;
 
     @Column(name = "comments")

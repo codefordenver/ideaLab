@@ -4,10 +4,10 @@ import idealab.api.dto.GenericResponse;
 import idealab.api.dto.PrintJobDeleteRequest;
 import idealab.api.dto.PrintJobUpdateRequest;
 import idealab.api.model.Employee;
-import idealab.api.model.PrintStatus;
+import idealab.api.model.PrintJob;
 import idealab.api.model.Status;
 import idealab.api.repositories.EmployeeRepo;
-import idealab.api.repositories.PrintStatusRepo;
+import idealab.api.repositories.PrintJobRepo;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,14 +27,14 @@ public class PrintJobOperationsTest {
     private PrintJobOperations operations;
 
     @Mock
-    PrintStatusRepo printStatusRepo;
+    PrintJobRepo printJobRepo;
 
     @Mock
     EmployeeRepo employeeRepo;
 
     @Before
     public void setup() {
-        operations = new PrintJobOperations(employeeRepo, printStatusRepo);
+        operations = new PrintJobOperations(employeeRepo, printJobRepo);
     }
 
     @Test
@@ -47,21 +47,21 @@ public class PrintJobOperationsTest {
         Employee employee = new Employee();
         employee.setId(1);
 
-        PrintStatus printStatus = new PrintStatus();
-        printStatus.setEmployeeId(employee);
-        printStatus.setId(2);
-        printStatus.setStatus(Status.COMPLETED);
+        PrintJob printJob = new PrintJob();
+        printJob.setEmployeeId(employee);
+        printJob.setId(2);
+        printJob.setStatus(Status.COMPLETED);
 
         //When
-        when(employeeRepo.getEmployeeById(anyInt())).thenReturn(employee);
-        when(printStatusRepo.getPrintStatusById(anyInt())).thenReturn(printStatus);
-        when(printStatusRepo.save(printStatus)).thenReturn(printStatus);
+        when(employeeRepo.findEmployeeById(anyInt())).thenReturn(employee);
+        when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
+        when(printJobRepo.save(printJob)).thenReturn(printJob);
 
         GenericResponse response = operations.updatePrintJobStatus(2, request);
 
         //Then
         assertTrue("response is not true", response.isSuccess() == true);
-        assertTrue("print job was not updated", response.getMessage().equalsIgnoreCase("Print Job Status Updated"));
+        assertTrue("print job was not updated", response.getMessage().equalsIgnoreCase("Print Job Updated"));
     }
 
     @Test
@@ -74,20 +74,20 @@ public class PrintJobOperationsTest {
         Employee employee = new Employee();
         employee.setId(1);
 
-        PrintStatus printStatus = new PrintStatus();
-        printStatus.setEmployeeId(employee);
-        printStatus.setId(2);
-        printStatus.setStatus(Status.COMPLETED);
+        PrintJob printJob = new PrintJob();
+        printJob.setEmployeeId(employee);
+        printJob.setId(2);
+        printJob.setStatus(Status.COMPLETED);
 
         //When
-        when(employeeRepo.getEmployeeById(anyInt())).thenReturn(employee);
-        when(printStatusRepo.getPrintStatusById(anyInt())).thenReturn(printStatus);
+        when(employeeRepo.findEmployeeById(anyInt())).thenReturn(employee);
+        when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
 
         GenericResponse response = operations.updatePrintJobStatus(2, request);
 
         //Then
         assertTrue("response is not false", response.isSuccess() == false);
-        assertTrue("print job was updated", response.getMessage().equalsIgnoreCase("Print Job Status Update Failed - Invalid Status"));
+        assertTrue("print job was updated", response.getMessage().equalsIgnoreCase("Print Job Update Failed - Invalid Status"));
     }
 
     @Test
@@ -99,18 +99,18 @@ public class PrintJobOperationsTest {
         Employee employee = new Employee();
         employee.setId(1);
 
-        PrintStatus printStatus = new PrintStatus();
-        printStatus.setEmployeeId(employee);
-        printStatus.setId(2);
+        PrintJob printJob = new PrintJob();
+        printJob.setEmployeeId(employee);
+        printJob.setId(2);
 
-        when(employeeRepo.getEmployeeById(anyInt())).thenReturn(employee);
-        when(printStatusRepo.getPrintStatusById(anyInt())).thenReturn(printStatus);
-        doNothing().when(printStatusRepo).delete(printStatus);
+        when(employeeRepo.findEmployeeById(anyInt())).thenReturn(employee);
+        when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
+        doNothing().when(printJobRepo).delete(printJob);
 
         GenericResponse response = operations.deletePrintJobStatus(request);
 
         assertTrue("response is not true", response.isSuccess() == true);
-        assertTrue("print job was not deleted", response.getMessage().equalsIgnoreCase("Print Job Status Deleted Successfully"));
+        assertTrue("print job was not deleted", response.getMessage().equalsIgnoreCase("Print Job Deleted Successfully"));
     }
 
     @Test
@@ -122,17 +122,17 @@ public class PrintJobOperationsTest {
         Employee employee = new Employee();
         employee.setId(1);
 
-        PrintStatus printStatus = new PrintStatus();
-        printStatus.setEmployeeId(employee);
-        printStatus.setId(2);
+        PrintJob printJob = new PrintJob();
+        printJob.setEmployeeId(employee);
+        printJob.setId(2);
 
-        when(employeeRepo.getEmployeeById(anyInt())).thenReturn(null);
-        when(printStatusRepo.getPrintStatusById(anyInt())).thenReturn(printStatus);
+        when(employeeRepo.findEmployeeById(anyInt())).thenReturn(null);
+        when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
 
         GenericResponse response = operations.deletePrintJobStatus(request);
 
         assertTrue("response is not false", response.isSuccess() == false);
-        assertTrue("print job was deleted", response.getMessage().equalsIgnoreCase("Print Job Status Delete Failed"));
+        assertTrue("print job was deleted", response.getMessage().equalsIgnoreCase("Print Job Delete Failed"));
     }
 
     @Test
@@ -144,13 +144,13 @@ public class PrintJobOperationsTest {
         Employee employee = new Employee();
         employee.setId(1);
 
-        when(employeeRepo.getEmployeeById(anyInt())).thenReturn(employee);
-        when(printStatusRepo.getPrintStatusById(anyInt())).thenReturn(null);
+        when(employeeRepo.findEmployeeById(anyInt())).thenReturn(employee);
+        when(printJobRepo.findPrintJobById(anyInt())).thenReturn(null);
 
         GenericResponse response = operations.deletePrintJobStatus(request);
 
         assertTrue("response is not false", response.isSuccess() == false);
-        assertTrue("print job was deleted", response.getMessage().equalsIgnoreCase("Print Job Status Delete Failed"));
+        assertTrue("print job was deleted", response.getMessage().equalsIgnoreCase("Print Job Delete Failed"));
     }
 
 }

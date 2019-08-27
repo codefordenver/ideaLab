@@ -20,8 +20,8 @@ public class Queue {
     private Integer id;
 
     @OneToOne()
-    @JoinColumn(name="fk_print_model_id", referencedColumnName = "id", nullable = false)
-    private PrintModel printModelId;
+    @JoinColumn(name="fk_print_job_id", referencedColumnName = "id", nullable = false)
+    private PrintJob printJobId;
     
     @Column(name = "rank", nullable = false)
     private Integer rank;

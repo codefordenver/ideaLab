@@ -25,8 +25,8 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private EmployeeRole role;
 
-    @OneToMany(targetEntity=PrintStatus.class, mappedBy="employeeId")   
-    private Set<PrintStatus> printStatus;
+    @OneToMany(targetEntity=PrintJob.class, mappedBy="employeeId")
+    private Set<PrintJob> printJobs;
 
     @Column(name = "first_name", nullable = false)
     @Length(min = 1, max = 254)
@@ -42,13 +42,13 @@ public class Employee {
     public Employee(@Length(min = 1, max = 254) String login,
                     String passwordHash,
                     EmployeeRole role,
-                    Set<PrintStatus> printStatus,
+                    Set<PrintJob> printJobs,
                     @Length(min = 1, max = 254) String firstName,
                     @Length(min = 1, max = 254) String lastName) {
         this.login = login;
         this.passwordHash = passwordHash;
         this.role = role;
-        this.printStatus = printStatus;
+        this.printJobs = printJobs;
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -104,11 +104,11 @@ public class Employee {
         this.role = role;
     }
 
-    public Set<PrintStatus> getPrintStatus() {
-        return printStatus;
+    public Set<PrintJob> getPrintJobs() {
+        return printJobs;
     }
 
-    public void setPrintStatus(Set<PrintStatus> printStatus) {
-        this.printStatus = printStatus;
+    public void setPrintJobs(Set<PrintJob> printJobs) {
+        this.printJobs = printJobs;
     }
 }
