@@ -21,10 +21,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Employee login = employeeRepo.findEmployeeByLoginEquals(username);
+        Employee login = employeeRepo.findEmployeeByUsername(username);
         if (login == null) {
             throw new UsernameNotFoundException(username);
         }
-        return new User(login.getLogin(), login.getPassword(), emptyList());
+        return new User(login.getUsername(), login.getPassword(), emptyList());
     }
 }

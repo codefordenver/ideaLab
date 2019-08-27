@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface EmployeeRepo extends CrudRepository<Employee, Integer> {
     Employee findEmployeeById(Integer id);
-    Employee findEmployeeByLoginEqualsAndPasswordEquals(String login, String password);
-    Employee findEmployeeByLoginEquals(String login);
+    Employee findEmployeeByUsernameEquals(String username);
+    Employee findEmployeeByUsername(String username);
 
 }

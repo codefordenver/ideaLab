@@ -2,7 +2,7 @@ package idealab.api.security;
 
 import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import idealab.api.model.ApplicationUser;
+import idealab.api.model.Employee;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,8 +32,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest req,
                                                 HttpServletResponse res) throws AuthenticationException {
         try {
-            ApplicationUser creds = new ObjectMapper()
-                    .readValue(req.getInputStream(), ApplicationUser.class);
+            Employee creds = new ObjectMapper()
+                    .readValue(req.getInputStream(), Employee.class);
 
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(

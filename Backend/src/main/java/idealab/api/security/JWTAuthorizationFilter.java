@@ -58,7 +58,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
             if (user != null) {
                 //return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
-                Employee e = employeeRepo.findEmployeeByLoginEquals(user);
+                Employee e = employeeRepo.findEmployeeByUsernameEquals(user);
                 GrantedAuthority ga = new SimpleGrantedAuthority("ROLE_" + e.getRole().getText());
                 List<GrantedAuthority> gaList = new ArrayList<>();
                 gaList.add(ga);
