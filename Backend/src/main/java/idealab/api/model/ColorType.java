@@ -16,8 +16,7 @@ import javax.persistence.Table;
 @Table(name = "color_type")
 public class ColorType {
     @Id
-    @Column(name = "id", updatable = false, nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @OneToMany(targetEntity=PrintModel.class, mappedBy="colorTypeId")   

@@ -19,7 +19,6 @@ import javax.persistence.Table;
 @Table(name = "print_status")
 public class PrintStatus {
     @Id
-    @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
@@ -39,7 +38,7 @@ public class PrintStatus {
     private Employee employeeId;
 
 
-    @Column(name = "employee_notes",  nullable = false)
+    @Column(name = "employee_notes")
     private String employeeNotes;
 
     public PrintStatus(Integer queue, PrintModel printModelId, LocalDateTime statusDate, Status status, Employee employeeId, String employeeNotes) {   
