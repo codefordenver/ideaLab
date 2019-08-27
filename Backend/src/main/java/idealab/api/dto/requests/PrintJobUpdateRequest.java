@@ -1,4 +1,4 @@
-package idealab.api.dto;
+package idealab.api.dto.requests;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

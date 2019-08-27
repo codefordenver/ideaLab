@@ -1,8 +1,10 @@
 package idealab.api.operations;
 
-import idealab.api.dto.GenericResponse;
-import idealab.api.dto.PrintJobDeleteRequest;
-import idealab.api.dto.PrintJobUpdateRequest;
+import idealab.api.dto.responses.GenericResponse;
+import idealab.api.dto.requests.PrintJobDeleteRequest;
+import idealab.api.dto.requests.PrintJobUpdateRequest;
+import idealab.api.exception.ErrorType;
+import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.Employee;
 import idealab.api.model.PrintJob;
 import idealab.api.repositories.EmployeeRepo;
@@ -46,7 +48,7 @@ public class PrintJobOperations {
 
     }
 
-    public GenericResponse deletePrintJobStatus(PrintJobDeleteRequest dto) {
+    public GenericResponse deletePrintJobStatus(PrintJobDeleteRequest dto) throws IdeaLabApiException {
 
         GenericResponse response = new GenericResponse();
         response.setSuccess(false);
@@ -55,12 +57,14 @@ public class PrintJobOperations {
         Employee employee = employeeRepo.findEmployeeById(dto.getEmployeeId());
         PrintJob printJob = printJobRepo.findPrintJobById(dto.getPrintJobId());
 
-        if(employee != null && printJob != null) {
-            printJobRepo.delete(printJob);
-
-            response.setSuccess(true);
-            response.setMessage("Print Job Deleted Successfully");
+        if(employee == null || printJob == null) {
+            ErrorType.PRINT_JOB_CANT_DELETED.throwException();
         }
+
+        printJobRepo.delete(printJob);
+
+        response.setSuccess(true);
+        response.setMessage("Print Job Deleted Successfully");
 
         return response;
     }
