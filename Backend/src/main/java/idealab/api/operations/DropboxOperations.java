@@ -21,8 +21,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import idealab.api.model.PrintModel;
-
 @Component
 @PropertySource("classpath:dropbox.properties")
 public class DropboxOperations {

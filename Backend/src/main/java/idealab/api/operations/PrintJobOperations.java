@@ -1,18 +1,11 @@
 package idealab.api.operations;
 
 import com.dropbox.core.DbxException;
-import idealab.api.dto.GenericResponse;
-import idealab.api.dto.PrintJobData;
-import idealab.api.dto.PrintJobNewRequest;
-import idealab.api.dto.PrintJobUpdateRequest;
-import idealab.api.model.ColorType;
-import idealab.api.model.CustomerInfo;
-import idealab.api.model.EmailHash;
-import idealab.api.model.PrintModel;
+import idealab.api.dto.*;
+import idealab.api.model.*;
 import idealab.api.repositories.ColorTypeRepo;
 import idealab.api.repositories.CustomerInfoRepo;
 import idealab.api.repositories.EmailHashRepo;
-import idealab.api.repositories.PrintModelRepo;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -20,24 +13,27 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import idealab.api.repositories.EmployeeRepo;
+import idealab.api.repositories.PrintJobRepo;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class PrintJobOperations {
     private final DropboxOperations dropboxOperations;
-    private PrintModelRepo printModelRepo;
+    private PrintJobRepo printJobRepo;
     private ColorTypeRepo colorTypeRepo;
     private EmailHashRepo emailHashRepo;
     private CustomerInfoRepo customerInfoRepo;
+    private EmployeeRepo employeeRepo;
 
-    public PrintJobOperations(DropboxOperations dropboxOperations, PrintModelRepo printModelRepo,
-            ColorTypeRepo colorTypeRepo, EmailHashRepo emailHashRepo, CustomerInfoRepo customerInfoRepo) {
+    public PrintJobOperations(DropboxOperations dropboxOperations, PrintJobRepo printJobRepo,
+                              ColorTypeRepo colorTypeRepo, EmailHashRepo emailHashRepo, CustomerInfoRepo customerInfoRepo, EmployeeRepo employeeRepo) {
         this.dropboxOperations = dropboxOperations;
-        this.printModelRepo = printModelRepo;
+        this.printJobRepo = printJobRepo;
         this.colorTypeRepo = colorTypeRepo;
         this.emailHashRepo = emailHashRepo;
         this.customerInfoRepo = customerInfoRepo;
+        this.employeeRepo = employeeRepo;
     }
 
     public PrintJobData newPrintJob(PrintJobNewRequest printJobNewRequest) {
@@ -76,34 +72,28 @@ public class PrintJobOperations {
         }
 
         // Create a new print model first with temp dropbox link
-        PrintModel printModel = new PrintModel(databaseEmail, databaseColor, comments, currentTime,
-                currentTime);
-        printModelRepo.save(printModel);
+        PrintJob printJob = new PrintJob(databaseEmail, databaseColor, EmployeeId, Status.PENDING_REVIEW, "employeeNotes", QueueId, comments, currentTime, currentTime);
+        printJobRepo.save(printJob);
 
         // Make a dropbox sharable link here using the ID of the database record
         Map<String, String> data = null;
         try {
-            data = dropboxOperations.uploadDropboxFile(printModel.getId(), printJobNewRequest.getFile());
-            printModel.setDropboxPath(data.get("filePath"));
-            printModel.setDropboxSharableLink(data.get("sharableLink"));
+            data = dropboxOperations.uploadDropboxFile(printJob.getId(), printJobNewRequest.getFile());
+            printJob.setDropboxPath(data.get("filePath"));
+            printJob.setDropboxSharableLink(data.get("sharableLink"));
         } catch (IOException | DbxException e) {
-            printModel.setDropboxPath("Error");
-            printModel.setDropboxSharableLink("Error");
+            printJob.setDropboxPath("Error");
+            printJob.setDropboxSharableLink("Error");
         }
 
-        printModelRepo.save(printModel);
-        
-        List<PrintModel> printModelData = Arrays.asList(printModel);
+        printJobRepo.save(printJob);
 
-        // TODO: Determine alternate method of how to handle dead code in else statement.  Try catch or throw exception?
-        if (printModel != null) {
-            response.setSuccess(true);
-            response.setMessage("Successfully saved new file to database!");
-            response.setData(printModelData);
-        } else {
-            response.setSuccess(false);
-            response.setMessage("File could not be uploaded");
-        }
+        List<PrintJob> printJobData = Arrays.asList(printJob);
+
+        response.setSuccess(true);
+        response.setMessage("Successfully saved new file to database!");
+        response.setData(printJobData);
+
         return response;
     }
 
@@ -147,4 +137,47 @@ public class PrintJobOperations {
         return response;
     }
 
+
+    public GenericResponse updatePrintJobStatus(Integer printId, PrintJobUpdateRequest dto) {
+        GenericResponse response = new GenericResponse();
+        response.setSuccess(false);
+        response.setMessage("Print Job Update Failed");
+
+        if (dto.isValidStatus()) {
+            Employee employee = employeeRepo.findEmployeeById(dto.getEmployeeId());
+            PrintJob printJob = printJobRepo.findPrintJobById(printId);
+
+            if (employee != null && printJob != null) {
+                printJob = printJobRepo.save(printJob);
+                if (printJob.getStatus().getName().equalsIgnoreCase(dto.getStatus())) {
+                    response.setSuccess(true);
+                    response.setMessage("Print Job Updated");
+                }
+            }
+        } else {
+            response.setMessage("Print Job Update Failed - Invalid Status");
+        }
+
+        return response;
+
+    }
+
+    public GenericResponse deletePrintJobStatus(PrintJobDeleteRequest dto) {
+
+        GenericResponse response = new GenericResponse();
+        response.setSuccess(false);
+        response.setMessage("Print Job Delete Failed");
+
+        Employee employee = employeeRepo.findEmployeeById(dto.getEmployeeId());
+        PrintJob printJob = printJobRepo.findPrintJobById(dto.getPrintJobId());
+
+        if (employee != null && printJob != null) {
+            printJobRepo.delete(printJob);
+
+            response.setSuccess(true);
+            response.setMessage("Print Job Deleted Successfully");
+        }
+
+        return response;
+    }
 }
