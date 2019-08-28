@@ -1,8 +1,8 @@
 package idealab.api.controller;
 
-import idealab.api.dto.responses.GenericResponse;
 import idealab.api.dto.requests.PrintJobDeleteRequest;
 import idealab.api.dto.requests.PrintJobUpdateRequest;
+import idealab.api.dto.responses.GenericResponse;
 import idealab.api.operations.PrintJobOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,16 +23,13 @@ public class PrintJobController {
     }
 
     @PutMapping("/{printId}/status")
-    public ResponseEntity<?> printJobUpdateStatus(@PathVariable ("printId") Integer printId, @RequestBody PrintJobUpdateRequest dto)
-    {
+    public ResponseEntity<?> printJobUpdateStatus(@PathVariable ("printId") Integer printId,
+                                                  @RequestBody PrintJobUpdateRequest dto){
+
         LOGGER.info("PrintJobUpdateStatus request is " + dto.toString());
 
         GenericResponse response = printJobOperations.updatePrintJobStatus(printId, dto);
-
-        if(response.isSuccess())
-            return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-        else
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping
@@ -42,10 +39,7 @@ public class PrintJobController {
 
         GenericResponse response = printJobOperations.deletePrintJobStatus(dto);
 
-        if(response.isSuccess())
-            return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-        else
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 
 }

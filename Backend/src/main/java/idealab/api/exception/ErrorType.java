@@ -24,13 +24,19 @@ public enum ErrorType {
     PRINT_JOB_CANT_DELETED(
         4,
         "Print job couldn't be deleted !",
-        HttpStatus.INTERNAL_SERVER_ERROR
+        HttpStatus.BAD_REQUEST
     ),
 
     PRINT_JOB_UPDATE_FAILED(
             5,
             "Print Job Update Failed - Invalid Status",
-            HttpStatus.INTERNAL_SERVER_ERROR
+            HttpStatus.BAD_REQUEST
+    ),
+
+    REQUEST_STATUS_IS_NOT_VALID(
+            6,
+            "Request status is not valid ! Operation couldn't be completed",
+            HttpStatus.BAD_REQUEST
     );
 
     ErrorType(int errorCode, String errorMessage, HttpStatus responseStatus){
@@ -43,7 +49,7 @@ public enum ErrorType {
     private String errorMessage;
     private HttpStatus responseStatus;
 
-    public void throwException() throws IdeaLabApiException {
+    public void throwException() {
         throw new IdeaLabApiException(this);
     }
 

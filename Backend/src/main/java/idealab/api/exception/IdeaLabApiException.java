@@ -1,6 +1,6 @@
 package idealab.api.exception;
 
-public class IdeaLabApiException extends Exception{
+public class IdeaLabApiException extends RuntimeException{
     private ErrorType errorType;
 
     public IdeaLabApiException(ErrorType errorType){
