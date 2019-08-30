@@ -28,4 +28,8 @@ public class UserController {
         else
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    /*
+    * the login endpoint is going to be handled by the in the background by spring.
+    * */
 }
