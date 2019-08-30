@@ -14,12 +14,12 @@ public class Employee {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "login", nullable = false)
+    @Column(name = "username", nullable = false)
     @Length (min = 1, max = 254)
-    private String login;
+    private String username;
 
-    @Column(name = "password_hash", nullable = false)
-    private String passwordHash;
+    @Column(name = "password", nullable = false)
+    private String password;
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -39,14 +39,14 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(@Length(min = 1, max = 254) String login,
-                    String passwordHash,
+    public Employee(@Length(min = 1, max = 254) String username,
+                    String password,
                     EmployeeRole role,
                     Set<PrintJob> printJobs,
                     @Length(min = 1, max = 254) String firstName,
                     @Length(min = 1, max = 254) String lastName) {
-        this.login = login;
-        this.passwordHash = passwordHash;
+        this.username = username;
+        this.password = password;
         this.role = role;
         this.printJobs = printJobs;
         this.firstName = firstName;
@@ -80,20 +80,20 @@ public class Employee {
         this.lastName = lastName;
     }
 
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public EmployeeRole getRole() {
