@@ -7,6 +7,14 @@ public class GenericResponse {
     private boolean isSuccess;
     private String message;
 
+    public GenericResponse() {
+    }
+
+    public GenericResponse(boolean isSuccess, String message) {
+        this.isSuccess = isSuccess;
+        this.message = message;
+    }
+
     public boolean isSuccess() {
         return isSuccess;
     }
