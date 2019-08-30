@@ -38,4 +38,25 @@ public class UserOperations {
         response.setMessage("User Sign Up Successful");
         return response;
     }
+
+    public GenericResponse deleteUser(Integer id) {
+        GenericResponse response = new GenericResponse();
+        Employee e = employeeRepo.findEmployeeById(id);
+
+        if(e != null) {
+            try {
+                employeeRepo.deleteById(id);
+                response.setSuccess(true);
+                response.setMessage("Employee Deleted Successfully");
+            } catch (Exception ex) {
+                response.setSuccess(false);
+                response.setMessage("Employee Could Not Be Deleted");
+            }
+        } else {
+            response.setSuccess(false);
+            response.setMessage("Employee ID is not valid");
+        }
+
+        return response;
+    }
 }
