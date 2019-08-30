@@ -27,10 +27,6 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private EmployeeRole role;
 
-    @OneToMany(targetEntity=PrintJob.class, mappedBy="employeeId")
-    @JsonBackReference
-    private Set<PrintJob> printJobs;
-
     @Column(name = "first_name", nullable = false)
     @Length(min = 1, max = 254)
     private String firstName;
@@ -103,13 +99,5 @@ public class Employee {
 
     public void setRole(EmployeeRole role) {
         this.role = role;
-    }
-
-    public Set<PrintJob> getPrintJobs() {
-        return printJobs;
-    }
-
-    public void setPrintJobs(Set<PrintJob> printJobs) {
-        this.printJobs = printJobs;
     }
 }

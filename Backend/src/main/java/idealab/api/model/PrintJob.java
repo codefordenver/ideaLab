@@ -34,7 +34,6 @@ public class PrintJob {
     private Status status;
 
     @Column(name = "employee_notes")
-    @JsonManagedReference
     private String employeeNotes;
 
     @OneToOne(targetEntity=Queue.class, mappedBy="printJobId")
