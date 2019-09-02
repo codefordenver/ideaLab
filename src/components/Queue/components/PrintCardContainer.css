@@ -1,0 +1,31 @@
+.printCardContainer {
+    padding: 10px;
+    margin: 5px;
+    border: solid 1px black;
+    border-radius: 4px;
+    text-align: left;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.col10 {
+    width: 10%;
+}
+.col20 {
+    width: 20%;
+}
+
+.colorCircle {
+    width: 25px;
+    height: 25px;
+    background-color: black;
+    border: solid 1px black;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0;
+    position: relative;
+    top: 50%;
+    left: 0%;
+    transform: translate(75%,-50%)
+}

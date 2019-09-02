@@ -1,0 +1,31 @@
+.banner {
+    list-style-type: none;
+    text-align: left;
+    display: flex;
+}
+
+body {
+    margin: 0px 50px;
+}
+
+.queueFilterInfo {
+	display: flex;
+	justify-content: space-between;
+}
+
+.search-container input {
+	padding: 2px;
+	border: none;
+	font-size: 14px;
+	background: white;
+	border: solid 1px #333;
+	border-radius: 6px;
+	text-align: left;
+}
+
+.col10 {
+    width: 5%;
+}
+.col20 {
+    width:20%;
+}
