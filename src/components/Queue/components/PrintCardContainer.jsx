@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './PrintCardContainer.css';
 import StatusDropdown from './components/StatusDropdown';
 import PrintDateAdded from './components/PrintDateAdded';
@@ -10,7 +10,6 @@ const PrintCardContainer = ({data}) => {
 
     return (
         <div className='printCardContainer'>
-            <img src='#' alt='hamLogo' className='col10'/>
             <div className='printFileName col20'>
                 <p>{data.fileName}</p>
             </div>

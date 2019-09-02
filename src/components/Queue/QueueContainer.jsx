@@ -5,10 +5,10 @@ import './QueueContainer.css';
 import SearchBar from './components/SearchBar';
 
 const QueueContainer = () => {
-	const [data, setData] = useState(dummyData);
+	const [data] = useState(dummyData);
 	const [filteredData, setFilteredData] = useState(data);
 	const [stringedValues, setStringedValues] = useState([]);
-	let totalJobsInWaiting = data.length;
+	const [statusView, setStatusView] = useState('QUEUEING');
 
 	useEffect(() => {
 		const filteredKeys = ['name', 'email', 'color', 'status', 'fileName', 'comments'];
@@ -21,8 +21,10 @@ const QueueContainer = () => {
             }
             return printJob[index] = valueString.toLowerCase();
         });
+		const queuedCards = data.filter(card => card.status === statusView);
+		setFilteredData(queuedCards);
 		setStringedValues(searchValues);
-	}, [data]);
+	}, [data, statusView]);
 
 	const filterByTerm = (searchTerm) => {
 		const filteredSearch = data.filter((printJob, i) => {
@@ -38,7 +40,11 @@ const QueueContainer = () => {
 	return (
 		<div>
 			<div className='queueFilterInfo'>
-				<div>{totalJobsInWaiting} jobs in queue</div>
+				<div className='statusMenu'>
+					<button>Queue |</button>
+					<button>Recently Completed |</button>
+					<button>In Progress</button>
+				</div>
 				<SearchBar filterByTerm={filterByTerm} />
 			</div>
 			<ul className='banner'>

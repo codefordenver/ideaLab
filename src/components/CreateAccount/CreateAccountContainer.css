@@ -36,7 +36,7 @@ input {
 	padding: 0.25rem;
 }
 
-button {
+.container > button {
 	display: block;
 	height: 2.5em;
 	width: 15.5em;

@@ -3,9 +3,6 @@ import './App.css';
 import { NavLink } from 'react-router-dom';
 
 class SidebarNavigation extends React.Component {
-	constructor(props) {
-		super(props);
-	}
 
     render() {
         return (

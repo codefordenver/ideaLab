@@ -13,6 +13,16 @@ body {
 	justify-content: space-between;
 }
 
+.statusMenu {
+	display: flex;
+	flex-direction: row;
+}
+
+.statusMenu > button {
+	border: none;
+	margin: 0;
+}
+
 .search-container input {
 	padding: 2px;
 	border: none;
