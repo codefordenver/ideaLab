@@ -18,10 +18,14 @@ const QueueContainer = () => {
                 if (filteredKeys.indexOf(key) !== -1) {
                     valueString = valueString + ' ' + printJob[key];
                 }
-            }
+            } 
             return printJob[index] = valueString.toLowerCase();
         });
-		const queuedCards = data.filter(card => card.status === statusView);
+		const queuedCards = data.filter(card => {
+			var sameStatus = card.status === statusView;
+			var doneAndFailed = statusView === 'DONE' && (card.status === 'DONE' || card.status === 'FAILED');
+			return sameStatus || doneAndFailed;
+		});
 		setFilteredData(queuedCards);
 		setStringedValues(searchValues);
 	}, [data, statusView]);
