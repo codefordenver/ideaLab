@@ -11,6 +11,7 @@ body {
 .queueFilterInfo {
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 }
 
 .statusMenu {
@@ -18,10 +19,34 @@ body {
 	flex-direction: row;
 }
 
-.statusMenu > button {
+.statusMenu button {
+	outline: none;
 	border: none;
-	margin: 0;
+	background-color: var(--default-background);
+	margin: 0 0 1em 0;
+	padding: .5em;
 }
+
+
+.statusMenu button:not(:first-child) {
+	border-left: 1px solid black;
+}
+
+.statusMenu button:after {
+	content: "";
+	display: block;
+	color: var(--default-background);
+	border-bottom: thick solid;
+}
+
+.statusMenu .selectedTab:after {
+	content: "";
+	display: block;
+	color: var(--light-blue);
+	border-bottom: thick solid;
+	
+}
+
 
 .search-container input {
 	padding: 2px;

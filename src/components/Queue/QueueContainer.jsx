@@ -41,9 +41,9 @@ const QueueContainer = () => {
 		<div>
 			<div className='queueFilterInfo'>
 				<div className='statusMenu'>
-					<button>Queue |</button>
-					<button>Recently Completed |</button>
-					<button>In Progress</button>
+					<button className={statusView === 'QUEUEING' ? 'selectedTab' : ''} onClick={() => setStatusView('QUEUEING')}>Queue</button>
+					<button className={statusView === 'DONE' ? 'selectedTab' : ''} onClick={() => setStatusView('DONE')}>Recently Completed</button>
+					<button className={statusView === 'PRINTING' ? 'selectedTab' : ''} onClick={() => setStatusView('PRINTING')}>In Progress</button>
 				</div>
 				<SearchBar filterByTerm={filterByTerm} />
 			</div>
@@ -54,7 +54,7 @@ const QueueContainer = () => {
 				<li className='col20'>Submitted</li>
 				<li className='col20'>Status</li>
 			</ul>
-			{renderPrintCards}
+			{renderPrintCards.length > 0 ? renderPrintCards : `No items are currently ${statusView.toLowerCase()}`}
 		</div>
 	);
 };
