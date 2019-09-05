@@ -1,14 +1,7 @@
 package idealab.api.model;
 
+import javax.persistence.*;
 import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 
 
@@ -19,8 +12,8 @@ public class ColorType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToMany(targetEntity=PrintModel.class, mappedBy="colorTypeId")   
-    private Set<PrintModel> printModel;
+    @OneToMany(targetEntity=PrintJob.class, mappedBy="colorTypeId")
+    private Set<PrintJob> printJobs;
 
     @Column(name = "color", nullable = false)
     private String color;
