@@ -41,7 +41,7 @@ public class PrintJobOperations {
     public PrintJobData newPrintJob(PrintJobNewRequest printJobNewRequest) {
         PrintJobData response = new PrintJobData();
         response.setSuccess(false);
-        response.setMessage("File coulåd not be uploaded");
+        response.setMessage("File could not be uploaded");
 
         if(printJobNewRequest.getFile() == null){
             response.setMessage("No file was submitted.  Please attach a file to the request");
