@@ -1,0 +1,13 @@
+.statusDropdown {
+    padding: 0px;
+}
+
+.statusDropdownSelect {
+    padding: 5px;
+    border: solid 1px black;
+    border-radius: 4px;
+    position: relative;
+    top: 0%;
+    left: 0%;
+    transform: translate(-50%,50%)
+}
