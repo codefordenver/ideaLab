@@ -44,7 +44,7 @@ body {
 	display: block;
 	color: var(--default-background);
 	border-bottom: thick solid;
-	width: 85%;
+	width: 90%;
 }
 
 .statusMenu .selectedTab:after {
@@ -52,7 +52,20 @@ body {
 	display: block;
 	color: var(--light-blue);
 	border-bottom: thick solid;
+	animation-duration: .3s;
+	animation-name: slidein;
+}
+
 	
+@keyframes slidein {
+	from {
+		width: 0%; 
+	}
+	  
+	to {
+		width: 90%;
+	}
+
 }
 
 
