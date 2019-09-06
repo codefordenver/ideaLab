@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static idealab.api.util.TestUtil.stringToGenericResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -164,15 +165,6 @@ public class PrintJobControllerTest {
         }
     }
 
-    public GenericResponse stringToGenericResponse(String s) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            GenericResponse response = mapper.readValue(s, GenericResponse.class);
-            return response;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Test
     public void getAllPrintJobs() throws Exception {
