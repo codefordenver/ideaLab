@@ -41,7 +41,13 @@ public class PrintJobOperations {
     public PrintJobData newPrintJob(PrintJobNewRequest printJobNewRequest) {
         PrintJobData response = new PrintJobData();
         response.setSuccess(false);
-        response.setMessage("File could not be uploaded");
+        response.setMessage("File coulåd not be uploaded");
+
+        if(printJobNewRequest.getFile() == null){
+            response.setMessage("No file was submitted.  Please attach a file to the request");
+            return response;
+        }
+
         // Create new record based off of the printJobNewRequest
         String email = printJobNewRequest.getEmail();
         String customerFirstName = printJobNewRequest.getCustomerFirstName();
@@ -116,6 +122,11 @@ public class PrintJobOperations {
         PrintJobData response = new PrintJobData();
         response.setSuccess(false);
         response.setMessage("File could not be updated");
+
+        if(file == null){
+            response.setMessage("No file was submitted.  Please attach a file to the request");
+            return response;
+        }
 
         PrintJob printJob = printJobRepo.findPrintJobById(id);
 
