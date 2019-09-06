@@ -47,7 +47,7 @@ const QueueContainer = () => {
 				</div>
 				<SearchBar filterByTerm={filterByTerm} />
 			</div>
-			<ul className='banner'>
+			<ul className='queueBanner'>
 				<li className='col10'></li>
 				<li className='col20'>File Name</li>
 				<li className='col20'>Color</li>

@@ -14,14 +14,14 @@
     justify-content: center;
 }
 
-.col10 {
+.printCardContainer .col10 {
     width: 10%;
 }
-.col20 {
+.printCardContainer .col20 {
     width: 20%;
 }
 
-.colorCircle {
+.printCardContainer .colorCircle {
     width: 25px;
     height: 25px;
     background-color: black;
