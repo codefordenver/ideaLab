@@ -1,7 +1,7 @@
 package idealab.api.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import idealab.api.dto.GenericResponse;
+import idealab.api.dto.response.GenericResponse;
 
 public class TestUtil {
 
