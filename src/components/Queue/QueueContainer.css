@@ -17,26 +17,34 @@ body {
 .statusMenu {
 	display: flex;
 	flex-direction: row;
+	list-style: none;
+	align-items: center;
+}
+
+.statusMenu li {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 .statusMenu button {
 	outline: none;
 	border: none;
 	background-color: var(--default-background);
-	margin: 0 0 1em 0;
-	padding: .5em;
+	font-size: 1em;
 }
 
 
-.statusMenu button:not(:first-child) {
+.statusMenu li:not(:first-child) button{
 	border-left: 1px solid black;
 }
 
-.statusMenu button:after {
+.statusMenu li:after {
 	content: "";
 	display: block;
 	color: var(--default-background);
 	border-bottom: thick solid;
+	width: 85%;
 }
 
 .statusMenu .selectedTab:after {

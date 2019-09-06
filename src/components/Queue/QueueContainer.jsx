@@ -44,11 +44,17 @@ const QueueContainer = () => {
 	return (
 		<div>
 			<div className='queueFilterInfo'>
-				<div className='statusMenu'>
-					<button className={statusView === 'QUEUEING' ? 'selectedTab' : ''} onClick={() => setStatusView('QUEUEING')}>Queue</button>
-					<button className={statusView === 'DONE' ? 'selectedTab' : ''} onClick={() => setStatusView('DONE')}>Recently Completed</button>
-					<button className={statusView === 'PRINTING' ? 'selectedTab' : ''} onClick={() => setStatusView('PRINTING')}>In Progress</button>
-				</div>
+				<ul className='statusMenu'>
+					<li className={statusView === 'QUEUEING' ? 'selectedTab' : ''}>
+						<button onClick={() => setStatusView('QUEUEING')}>Queue</button>
+					</li>
+					<li className={statusView === 'DONE' ? 'selectedTab' : ''}>
+						<button onClick={() => setStatusView('DONE')}>Recently Completed</button>
+					</li>
+					<li className={statusView === 'PRINTING' ? 'selectedTab' : ''}>
+						<button onClick={() => setStatusView('PRINTING')}>In Progress</button>
+					</li>
+				</ul>
 				<SearchBar filterByTerm={filterByTerm} />
 			</div>
 			<ul className='banner'>
