@@ -103,8 +103,8 @@ public class PrintJobOperations {
             printJob.setDropboxPath(data.get("filePath"));
             printJob.setDropboxSharableLink(data.get("sharableLink"));
         } catch (IOException | DbxException e) {
-            printJob.setDropboxPath("Error");
-            printJob.setDropboxSharableLink("Error");
+            printJob.setDropboxPath("Error Creating New File");
+            printJob.setDropboxSharableLink("Error Creating New File");
         }
 
         printJobRepo.save(printJob);
@@ -118,26 +118,28 @@ public class PrintJobOperations {
         return response;
     }
 
-    public PrintJobData updateModel(int id, MultipartFile file){
+    public PrintJobData updateModel(Integer printId, PrintModel model){
         PrintJobData response = new PrintJobData();
         response.setSuccess(false);
         response.setMessage("File could not be updated");
+
+        MultipartFile file = model.getFile();
 
         if(file == null){
             response.setMessage("No file was submitted.  Please attach a file to the request");
             return response;
         }
 
-        PrintJob printJob = printJobRepo.findPrintJobById(id);
+        PrintJob printJob = printJobRepo.findPrintJobById(printId);
 
         Map<String, String> data = null;
         try {
-            data = dropboxOperations.updateDropboxFile(printJob, file);
+            data = dropboxOperations.updateDropboxFile(printJob, model.getFile());
             printJob.setDropboxPath(data.get("filePath"));
             printJob.setDropboxSharableLink(data.get("sharableLink"));
         } catch (IOException | DbxException e) {
-            printJob.setDropboxPath("Error");
-            printJob.setDropboxSharableLink("Error");
+            printJob.setDropboxPath("Error updating file");
+            printJob.setDropboxSharableLink("Error updating file");
         }
 
         printJobRepo.save(printJob);
@@ -145,8 +147,32 @@ public class PrintJobOperations {
         List<PrintJob> printJobData = Arrays.asList(printJob);
 
         response.setSuccess(true);
-        response.setMessage("Successfully saved new file to database!");
+        response.setMessage("Successfully updated file to database!");
         response.setData(printJobData);
+
+        return response;
+    }
+
+    public GenericResponse deleteModel(Integer printId) {
+        GenericResponse response = new GenericResponse();
+        response.setSuccess(false);
+        response.setMessage("File could not be deleted");
+
+        PrintJob printJob = printJobRepo.findPrintJobById(printId);
+
+        try {
+            dropboxOperations.deleteDropboxFile(printJob);
+            printJob.setDropboxPath("Deleted");
+            printJob.setDropboxSharableLink("Deleted");
+        } catch (DbxException e) {
+            printJob.setDropboxPath("Error Deleting File");
+            printJob.setDropboxSharableLink("Error Deleting File");
+        }
+
+        printJobRepo.save(printJob);
+
+        response.setSuccess(true);
+        response.setMessage("Successfully deleted file from DropBox");
 
         return response;
     }

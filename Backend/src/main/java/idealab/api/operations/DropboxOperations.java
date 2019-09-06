@@ -70,13 +70,16 @@ public class DropboxOperations {
     return data;
   }
 
-  public void deleteDropboxFile(String path) throws DbxException {
-    DeleteResult deleteResult = client.files().deleteV2(path);
+  public void deleteDropboxFile(PrintJob printJob) throws DbxException {
+    DeleteResult deleteResult = client.files().deleteV2(printJob.getDropboxPath());
   }
 
   public Map<String, String> updateDropboxFile(PrintJob printJob, MultipartFile file) throws DbxException, IOException {
     // 1. Delete existing dropbox file using deleteDropboxFile() method
-    deleteDropboxFile(printJob.getDropboxPath());
+    // Note:  if the file path does not start with a "/" then there is either an error or it was deleted already.
+    if(printJob.getDropboxPath().startsWith("/")){
+      deleteDropboxFile(printJob);
+    }
     // 2. Create new sharable data link using uploadDropboxFile() method
     Map<String, String> data = uploadDropboxFile(printJob.getId(), file);
 

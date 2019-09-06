@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.web.bind.annotation.*;
+import sun.net.www.content.text.Generic;
 
 @RestController
 @RequestMapping("/api/printjobs")
@@ -36,11 +37,22 @@ public class PrintJobController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    // Sample Endpoint to update the model
+    // Sample Endpoint to UPDATE the model
     @PutMapping("/{printId}/model")
     public ResponseEntity<?> printJobUpdateModel(@PathVariable("printId") Integer printId,
                                                   @ModelAttribute PrintModel model) {
-        PrintJobData response = printJobOperations.updateModel(printId, model.getFile());
+        PrintJobData response = printJobOperations.updateModel(printId, model);
+
+        if (response.isSuccess())
+            return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        else
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // Sample Endpoint to DELETE the model
+    @DeleteMapping("/{printId}/model")
+    public ResponseEntity<?> printJobUpdateModel(@PathVariable("printId") Integer printId) {
+        GenericResponse response = printJobOperations.deleteModel(printId);
 
         if (response.isSuccess())
             return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
