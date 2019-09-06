@@ -1,12 +1,14 @@
 package idealab.api.controller;
 
-import idealab.api.dto.GenericResponse;
-import idealab.api.dto.PrintJobDeleteRequest;
-import idealab.api.dto.PrintJobUpdateRequest;
+import idealab.api.dto.request.PrintJobDeleteRequest;
+import idealab.api.dto.request.PrintJobUpdateRequest;
+import idealab.api.dto.response.GenericResponse;
+import idealab.api.dto.response.GetAllPrintJobListResponse;
 import idealab.api.operations.PrintJobOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,4 +50,18 @@ public class PrintJobController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping
+    public ResponseEntity<GetAllPrintJobListResponse> getAllPrintJobs(){
+        GetAllPrintJobListResponse response = printJobOperations.getAllPrintJobs();
+
+        if(response == null || response.getPrintJobs() == null || response.getPrintJobs().size() == 0){
+            return ResponseEntity.badRequest()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .build();
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+    }
 }
