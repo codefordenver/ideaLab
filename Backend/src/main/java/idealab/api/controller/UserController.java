@@ -1,6 +1,6 @@
 package idealab.api.controller;
 
-import idealab.api.dto.GenericResponse;
+import idealab.api.dto.response.GenericResponse;
 import idealab.api.model.Employee;
 import idealab.api.operations.UserOperations;
 import org.springframework.http.HttpStatus;
