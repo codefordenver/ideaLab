@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
+import com.dropbox.core.v2.files.DeleteResult;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.sharing.ListSharedLinksErrorException;
 import com.dropbox.core.v2.sharing.ListSharedLinksResult;
@@ -58,7 +59,6 @@ public class DropboxOperations {
     String dropboxFilePath = "/" + id + "-" + file.getOriginalFilename();
 
     InputStream in = new BufferedInputStream(file.getInputStream());
-    // TODO See if file already exists to delete and replace it.
     FileMetadata metadata = client.files().uploadBuilder(dropboxFilePath).uploadAndFinish(in);
     String filePath = metadata.getPathLower();
     String sharableLink = getSharableLink(filePath);
@@ -70,23 +70,16 @@ public class DropboxOperations {
     return data;
   }
 
-  public String deleteDropboxFile(PrintJob printJob) {
-    // TODO: Delete a dropbox file based on print job id (or filepath?)
-    // TODO: Can pass in the the entire PrintModel from the database if the filepath
-    // is on it.
-    return null;
+  public void deleteDropboxFile(String path) throws DbxException {
+    DeleteResult deleteResult = client.files().deleteV2(path);
   }
 
-  public String updateDropboxFile(PrintJob printJob, MultipartFile file) {
-    // TODO: Update a dropbox file, should return a new sharable link.
-    // TODO: Can pass in the the entire PrintModel from the database if the filepath
-    // is on it.
-
+  public Map<String, String> updateDropboxFile(PrintJob printJob, MultipartFile file) throws DbxException, IOException {
     // 1. Delete existing dropbox file using deleteDropboxFile() method
+    deleteDropboxFile(printJob.getDropboxPath());
+    // 2. Create new sharable data link using uploadDropboxFile() method
+    Map<String, String> data = uploadDropboxFile(printJob.getId(), file);
 
-    // 2. Create new dropbox file using uploadDropboxFile() method
-
-    // 3. Create a new sharable link using the getSharableLink method
-    return null;
+    return data;
   }
 }

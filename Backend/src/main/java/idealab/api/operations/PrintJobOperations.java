@@ -16,6 +16,7 @@ import java.util.Map;
 import idealab.api.repositories.EmployeeRepo;
 import idealab.api.repositories.PrintJobRepo;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class PrintJobOperations {
@@ -93,6 +94,34 @@ public class PrintJobOperations {
         Map<String, String> data = null;
         try {
             data = dropboxOperations.uploadDropboxFile(printJob.getId(), printJobNewRequest.getFile());
+            printJob.setDropboxPath(data.get("filePath"));
+            printJob.setDropboxSharableLink(data.get("sharableLink"));
+        } catch (IOException | DbxException e) {
+            printJob.setDropboxPath("Error");
+            printJob.setDropboxSharableLink("Error");
+        }
+
+        printJobRepo.save(printJob);
+
+        List<PrintJob> printJobData = Arrays.asList(printJob);
+
+        response.setSuccess(true);
+        response.setMessage("Successfully saved new file to database!");
+        response.setData(printJobData);
+
+        return response;
+    }
+
+    public PrintJobData updateModel(int id, MultipartFile file){
+        PrintJobData response = new PrintJobData();
+        response.setSuccess(false);
+        response.setMessage("File could not be updated");
+
+        PrintJob printJob = printJobRepo.findPrintJobById(id);
+
+        Map<String, String> data = null;
+        try {
+            data = dropboxOperations.updateDropboxFile(printJob, file);
             printJob.setDropboxPath(data.get("filePath"));
             printJob.setDropboxSharableLink(data.get("sharableLink"));
         } catch (IOException | DbxException e) {

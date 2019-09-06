@@ -1,10 +1,6 @@
 package idealab.api.controller;
 
-import idealab.api.dto.GenericResponse;
-import idealab.api.dto.PrintJobData;
-import idealab.api.dto.PrintJobNewRequest;
-import idealab.api.dto.PrintJobDeleteRequest;
-import idealab.api.dto.PrintJobUpdateRequest;
+import idealab.api.dto.*;
 import idealab.api.operations.PrintJobOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +29,18 @@ public class PrintJobController {
     @PostMapping
     public ResponseEntity<?> printJobNew(@ModelAttribute PrintJobNewRequest model) {
         PrintJobData response = printJobOperations.newPrintJob(model);
+
+        if (response.isSuccess())
+            return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        else
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // Sample Endpoint to update the model
+    @PutMapping("/{printId}/model")
+    public ResponseEntity<?> printJobUpdateModel(@PathVariable("printId") Integer printId,
+                                                  @ModelAttribute PrintModel model) {
+        PrintJobData response = printJobOperations.updateModel(printId, model.getFile());
 
         if (response.isSuccess())
             return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
