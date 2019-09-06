@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Dropdown from '../globalStyles/Dropdown';
 import './LoginManager.css';
 
 import ideaLABlogo from './../../ideaLABlogo.png';
@@ -6,6 +7,13 @@ import ideaLABlogo from './../../ideaLABlogo.png';
 const LoginManager = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const locations = [
+		'Denver Central Library',
+		'Blair-Caldwell',
+		'Ford-Warren',
+		'Ross-Cherry',
+		'Park Hill'
+	]
 
 	const onSubmit = e => {
 		e.preventDefault();
@@ -25,6 +33,7 @@ const LoginManager = () => {
 					value={email}
 					onChange={e => setEmail(e.target.value)}
 				/>
+				<Dropdown options={locations}/>
 				<input
 					name='password'
 					placeholder='password'

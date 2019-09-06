@@ -8,7 +8,7 @@ const QueueContainer = () => {
 	const [data] = useState(dummyData);
 	const [filteredData, setFilteredData] = useState(data);
 	const [stringedValues, setStringedValues] = useState([]);
-	const [statusView, setStatusView] = useState('QUEUEING');
+	const [statusView] = useState('QUEUEING');
 
 	useEffect(() => {
 		const filteredKeys = ['name', 'email', 'color', 'status', 'fileName', 'comments'];
