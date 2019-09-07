@@ -3,7 +3,7 @@ package idealab.api.operations;
 import com.dropbox.core.DbxException;
 import idealab.api.dto.request.PrintJobNewRequest;
 import idealab.api.dto.request.PrintModelUpdateRequest;
-import idealab.api.dto.response.PrintJobDataResponse;
+import idealab.api.dto.response.GetPrintJobDataResponse;
 import idealab.api.model.*;
 import idealab.api.repositories.ColorTypeRepo;
 import idealab.api.repositories.CustomerInfoRepo;
@@ -49,8 +49,8 @@ public class PrintJobOperations {
         this.employeeRepo = employeeRepo;
     }
 
-    public PrintJobDataResponse newPrintJob(PrintJobNewRequest printJobNewRequest) {
-        PrintJobDataResponse response = new PrintJobDataResponse();
+    public GetPrintJobDataResponse newPrintJob(PrintJobNewRequest printJobNewRequest) {
+        GetPrintJobDataResponse response = new GetPrintJobDataResponse();
         response.setSuccess(false);
         response.setMessage("File could not be uploaded");
 
@@ -94,8 +94,8 @@ public class PrintJobOperations {
         // TODO: Remove temp employee, this should be taken directly from the employee making the request through the token.
         String tempEmployeeFirstName = "Temp John";
         String tempEmployeeLastName = "Temp Joe";
-        String tempEmployeeLogin = "Temp Cotton Eyed Joe";
-        Employee employee = new Employee(tempEmployeeLogin, "such secure, wow!", EmployeeRole.STAFF, tempEmployeeFirstName, tempEmployeeLastName);
+        String tempEmployeeUserName = "Temp Cotton Eyed Joe";
+        Employee employee = new Employee(tempEmployeeUserName, "such secure, wow!", EmployeeRole.STAFF, tempEmployeeFirstName, tempEmployeeLastName);
         Employee databaseEmployee = employeeRepo.findEmployeeByUsername(employee.getUsername());
         if (databaseEmployee == null) {
             databaseEmployee = employeeRepo.save(employee);
@@ -105,6 +105,7 @@ public class PrintJobOperations {
         PrintJob printJob = new PrintJob(databaseEmail, databaseColor, databaseEmployee, Status.PENDING_REVIEW, employeeNotes, comments, currentTime, currentTime);
         printJobRepo.save(printJob);
 
+        System.out.println(printJob.toString());
         // TODO: set the queue position of the new job to be at the end of the list.
 
         // Make a dropbox sharable link here using the ID of the database record
@@ -120,6 +121,7 @@ public class PrintJobOperations {
 
         printJobRepo.save(printJob);
 
+        System.out.println(printJob.toString());
         List<PrintJob> printJobData = Arrays.asList(printJob);
 
         response.setSuccess(true);
@@ -129,8 +131,8 @@ public class PrintJobOperations {
         return response;
     }
 
-    public PrintJobDataResponse updateModel(Integer printId, PrintModelUpdateRequest model){
-        PrintJobDataResponse response = new PrintJobDataResponse();
+    public GetPrintJobDataResponse updateModel(Integer printId, PrintModelUpdateRequest model){
+        GetPrintJobDataResponse response = new GetPrintJobDataResponse();
         response.setSuccess(false);
         response.setMessage("File could not be updated");
 

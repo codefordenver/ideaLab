@@ -5,7 +5,7 @@ import java.util.List;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.model.PrintJob;
 
-public class PrintJobDataResponse extends GenericResponse {
+public class GetPrintJobDataResponse extends GenericResponse {
   private List <PrintJob> data;
 
   public List<PrintJob> getData() {

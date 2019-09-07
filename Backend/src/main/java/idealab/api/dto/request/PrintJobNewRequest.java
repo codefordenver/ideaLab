@@ -67,4 +67,17 @@ public class PrintJobNewRequest {
     public void setCustomerLastName(String customerLastName) {
         this.customerLastName = customerLastName;
     }
+
+    @Override
+    public String toString() {
+        return "PrintJobNewRequest{" +
+                "customerFirstName='" + customerFirstName + '\'' +
+                ", customerLastName='" + customerLastName + '\'' +
+                ", email='" + email + '\'' +
+                ", color='" + color + '\'' +
+                ", comments='" + comments + '\'' +
+                ", employeeNotes='" + employeeNotes + '\'' +
+                ", file=" + file.getOriginalFilename() +
+                '}';
+    }
 }

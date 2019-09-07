@@ -12,4 +12,11 @@ public class PrintModelUpdateRequest {
     public void setFile(MultipartFile file) {
         this.file = file;
     }
+
+    @Override
+    public String toString() {
+        return "PrintModelUpdateRequest{" +
+                "file=" + file.getOriginalFilename() +
+                '}';
+    }
 }

@@ -1,6 +1,6 @@
 package idealab.api.controller;
 
-import idealab.api.dto.response.PrintJobDataResponse;
+import idealab.api.dto.response.GetPrintJobDataResponse;
 import idealab.api.dto.request.PrintJobNewRequest;
 import idealab.api.dto.request.PrintModelUpdateRequest;
 import idealab.api.dto.request.PrintJobDeleteRequest;
@@ -50,7 +50,8 @@ public class PrintJobController {
 
     @PostMapping
     public ResponseEntity<?> printJobNew(@ModelAttribute PrintJobNewRequest model) {
-        PrintJobDataResponse response = printJobOperations.newPrintJob(model);
+        LOGGER.info("PrintJobNew request is:" + model.toString());
+        GetPrintJobDataResponse response = printJobOperations.newPrintJob(model);
 
         if (response.isSuccess())
             return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
@@ -62,7 +63,9 @@ public class PrintJobController {
     @PutMapping("/{printId}/model")
     public ResponseEntity<?> printJobUpdateModel(@PathVariable("printId") Integer printId,
                                                   @ModelAttribute PrintModelUpdateRequest model) {
-        PrintJobDataResponse response = printJobOperations.updateModel(printId, model);
+
+        LOGGER.info("PrintJobUpdateModel request is job:" + printId.toString() + "| model: " + model.toString());
+        GetPrintJobDataResponse response = printJobOperations.updateModel(printId, model);
 
         if (response.isSuccess())
             return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
@@ -72,7 +75,8 @@ public class PrintJobController {
 
     // Sample Endpoint to DELETE the model
     @DeleteMapping("/{printId}/model")
-    public ResponseEntity<?> printJobUpdateModel(@PathVariable("printId") Integer printId) {
+    public ResponseEntity<?> printJobDeleteModel(@PathVariable("printId") Integer printId) {
+        LOGGER.info("PrintJobDeleteModel request is " + printId.toString());
         GenericResponse response = printJobOperations.deleteModel(printId);
 
         if (response.isSuccess())
