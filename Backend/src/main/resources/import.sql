@@ -1,6 +1,6 @@
 INSERT INTO email_hash (email_hash) VALUES ('hash1'),('hash2'),('hash3'),('hash4');
 
-INSERT INTO color_type (color) VALUES ('blue'),('green'),('purple'),('red');
+INSERT INTO color_type (color, available) VALUES ('blue', true),('green', false),('purple', true), ('red', true);
 
 INSERT INTO customer_info (fk_email_hash_id, first_name, last_name, email) VALUES (1, 'hannah', 'amundson', 'fake@gmail.com'), (2, 'john', 'frank', 'hi@gmail.com'),(3, 'josiah', 'taylor', 'hello@gmail.com'),(1, 'ben', 'arch', 'fake@gmail.com'),(2, 'haley', 'black', 'hi@gmail.com');
 
