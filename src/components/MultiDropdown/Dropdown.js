@@ -14,6 +14,9 @@ const Dropdown = (props) => {
                         <DropdownItem>
                             <a href="https://google.com">Google it</a>
                         </DropdownItem>
+                        <DropdownItem>
+                            <a href="https://yahoo.com">Yahoo</a>
+                        </DropdownItem>
                     </Menu>
 
                 </DropdownItem>

@@ -1,3 +1,7 @@
+.dropdown {
+	display: flex;
+}
+
 ul {
     background-color: grey;
 	list-style: none;
@@ -7,8 +11,12 @@ ul {
 
 .dropdown li {
 	position: relative;
-	float: left;
+	/* float: left; */
 	background-color: lightgray;
+}
+
+.dropdown > li {
+	padding: .5em;
 }
 
 .dropdown ul li:not(:first-child) {
@@ -20,11 +28,14 @@ ul {
 }
 
 .dropdown li > ul {
-	position: absolute;
+	/* position: absolute; */
 	left:-999em;
 	width:100%;
 	top:0;
 	transition:top .5s ease;
+	display: flex;
+	flex-direction: column;
+	background-color: grey;
 }
 
 .dropdown ul ul {
@@ -50,6 +61,9 @@ ul {
 .dropdown li.open > ul {
 	left:0;
 	top:100%;
+	position: absolute;
+	background-color: lightgray;
+	width: max-content;
 }
 
 .dropdown li li:hover > ul {
@@ -60,7 +74,7 @@ ul {
 }
 
 .dropdown ul li {
-	float: none;
+	/* float: none; */
 }
 
 .dropdown li:hover > a {
@@ -68,4 +82,14 @@ ul {
 }
 #dropdown ul li {
 	border-top: none;
+}
+
+.dropdown li.visually-hidden > ul {
+    position: absolute !important;
+    height: 1px; 
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px, 1px, 1px, 1px);
+    white-space: nowrap; /* added line */
 }
