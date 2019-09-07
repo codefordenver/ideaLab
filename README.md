@@ -18,8 +18,8 @@ Our project is split into 2 sections: frontend & backend.
 Our backend is split into 2 sections: our API app & our database. Our API is written in Java Spring & Gradle. Our database uses open source POSTGRES and we have containerized it in Docker.
 
 ### Setting up Resource File
-1. Request the latest dev resource file (if starting a new project see Backend/src/main/resources/sample_application.properties) 
-2. Place the resource file and values in /Backend/src/main/resources/application.properties (delete "sample_" if starting a new project)
+1. Request the latest dev resource file (if starting a new project see Backend/src/main/resources/sample_dropbox.properties) 
+2. Place the resource file and values in /Backend/src/main/resources/dropbox.properties (delete "sample_" if starting a new project)
 3. Values can be accessed using the @Value annotation.  i.e.
 ```
   @Value("${dropbox.ACCESS_TOKEN}")
