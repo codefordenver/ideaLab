@@ -9,6 +9,7 @@ import idealab.api.model.Employee;
 import idealab.api.model.PrintJob;
 import idealab.api.repositories.EmployeeRepo;
 import idealab.api.repositories.PrintJobRepo;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class PrintJobOperations {
         GenericResponse response = new GenericResponse();
         response.setSuccess(false);
         response.setMessage("Print Job Update Failed");
+        response.setHttpStatus(HttpStatus.BAD_REQUEST);
 
         if(dto.isValidStatus())
         {
@@ -41,6 +43,7 @@ public class PrintJobOperations {
                 if(printJob.getStatus().getName().equalsIgnoreCase(dto.getStatus())) {
                     response.setSuccess(true);
                     response.setMessage("Print Job Updated");
+                    response.setHttpStatus(HttpStatus.ACCEPTED);
                 }
             }
         } else {
@@ -56,6 +59,7 @@ public class PrintJobOperations {
         GenericResponse response = new GenericResponse();
         response.setSuccess(false);
         response.setMessage("Print Job Delete Failed");
+        response.setHttpStatus(HttpStatus.BAD_REQUEST);
 
         Employee employee = employeeRepo.findEmployeeById(dto.getEmployeeId());
         PrintJob printJob = printJobRepo.findPrintJobById(dto.getPrintJobId());
@@ -65,6 +69,7 @@ public class PrintJobOperations {
 
             response.setSuccess(true);
             response.setMessage("Print Job Deleted Successfully");
+            response.setHttpStatus(HttpStatus.ACCEPTED);
         }
 
         return response;
