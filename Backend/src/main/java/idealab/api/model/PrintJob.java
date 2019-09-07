@@ -6,6 +6,10 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * This class holds the model that represents the print job table. It is related to email hash, color type, queue, and employee ID. Additionally,
+ * it has a spot for comments, dropbox link, and a way to state when it was created + last updated.
+ */
 @Entity
 @Table(name = "print_job")
 public class PrintJob {
