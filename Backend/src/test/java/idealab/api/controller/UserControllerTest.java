@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -47,6 +48,7 @@ public class UserControllerTest {
         GenericResponse genericResponse = new GenericResponse();
         genericResponse.setSuccess(true);
         genericResponse.setMessage("User Sign Up Successful");
+        genericResponse.setHttpStatus(HttpStatus.CREATED);
 
         Employee e = new Employee();
         e.setUsername("test");
@@ -72,6 +74,7 @@ public class UserControllerTest {
         GenericResponse genericResponse = new GenericResponse();
         genericResponse.setSuccess(false);
         genericResponse.setMessage("User Sign Up Failed");
+        genericResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
 
         Employee e = new Employee();
         e.setUsername("test");
@@ -97,6 +100,7 @@ public class UserControllerTest {
         GenericResponse genericResponse = new GenericResponse();
         genericResponse.setSuccess(true);
         genericResponse.setMessage("Employee Deleted Successfully");
+        genericResponse.setHttpStatus(HttpStatus.ACCEPTED);
 
         when(operations.deleteUser(1)).thenReturn(genericResponse);
 
@@ -115,6 +119,7 @@ public class UserControllerTest {
         GenericResponse genericResponse = new GenericResponse();
         genericResponse.setSuccess(false);
         genericResponse.setMessage("Employee ID is not valid");
+        genericResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
 
         when(operations.deleteUser(1)).thenReturn(genericResponse);
 
@@ -133,6 +138,7 @@ public class UserControllerTest {
         GenericResponse genericResponse = new GenericResponse();
         genericResponse.setSuccess(false);
         genericResponse.setMessage("Employee Could Not Be Deleted");
+        genericResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
 
         when(operations.deleteUser(1)).thenReturn(genericResponse);
 
