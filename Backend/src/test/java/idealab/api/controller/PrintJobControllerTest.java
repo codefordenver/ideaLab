@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
+import static idealab.api.util.TestUtil.stringToGenericResponse;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -62,6 +63,7 @@ public class PrintJobControllerTest {
         GenericResponse genericResponse = new GenericResponse();
         genericResponse.setSuccess(true);
         genericResponse.setMessage("Print Job Updated");
+        genericResponse.setHttpStatus(HttpStatus.ACCEPTED);
 
         String inputJson = printJobRequestAsJsonString(printJobUpdateRequest);
 
@@ -89,6 +91,7 @@ public class PrintJobControllerTest {
         GenericResponse genericResponse = new GenericResponse();
         genericResponse.setSuccess(false);
         genericResponse.setMessage("Invalid Status");
+        genericResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
 
         String inputJson = printJobRequestAsJsonString(printJobUpdateRequest);
 
@@ -114,6 +117,7 @@ public class PrintJobControllerTest {
         GenericResponse genericResponse = new GenericResponse();
         genericResponse.setSuccess(true);
         genericResponse.setMessage("Print Job Deleted");
+        genericResponse.setHttpStatus(HttpStatus.ACCEPTED);
 
         String inputJson = printJobRequestAsJsonString(printJobDeleteRequest);
 
@@ -139,6 +143,7 @@ public class PrintJobControllerTest {
         GenericResponse genericResponse = new GenericResponse();
         genericResponse.setSuccess(false);
         genericResponse.setMessage("Print Job Delete Failed");
+        genericResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
 
         String inputJson = printJobRequestAsJsonString(printJobDeleteRequest);
 
@@ -164,15 +169,6 @@ public class PrintJobControllerTest {
         }
     }
 
-    public GenericResponse stringToGenericResponse(String s) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            GenericResponse response = mapper.readValue(s, GenericResponse.class);
-            return response;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Test
     public void getAllPrintJobs() throws Exception {

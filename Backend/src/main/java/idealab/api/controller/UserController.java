@@ -3,16 +3,8 @@ package idealab.api.controller;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.model.Employee;
 import idealab.api.operations.UserOperations;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import idealab.api.dto.response.GenericResponse;
-import idealab.api.model.Employee;
-import idealab.api.operations.UserOperations;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
@@ -27,10 +19,13 @@ public class UserController {
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@RequestBody Employee user) {
         GenericResponse response = userOperations.userSignUp(user);
-        if(response.isSuccess())
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
-        else
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Integer id) {
+        GenericResponse response = userOperations.deleteUser(id);
+        return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     /*
