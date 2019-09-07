@@ -1,8 +1,8 @@
-package idealab.api.dto;
+package idealab.api.dto.request;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public class PrintModel {
+public class PrintModelUpdateRequest {
     private MultipartFile file;
 
     public MultipartFile getFile() {

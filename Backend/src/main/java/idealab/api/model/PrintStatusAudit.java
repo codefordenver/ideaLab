@@ -9,11 +9,10 @@ import java.util.Objects;
 public class PrintStatusAudit {
 
     @Id
-    @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "employee_id")
+    @Column(name = "fk_employee_id")
     private Integer employeeId;
 
     @Column(name = "status_before")
@@ -24,6 +23,9 @@ public class PrintStatusAudit {
 
     @Column(name = "created_at",  nullable = false)
     private LocalDateTime createdAt;
+
+    @Column(name = "fk_print_model_id", nullable = false)
+    private Integer printModelId;
 
     public PrintStatusAudit() {
     }
@@ -73,6 +75,14 @@ public class PrintStatusAudit {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public void setPrintModelId(Integer id) {
+        this.printModelId = id;
+    }
+
+    public Integer getPrintModelId() {
+        return this.printModelId;
     }
 
     @Override

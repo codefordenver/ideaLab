@@ -1,7 +1,9 @@
 package idealab.api.operations;
 
 import com.dropbox.core.DbxException;
-import idealab.api.dto.*;
+import idealab.api.dto.request.PrintJobNewRequest;
+import idealab.api.dto.request.PrintModelUpdateRequest;
+import idealab.api.dto.response.PrintJobDataResponse;
 import idealab.api.model.*;
 import idealab.api.repositories.ColorTypeRepo;
 import idealab.api.repositories.CustomerInfoRepo;
@@ -13,10 +15,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import idealab.api.dto.request.PrintJobDeleteRequest;
+import idealab.api.dto.request.PrintJobUpdateRequest;
+import idealab.api.dto.response.GenericResponse;
+import idealab.api.dto.response.GetAllPrintJobListResponse;
+import idealab.api.dto.response.GetAllPrintJobResponse;
+import idealab.api.model.Employee;
+import idealab.api.model.PrintJob;
 import idealab.api.repositories.EmployeeRepo;
 import idealab.api.repositories.PrintJobRepo;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
 
 @Component
 public class PrintJobOperations {
@@ -38,8 +49,8 @@ public class PrintJobOperations {
         this.employeeRepo = employeeRepo;
     }
 
-    public PrintJobData newPrintJob(PrintJobNewRequest printJobNewRequest) {
-        PrintJobData response = new PrintJobData();
+    public PrintJobDataResponse newPrintJob(PrintJobNewRequest printJobNewRequest) {
+        PrintJobDataResponse response = new PrintJobDataResponse();
         response.setSuccess(false);
         response.setMessage("File could not be uploaded");
 
@@ -85,7 +96,7 @@ public class PrintJobOperations {
         String tempEmployeeLastName = "Temp Joe";
         String tempEmployeeLogin = "Temp Cotton Eyed Joe";
         Employee employee = new Employee(tempEmployeeLogin, "such secure, wow!", EmployeeRole.STAFF, tempEmployeeFirstName, tempEmployeeLastName);
-        Employee databaseEmployee = employeeRepo.findByLogin(employee.getLogin());
+        Employee databaseEmployee = employeeRepo.findEmployeeByUsername(employee.getUsername());
         if (databaseEmployee == null) {
             databaseEmployee = employeeRepo.save(employee);
         }
@@ -118,8 +129,8 @@ public class PrintJobOperations {
         return response;
     }
 
-    public PrintJobData updateModel(Integer printId, PrintModel model){
-        PrintJobData response = new PrintJobData();
+    public PrintJobDataResponse updateModel(Integer printId, PrintModelUpdateRequest model){
+        PrintJobDataResponse response = new PrintJobDataResponse();
         response.setSuccess(false);
         response.setMessage("File could not be updated");
 
@@ -260,4 +271,23 @@ public class PrintJobOperations {
 
         return response;
     }
+
+    public GetAllPrintJobListResponse getAllPrintJobs(){
+        // Some magic happened here !
+        //TODO: Repo class should be coded !
+        //TODO: They should be connected !
+        //TODO: Domain entity (model) should be mapped response. It will be better if we use dto then map to response to make it more flexible for future use.
+        //TODO: but now we don't need dto as mid entity between response entity and database entity.
+
+        //TODO: Tempporary
+        GetAllPrintJobResponse printJobResponse =
+                new GetAllPrintJobResponse(null, null, null, null, null,
+                null, null, null);
+
+        List<GetAllPrintJobResponse> printJobResponses = new ArrayList<GetAllPrintJobResponse>();
+        printJobResponses.add(printJobResponse);
+
+        return new GetAllPrintJobListResponse(printJobResponses);
+    }
+
 }

@@ -1,13 +1,11 @@
-package idealab.api.dto;
+package idealab.api.dto.response;
 
 import java.util.List;
 
+import idealab.api.dto.response.GenericResponse;
 import idealab.api.model.PrintJob;
 
-public class PrintJobData extends GenericResponse {
-
-  private boolean isSuccess;
-  private String message;
+public class PrintJobDataResponse extends GenericResponse {
   private List <PrintJob> data;
 
   public List<PrintJob> getData() {

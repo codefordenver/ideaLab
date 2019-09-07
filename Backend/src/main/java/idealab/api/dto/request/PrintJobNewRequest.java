@@ -1,4 +1,4 @@
-package idealab.api.dto;
+package idealab.api.dto.request;
 
 import org.springframework.web.multipart.MultipartFile;
 

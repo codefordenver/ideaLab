@@ -15,7 +15,6 @@ import org.hibernate.validator.constraints.Length;
 @Table(name ="customer_info")
 public class CustomerInfo {
     @Id
-    @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
