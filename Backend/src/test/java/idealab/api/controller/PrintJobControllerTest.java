@@ -178,7 +178,7 @@ public class PrintJobControllerTest {
     public void getAllPrintJobs() throws Exception {
         // given
         GetAllPrintJobResponse printJob = new GetAllPrintJobResponse(1, null, null, null,
-                null, null, null, null);
+                null, null, null, null, null);
         List<GetAllPrintJobResponse> printJobResponses = new ArrayList<GetAllPrintJobResponse>();
         printJobResponses.add(printJob);
         GetAllPrintJobListResponse expectedResponse = new GetAllPrintJobListResponse(printJobResponses);

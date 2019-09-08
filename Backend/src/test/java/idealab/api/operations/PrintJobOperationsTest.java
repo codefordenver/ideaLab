@@ -164,7 +164,7 @@ public class PrintJobOperationsTest {
         // Given
         GetAllPrintJobResponse printJobResponse =
                 new GetAllPrintJobResponse(null, null, null, null, null,
-                        null, null, null);
+                        null, null, null, null);
 
         List<GetAllPrintJobResponse> printJobResponses = new ArrayList<GetAllPrintJobResponse>();
         printJobResponses.add(printJobResponse);

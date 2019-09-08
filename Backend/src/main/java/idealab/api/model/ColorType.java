@@ -18,8 +18,9 @@ public class ColorType {
     @Column(name = "color", nullable = false)
     private String color;
 
+    public ColorType() {}
+
     public ColorType(Integer id, String color) {
-        
         this.color = color;
     }
 
