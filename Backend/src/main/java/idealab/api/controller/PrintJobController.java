@@ -7,7 +7,6 @@ import idealab.api.dto.response.GetAllPrintJobListResponse;
 import idealab.api.operations.PrintJobOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,11 +29,7 @@ public class PrintJobController {
         LOGGER.info("PrintJobUpdateStatus request is " + dto.toString());
 
         GenericResponse response = printJobOperations.updatePrintJobStatus(printId, dto);
-
-        if(response.isSuccess())
-            return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-        else
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     @DeleteMapping
@@ -43,11 +38,7 @@ public class PrintJobController {
         LOGGER.info("PrintJobDelete request is " + dto.toString());
 
         GenericResponse response = printJobOperations.deletePrintJobStatus(dto);
-
-        if(response.isSuccess())
-            return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-        else
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     @GetMapping
