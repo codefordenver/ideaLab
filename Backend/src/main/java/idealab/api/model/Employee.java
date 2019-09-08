@@ -10,7 +10,6 @@ import java.util.Set;
 @Table(name = "employee")
 public class Employee {
     @Id
-    @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 

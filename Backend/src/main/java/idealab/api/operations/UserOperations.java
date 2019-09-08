@@ -1,6 +1,6 @@
 package idealab.api.operations;
 
-import idealab.api.dto.GenericResponse;
+import idealab.api.dto.response.GenericResponse;
 import idealab.api.model.Employee;
 import idealab.api.repositories.EmployeeRepo;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

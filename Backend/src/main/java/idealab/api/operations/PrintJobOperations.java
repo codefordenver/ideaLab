@@ -1,13 +1,18 @@
 package idealab.api.operations;
 
-import idealab.api.dto.GenericResponse;
-import idealab.api.dto.PrintJobDeleteRequest;
-import idealab.api.dto.PrintJobUpdateRequest;
+import idealab.api.dto.request.PrintJobDeleteRequest;
+import idealab.api.dto.request.PrintJobUpdateRequest;
+import idealab.api.dto.response.GenericResponse;
+import idealab.api.dto.response.GetAllPrintJobListResponse;
+import idealab.api.dto.response.GetAllPrintJobResponse;
 import idealab.api.model.Employee;
 import idealab.api.model.PrintJob;
 import idealab.api.repositories.EmployeeRepo;
 import idealab.api.repositories.PrintJobRepo;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class PrintJobOperations {
@@ -64,4 +69,23 @@ public class PrintJobOperations {
 
         return response;
     }
+
+    public GetAllPrintJobListResponse getAllPrintJobs(){
+        // Some magic happened here !
+        //TODO: Repo class should be coded !
+        //TODO: They should be connected !
+        //TODO: Domain entity (model) should be mapped response. It will be better if we use dto then map to response to make it more flexible for future use.
+        //TODO: but now we don't need dto as mid entity between response entity and database entity.
+
+        //TODO: Tempporary
+        GetAllPrintJobResponse printJobResponse =
+                new GetAllPrintJobResponse(null, null, null, null, null,
+                null, null, null);
+
+        List<GetAllPrintJobResponse> printJobResponses = new ArrayList<GetAllPrintJobResponse>();
+        printJobResponses.add(printJobResponse);
+
+        return new GetAllPrintJobListResponse(printJobResponses);
+    }
+
 }
