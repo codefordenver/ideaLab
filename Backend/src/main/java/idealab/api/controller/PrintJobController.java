@@ -10,7 +10,6 @@ import idealab.api.dto.response.GetAllPrintJobListResponse;
 import idealab.api.operations.PrintJobOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -53,10 +52,7 @@ public class PrintJobController {
         LOGGER.info("PrintJobNew request is:" + model.toString());
         GetPrintJobDataResponse response = printJobOperations.newPrintJob(model);
 
-        if (response.isSuccess())
-            return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-        else
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     // Sample Endpoint to UPDATE the model
@@ -67,10 +63,7 @@ public class PrintJobController {
         LOGGER.info("PrintJobUpdateModel request is job:" + printId.toString() + "| model: " + model.toString());
         GetPrintJobDataResponse response = printJobOperations.updateModel(printId, model);
 
-        if (response.isSuccess())
-            return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-        else
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     // Sample Endpoint to DELETE the model
@@ -79,34 +72,24 @@ public class PrintJobController {
         LOGGER.info("PrintJobDeleteModel request is " + printId.toString());
         GenericResponse response = printJobOperations.deleteModel(printId);
 
-        if (response.isSuccess())
-            return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-        else
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     @PutMapping("/{printId}/status")
-    public ResponseEntity<?> printJobUpdateStatus(@PathVariable("printId") Integer printId,
-            @RequestBody PrintJobUpdateRequest dto) {
+    public ResponseEntity<?> printJobUpdateStatus(@PathVariable ("printId") Integer printId, @RequestBody PrintJobUpdateRequest dto)
+    {
         LOGGER.info("PrintJobUpdateStatus request is " + dto.toString());
 
         GenericResponse response = printJobOperations.updatePrintJobStatus(printId, dto);
-
-        if (response.isSuccess())
-            return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-        else
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     @DeleteMapping
-    public ResponseEntity<?> printJobDelete(@RequestBody PrintJobDeleteRequest dto) {
+    public ResponseEntity<?> printJobDelete(@RequestBody PrintJobDeleteRequest dto)
+    {
         LOGGER.info("PrintJobDelete request is " + dto.toString());
 
         GenericResponse response = printJobOperations.deletePrintJobStatus(dto);
-
-        if (response.isSuccess())
-            return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-        else
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, response.getHttpStatus());
     }
 }

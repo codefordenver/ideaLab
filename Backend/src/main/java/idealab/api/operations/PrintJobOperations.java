@@ -24,6 +24,7 @@ import idealab.api.model.Employee;
 import idealab.api.model.PrintJob;
 import idealab.api.repositories.EmployeeRepo;
 import idealab.api.repositories.PrintJobRepo;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -53,6 +54,7 @@ public class PrintJobOperations {
         GetPrintJobDataResponse response = new GetPrintJobDataResponse();
         response.setSuccess(false);
         response.setMessage("File could not be uploaded");
+        response.setHttpStatus(HttpStatus.BAD_REQUEST);
 
         if(printJobNewRequest.getFile() == null){
             response.setMessage("No file was submitted.  Please attach a file to the request");
@@ -65,7 +67,6 @@ public class PrintJobOperations {
         String customerLastName = printJobNewRequest.getCustomerLastName();
         String color = printJobNewRequest.getColor();
         String comments = printJobNewRequest.getComments();
-        String employeeNotes = printJobNewRequest.getEmployeeNotes();
         LocalDateTime currentTime = LocalDateTime.now();
 
         // Check if EmailHash Exists otherwise make a new record
@@ -102,7 +103,7 @@ public class PrintJobOperations {
         }
 
         // Create a new print model first with temp dropbox link
-        PrintJob printJob = new PrintJob(databaseEmail, databaseColor, databaseEmployee, Status.PENDING_REVIEW, employeeNotes, comments, currentTime, currentTime);
+        PrintJob printJob = new PrintJob(databaseEmail, databaseColor, databaseEmployee, Status.PENDING_REVIEW, comments, currentTime, currentTime);
         printJobRepo.save(printJob);
 
         System.out.println(printJob.toString());
@@ -127,7 +128,7 @@ public class PrintJobOperations {
         response.setSuccess(true);
         response.setMessage("Successfully saved new file to database!");
         response.setData(printJobData);
-
+        response.setHttpStatus(HttpStatus.ACCEPTED);
         return response;
     }
 
@@ -135,6 +136,7 @@ public class PrintJobOperations {
         GetPrintJobDataResponse response = new GetPrintJobDataResponse();
         response.setSuccess(false);
         response.setMessage("File could not be updated");
+        response.setHttpStatus(HttpStatus.BAD_REQUEST);
 
         MultipartFile file = model.getFile();
 
@@ -163,6 +165,7 @@ public class PrintJobOperations {
         response.setMessage("Successfully updated file to database!");
         response.setData(printJobData);
 
+        response.setHttpStatus(HttpStatus.ACCEPTED);
         return response;
     }
 
@@ -170,6 +173,7 @@ public class PrintJobOperations {
         GenericResponse response = new GenericResponse();
         response.setSuccess(false);
         response.setMessage("File could not be deleted");
+        response.setHttpStatus(HttpStatus.BAD_REQUEST);
 
         PrintJob printJob = printJobRepo.findPrintJobById(printId);
 
@@ -187,6 +191,7 @@ public class PrintJobOperations {
         response.setSuccess(true);
         response.setMessage("Successfully deleted file from DropBox");
 
+        response.setHttpStatus(HttpStatus.ACCEPTED);
         return response;
     }
 
@@ -235,6 +240,7 @@ public class PrintJobOperations {
         GenericResponse response = new GenericResponse();
         response.setSuccess(false);
         response.setMessage("Print Job Update Failed");
+        response.setHttpStatus(HttpStatus.BAD_REQUEST);
 
         if (dto.isValidStatus()) {
             Employee employee = employeeRepo.findEmployeeById(dto.getEmployeeId());
@@ -245,6 +251,7 @@ public class PrintJobOperations {
                 if (printJob.getStatus().getName().equalsIgnoreCase(dto.getStatus())) {
                     response.setSuccess(true);
                     response.setMessage("Print Job Updated");
+                    response.setHttpStatus(HttpStatus.ACCEPTED);
                 }
             }
         } else {
@@ -260,6 +267,7 @@ public class PrintJobOperations {
         GenericResponse response = new GenericResponse();
         response.setSuccess(false);
         response.setMessage("Print Job Delete Failed");
+        response.setHttpStatus(HttpStatus.BAD_REQUEST);
 
         Employee employee = employeeRepo.findEmployeeById(dto.getEmployeeId());
         PrintJob printJob = printJobRepo.findPrintJobById(dto.getPrintJobId());
@@ -269,6 +277,7 @@ public class PrintJobOperations {
 
             response.setSuccess(true);
             response.setMessage("Print Job Deleted Successfully");
+            response.setHttpStatus(HttpStatus.ACCEPTED);
         }
 
         return response;

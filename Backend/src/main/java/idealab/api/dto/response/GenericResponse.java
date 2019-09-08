@@ -1,11 +1,17 @@
 package idealab.api.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.http.HttpStatus;
+
 import java.util.Objects;
 
 public class GenericResponse {
 
     private boolean isSuccess;
     private String message;
+
+    @JsonIgnore
+    private HttpStatus httpStatus;
 
     public boolean isSuccess() {
         return isSuccess;
@@ -21,6 +27,14 @@ public class GenericResponse {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
+
+    public void setHttpStatus(HttpStatus httpStatus) {
+        this.httpStatus = httpStatus;
     }
 
     @Override

@@ -9,7 +9,6 @@ public class PrintJobNewRequest {
     private String email;
     private String color;
     private String comments;
-    private String employeeNotes;
     private MultipartFile file;
 
     public String getEmail() {
@@ -34,14 +33,6 @@ public class PrintJobNewRequest {
 
     public void setComments(String comments) {
         this.comments = comments;
-    }
-
-    public String getEmployeeNotes() {
-        return employeeNotes;
-    }
-
-    public void setEmployeeNotes(String employeeNotes) {
-        this.employeeNotes = employeeNotes;
     }
 
     public String getColor() {
@@ -76,7 +67,6 @@ public class PrintJobNewRequest {
                 ", email='" + email + '\'' +
                 ", color='" + color + '\'' +
                 ", comments='" + comments + '\'' +
-                ", employeeNotes='" + employeeNotes + '\'' +
                 ", file=" + file.getOriginalFilename() +
                 '}';
     }

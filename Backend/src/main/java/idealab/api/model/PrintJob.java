@@ -1,13 +1,15 @@
 package idealab.api.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * This class holds the model that represents the print job table. It is related to email hash, color type, queue, and employee ID. Additionally,
+ * it has a spot for comments, dropbox link, and a way to state when it was created + last updated.
+ */
 @Entity
 @Table(name = "print_job")
 public class PrintJob {
@@ -31,9 +33,6 @@ public class PrintJob {
     @Column(name = "status",  nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
-
-    @Column(name = "employee_notes")
-    private String employeeNotes;
 
     @OneToOne(targetEntity=Queue.class, mappedBy="printJobId")
     private Queue queueId;
@@ -59,12 +58,11 @@ public class PrintJob {
     }
 
     public PrintJob(EmailHash emailHashId, ColorType colorTypeId, Employee employeeId, Status status,
-                    String employeeNotes, String comments, LocalDateTime updatedAt, LocalDateTime createdAt) {
+                    String comments, LocalDateTime updatedAt, LocalDateTime createdAt) {
         this.emailHashId = emailHashId;
         this.colorTypeId = colorTypeId;
         this.employeeId = employeeId;
         this.status = status;
-        this.employeeNotes = employeeNotes;
         this.comments = comments;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
@@ -108,14 +106,6 @@ public class PrintJob {
 
     public void setStatus(Status status) {
         this.status = status;
-    }
-
-    public String getEmployeeNotes() {
-        return employeeNotes;
-    }
-
-    public void setEmployeeNotes(String employeeNotes) {
-        this.employeeNotes = employeeNotes;
     }
 
     public Queue getQueueId() {
@@ -176,7 +166,6 @@ public class PrintJob {
                 Objects.equals(colorTypeId, printJob.colorTypeId) &&
                 Objects.equals(employeeId, printJob.employeeId) &&
                 status == printJob.status &&
-                Objects.equals(employeeNotes, printJob.employeeNotes) &&
                 Objects.equals(queueId, printJob.queueId) &&
                 Objects.equals(comments, printJob.comments) &&
                 Objects.equals(dropboxPath, printJob.dropboxPath) &&
@@ -193,7 +182,6 @@ public class PrintJob {
                 ", colorTypeId=" + colorTypeId +
                 ", employeeId=" + employeeId +
                 ", status=" + status +
-                ", employeeNotes='" + employeeNotes + '\'' +
                 ", queueId=" + queueId +
                 ", comments='" + comments + '\'' +
                 ", dropboxPath='" + dropboxPath + '\'' +
