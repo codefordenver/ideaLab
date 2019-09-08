@@ -1,5 +1,11 @@
 package idealab.api.operations;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+
 import idealab.api.dto.request.PrintJobDeleteRequest;
 import idealab.api.dto.request.PrintJobUpdateRequest;
 import idealab.api.dto.response.GenericResponse;
@@ -9,10 +15,6 @@ import idealab.api.model.Employee;
 import idealab.api.model.PrintJob;
 import idealab.api.repositories.EmployeeRepo;
 import idealab.api.repositories.PrintJobRepo;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class PrintJobOperations {
@@ -71,19 +73,37 @@ public class PrintJobOperations {
     }
 
     public GetAllPrintJobListResponse getAllPrintJobs(){
-        // Some magic happened here !
-        //TODO: Repo class should be coded !
-        //TODO: They should be connected !
-        //TODO: Domain entity (model) should be mapped response. It will be better if we use dto then map to response to make it more flexible for future use.
-        //TODO: but now we don't need dto as mid entity between response entity and database entity.
-
-        //TODO: Tempporary
-        GetAllPrintJobResponse printJobResponse =
-                new GetAllPrintJobResponse(null, null, null, null, null,
-                null, null, null);
-
+        Iterable<PrintJob> allJobs = printJobRepo.findAll();
         List<GetAllPrintJobResponse> printJobResponses = new ArrayList<GetAllPrintJobResponse>();
-        printJobResponses.add(printJobResponse);
+
+        allJobs.forEach(printJob -> {
+            Integer id = printJob.getId();
+            String colorChoice = printJob.getColorTypeId().getColor();
+            String email;
+            String name;
+
+            if(printJob.getEmailHashId().getCustomerInfo() != null) {
+                email = printJob.getEmailHashId().getCustomerInfo().getEmail();
+                name = printJob.getEmailHashId().getCustomerInfo().getFullName();
+            } else {
+                email = "No longer available";
+                name = "No longer available";
+            }
+
+            String comments = printJob.getComments();
+            String dropboxLink = printJob.getDropboxLink();
+            String status = printJob.getStatus().getName();
+            LocalDateTime createdDate = LocalDateTime.now();//printJob.getCreatedAt();
+            Integer rank = printJob.getQueueId().getRank();
+
+            
+            
+
+
+            GetAllPrintJobResponse printJobResponse =
+                new GetAllPrintJobResponse(id, colorChoice, email, status, createdDate, rank, name, comments, dropboxLink);
+            printJobResponses.add(printJobResponse);
+        });
 
         return new GetAllPrintJobListResponse(printJobResponses);
     }
