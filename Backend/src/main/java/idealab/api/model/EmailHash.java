@@ -12,8 +12,8 @@ public class EmailHash {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToMany(targetEntity=CustomerInfo.class, mappedBy="emailHashId")   
-    private Set<CustomerInfo> customerInfo;
+    @OneToOne(targetEntity=CustomerInfo.class, mappedBy="emailHashId")   
+    private CustomerInfo customerInfo;
 
     @OneToMany(targetEntity=PrintJob.class, mappedBy="emailHashId")
     private Set<PrintJob> printJobs;
@@ -21,6 +21,8 @@ public class EmailHash {
     @Column(name = "email_hash", nullable = false)
     private String emailHash;
 
+    public EmailHash() {}
+    
     public EmailHash(String emailHash) {
         this.emailHash = emailHash;
     }
@@ -32,6 +34,14 @@ public class EmailHash {
 
     public void setEmailHash(String emailHash) {
         this.emailHash = emailHash;
+    }
+
+    public CustomerInfo getCustomerInfo() {
+        return this.customerInfo;
+    }
+
+    public void setCustomerInfo(CustomerInfo customerInfo) {
+        this.customerInfo = customerInfo;
     }
 
 }

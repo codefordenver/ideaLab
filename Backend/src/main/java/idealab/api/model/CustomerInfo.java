@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.Length;
@@ -18,7 +18,7 @@ public class CustomerInfo {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne()
+    @OneToOne()
     @JoinColumn(name="fk_email_hash_id", referencedColumnName = "id", nullable = false)    
     private EmailHash emailHashId;
 
@@ -33,6 +33,8 @@ public class CustomerInfo {
     @Column(name = "email", nullable = false)
     @Length(min = 1,  max = 254)
     private String email;
+
+    public CustomerInfo() {}
 
     public CustomerInfo(EmailHash emailHashId, String firstName, String lastName, String email) {
         this.emailHashId = emailHashId;
@@ -66,6 +68,10 @@ public class CustomerInfo {
         this.lastName = lastName;
     }
 
+    public String getFullName() {
+        return this.firstName + ' ' + this.lastName;
+    }
+    
     public String getEmail() {
         return email;
     }

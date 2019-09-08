@@ -1,10 +1,21 @@
 package idealab.api.model;
 
-import org.hibernate.validator.constraints.Length;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.hibernate.validator.constraints.Length;
 
 /**
  * This class holds the model that represents the print job table. It is related to email hash, color type, queue, and employee ID. Additionally,
@@ -68,7 +79,7 @@ public class PrintJob {
     }
 
     public Integer getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Integer id) {
@@ -84,7 +95,7 @@ public class PrintJob {
     }
 
     public ColorType getColorTypeId() {
-        return colorTypeId;
+        return this.colorTypeId;
     }
 
     public void setColorTypeId(ColorType colorTypeId) {
@@ -92,7 +103,7 @@ public class PrintJob {
     }
 
     public Employee getEmployeeId() {
-        return employeeId;
+        return this.employeeId;
     }
 
     public void setEmployeeId(Employee employeeId) {
@@ -100,7 +111,7 @@ public class PrintJob {
     }
 
     public Status getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(Status status) {
@@ -108,7 +119,7 @@ public class PrintJob {
     }
 
     public Queue getQueueId() {
-        return queueId;
+        return this.queueId;
     }
 
     public void setQueueId(Queue queueId) {
@@ -116,7 +127,7 @@ public class PrintJob {
     }
 
     public String getComments() {
-        return comments;
+        return this.comments;
     }
 
     public void setComments(String comments) {
@@ -124,7 +135,7 @@ public class PrintJob {
     }
 
     public String getDropboxLink() {
-        return dropboxLink;
+        return this.dropboxLink;
     }
 
     public void setDropboxLink(String dropboxLink) {
@@ -140,7 +151,7 @@ public class PrintJob {
     }
 
     public LocalDateTime getCreatedAt() {
-        return createdAt;
+        return this.createdAt;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
