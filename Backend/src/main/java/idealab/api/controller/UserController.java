@@ -3,6 +3,9 @@ package idealab.api.controller;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.model.Employee;
 import idealab.api.operations.UserOperations;
+
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<?> signUp(@RequestBody Employee user) {
+    public ResponseEntity<?> signUp(@RequestBody @Valid Employee user) {
         GenericResponse response = userOperations.userSignUp(user);
         if(response.isSuccess())
             return new ResponseEntity<>(response, HttpStatus.CREATED);

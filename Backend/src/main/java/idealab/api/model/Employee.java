@@ -18,6 +18,7 @@ public class Employee {
     private String username;
 
     @Column(name = "password", nullable = false)
+    @Length(min = 8)
     private String password;
 
     @Column(name = "role", nullable = false)
