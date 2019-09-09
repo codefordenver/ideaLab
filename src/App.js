@@ -14,12 +14,13 @@ function App() {
     <div className="App grid-container">
       <HashRouter>
         {sidebar}
-      <Switch>
-        <Route exact path="/queue" component={QueueContainer} />
-        <Route exact path="/upload" component={UploadContainer} />
-        <Route path="/login" component={LoginManager} />
-        <Route path='/account' component={CreateAccountContainer} />
-      </Switch>
+        <Switch>
+          <Route exact path="/queue" component={QueueContainer} />
+          <Route exact path="/manageaccounts" component={CreateAccountContainer} />
+          <Route exact path="/upload" component={UploadContainer} />
+          <Route path="/login" component={LoginManager} />
+          <Route path='/account' component={CreateAccountContainer} />
+        </Switch>
       </HashRouter>
     </div>
   );

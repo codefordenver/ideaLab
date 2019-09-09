@@ -1,15 +1,58 @@
 import React, { useState } from 'react';
+import RequestService from '../../util/RequestService'
 import './CreateAccountContainer.css';
 
 import ideaLABlogo from './../../ideaLABlogo.png';
 
 const LoginManager = () => {
-	const onSubmit = e => {
-		e.preventDefault();
-	};
 
+	const [role, setRole] = useState('STAFF');
+	const [firstName, setFirstName] = useState('');
+	const [lastName, setLastName] = useState('');
+	const [username, setUsername] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [errors, setErrors] = useState({});
+
+	function onSuccess(response) {
+		// Maybe display the modal or some kind of redirect?
+		console.log(response.data.message);
+	 }
+
+	function onFailure(error) {
+		const validationErrors = RequestService.validationErrorGetter(error);
+		const newErrorState = {};
+		validationErrors.forEach(error => {
+			newErrorState[error.field] = error.defaultMessage;
+		});
+		setErrors(newErrorState);
+	};
+
+
+	const onSubmit = e => {
+		e.preventDefault();
+		const payload = {
+			"email": email,
+			"password": password,
+			"firstName": firstName,
+			"lastName": lastName,
+			"role": role,
+			"username": username
+		}
+
+		RequestService.signUp(payload, onSuccess, onFailure);
+	};
+
+	function renderErrors(){
+		const errorMessages = ['role', 'firstName', 'lastName', 'username', 'email', 'password'].map((field) => {
+			if (errors[field]) {
+				return <p>{field + ' ' + errors[field]}</p>
+			} else {
+				return null;
+			}
+		});
+		return errorMessages;
+	}
 
 	return (
 		<div className='container'>
@@ -18,6 +61,14 @@ const LoginManager = () => {
 				<h1>3D Printing and Upload Queue</h1>
 				<h2>Create an Account</h2>
 				<form onSubmit={e => onSubmit(e)}>
+					<input
+						name='username'
+						placeholder='username'
+						autoComplete='off'
+						autoFocus
+						value={username}
+						onChange={e => setUsername(e.target.value)}
+					/>
 					<input
 						name='email'
 						placeholder='email'
@@ -35,13 +86,44 @@ const LoginManager = () => {
 						onChange={e => setPassword(e.target.value)}
 					/>
 					<input
-						name='password'
-						placeholder='confirm password'
-						type='password'
+						name='firstName'
+						placeholder='First Name'
+						type='input'
 						autoComplete='off'
-						value={password}
-						onChange={e => setPassword(e.target.value)}
+						value={firstName}
+						onChange={e => setFirstName(e.target.value)}
 					/>
+					<input
+						name='lastName'
+						placeholder='Last Name'
+						type='input'
+						autoComplete='off'
+						value={lastName}
+						onChange={e => setLastName(e.target.value)}
+					/>
+					<div>
+						<label>
+							<input
+								name='role'
+								type='radio'
+								autoComplete='off'
+								value={'STAFF'}
+								onChange={e => setRole(e.target.value)}
+							/>
+							Staff
+						</label>
+						<label>
+							<input
+								name='role'
+								type='radio'
+								autoComplete='off'
+								value={'ADMIN'}
+								onChange={e => setRole(e.target.value)}
+							/>
+							Admin
+						</label>
+					</div>
+					{renderErrors()}
 					<button type='submit'>Create Account</button>
 				</form>
 				<p>This is the email state: {email}</p>
