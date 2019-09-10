@@ -32,7 +32,7 @@ import java.util.ArrayList;
 
 @Component
 public class PrintJobOperations {
-    private final DropboxOperations dropboxOperations;
+    private DropboxOperations dropboxOperations;
     private PrintJobRepo printJobRepo;
     private ColorTypeRepo colorTypeRepo;
     private EmailHashRepo emailHashRepo;
