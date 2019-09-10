@@ -5,7 +5,7 @@ import './Dropdown.css';
 
 const Dropdown = props => {
     const [isDropped,toggleIsDropped] = useState(false);
-    const [isSelected,setIsSelected] = useState('location');
+    const [isSelected,setIsSelected] = useState(props.optionsName);
 
     const checkArrow = () => {
         const arrowImg = document.getElementById('arrow');
