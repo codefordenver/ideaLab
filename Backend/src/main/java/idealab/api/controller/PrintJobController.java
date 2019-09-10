@@ -55,7 +55,6 @@ public class PrintJobController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    // Sample Endpoint to UPDATE the model
     @PutMapping("/{printId}/model")
     public ResponseEntity<?> printJobUpdateModel(@PathVariable("printId") Integer printId,
                                                   @ModelAttribute PrintModelUpdateRequest model) {
@@ -66,7 +65,6 @@ public class PrintJobController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    // Sample Endpoint to DELETE the model
     @DeleteMapping("/{printId}/model")
     public ResponseEntity<?> printJobDeleteModel(@PathVariable("printId") Integer printId) {
         LOGGER.info("PrintJobDeleteModel request is " + printId.toString());
