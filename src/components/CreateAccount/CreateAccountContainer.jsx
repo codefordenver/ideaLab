@@ -62,20 +62,18 @@ const LoginManager = () => {
 				<h2>Create an Account</h2>
 				<form onSubmit={e => onSubmit(e)}>
 					<input
-						name='username'
-						placeholder='username'
-						autoComplete='off'
-						autoFocus
-						value={username}
-						onChange={e => setUsername(e.target.value)}
-					/>
-					<input
 						name='email'
 						placeholder='email'
 						autoComplete='off'
-						autoFocus
 						value={email}
 						onChange={e => setEmail(e.target.value)}
+					/>
+					<input
+						name='username'
+						placeholder='username'
+						autoComplete='off'
+						value={username}
+						onChange={e => setUsername(e.target.value)}
 					/>
 					<input
 						name='password'
