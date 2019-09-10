@@ -40,9 +40,13 @@ public class PrintJob {
     @Column(name = "comments")
     private String comments;
 
-    @Column(name = "dropbox_link", nullable = false)
+    @Column(name = "dropbox_sharable_link")
     @Length(min = 1, max = 254)
-    private String dropboxLink;
+    private String dropboxSharableLink;
+
+    @Column(name = "dropbox_path")
+    @Length(min = 1, max = 254)
+    private String dropboxPath;
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
@@ -54,15 +58,12 @@ public class PrintJob {
     }
 
     public PrintJob(EmailHash emailHashId, ColorType colorTypeId, Employee employeeId, Status status,
-                     Queue queueId, String comments,
-                    @Length(min = 1, max = 254) String dropboxLink, LocalDateTime updatedAt, LocalDateTime createdAt) {
+                    String comments, LocalDateTime updatedAt, LocalDateTime createdAt) {
         this.emailHashId = emailHashId;
         this.colorTypeId = colorTypeId;
         this.employeeId = employeeId;
         this.status = status;
-        this.queueId = queueId;
         this.comments = comments;
-        this.dropboxLink = dropboxLink;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
     }
@@ -123,12 +124,20 @@ public class PrintJob {
         this.comments = comments;
     }
 
-    public String getDropboxLink() {
-        return dropboxLink;
+    public String getDropboxSharableLink() {
+        return dropboxSharableLink;
     }
 
-    public void setDropboxLink(String dropboxLink) {
-        this.dropboxLink = dropboxLink;
+    public void setDropboxSharableLink(String dropboxSharableLink) {
+        this.dropboxSharableLink = dropboxSharableLink;
+    }
+
+    public String getDropboxPath() {
+        return dropboxPath;
+    }
+
+    public void setDropboxPath(String dropboxPath) {
+        this.dropboxPath = dropboxPath;
     }
 
     public LocalDateTime getUpdatedAt() {
@@ -159,7 +168,8 @@ public class PrintJob {
                 status == printJob.status &&
                 Objects.equals(queueId, printJob.queueId) &&
                 Objects.equals(comments, printJob.comments) &&
-                Objects.equals(dropboxLink, printJob.dropboxLink) &&
+                Objects.equals(dropboxPath, printJob.dropboxPath) &&
+                Objects.equals(dropboxSharableLink, printJob.dropboxSharableLink) &&
                 Objects.equals(updatedAt, printJob.updatedAt) &&
                 Objects.equals(createdAt, printJob.createdAt);
     }
@@ -174,7 +184,8 @@ public class PrintJob {
                 ", status=" + status +
                 ", queueId=" + queueId +
                 ", comments='" + comments + '\'' +
-                ", dropboxLink='" + dropboxLink + '\'' +
+                ", dropboxPath='" + dropboxPath + '\'' +
+                ", dropboxSharableLink='" + dropboxSharableLink + '\'' +
                 ", updatedAt=" + updatedAt +
                 ", createdAt=" + createdAt +
                 '}';
