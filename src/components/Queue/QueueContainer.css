@@ -69,6 +69,13 @@ body {
 }
 
 
+}
+
+.statusMenu > button {
+	border: none;
+	margin: 0;
+}
+
 .search-container input {
 	padding: 2px;
 	border: none;

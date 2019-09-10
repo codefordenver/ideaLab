@@ -15,7 +15,6 @@ import org.hibernate.validator.constraints.Length;
 @Table(name ="customer_info")
 public class CustomerInfo {
     @Id
-    @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
@@ -34,6 +33,9 @@ public class CustomerInfo {
     @Column(name = "email", nullable = false)
     @Length(min = 1,  max = 254)
     private String email;
+
+    public CustomerInfo() {
+    }
 
     public CustomerInfo(EmailHash emailHashId, String firstName, String lastName, String email) {
         this.emailHashId = emailHashId;

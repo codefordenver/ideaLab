@@ -1,5 +1,7 @@
 package idealab.api.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -10,7 +12,6 @@ import java.util.Set;
 @Table(name = "employee")
 public class Employee {
     @Id
-    @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
@@ -24,9 +25,6 @@ public class Employee {
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private EmployeeRole role;
-
-    @OneToMany(targetEntity=PrintJob.class, mappedBy="employeeId")
-    private Set<PrintJob> printJobs;
 
     @Column(name = "first_name", nullable = false)
     @Length(min = 1, max = 254)
@@ -42,13 +40,11 @@ public class Employee {
     public Employee(@Length(min = 1, max = 254) String username,
                     String password,
                     EmployeeRole role,
-                    Set<PrintJob> printJobs,
                     @Length(min = 1, max = 254) String firstName,
                     @Length(min = 1, max = 254) String lastName) {
         this.username = username;
         this.password = password;
         this.role = role;
-        this.printJobs = printJobs;
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -102,13 +98,5 @@ public class Employee {
 
     public void setRole(EmployeeRole role) {
         this.role = role;
-    }
-
-    public Set<PrintJob> getPrintJobs() {
-        return printJobs;
-    }
-
-    public void setPrintJobs(Set<PrintJob> printJobs) {
-        this.printJobs = printJobs;
     }
 }

@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - DropboxController",
+            "request": "launch",
+            "mainClass": "idealab.api.controller.DropboxController",
+            "projectName": "ideaLab"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - IdeaLabMain",
             "request": "launch",
             "mainClass": "idealab.IdeaLabMain",

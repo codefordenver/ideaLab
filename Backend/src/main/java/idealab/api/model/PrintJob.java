@@ -6,12 +6,15 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * This class holds the model that represents the print job table. It is related to email hash, color type, queue, and employee ID. Additionally,
+ * it has a spot for comments, dropbox link, and a way to state when it was created + last updated.
+ */
 @Entity
 @Table(name = "print_job")
 public class PrintJob {
 
     @Id
-    @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
@@ -31,18 +34,19 @@ public class PrintJob {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Column(name = "employee_notes",  nullable = false)
-    private String employeeNotes;
-
     @OneToOne(targetEntity=Queue.class, mappedBy="printJobId")
     private Queue queueId;
 
     @Column(name = "comments")
     private String comments;
 
-    @Column(name = "dropbox_link", nullable = false)
+    @Column(name = "dropbox_sharable_link")
     @Length(min = 1, max = 254)
-    private String dropboxLink;
+    private String dropboxSharableLink;
+
+    @Column(name = "dropbox_path")
+    @Length(min = 1, max = 254)
+    private String dropboxPath;
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
@@ -54,16 +58,12 @@ public class PrintJob {
     }
 
     public PrintJob(EmailHash emailHashId, ColorType colorTypeId, Employee employeeId, Status status,
-                    String employeeNotes, Queue queueId, String comments,
-                    @Length(min = 1, max = 254) String dropboxLink, LocalDateTime updatedAt, LocalDateTime createdAt) {
+                    String comments, LocalDateTime updatedAt, LocalDateTime createdAt) {
         this.emailHashId = emailHashId;
         this.colorTypeId = colorTypeId;
         this.employeeId = employeeId;
         this.status = status;
-        this.employeeNotes = employeeNotes;
-        this.queueId = queueId;
         this.comments = comments;
-        this.dropboxLink = dropboxLink;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
     }
@@ -108,14 +108,6 @@ public class PrintJob {
         this.status = status;
     }
 
-    public String getEmployeeNotes() {
-        return employeeNotes;
-    }
-
-    public void setEmployeeNotes(String employeeNotes) {
-        this.employeeNotes = employeeNotes;
-    }
-
     public Queue getQueueId() {
         return queueId;
     }
@@ -132,12 +124,20 @@ public class PrintJob {
         this.comments = comments;
     }
 
-    public String getDropboxLink() {
-        return dropboxLink;
+    public String getDropboxSharableLink() {
+        return dropboxSharableLink;
     }
 
-    public void setDropboxLink(String dropboxLink) {
-        this.dropboxLink = dropboxLink;
+    public void setDropboxSharableLink(String dropboxSharableLink) {
+        this.dropboxSharableLink = dropboxSharableLink;
+    }
+
+    public String getDropboxPath() {
+        return dropboxPath;
+    }
+
+    public void setDropboxPath(String dropboxPath) {
+        this.dropboxPath = dropboxPath;
     }
 
     public LocalDateTime getUpdatedAt() {
@@ -166,10 +166,10 @@ public class PrintJob {
                 Objects.equals(colorTypeId, printJob.colorTypeId) &&
                 Objects.equals(employeeId, printJob.employeeId) &&
                 status == printJob.status &&
-                Objects.equals(employeeNotes, printJob.employeeNotes) &&
                 Objects.equals(queueId, printJob.queueId) &&
                 Objects.equals(comments, printJob.comments) &&
-                Objects.equals(dropboxLink, printJob.dropboxLink) &&
+                Objects.equals(dropboxPath, printJob.dropboxPath) &&
+                Objects.equals(dropboxSharableLink, printJob.dropboxSharableLink) &&
                 Objects.equals(updatedAt, printJob.updatedAt) &&
                 Objects.equals(createdAt, printJob.createdAt);
     }
@@ -182,10 +182,10 @@ public class PrintJob {
                 ", colorTypeId=" + colorTypeId +
                 ", employeeId=" + employeeId +
                 ", status=" + status +
-                ", employeeNotes='" + employeeNotes + '\'' +
                 ", queueId=" + queueId +
                 ", comments='" + comments + '\'' +
-                ", dropboxLink='" + dropboxLink + '\'' +
+                ", dropboxPath='" + dropboxPath + '\'' +
+                ", dropboxSharableLink='" + dropboxSharableLink + '\'' +
                 ", updatedAt=" + updatedAt +
                 ", createdAt=" + createdAt +
                 '}';
