@@ -1,5 +1,6 @@
 package idealab.api.operations;
 
+import com.dropbox.core.DbxException;
 import idealab.api.dto.request.*;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.GetAllPrintJobListResponse;
@@ -8,6 +9,8 @@ import idealab.api.dto.response.GetPrintJobDataResponse;
 import idealab.api.exception.ErrorType;
 import idealab.api.model.*;
 import idealab.api.repositories.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +27,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class PrintJobOperations {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PrintJobOperations.class);
+
     private final DropboxOperations dropboxOperations;
     private final PrintJobRepo printJobRepo;
     private final ColorTypeRepo colorTypeRepo;
@@ -243,7 +249,6 @@ public class PrintJobOperations {
             String line = "";
             List<String> items;
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
                 items = Arrays.asList(line.split("\\s*,\\s*"));
                 CsvUploadRequest request = new CsvUploadRequest();
                 request.setFirstName(items.get(0));
@@ -252,6 +257,25 @@ public class PrintJobOperations {
                 request.setColor(items.get(3));
                 request.setEmployeeId(Integer.valueOf(items.get(4)));
                 request.setStatus(items.get(5));
+
+                try {
+                    Employee e = employeeRepo.findEmployeeById(request.getEmployeeId());
+                    if(e == null) {
+                        LOGGER.error("CSV line not processed: Employee not valid\n" + line);
+                        continue;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    LOGGER.error("CSV line not processed: Error getting Employee\n" + line);
+                    continue;
+                }
+
+                Status status = Status.valueOf(request.getStatus());
+                if(status == null) {
+                    LOGGER.error("CSV line not processed: Status not valid\n" + line);
+                    continue;
+                }
+
                 requests.add(request);
             }
             br.close();
