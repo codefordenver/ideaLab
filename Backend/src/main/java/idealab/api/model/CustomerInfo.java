@@ -1,15 +1,10 @@
 package idealab.api.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.annotation.CreatedDate;
+
+import javax.persistence.*;
+import java.sql.Date;
 
 @Entity
 @Table(name ="customer_info")
@@ -33,6 +28,10 @@ public class CustomerInfo {
     @Column(name = "email", nullable = false)
     @Length(min = 1,  max = 254)
     private String email;
+
+    @CreatedDate
+    @Column(name = "created_date", nullable = false)
+    private Date createdDate;
 
     public CustomerInfo() {
     }
@@ -75,6 +74,14 @@ public class CustomerInfo {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 }
 
