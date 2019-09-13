@@ -78,7 +78,7 @@ public class PrintJobController {
     {
         LOGGER.info("PrintJobUpdateStatus request is " + dto.toString());
 
-        GenericResponse response = printJobOperations.updatePrintJobStatus(printId, dto);
+        GenericResponse response = printJobOperations.updatePrintJob(printId, dto);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
@@ -87,7 +87,7 @@ public class PrintJobController {
     {
         LOGGER.info("PrintJobDelete request is " + dto.toString());
 
-        GenericResponse response = printJobOperations.deletePrintJobStatus(dto);
+        GenericResponse response = printJobOperations.deletePrintJob(dto);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 }

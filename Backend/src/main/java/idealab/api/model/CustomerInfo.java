@@ -1,10 +1,11 @@
 package idealab.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name ="customer_info")
@@ -29,11 +30,12 @@ public class CustomerInfo {
     @Length(min = 1,  max = 254)
     private String email;
 
-    @CreatedDate
+    @JsonIgnore
     @Column(name = "created_date", nullable = false)
     private Date createdDate;
 
     public CustomerInfo() {
+        this.createdDate = Date.valueOf(LocalDate.now());
     }
 
     public CustomerInfo(EmailHash emailHashId, String firstName, String lastName, String email) {
@@ -41,6 +43,7 @@ public class CustomerInfo {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.createdDate = Date.valueOf(LocalDate.now());
     }
 
     //getters and setters
