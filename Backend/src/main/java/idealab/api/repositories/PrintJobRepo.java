@@ -5,5 +5,4 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface PrintJobRepo extends CrudRepository<PrintJob, Integer> {
     PrintJob findPrintJobById(Integer id);
-
 }

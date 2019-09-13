@@ -11,27 +11,37 @@ const QueueContainer = () => {
 	const [statusView, setStatusView] = useState('QUEUEING');
 
 	useEffect(() => {
-		const filteredKeys = ['name', 'email', 'color', 'status', 'fileName', 'comments'];
+		const filteredKeys = [
+			'name',
+			'email',
+			'color',
+			'status',
+			'fileName',
+			'comments'
+		];
 		const searchValues = data.map((printJob, index) => {
-        	let valueString = '';
-            for (var key in printJob) {
-                if (filteredKeys.indexOf(key) !== -1) {
-                    valueString = valueString + ' ' + printJob[key];
-                }
-            }
-            return printJob[index] = valueString.toLowerCase();
-        });
+			let valueString = '';
+			for (var key in printJob) {
+				if (filteredKeys.indexOf(key) !== -1) {
+					valueString = valueString + ' ' + printJob[key];
+				}
+			}
+			console.log(valueString);
+			return (printJob[index] = valueString.toLowerCase());
+		});
+
 		const queuedCards = data.filter(card => card.status === statusView);
 		setFilteredData(queuedCards);
 		setStringedValues(searchValues);
+		console.log(queuedCards);
 	}, [data, statusView]);
 
-	const filterByTerm = (searchTerm) => {
+	const filterByTerm = searchTerm => {
 		const filteredSearch = data.filter((printJob, i) => {
 			return stringedValues[i].indexOf(searchTerm.toLowerCase()) !== -1;
 		});
 		setFilteredData(filteredSearch);
-	}
+	};
 
 	const renderPrintCards = filteredData.map((el, i) => (
 		<PrintCardContainer data={el} key={i} />
