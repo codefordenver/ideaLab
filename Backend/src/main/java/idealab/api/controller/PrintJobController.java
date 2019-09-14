@@ -10,7 +10,6 @@ import idealab.api.dto.response.GetPrintJobDataResponse;
 import idealab.api.operations.PrintJobOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/printjobs")
 public class PrintJobController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PrintJobController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PrintJobController.class); // TODO: loglama islemini baska bir yerde yapmak lazim !
 
     private final PrintJobOperations printJobOperations;
 
@@ -30,12 +29,6 @@ public class PrintJobController {
     @GetMapping
     public ResponseEntity<GetAllPrintJobListResponse> getAllPrintJobs(){
         GetAllPrintJobListResponse response = printJobOperations.getAllPrintJobs();
-
-        if(response == null || response.getPrintJobs() == null || response.getPrintJobs().size() == 0){
-            return ResponseEntity.badRequest()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .build();
-        }
 
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -75,7 +68,7 @@ public class PrintJobController {
         LOGGER.info("PrintJobUpdateStatus request is " + dto.toString());
 
         GenericResponse response = printJobOperations.updatePrintJobStatus(printId, dto);
-        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     @DeleteMapping

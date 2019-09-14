@@ -1,6 +1,5 @@
 package idealab.api.operations;
 
-import com.dropbox.core.DbxException;
 import idealab.api.dto.request.PrintJobDeleteRequest;
 import idealab.api.dto.request.PrintJobNewRequest;
 import idealab.api.dto.request.PrintJobUpdateRequest;
@@ -13,30 +12,29 @@ import idealab.api.exception.ErrorType;
 import idealab.api.model.*;
 import idealab.api.repositories.*;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Component
+@Service
 public class PrintJobOperations {
-    private DropboxOperations dropboxOperations;
-    private PrintJobRepo printJobRepo;
-    private ColorTypeRepo colorTypeRepo;
-    private EmailHashRepo emailHashRepo;
-    private CustomerInfoRepo customerInfoRepo;
-    private EmployeeRepo employeeRepo;
+    private final DropboxOperations dropboxOperations;
+    private final PrintJobRepo printJobRepo;
+    private final ColorTypeRepo colorTypeRepo;
+    private final EmailHashRepo emailHashRepo;
+    private final CustomerInfoRepo customerInfoRepo;
+    private final EmployeeRepo employeeRepo;
 
     public PrintJobOperations(DropboxOperations dropboxOperations, PrintJobRepo printJobRepo,
                               ColorTypeRepo colorTypeRepo, EmailHashRepo emailHashRepo, CustomerInfoRepo customerInfoRepo,
                               EmployeeRepo employeeRepo) {
-        this.dropboxOperations = dropboxOperations;
+
+        this.dropboxOperations = dropboxOperations; // service'lerin üstüne bir layer daha cekmek lazim aslında belki de ? cok fazla dependent burada cunku
         this.printJobRepo = printJobRepo;
         this.colorTypeRepo = colorTypeRepo;
         this.emailHashRepo = emailHashRepo;
@@ -90,8 +88,10 @@ public class PrintJobOperations {
         String tempEmployeeFirstName = "Temp John";
         String tempEmployeeLastName = "Temp Joe";
         String tempEmployeeUserName = "Temp Cotton Eyed Joe";
+
         Employee employee = new Employee(tempEmployeeUserName, "such secure, wow!", EmployeeRole.STAFF, tempEmployeeFirstName, tempEmployeeLastName);
         Employee databaseEmployee = employeeRepo.findEmployeeByUsername(employee.getUsername());
+
         if (databaseEmployee == null) {
             databaseEmployee = employeeRepo.save(employee);
         }
@@ -104,15 +104,10 @@ public class PrintJobOperations {
         // TODO: set the queue position of the new job to be at the end of the list.
 
         // Make a dropbox sharable link here using the ID of the database record
-        Map<String, String> data = null;
-        try {
-            data = dropboxOperations.uploadDropboxFile(printJob.getId(), printJobNewRequest.getFile());
-            printJob.setDropboxPath(data.get("filePath"));
-            printJob.setDropboxSharableLink(data.get("sharableLink"));
-        } catch (IOException | DbxException e) {
-            printJob.setDropboxPath("Error Creating New File");
-            printJob.setDropboxSharableLink("Error Creating New File");
-        }
+        Map<String, String> data;
+        data = dropboxOperations.uploadDropboxFile(printJob.getId(), printJobNewRequest.getFile());
+        printJob.setDropboxPath(data.get("filePath"));
+        printJob.setDropboxSharableLink(data.get("sharableLink"));
 
         printJobRepo.save(printJob);
 
@@ -123,14 +118,12 @@ public class PrintJobOperations {
         response.setMessage("Successfully saved new file to database!");
         response.setData(printJobData);
         response.setHttpStatus(HttpStatus.ACCEPTED);
+
         return response;
     }
 
     public GetPrintJobDataResponse updateModel(Integer printId, PrintModelUpdateRequest model){
         GetPrintJobDataResponse response = new GetPrintJobDataResponse();
-        response.setSuccess(false);
-        response.setMessage("File could not be updated");
-        response.setHttpStatus(HttpStatus.BAD_REQUEST);
 
         MultipartFile file = model.getFile();
 
@@ -142,14 +135,11 @@ public class PrintJobOperations {
         PrintJob printJob = printJobRepo.findPrintJobById(printId);
 
         Map<String, String> data = null;
-        try {
-            data = dropboxOperations.updateDropboxFile(printJob, model.getFile());
-            printJob.setDropboxPath(data.get("filePath"));
-            printJob.setDropboxSharableLink(data.get("sharableLink"));
-        } catch (IOException | DbxException e) {
-            printJob.setDropboxPath("Error updating file");
-            printJob.setDropboxSharableLink("Error updating file");
-        }
+        data = dropboxOperations.updateDropboxFile(printJob, model.getFile());
+        printJob.setDropboxPath(data.get("filePath"));
+        printJob.setDropboxSharableLink(data.get("sharableLink"));
+        printJob.setDropboxPath("Error updating file");
+        printJob.setDropboxSharableLink("Error updating file");
 
         printJobRepo.save(printJob);
 
@@ -171,15 +161,10 @@ public class PrintJobOperations {
 
         PrintJob printJob = printJobRepo.findPrintJobById(printId);
 
-        try {
-            dropboxOperations.deleteDropboxFile(printJob);
-            printJob.setDropboxPath("Deleted");
-            printJob.setDropboxSharableLink("Deleted");
-        } catch (DbxException e) {
-            printJob.setDropboxPath("Error Deleting File");
-            printJob.setDropboxSharableLink("Error Deleting File");
-        }
+        dropboxOperations.deleteDropboxFile(printJob);
+        printJob.setDropboxPath("Deleted");
 
+        printJob.setDropboxSharableLink("Deleted");
         printJobRepo.save(printJob);
 
         response.setSuccess(true);
@@ -190,14 +175,10 @@ public class PrintJobOperations {
     }
 
     public GenericResponse updatePrintJobStatus(Integer printId, PrintJobUpdateRequest dto) {
-        GenericResponse response = new GenericResponse();
+        Status requestStatus = Status.fromValue(dto.getStatus());
 
-
-        if(!dto.isValidStatus()){
+        if(requestStatus == null || !requestStatus.isValid()){
             ErrorType.REQUEST_STATUS_IS_NOT_VALID.throwException();
-            //response.setMessage("Print Job Update Failed - Invalid Status");
-            //response.setHttpStatus(HttpStatus.BAD_REQUEST);
-            //response.setSuccess(false);
         }
 
         Employee employee = employeeRepo.findEmployeeById(dto.getEmployeeId());
@@ -205,19 +186,16 @@ public class PrintJobOperations {
 
         if(employee == null || printJob == null){
             ErrorType.PRINT_JOB_UPDATE_FAILED.throwException();
-            //response.setMessage("Print Job Update Failed");
-            //response.setHttpStatus(HttpStatus.BAD_REQUEST);
-            //response.setSuccess(false);
         }
 
-        // There is no update save exactly the same printJob !!! ~ kaansonmezoz
-        printJob = printJobRepo.save(printJob);
+        GenericResponse response = new GenericResponse();
 
-        if (printJob.getStatus().getName().equalsIgnoreCase(dto.getStatus())) {
-            response.setSuccess(true);
-            response.setMessage("Print Job Updated");
-            response.setHttpStatus(HttpStatus.ACCEPTED);
-        }
+        printJob.setStatus(requestStatus);
+        printJobRepo.save(printJob);
+
+        response.setSuccess(true);
+        response.setMessage("Print Job Updated");
+        response.setHttpStatus(HttpStatus.ACCEPTED);
 
         return response;
     }
@@ -231,9 +209,6 @@ public class PrintJobOperations {
         }
 
         GenericResponse response = new GenericResponse();
-        //response.setSuccess(false);
-        //response.setMessage("Print Job Delete Failed");
-        //response.setHttpStatus(HttpStatus.BAD_REQUEST);
 
         printJobRepo.delete(printJob);
 
@@ -245,13 +220,13 @@ public class PrintJobOperations {
     }
 
     public GetAllPrintJobListResponse getAllPrintJobs() {
-        Optional<List<PrintJob>> printJobs = printJobRepo.findAllPrintJob();
+        List<PrintJob> printJobs = printJobRepo.findAll();
 
-        if(!printJobs.isPresent() || printJobs.get().size() == 0){
+        if(printJobs == null || printJobs.size() == 0){
             ErrorType.PRINT_JOBS_NOT_EXIST.throwException();
         }
 
-        List<GetAllPrintJobResponse> printJobResponses = printJobs.get().stream()
+        List<GetAllPrintJobResponse> printJobResponses = printJobs.stream()
                 .map(GetAllPrintJobResponse::new).collect(Collectors.toList());
 
         return new GetAllPrintJobListResponse(printJobResponses);

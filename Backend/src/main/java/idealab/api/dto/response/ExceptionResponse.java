@@ -1,11 +1,15 @@
 package idealab.api.dto.response;
 
-public class ExceptionResponse {
+import java.time.LocalDateTime;
+
+public class ExceptionResponse { // Bunun icin bir builder pattern olusturabiliriz aslinda daha hos durur.
     private int errorCode;
     private String errorName;
     private String errorMessage;
-    private String errorDescription;
-    private String exceptionClassName;
+    private String errorDescription;    // bu ve asagidaki aslında loglama kısmında bizlerin isine yarar. Response'da dönmesek sanki daha iyi gibi.
+    private String exceptionClassName;  // bu
+    private LocalDateTime errorTime;
+
 
     public void setErrorCode(int errorCode) {
         this.errorCode = errorCode;
@@ -25,5 +29,33 @@ public class ExceptionResponse {
 
     public void setExceptionClassName(String exceptionClassName) {
         this.exceptionClassName = exceptionClassName;
+    }
+
+    public void setErrorTime(LocalDateTime errorTime){
+        this.errorTime = errorTime;
+    }
+
+    public int getErrorCode() {
+        return errorCode;
+    }
+
+    public String getErrorName() {
+        return errorName;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public String getErrorDescription() {
+        return errorDescription;
+    }
+
+    public String getExceptionClassName() {
+        return exceptionClassName;
+    }
+
+    public LocalDateTime getErrorTime(){
+        return errorTime;
     }
 }

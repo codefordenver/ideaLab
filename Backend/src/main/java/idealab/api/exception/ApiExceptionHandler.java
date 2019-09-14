@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler {   // Loglama işlemi burada yapılmalı !!!
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ExceptionResponse> handleGeneralException(Exception ex){
         return createExceptionResponse(ErrorType.GENERAL_ERROR, ex);
@@ -27,6 +27,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         response.setExceptionClassName(ex.getClass().getCanonicalName());
         response.setErrorName(errorType.name());
 
-        return new ResponseEntity<ExceptionResponse>(response, errorType.getResponseStatus());
+        return new ResponseEntity<>(response, errorType.getResponseStatus());
     }
 }

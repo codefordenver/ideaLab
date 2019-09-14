@@ -15,6 +15,8 @@ public class GetAllPrintJobResponse {
     private String comments;
     private String dropboxLink;
 
+    public GetAllPrintJobResponse(){} // For JacksonSerializer
+
     public GetAllPrintJobResponse(PrintJob printJob){
         this.id = printJob.getId();
         this.colorChoice = printJob.getColorTypeId().getColor();
@@ -24,19 +26,6 @@ public class GetAllPrintJobResponse {
         this.initialRequestTime = printJob.getCreatedAt();
         this.comments = printJob.getComments();
         this.dropboxLink = printJob.getDropboxSharableLink();
-    }
-
-    public GetAllPrintJobResponse(Integer id, String colorChoice, String email, String status,
-                                  LocalDateTime currentStatusCreatedAt, LocalDateTime initialRequestTime,
-                                  String comments, String dropboxLink) {
-        this.id = id;
-        this.colorChoice = colorChoice;
-        this.email = email;
-        this.status = status;
-        this.currentStatusCreatedAt = currentStatusCreatedAt;
-        this.initialRequestTime = initialRequestTime;
-        this.comments = comments;
-        this.dropboxLink = dropboxLink;
     }
 
     public Integer getId() {

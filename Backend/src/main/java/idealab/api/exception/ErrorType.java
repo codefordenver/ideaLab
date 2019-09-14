@@ -29,14 +29,26 @@ public enum ErrorType {
 
     PRINT_JOB_UPDATE_FAILED(
             5,
-            "Print Job Update Failed - Invalid Status",
+            "Print Job Update Failed",
             HttpStatus.BAD_REQUEST
     ),
 
     REQUEST_STATUS_IS_NOT_VALID(
             6,
-            "Request status is not valid ! Operation couldn't be completed",
+            "Print Job Update Failed - Invalid Status",
             HttpStatus.BAD_REQUEST
+    ),
+
+    DROPBOX_UPLOAD_FILE_ERROR(
+            7,
+            "Error Creating New File",
+            HttpStatus.INTERNAL_SERVER_ERROR
+    ),
+
+    DROPBOX_DELETE_FILE_ERROR(
+            8,
+            "Error Deleting File",
+            HttpStatus.INTERNAL_SERVER_ERROR
     );
 
     ErrorType(int errorCode, String errorMessage, HttpStatus responseStatus){
@@ -49,7 +61,7 @@ public enum ErrorType {
     private String errorMessage;
     private HttpStatus responseStatus;
 
-    public void throwException() {
+    public void throwException() throws RuntimeException{
         throw new IdeaLabApiException(this);
     }
 
