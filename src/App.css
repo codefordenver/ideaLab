@@ -1,0 +1,75 @@
+/* Layout */
+:root {
+  --light-blue: #00AEEF;
+  --default-background: #282c34;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
+.grid-container {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+}
+
+.grid-item-nav {
+  border-right: solid;
+}
+
+
+.selected {
+  color: var(--light-blue);
+  border-right: 6px solid;
+}
+
+.navList li {
+  display: flex;
+}
+
+
+.navList a {
+  flex-grow: 1;
+}
+
+.navList a:hover {
+  background-color: var(--light-blue);
+  color: black;
+}
+
+.navList {
+  font-size: 2rem;
+  list-style: none;
+  text-align: left;
+}
+
+a {
+  color: black;
+  font-weight: bolder;
+  text-decoration: none;
+}
+
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: var(--default-background);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+

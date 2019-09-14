@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.Length;
 
 
@@ -34,9 +36,6 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private EmployeeRole role;
 
-    @OneToMany(targetEntity=PrintJob.class, mappedBy="employeeId")
-    private Set<PrintJob> printJobs;
-
     @Column(name = "first_name", nullable = false)
     @Length(min = 1, max = 254)
     private String firstName;
@@ -51,13 +50,11 @@ public class Employee {
     public Employee(@Length(min = 1, max = 254) String username,
                     String password,
                     EmployeeRole role,
-                    Set<PrintJob> printJobs,
                     @Length(min = 1, max = 254) String firstName,
                     @Length(min = 1, max = 254) String lastName) {
         this.username = username;
         this.password = password;
         this.role = role;
-        this.printJobs = printJobs;
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -111,13 +108,5 @@ public class Employee {
 
     public void setRole(EmployeeRole role) {
         this.role = role;
-    }
-
-    public Set<PrintJob> getPrintJobs() {
-        return printJobs;
-    }
-
-    public void setPrintJobs(Set<PrintJob> printJobs) {
-        this.printJobs = printJobs;
     }
 }

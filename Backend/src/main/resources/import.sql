@@ -4,9 +4,19 @@ INSERT INTO color_type (color, available) VALUES ('blue', true),('green', false)
 
 INSERT INTO customer_info (fk_email_hash_id, first_name, last_name, email) VALUES (1, 'hannah', 'amundson', 'fake@gmail.com'), (2, 'john', 'frank', 'hi@gmail.com'),(3, 'josiah', 'taylor', 'hello@gmail.com'),(4, 'haley', 'black', 'hi@gmail.com');
 
-INSERT INTO employee (first_name, last_name, "password", "role", username) VALUES ('hank','joseph','sadfsdf','STAFF','hankjoseph'),('hannah','amundson','sasdfadfdfsdf','STAFF','hannahamundson'),('megan','forgey','sasdfsdfsdadfsdf','STAFF','mforgey'),('carol','hadley','2sfkdjlsa','ADMIN','carolhadley')
+INSERT INTO employee (first_name, last_name, "password", "role", username) VALUES ('hank','joseph','password','STAFF','hankjoseph'),
+('hannah','amundson','sasdfadfdfsdf','STAFF','hannahamundson'),
+('megan','forgey','sasdfsdfsdadfsdf','STAFF','mforgey'),
+('carol','hadley','2sfkdjlsa','ADMIN','carolhadley');
 
-INSERT INTO print_job (status, fk_email_hash_id, comments, dropbox_link, updated_at, created_at, fk_color_type_id, fk_employee_id) VALUES ('PENDING_REVIEW', 1, 'comment 1', 'http://fakelink.com','2019-05-01','2019-03-01',1,1),('PRINTING', 2, 'comment 1', 'http://what.com','2018-05-01','2018-03-01',2,2),('PENDING_CUSTOMER_RESPONSE', 2, 'comment 1', 'http://fake.com','2018-04-01','2018-03-01',3,3),('PENDING_CUSTOMER_RESPONSE',2, 'comment 1', 'http://hi.com','2019-05-14','2019-03-12',4,4),('PENDING_REVIEW',3, 'comment 1', 'http://dotcom.com','2019-05-15','2019-03-10',2,2),('PENDING_REVIEW', 1, 'comment 1', 'http://website.com','2019-05-23','2019-03-06',3,2),('PENDING_REVIEW', 3, 'comment 1',  'http://site.com','2019-05-27','2019-05-07',3,3),('COMPLETED', 4, 'comment 1', 'http://web.com','2019-05-03','2019-04-08',4,1);
+INSERT INTO print_job (status, fk_email_hash_id, comments, dropbox_sharable_link, dropbox_path, updated_at, created_at, fk_color_type_id, fk_employee_id) VALUES ('PENDING_REVIEW', 1, 'comment 1', 'http://fakelink.com', '/fakepath', '2019-05-01','2019-03-01',1,1),
+('PRINTING', 2, 'comment 1', 'http://what.com', '/whatpath','2018-05-01','2018-03-01',2,2),
+('PENDING_CUSTOMER_RESPONSE', 2, 'comment 1', 'http://fake.com', '/fakepath','2018-04-01','2018-03-01',3,3),
+('PENDING_CUSTOMER_RESPONSE',2, 'comment 1', 'http://hi.com', '/hipath', '2019-05-14','2019-03-12',4,4),
+('PENDING_REVIEW',3, 'comment 1', 'http://dotcom.com', '/dotpath','2019-05-15','2019-03-10',2,2),
+('PENDING_REVIEW', 1, 'comment 1', 'http://website.com', '/webpath','2019-05-23','2019-03-06',3,2),
+('PENDING_REVIEW', 3, 'comment 1',  'http://site.com', '/sitepath','2019-05-27','2019-05-07',3,3),
+('COMPLETED', 4, 'comment 1', 'http://web.com', 'webpath','2019-05-03','2019-04-08',4,1);
 
 INSERT INTO print_status_audit (status_after, status_before, created_at, fk_employee_id, fk_print_model_id) VALUES ('Waiting', 'Pending Review', '01/01/2019', 1, 1), ('Pending Review', 'Printing', '01/02/2019', 2, 1), ('Waiting', 'Pending Review', '01/01/2019', 1, 2), ('Complete', 'Pending Review', '01/01/2019', 1, 3);
 

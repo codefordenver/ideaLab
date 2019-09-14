@@ -26,9 +26,10 @@ public class ColorType {
     @Column(name = "available", nullable = false)
     private Boolean available;
 
-    public ColorType() {}
+    public ColorType() {
+    }
 
-    public ColorType(Integer id, String color) {
+    public ColorType(String color) {
         this.color = color;
         this.available = true;
     }

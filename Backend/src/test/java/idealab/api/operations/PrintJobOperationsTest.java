@@ -8,8 +8,7 @@ import idealab.api.dto.response.GetAllPrintJobResponse;
 import idealab.api.model.Employee;
 import idealab.api.model.PrintJob;
 import idealab.api.model.Status;
-import idealab.api.repositories.EmployeeRepo;
-import idealab.api.repositories.PrintJobRepo;
+import idealab.api.repositories.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,11 +35,25 @@ public class PrintJobOperationsTest {
     PrintJobRepo printJobRepo;
 
     @Mock
-    EmployeeRepo employeeRepo;
+    private DropboxOperations dropboxOperations;
+
+    @Mock
+    private ColorTypeRepo colorTypeRepo;
+
+    @Mock
+    private EmailHashRepo emailHashRepo;
+
+    @Mock
+    private CustomerInfoRepo customerInfoRepo;
+
+    @Mock
+    private EmployeeRepo employeeRepo;
 
     @Before
     public void setup() {
-        operations = new PrintJobOperations(employeeRepo, printJobRepo);
+        operations = new PrintJobOperations(dropboxOperations, printJobRepo,
+                 colorTypeRepo, emailHashRepo, customerInfoRepo,
+                 employeeRepo);
     }
 
     @Test
