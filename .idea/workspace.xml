@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="6fc8cce3-4275-46ce-b94e-75f2067414e8" name="Default Changelist" comment="Files have been deleted">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/dto/request/PrintJobNewRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/dto/request/PrintModelUpdateRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/dto/response/GetPrintJobDataResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/operations/DropboxOperations.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/repositories/ColorTypeRepo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/repositories/CustomerInfoRepo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/repositories/EmailHashRepo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/main/resources/sample_dropbox.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/test/java/idealab/api/controller/UserControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/test/java/idealab/api/operations/UserOperationsTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/test/java/idealab/api/util/TestUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/robots.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/App.test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/SidebarNavigation.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/CreateAccount/CreateAccountContainer.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/CreateAccount/CreateAccountContainer.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Login/LoginManager.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Login/LoginManager.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Queue/QueueContainer.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Queue/QueueContainer.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Queue/components/PrintCardContainer.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Queue/components/PrintCardContainer.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Queue/components/SearchBar.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Queue/components/components/PrintDateAdded.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Queue/components/components/StatusDropdown.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Queue/components/components/StatusDropdown.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Upload/UploadContainer.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/dummyData.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/ideaLABlogo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/serviceWorker.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/.vscode/launch.json" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/.vscode/launch.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/controller/PrintJobController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/controller/PrintJobController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/dto/requests/PrintJobDeleteRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/dto/request/PrintJobDeleteRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/dto/requests/PrintJobUpdateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/dto/request/PrintJobUpdateRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/dto/responses/ExceptionResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/dto/response/ExceptionResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/dto/responses/GenericResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/dto/response/GenericResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/dto/responses/GetAllPrintJobListResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/dto/response/GetAllPrintJobListResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/dto/responses/GetAllPrintJobResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/dto/response/GetAllPrintJobResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/exception/ApiExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/exception/ApiExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/model/ColorType.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/model/ColorType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/model/CustomerInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/model/CustomerInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/model/EmailHash.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/model/EmailHash.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/model/Employee.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/model/Employee.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/model/PrintJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/model/PrintJob.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/model/Status.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/model/Status.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/operations/PrintJobOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/operations/PrintJobOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/operations/UserOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/operations/UserOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/repositories/EmployeeRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/idealab/api/repositories/EmployeeRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/resources/import.sql" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/resources/import.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/test/java/idealab/api/controller/PrintJobControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/test/java/idealab/api/controller/PrintJobControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/test/java/idealab/api/operations/PrintJobOperationsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/test/java/idealab/api/operations/PrintJobOperationsTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$/Backend">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$/Backend">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="ideaLab" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="ideaLab" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="ideaLab" type="f1a62948:ProjectNode" />
+                <item name="Run Configurations" type="7b0102dc:RunConfigurationsNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="feature/exception-handling" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="$PROJECT_DIR$/.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectId" id="1PrtCk87Yj1QZCAvPwgzsx49ojl" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Backend" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="gradle " />
+    </option>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Spring Boot.IdeaLabMain">
+    <configuration name="Backend [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Backend" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="dependencies" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="Backend" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Backend" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list />
+        </option>
+        <option name="vmOptions" value="" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="PrintJobControllerTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Backend" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="--tests &quot;idealab.api.controller.PrintJobControllerTest&quot;" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":cleanTest" />
+            <option value=":test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>false</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="PrintJobControllerTest.getAllPrintJobs_shouldReturn_404_when_thereIsNone" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Backend" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="--tests &quot;idealab.api.controller.PrintJobControllerTest.getAllPrintJobs_shouldReturn_404_when_thereIsNone&quot; --stacktrace" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":cleanTest" />
+            <option value=":test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>false</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="/home/khan/Workspace/codefordenver/ideaLab/Backend/build.gradle" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Backend/build.gradle" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list />
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="IdeaLabMain" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="ideaLab.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="idealab.IdeaLabMain" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.PrintJobControllerTest" />
+        <item itemvalue="Gradle.PrintJobControllerTest.getAllPrintJobs_shouldReturn_404_when_thereIsNone" />
+        <item itemvalue="Gradle.Backend [dependencies]" />
+        <item itemvalue="Gradle.Backend" />
+        <item itemvalue="Gradle./home/khan/Workspace/codefordenver/ideaLab/Backend/build.gradle" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6fc8cce3-4275-46ce-b94e-75f2067414e8" name="Default Changelist" comment="" />
+      <created>1566643918525</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1566643918525</updated>
+      <workItem from="1566643922853" duration="506000" />
+      <workItem from="1566644462450" duration="270000" />
+      <workItem from="1566645596440" duration="33000" />
+      <workItem from="1566660788550" duration="675000" />
+      <workItem from="1566717206382" duration="223000" />
+      <workItem from="1566937538455" duration="235000" />
+      <workItem from="1566937802315" duration="7130000" />
+      <workItem from="1567012697529" duration="5787000" />
+      <workItem from="1567050917722" duration="4266000" />
+      <workItem from="1567199581101" duration="2325000" />
+      <workItem from="1567880824176" duration="2597000" />
+      <workItem from="1567946173169" duration="24000" />
+      <workItem from="1568437618800" duration="2473000" />
+    </task>
+    <task id="LOCAL-00001" summary="Files have been deleted">
+      <created>1567233332434</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1567233332434</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Files have been deleted" />
+    <option name="LAST_COMMIT_MESSAGE" value="Files have been deleted" />
+  </component>
+</project>

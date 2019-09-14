@@ -1,6 +1,6 @@
 package idealab.api.exception;
 
-import idealab.api.dto.responses.ExceptionResponse;
+import idealab.api.dto.response.ExceptionResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
