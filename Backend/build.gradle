@@ -7,7 +7,6 @@ buildscript {
     }
 }
 
-
 apply plugin: 'application'
 apply plugin: 'java'
 apply plugin: 'eclipse'
@@ -38,4 +37,6 @@ dependencies {
     compile("com.auth0:java-jwt:3.4.0")
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('junit:junit')
+    compile ('com.fasterxml.jackson.core:jackson-core:2.9.9')
+    implementation('com.dropbox.core:dropbox-core-sdk:3.1.1')
 }

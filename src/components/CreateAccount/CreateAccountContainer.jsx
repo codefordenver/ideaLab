@@ -5,7 +5,6 @@ import './CreateAccountContainer.css';
 import ideaLABlogo from './../../ideaLABlogo.png';
 
 const LoginManager = () => {
-
 	const [role, setRole] = useState('STAFF');
 	const [firstName, setFirstName] = useState('');
 	const [lastName, setLastName] = useState('');
@@ -65,6 +64,7 @@ const LoginManager = () => {
 						name='email'
 						placeholder='email'
 						autoComplete='off'
+						autoFocus
 						value={email}
 						onChange={e => setEmail(e.target.value)}
 					/>
