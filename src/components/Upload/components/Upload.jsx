@@ -1,13 +1,14 @@
 import React, { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 
-function MyDropzone() {
+function Upload(props) {
     const onDrop = useCallback(acceptedFiles => {
+        props.callback(acceptedFiles);
     }, [])
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
     return (
-        <div  className={"upload"} {...getRootProps()}>
+        <div className={"upload"} {...getRootProps()}>
             <input {...getInputProps()} />
             {
                 isDragActive ?
@@ -18,4 +19,4 @@ function MyDropzone() {
     )
 }
 
-export default MyDropzone;
+export default Upload;
