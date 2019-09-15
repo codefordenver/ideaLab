@@ -6,9 +6,7 @@ import idealab.api.dto.request.PrintJobUpdateRequest;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.GetAllPrintJobListResponse;
 import idealab.api.dto.response.GetAllPrintJobResponse;
-import idealab.api.operations.DropboxOperations;
 import idealab.api.operations.PrintJobOperations;
-import idealab.api.repositories.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,7 +67,7 @@ public class PrintJobControllerTest {
 
         String inputJson = printJobRequestAsJsonString(printJobUpdateRequest);
 
-        when(printJobOperations.updatePrintJobStatus(printJobId, printJobUpdateRequest)).thenReturn(genericResponse);
+        when(printJobOperations.updatePrintJob(printJobId, printJobUpdateRequest)).thenReturn(genericResponse);
 
         String returnJson = mockMvc.perform(put("/api/printjobs/3/status")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -97,7 +95,7 @@ public class PrintJobControllerTest {
 
         String inputJson = printJobRequestAsJsonString(printJobUpdateRequest);
 
-        when(printJobOperations.updatePrintJobStatus(printJobId, printJobUpdateRequest)).thenReturn(genericResponse);
+        when(printJobOperations.updatePrintJob(printJobId, printJobUpdateRequest)).thenReturn(genericResponse);
 
         String returnJson = mockMvc.perform(put("/api/printjobs/3/status")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -123,7 +121,7 @@ public class PrintJobControllerTest {
 
         String inputJson = printJobRequestAsJsonString(printJobDeleteRequest);
 
-        when(printJobOperations.deletePrintJobStatus(printJobDeleteRequest)).thenReturn(genericResponse);
+        when(printJobOperations.deletePrintJob(printJobDeleteRequest)).thenReturn(genericResponse);
 
         String returnJson = mockMvc.perform(delete("/api/printjobs")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -149,7 +147,7 @@ public class PrintJobControllerTest {
 
         String inputJson = printJobRequestAsJsonString(printJobDeleteRequest);
 
-        when(printJobOperations.deletePrintJobStatus(printJobDeleteRequest)).thenReturn(genericResponse);
+        when(printJobOperations.deletePrintJob(printJobDeleteRequest)).thenReturn(genericResponse);
 
         String returnJson = mockMvc.perform(delete("/api/printjobs")
                 .contentType(MediaType.APPLICATION_JSON)
