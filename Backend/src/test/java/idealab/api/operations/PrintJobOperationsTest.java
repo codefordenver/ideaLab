@@ -11,7 +11,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -26,7 +25,6 @@ import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PrintJobOperationsTest {
-    @InjectMocks
     private PrintJobOperations operations;
 
     @Mock
@@ -107,7 +105,6 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
 
         operations.updatePrintJobStatus(2, request);
-
     }
 
     @Test
@@ -127,7 +124,7 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
         doNothing().when(printJobRepo).delete(printJob);
 
-        GenericResponse response = operations.deletePrintJobStatus(request);
+        GenericResponse response = operations.deletePrintJob(request);
 
         assertTrue("response is not true", response.isSuccess() == true);
         assertTrue("print job was not deleted", response.getMessage().equalsIgnoreCase("Print Job Deleted Successfully"));
@@ -151,7 +148,11 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
 
         // when
-        operations.deletePrintJobStatus(request);
+        operations.deletePrintJob(request);
+        GenericResponse response = operations.deletePrintJob(request);
+
+        assertTrue("response is not false", response.isSuccess() == false);
+        assertTrue("print job was deleted", response.getMessage().equalsIgnoreCase("Print Job Delete Failed"));
     }
 
     @Test(expected = IdeaLabApiException.class)
@@ -166,7 +167,7 @@ public class PrintJobOperationsTest {
         when(employeeRepo.findEmployeeById(anyInt())).thenReturn(employee);
         when(printJobRepo.findPrintJobById(anyInt())).thenReturn(null);
 
-        operations.deletePrintJobStatus(request);
+        operations.deletePrintJob(request);
     }
 
     @Test

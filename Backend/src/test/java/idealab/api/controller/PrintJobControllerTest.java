@@ -121,7 +121,7 @@ public class PrintJobControllerTest {
 
         String inputJson = printJobRequestAsJsonString(printJobDeleteRequest);
 
-        when(printJobOperations.deletePrintJobStatus(printJobDeleteRequest)).thenReturn(genericResponse);
+        when(printJobOperations.deletePrintJob(printJobDeleteRequest)).thenReturn(genericResponse);
 
         String returnJson = mockMvc.perform(delete("/api/printjobs")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -147,7 +147,7 @@ public class PrintJobControllerTest {
 
         String inputJson = printJobRequestAsJsonString(printJobDeleteRequest);
 
-        when(printJobOperations.deletePrintJobStatus(printJobDeleteRequest)).thenReturn(genericResponse);
+        when(printJobOperations.deletePrintJob(printJobDeleteRequest)).thenReturn(genericResponse);
 
         String returnJson = mockMvc.perform(delete("/api/printjobs")
                 .contentType(MediaType.APPLICATION_JSON)

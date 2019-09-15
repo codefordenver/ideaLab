@@ -200,7 +200,7 @@ public class PrintJobOperations {
         return response;
     }
 
-    public GenericResponse deletePrintJobStatus(PrintJobDeleteRequest dto) {
+    public GenericResponse deletePrintJob(PrintJobDeleteRequest dto) {
         Employee employee = employeeRepo.findEmployeeById(dto.getEmployeeId());
         PrintJob printJob = printJobRepo.findPrintJobById(dto.getPrintJobId());
 
