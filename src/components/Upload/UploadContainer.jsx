@@ -1,8 +1,9 @@
 import React from 'react';
+import './UploadContainer.css';
 
 function UploadContainer(){
   return (
-    <div>
+    <div className={"uploadContainer"}>
       <form>
         <input
           type='text'
@@ -12,10 +13,10 @@ function UploadContainer(){
           type='text'
           id='color'
           placeholder='Color'/>
-        <textarea
+        <input
           id='comments'
           placeholder='Comments'/>
-        <button type='submit'>SUMBIT</button>
+        <button className={"shapedButton"} type='submit'>SUMBIT</button>
       </form>
     </div>
   );
