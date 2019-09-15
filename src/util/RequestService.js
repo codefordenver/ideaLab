@@ -13,6 +13,14 @@ const RequestService = {
         axios.post(baseurl + '/users/sign-up', payload)
             .then(thenCallback)
             .catch(catchCallback);
+    },
+
+    newPrintJob(payload, thenCallback, catchCallback){
+        console.log(payload);
+        axios.post(baseurl + '/api/printjobs', payload)
+            .then(thenCallback)
+            .catch(catchCallback);
+
     }
 }
 
