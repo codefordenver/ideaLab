@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Upload from './components/Upload'
+import RequestService from '../../util/RequestService';
 import './UploadContainer.css';
 
 function UploadContainer() {
@@ -9,21 +10,19 @@ function UploadContainer() {
   const [customerLastName, setCustomerLastName] = useState();
   const [color, setColor] = useState();
   const [comments, setComments] = useState();
-  console.log(customerFirstName);
 
   return (
     <div className={"uploadContainer"}>
       <form onSubmit={e => {
         e.preventDefault();
-        const payload = {
-          file,
-          email,
-          customerFirstName,
-          customerLastName,
-          color,
-          comments
-        };
-        console.log(payload)
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('email', email);
+        formData.append('customerFirstName', customerFirstName);
+        formData.append('customerLastName', customerLastName);
+        formData.append('color', color);
+        formData.append('comments', comments);
+        RequestService.newPrintJob(formData, (response) => console.log(response), (err) => console.log(err));
       }}>
         <Upload className={"upload"} callback={(files => setFile(files[0]))}>
         </Upload>
