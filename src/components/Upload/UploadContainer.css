@@ -1,7 +1,14 @@
 .uploadContainer {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     justify-content: center;
 }
+
+.uploadContainer div {
+    display: flex;
+    flex-direction: column;
+}
+
 
 .uploadContainer .upload {
     border-style: dashed;
@@ -11,13 +18,16 @@
 }
 
 .uploadContainer > form {
+    grid-column-start: 2;
     display: flex;
     flex-direction: column;
 }
 .uploadContainer input {
     background-color: var(--dark-blue);
     color: var(--white-text);
-	padding: 0.5rem;
+    padding: 0.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .uploadContainer input::placeholder {
