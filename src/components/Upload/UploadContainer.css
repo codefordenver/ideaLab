@@ -3,6 +3,13 @@
     justify-content: center;
 }
 
+.uploadContainer .upload {
+    border-style: dashed;
+    border-width: 2px;
+    border-color: var(--light-blue);
+    height: 7.5em;
+}
+
 .uploadContainer > form {
     display: flex;
     flex-direction: column;
