@@ -2,12 +2,12 @@ package idealab.api.dto.response;
 
 import java.util.List;
 
-public class ColorListResponse {
+public class AllColorsResponse {
     private List<ColorResponse> colors;
 
-    public ColorListResponse(){}
+    public AllColorsResponse(){}
 
-    public ColorListResponse(List<ColorResponse> colors){
+    public AllColorsResponse(List<ColorResponse> colors){
         this.colors = colors;
     }
 

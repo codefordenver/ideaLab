@@ -1,13 +1,12 @@
 package idealab.api.operations;
 
 import com.dropbox.core.DbxException;
-import idealab.api.dto.request.PrintJobNewRequest;
-import idealab.api.dto.request.PrintModelUpdateRequest;
-import idealab.api.dto.response.GetPrintJobDataResponse;
+import idealab.api.dto.ColorResponse;
+import idealab.api.dto.AllColorsResponse;
 import idealab.api.model.*;
 import idealab.api.repositories.ColorTypeRepo;
-import idealab.api.repositories.CustomerInfoRepo;
-import idealab.api.repositories.EmailHashRepo;
+//import idealab.api.repositories.CustomerInfoRepo;
+//import idealab.api.repositories.EmailHashRepo;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -36,8 +35,8 @@ public class ColorTypesOperations {
     public ColorTypesOperations () {
     }
 
-    GenericResponse getAllColors() {
-
+    AllColorsResponse getAllColors() {
+        return new AllColorsResponse();
     }
 
 
