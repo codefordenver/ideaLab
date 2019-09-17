@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/printjobs")
 public class PrintJobController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PrintJobController.class); // TODO: loglama islemini baska bir yerde yapmak lazim !
+    private static final Logger LOGGER = LoggerFactory.getLogger(PrintJobController.class); // TODO: Logs should not be in controller
 
     private final PrintJobOperations printJobOperations;
 
