@@ -14,8 +14,4 @@ public class GetAllPrintJobListResponse {
     public List<GetAllPrintJobResponse> getPrintJobs() {
         return printJobs;
     }
-
-    public void setPrintJobs(List<GetAllPrintJobResponse> printJobs) {
-        this.printJobs = printJobs;
-    }
 }
