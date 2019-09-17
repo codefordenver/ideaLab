@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.time.LocalDateTime;
+
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {   // Loglama işlemi burada yapılmalı !!!
     @ExceptionHandler(value = Exception.class)
@@ -26,6 +28,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {   // L
         response.setErrorMessage(errorType.getErrorMessage());
         response.setExceptionClassName(ex.getClass().getCanonicalName());
         response.setErrorName(errorType.name());
+        response.setErrorTime(LocalDateTime.now());
 
         return new ResponseEntity<>(response, errorType.getResponseStatus());
     }
