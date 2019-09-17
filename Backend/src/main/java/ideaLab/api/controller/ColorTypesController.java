@@ -51,51 +51,31 @@ public class ColorTypesController {
     }
 
     //getAllAvailableColors
+    @GetMapping
+    public ResponseEntity<AllColorsResponse> getAllAvailableColors(){
+        AllColorsResponse response = colorTypesOperations.getAllAvailableColors();
 
-    //post updateColorAvailability
+        if(response == null || response.getPrintJobs() == null || response.getPrintJobs().size() == 0){
+            return ResponseEntity.badRequest()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .build();
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+    }
+
     //put ColorTypesAdd new color
-
     @PostMapping
-    public ResponseEntity<?> printJobNew(@ModelAttribute PrintJobNewRequest model) {
-        LOGGER.info("PrintJobNew request is:" + model.toString());
-        GetPrintJobDataResponse response = printJobOperations.newPrintJob(model);
+    public ResponseEntity<?> addColor(AddColorRequest model) {
+        LOGGER.info("AddColor request is:" + model.toString());
+        ColorResponse response = colorTypesOperations.addColor(model);
 
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @PutMapping("/{printId}/model")
-    public ResponseEntity<?> printJobUpdateModel(@PathVariable("printId") Integer printId,
-                                                 @ModelAttribute PrintModelUpdateRequest model) {
 
-        LOGGER.info("PrintJobUpdateModel request is job:" + printId.toString() + "| model: " + model.toString());
-        GetPrintJobDataResponse response = printJobOperations.updateModel(printId, model);
+    //update color availability
 
-        return new ResponseEntity<>(response, response.getHttpStatus());
-    }
-
-    @DeleteMapping("/{printId}/model")
-    public ResponseEntity<?> printJobDeleteModel(@PathVariable("printId") Integer printId) {
-        LOGGER.info("PrintJobDeleteModel request is " + printId.toString());
-        GenericResponse response = printJobOperations.deleteModel(printId);
-
-        return new ResponseEntity<>(response, response.getHttpStatus());
-    }
-
-    @PutMapping("/{printId}/status")
-    public ResponseEntity<?> printJobUpdateStatus(@PathVariable ("printId") Integer printId, @RequestBody PrintJobUpdateRequest dto)
-    {
-        LOGGER.info("PrintJobUpdateStatus request is " + dto.toString());
-
-        GenericResponse response = printJobOperations.updatePrintJobStatus(printId, dto);
-        return new ResponseEntity<>(response, response.getHttpStatus());
-    }
-
-    @DeleteMapping
-    public ResponseEntity<?> printJobDelete(@RequestBody PrintJobDeleteRequest dto)
-    {
-        LOGGER.info("PrintJobDelete request is " + dto.toString());
-
-        GenericResponse response = printJobOperations.deletePrintJobStatus(dto);
-        return new ResponseEntity<>(response, response.getHttpStatus());
-    }
 }
