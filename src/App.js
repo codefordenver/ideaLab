@@ -3,7 +3,7 @@ import './App.css';
 import QueueContainer from './components/Queue/QueueContainer';
 import UploadContainer from './components/Upload/UploadContainer';
 import LoginManager from './components/Login/LoginManager';
-import CreateAccountContainer from './components/CreateAccount/CreateAccountContainer';
+import CreateAccountManager from './components/CreateAccount/CreateAccountManager';
 import SidebarNavigation from './SidebarNavigation';
 import { HashRouter, Switch, Route } from 'react-router-dom';
 
@@ -16,10 +16,10 @@ function App() {
         {sidebar}
         <Switch>
           <Route exact path="/queue" component={QueueContainer} />
-          <Route exact path="/manageaccounts" component={CreateAccountContainer} />
+          <Route exact path="/manageaccounts" component={CreateAccountManager} />
           <Route exact path="/upload" component={UploadContainer} />
           <Route path="/login" component={LoginManager} />
-          <Route path='/account' component={CreateAccountContainer} />
+          <Route path='/account' component={CreateAccountManager} />
         </Switch>
       </HashRouter>
     </div>

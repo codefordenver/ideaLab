@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import RequestService from '../../util/RequestService'
-import './CreateAccountContainer.css';
+import './CreateAccountManager.css';
 
 import ideaLABlogo from './../../ideaLABlogo.png';
 
-const LoginManager = () => {
+const CreateAccountManager = () => {
 
 	const [role, setRole] = useState('STAFF');
 	const [firstName, setFirstName] = useState('');
@@ -124,11 +124,9 @@ const LoginManager = () => {
 					{renderErrors()}
 					<button type='submit'>Create Account</button>
 				</form>
-				<p>This is the email state: {email}</p>
-				<p>This is the password state: {password}</p>
 			</div>
 		</div>
 	);
 };
 
-export default LoginManager;
+export default CreateAccountManager;
