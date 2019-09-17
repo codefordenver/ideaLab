@@ -36,7 +36,7 @@ public class ColorTypesController {
 
     //get all colors
     @GetMapping
-    public ResponseEntity<?> getAllColors(){
+    public ResponseEntity<AllColorsResponse> getAllColors(){
         AllColorsResponse response = colorTypesOperations.getAllColors();
 
         if(response == null || response.getPrintJobs() == null || response.getPrintJobs().size() == 0){
