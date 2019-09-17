@@ -68,7 +68,7 @@ public class UploadOperations {
                     continue;
                 }
 
-                Status status = Status.fromName(request.getStatus());
+                Status status = Status.valueOf(request.getStatus());
                 if(status == null) {
                     LOGGER.error("CSV line not processed: Status not valid\n" + line);
                     continue;
