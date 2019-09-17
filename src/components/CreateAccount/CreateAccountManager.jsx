@@ -65,6 +65,7 @@ const CreateAccountManager = () => {
 						name='email'
 						placeholder='email'
 						autoComplete='off'
+						autoFocus
 						value={email}
 						onChange={e => setEmail(e.target.value)}
 					/>

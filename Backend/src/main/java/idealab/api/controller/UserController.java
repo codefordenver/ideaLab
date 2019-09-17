@@ -3,7 +3,6 @@ package idealab.api.controller;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.model.Employee;
 import idealab.api.operations.UserOperations;
-
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
