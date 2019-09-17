@@ -232,4 +232,19 @@ public class PrintJobOperations {
         return new GetAllPrintJobListResponse(printJobResponses);
     }
 
+
+    public GetAllPrintJobListResponse getDeletablePrintJobs() {
+        List<Status> deletableStatuses = Arrays.asList(new Status[]{
+            Status.PENDING_REVIEW,
+            Status.FAILED,
+            Status.PENDING_CUSTOMER_RESPONSE,
+            Status.REJECTED,
+            Status.COMPLETED,
+            Status.ARCHIVED
+        });
+        List<PrintJob> printJobs = printJobRepo.findByStatusIn(deletableStatuses);
+        List<GetAllPrintJobResponse> printJobResponses = printJobs.stream()
+                .map(GetAllPrintJobResponse::new).collect(Collectors.toList());
+        return new GetAllPrintJobListResponse(printJobResponses);
+    }
 }

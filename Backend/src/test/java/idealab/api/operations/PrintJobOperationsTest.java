@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -216,4 +217,38 @@ public class PrintJobOperationsTest {
         // when
         operations.getAllPrintJobs();
     }
+
+    @Test
+    public void getDeletablePrintJobs(){
+        // given
+        PrintJob printJob = new PrintJob();
+
+        printJob.setColorTypeId(new ColorType("Red"));
+        printJob.setComments("comments");
+        printJob.setCreatedAt(LocalDateTime.now());
+        printJob.setEmailHashId(new EmailHash());
+        printJob.setQueueId(new Queue(1));
+        printJob.setStatus(Status.PENDING_REVIEW);
+        printJob.setEmployeeId(new Employee());
+        printJob.setId(1);
+
+        List<PrintJob> printJobs = new ArrayList<PrintJob>();
+        printJobs.add(printJob);
+        List<Status> deletableStatuses = Arrays.asList(new Status[]{
+            Status.PENDING_REVIEW,
+            Status.FAILED,
+            Status.PENDING_CUSTOMER_RESPONSE,
+            Status.REJECTED,
+            Status.COMPLETED,
+            Status.ARCHIVED
+        });
+        when(printJobRepo.findByStatusIn(deletableStatuses)).thenReturn(printJobs);
+
+        // when
+        GetAllPrintJobListResponse result = operations.getDeletablePrintJobs();
+
+        // assert
+        Assert.assertEquals(result.getPrintJobs().get(0).getId(), printJob.getId());
+    }
+
 }
