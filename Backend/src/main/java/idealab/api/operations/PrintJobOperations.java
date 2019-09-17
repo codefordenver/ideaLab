@@ -98,7 +98,7 @@ public class PrintJobOperations {
 
         // Create a new print model first with temp dropbox link
         PrintJob printJob = new PrintJob(databaseEmail, databaseColor, databaseEmployee, Status.PENDING_REVIEW, comments, currentTime, currentTime);
-        printJobRepo.save(printJob);
+        printJob = printJobRepo.save(printJob);
 
         System.out.println(printJob.toString());
         // TODO: set the queue position of the new job to be at the end of the list.
@@ -109,7 +109,7 @@ public class PrintJobOperations {
         printJob.setDropboxPath(data.get("filePath"));
         printJob.setDropboxSharableLink(data.get("sharableLink"));
 
-        printJobRepo.save(printJob);
+        printJob = printJobRepo.save(printJob);
 
         System.out.println(printJob.toString());
         List<PrintJob> printJobData = Arrays.asList(printJob);
