@@ -1,6 +1,6 @@
 package idealab.api.operations;
 
-import idealab.api.dto.request.CsvUploadRequest;
+import idealab.api.dto.request.UserCsvUploadRequest;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.model.Employee;
 import idealab.api.model.Status;
@@ -39,7 +39,7 @@ public class UploadOperations {
             return response;
         }
 
-        List<CsvUploadRequest> requests = new ArrayList<>();
+        List<UserCsvUploadRequest> requests = new ArrayList<>();
         try {
             byte[] bytes = file.getBytes();
             ByteArrayInputStream inputFilestream = new ByteArrayInputStream(bytes);
@@ -48,7 +48,7 @@ public class UploadOperations {
             List<String> items;
             while ((line = br.readLine()) != null) {
                 items = Arrays.asList(line.split("\\s*,\\s*"));
-                CsvUploadRequest request = new CsvUploadRequest();
+                UserCsvUploadRequest request = new UserCsvUploadRequest();
                 request.setFirstName(items.get(0));
                 request.setLastName(items.get(1));
                 request.setEmail(items.get(2));

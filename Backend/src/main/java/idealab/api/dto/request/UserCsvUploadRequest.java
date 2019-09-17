@@ -2,7 +2,7 @@ package idealab.api.dto.request;
 
 import java.util.Objects;
 
-public class CsvUploadRequest {
+public class UserCsvUploadRequest {
 
     private String firstName;
     private String lastName;
@@ -11,9 +11,9 @@ public class CsvUploadRequest {
     private Integer employeeId;
     private String status;
 
-    public CsvUploadRequest(){}
+    public UserCsvUploadRequest(){}
 
-    public CsvUploadRequest(String firstName, String lastName, String email, String color, Integer employeeId, String status) {
+    public UserCsvUploadRequest(String firstName, String lastName, String email, String color, Integer employeeId, String status) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -72,7 +72,7 @@ public class CsvUploadRequest {
 
     @Override
     public String toString() {
-        return "CsvUploadRequest{" +
+        return "UserCsvUploadRequest{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
@@ -86,7 +86,7 @@ public class CsvUploadRequest {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CsvUploadRequest that = (CsvUploadRequest) o;
+        UserCsvUploadRequest that = (UserCsvUploadRequest) o;
         return Objects.equals(firstName, that.firstName) &&
                 Objects.equals(lastName, that.lastName) &&
                 Objects.equals(email, that.email) &&
