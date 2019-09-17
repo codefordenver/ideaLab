@@ -10,11 +10,9 @@ import idealab.api.dto.response.GetPrintJobDataResponse;
 import idealab.api.operations.PrintJobOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/printjobs")
@@ -80,16 +78,5 @@ public class PrintJobController {
 
         GenericResponse response = printJobOperations.deletePrintJob(dto);
         return new ResponseEntity<>(response, response.getHttpStatus());
-    }
-
-    @PostMapping("/csv")
-    public ResponseEntity<?> uploadPrintJobCsv(@RequestParam("file") MultipartFile file) {
-        if(file.isEmpty()) {
-            return new ResponseEntity<>("File is Empty", HttpStatus.BAD_REQUEST);
-        }
-
-        GenericResponse response = printJobOperations.processPrintJobUpload(file);
-        return new ResponseEntity<>(response, response.getHttpStatus());
-
     }
 }
