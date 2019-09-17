@@ -1,21 +1,16 @@
 package idealab.api.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
+
+import javax.persistence.*;
+import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name ="customer_info")
 public class CustomerInfo {
     @Id
-    @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
@@ -35,11 +30,20 @@ public class CustomerInfo {
     @Length(min = 1,  max = 254)
     private String email;
 
+    @JsonIgnore
+    @Column(name = "created_date", nullable = false)
+    private Date createdDate;
+
+    public CustomerInfo() {
+        this.createdDate = Date.valueOf(LocalDate.now());
+    }
+
     public CustomerInfo(EmailHash emailHashId, String firstName, String lastName, String email) {
         this.emailHashId = emailHashId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.createdDate = Date.valueOf(LocalDate.now());
     }
 
     //getters and setters
@@ -73,6 +77,14 @@ public class CustomerInfo {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 }
 

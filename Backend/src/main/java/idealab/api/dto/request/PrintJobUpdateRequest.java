@@ -1,10 +1,6 @@
-package idealab.api.dto;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+package idealab.api.dto.request;
 
 import java.util.Objects;
-
-import static idealab.api.model.Status.*;
 
 public class PrintJobUpdateRequest {
 
@@ -27,28 +23,8 @@ public class PrintJobUpdateRequest {
         this.status = status;
     }
 
-    @JsonIgnore
-    public boolean isValidStatus() {
-        if(this.status != null && !this.status.isEmpty()) {
-            if(this.status.equalsIgnoreCase(ARCHIVED.toString()))
-                return true;
-            if(this.status.equalsIgnoreCase(PENDING_CUSTOMER_RESPONSE.toString()))
-                return true;
-            if(this.status.equalsIgnoreCase(PENDING_REVIEW.toString()))
-                return true;
-            if(this.status.equalsIgnoreCase(PRINTING.toString()))
-                return true;
-            if(this.status.equalsIgnoreCase(REJECTED.toString()))
-                return true;
-            if(this.status.equalsIgnoreCase(COMPLETED.toString()))
-                return true;
-            if(this.status.equalsIgnoreCase(FAILED.toString()))
-                return true;
-        }
-        return false;
-    }
-
     //Currently needed for test classes
+    // I think it's better to achieve that without using this. It's bad practice to have a code which is only used for testing purposes ~ kaansonmezoz
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

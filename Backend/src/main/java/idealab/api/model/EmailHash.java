@@ -9,7 +9,6 @@ import java.util.Set;
 @Table(name = "email_hash")
 public class EmailHash {
     @Id
-    @Column(name = "id", updatable = false, nullable = false)
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
@@ -21,6 +20,9 @@ public class EmailHash {
 
     @Column(name = "email_hash", nullable = false)
     private String emailHash;
+
+    public EmailHash() {
+    }
 
     public EmailHash(String emailHash) {
         this.emailHash = emailHash;

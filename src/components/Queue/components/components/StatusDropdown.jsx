@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import './StatusDropdown.css'
 
 const StatusDropdown = ({data}) => {
-    const [printStatus] = useState(data.status);
+    const [printStatus,setPrintStatus] = useState(data.status);
 
     return (
         <div className='statusDropdown'>
