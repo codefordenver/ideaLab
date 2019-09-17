@@ -1,13 +1,13 @@
 package idealab.api.model;
 
 public enum Status {
-    PENDING_REVIEW("Pending Review", true),
-    FAILED("Failed", true),
-    PRINTING("Printing", true),
-    PENDING_CUSTOMER_RESPONSE("Pending Customer Response", true),
-    REJECTED("Rejected", true),
-    COMPLETED("Completed", true),
-    ARCHIVED("Archived", true);
+    PENDING_REVIEW("PENDING_REVIEW", true),
+    FAILED("FAILED", true),
+    PRINTING("PRINTING", true),
+    PENDING_CUSTOMER_RESPONSE("PENDING_CUSTOMER_RESPONSE", true),
+    REJECTED("REJECTED", true),
+    COMPLETED("COMPLETED", true),
+    ARCHIVED("ARCHIVED", true);
 
     private final String name;
     private final boolean isValid;

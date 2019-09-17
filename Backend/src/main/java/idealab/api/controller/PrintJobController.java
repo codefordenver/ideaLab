@@ -79,4 +79,15 @@ public class PrintJobController {
         GenericResponse response = printJobOperations.deletePrintJob(dto);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
+
+    @GetMapping("deletable")
+    public ResponseEntity<GetAllPrintJobListResponse> getDeletablePrintJobs() {
+        LOGGER.info("getDeletablePrintJobs ");
+
+        GetAllPrintJobListResponse response = printJobOperations.getDeletablePrintJobs();
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+    }
 }
