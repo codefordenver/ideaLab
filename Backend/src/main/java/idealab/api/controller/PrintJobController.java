@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/printjobs")
+@RequestMapping("/api/print-jobs")
 public class PrintJobController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PrintJobController.class); // TODO: Logs should not be in controller
@@ -43,8 +43,8 @@ public class PrintJobController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @PutMapping("/{printId}/model")
-    public ResponseEntity<?> printJobUpdateModel(@PathVariable("printId") Integer printId,
+    @PutMapping("/{print-id}/model")
+    public ResponseEntity<?> printJobUpdateModel(@PathVariable("print-id") Integer printId,
                                                   @ModelAttribute PrintModelUpdateRequest model) {
 
         LOGGER.info("PrintJobUpdateModel request is job:" + printId.toString() + "| model: " + model.toString());
@@ -53,16 +53,16 @@ public class PrintJobController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @DeleteMapping("/{printId}/model")
-    public ResponseEntity<?> printJobDeleteModel(@PathVariable("printId") Integer printId) {
+    @DeleteMapping("/{print-id}/model")
+    public ResponseEntity<?> printJobDeleteModel(@PathVariable("print-id") Integer printId) {
         LOGGER.info("PrintJobDeleteModel request is " + printId.toString());
         GenericResponse response = printJobOperations.deleteModel(printId);
 
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @PutMapping("/{printId}/status")
-    public ResponseEntity<?> printJobUpdateStatus(@PathVariable ("printId") Integer printId,
+    @PutMapping("/{print-id}/status")
+    public ResponseEntity<?> printJobUpdateStatus(@PathVariable ("print-id") Integer printId,
                                                   @RequestBody PrintJobUpdateRequest dto){
 
         LOGGER.info("PrintJobUpdateStatus request is " + dto.toString());
