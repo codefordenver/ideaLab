@@ -8,10 +8,17 @@ const QueueContainer = () => {
 	const [data] = useState(dummyData);
 	const [filteredData, setFilteredData] = useState(data);
 	const [stringedValues, setStringedValues] = useState([]);
-	const [statusView] = useState('QUEUEING');
+	const [statusView, setStatusView] = useState('QUEUEING');
 
 	useEffect(() => {
-		const filteredKeys = ['name', 'email', 'color', 'status', 'fileName', 'comments'];
+		const filteredKeys = [
+			'name',
+			'email',
+			'color',
+			'status',
+			'fileName',
+			'comments'
+		];
 		const searchValues = data.map((printJob, index) => {
         	let valueString = '';
             for (var key in printJob) {
@@ -28,14 +35,15 @@ const QueueContainer = () => {
 		});
 		setFilteredData(queuedCards);
 		setStringedValues(searchValues);
+		console.log(queuedCards);
 	}, [data, statusView]);
 
-	const filterByTerm = (searchTerm) => {
+	const filterByTerm = searchTerm => {
 		const filteredSearch = data.filter((printJob, i) => {
 			return stringedValues[i].indexOf(searchTerm.toLowerCase()) !== -1;
 		});
 		setFilteredData(filteredSearch);
-	}
+	};
 
 	const renderPrintCards = filteredData.map((el, i) => (
 		<PrintCardContainer data={el} key={i} />
