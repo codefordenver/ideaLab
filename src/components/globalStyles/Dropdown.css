@@ -1,0 +1,78 @@
+.dd-container * {
+    padding: 0;
+    margin: 0;
+    color: #4b4b4b;
+}
+
+.dd-container {
+    display: block;
+    height: auto;
+    width: 15em;
+    margin: 2rem;
+    background-color: #00aeef;
+    border-color: #00aeef;
+    border-radius: 2px;
+    outline: none;
+    border-style: solid;
+    font-size: 1.5rem;
+    padding: 0.25rem;
+    cursor: pointer;
+}
+
+.dd-container .location {
+    border-radius: 4px;
+    width: 100%;
+    padding: 10px 0;
+    margin: 0px;
+    /* transform: -50% -50%; */
+    transition: background-color .5s;
+}
+
+.dd-container p {
+    display: block;
+	text-align: center;
+	border-radius: 2px;
+	outline: none;
+	font-size: 1.5rem;
+}
+
+.dd-container #arrow {
+    width: 30px;
+    float: right;
+    margin-top: -1.25em;
+    margin-right: .5em;
+    transition: transform 1s;
+    
+}
+
+.dd-options {
+    background-color: #00aeef;
+    animation: text1 .75s;
+}
+
+.dd-options p {
+    padding: 10px;
+    border-top: solid 1px black;
+    /* border-radius: 0 0 10px 10px; */
+    cursor: pointer;
+    transition: background-color .5s;
+}
+
+.dd-options p:first-child {
+    border: none;
+}
+
+.dd-options p:hover {
+    background-color:rgba(211, 211, 211, 0.5);
+}
+
+@keyframes text1 {
+    0% {
+        opacity: 0;
+        margin-top: -40px;
+    }
+    100% {
+        opacity: 1;
+        margin-top: 0;
+    }
+}

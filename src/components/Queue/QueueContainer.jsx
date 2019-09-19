@@ -8,7 +8,7 @@ const QueueContainer = () => {
 	const [data] = useState(dummyData);
 	const [filteredData, setFilteredData] = useState(data);
 	const [stringedValues, setStringedValues] = useState([]);
-	const [statusView, setStatusView] = useState('QUEUEING');
+	const [statusView] = useState('QUEUEING');
 
 	useEffect(() => {
 		const filteredKeys = ['name', 'email', 'color', 'status', 'fileName', 'comments'];
@@ -57,7 +57,7 @@ const QueueContainer = () => {
 				</ul>
 				<SearchBar filterByTerm={filterByTerm} />
 			</div>
-			<ul className='banner'>
+			<ul className='queueBanner'>
 				<li className='col10'></li>
 				<li className='col20'>File Name</li>
 				<li className='col20'>Color</li>

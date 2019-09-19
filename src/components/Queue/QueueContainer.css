@@ -1,4 +1,4 @@
-.banner {
+.queueBanner {
     list-style-type: none;
     text-align: left;
     display: flex;
@@ -84,9 +84,9 @@ body {
 	text-align: left;
 }
 
-.col10 {
+.queueBanner .col10 {
     width: 5%;
 }
-.col20 {
+.queueBanner .col20 {
     width:20%;
 }
