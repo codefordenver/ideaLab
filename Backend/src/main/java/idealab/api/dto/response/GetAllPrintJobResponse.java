@@ -1,8 +1,9 @@
 package idealab.api.dto.response;
 
 
+import idealab.api.model.PrintJob;
+
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class GetAllPrintJobResponse {
     private Integer id;
@@ -11,22 +12,20 @@ public class GetAllPrintJobResponse {
     private String status;
     private LocalDateTime currentStatusCreatedAt;
     private LocalDateTime initialRequestTime;
-    private List<String> comments;
+    private String comments;
     private String dropboxLink;
 
-    public GetAllPrintJobResponse(){}
+    public GetAllPrintJobResponse(){} // For JacksonSerializer
 
-    public GetAllPrintJobResponse(Integer id, String colorChoice, String email, String status,
-                                  LocalDateTime currentStatusCreatedAt, LocalDateTime initialRequestTime,
-                                  List<String> comments, String dropboxLink) {
-        this.id = id;
-        this.colorChoice = colorChoice;
-        this.email = email;
-        this.status = status;
-        this.currentStatusCreatedAt = currentStatusCreatedAt;
-        this.initialRequestTime = initialRequestTime;
-        this.comments = comments;
-        this.dropboxLink = dropboxLink;
+    public GetAllPrintJobResponse(PrintJob printJob){
+        this.id = printJob.getId();
+        this.colorChoice = printJob.getColorTypeId().getColor();
+        this.email = printJob.getEmailHashId().getEmailHash();
+        this.status = printJob.getStatus().getName();
+        this.currentStatusCreatedAt = printJob.getUpdatedAt();
+        this.initialRequestTime = printJob.getCreatedAt();
+        this.comments = printJob.getComments();
+        this.dropboxLink = printJob.getDropboxSharableLink();
     }
 
     public Integer getId() {
@@ -41,55 +40,27 @@ public class GetAllPrintJobResponse {
         return colorChoice;
     }
 
-    public void setColorChoice(String colorChoice) {
-        this.colorChoice = colorChoice;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public LocalDateTime getCurrentStatusCreatedAt() {
         return currentStatusCreatedAt;
-    }
-
-    public void setCurrentStatusCreatedAt(LocalDateTime currentStatusCreatedAt) {
-        this.currentStatusCreatedAt = currentStatusCreatedAt;
     }
 
     public LocalDateTime getInitialRequestTime() {
         return initialRequestTime;
     }
 
-    public void setInitialRequestTime(LocalDateTime initialRequestTime) {
-        this.initialRequestTime = initialRequestTime;
-    }
-
-    public List<String> getComments() {
+    public String getComments() {
         return comments;
-    }
-
-    public void setComments(List<String> comments) {
-        this.comments = comments;
     }
 
     public String getDropboxLink() {
         return dropboxLink;
-    }
-
-    public void setDropboxLink(String dropboxLink) {
-        this.dropboxLink = dropboxLink;
     }
 }

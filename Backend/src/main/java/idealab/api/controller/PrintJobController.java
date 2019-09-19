@@ -1,30 +1,24 @@
 package idealab.api.controller;
 
-import idealab.api.dto.response.GetPrintJobDataResponse;
-import idealab.api.dto.request.PrintJobNewRequest;
-import idealab.api.dto.request.PrintModelUpdateRequest;
 import idealab.api.dto.request.PrintJobDeleteRequest;
+import idealab.api.dto.request.PrintJobNewRequest;
 import idealab.api.dto.request.PrintJobUpdateRequest;
+import idealab.api.dto.request.PrintModelUpdateRequest;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.GetAllPrintJobListResponse;
+import idealab.api.dto.response.GetPrintJobDataResponse;
 import idealab.api.operations.PrintJobOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/printjobs")
 public class PrintJobController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PrintJobController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PrintJobController.class); // TODO: Logs should not be in controller
 
     private final PrintJobOperations printJobOperations;
 
@@ -35,12 +29,6 @@ public class PrintJobController {
     @GetMapping
     public ResponseEntity<GetAllPrintJobListResponse> getAllPrintJobs(){
         GetAllPrintJobListResponse response = printJobOperations.getAllPrintJobs();
-
-        if(response == null || response.getPrintJobs() == null || response.getPrintJobs().size() == 0){
-            return ResponseEntity.badRequest()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .build();
-        }
 
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -74,8 +62,9 @@ public class PrintJobController {
     }
 
     @PutMapping("/{printId}/status")
-    public ResponseEntity<?> printJobUpdateStatus(@PathVariable ("printId") Integer printId, @RequestBody PrintJobUpdateRequest dto)
-    {
+    public ResponseEntity<?> printJobUpdateStatus(@PathVariable ("printId") Integer printId,
+                                                  @RequestBody PrintJobUpdateRequest dto){
+
         LOGGER.info("PrintJobUpdateStatus request is " + dto.toString());
 
         GenericResponse response = printJobOperations.updatePrintJobStatus(printId, dto);
@@ -87,7 +76,18 @@ public class PrintJobController {
     {
         LOGGER.info("PrintJobDelete request is " + dto.toString());
 
-        GenericResponse response = printJobOperations.deletePrintJobStatus(dto);
+        GenericResponse response = printJobOperations.deletePrintJob(dto);
         return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
+    @GetMapping("deletable")
+    public ResponseEntity<GetAllPrintJobListResponse> getDeletablePrintJobs() {
+        LOGGER.info("getDeletablePrintJobs ");
+
+        GetAllPrintJobListResponse response = printJobOperations.getDeletablePrintJobs();
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
     }
 }
