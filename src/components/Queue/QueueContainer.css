@@ -11,12 +11,63 @@ body {
 .queueFilterInfo {
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 }
 
 .statusMenu {
 	display: flex;
 	flex-direction: row;
+	list-style: none;
+	align-items: center;
 }
+
+.statusMenu li {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.statusMenu button {
+	outline: none;
+	border: none;
+	background-color: var(--default-background);
+	font-size: 1em;
+}
+
+
+.statusMenu li:not(:first-child) button{
+	border-left: 1px solid black;
+}
+
+.statusMenu li:after {
+	content: "";
+	display: block;
+	color: var(--default-background);
+	border-bottom: thick solid;
+	width: 90%;
+}
+
+.statusMenu .selectedTab:after {
+	content: "";
+	display: block;
+	color: var(--light-blue);
+	border-bottom: thick solid;
+	animation-duration: .3s;
+	animation-name: slidein;
+}
+
+	
+@keyframes slidein {
+	from {
+		width: 0%; 
+	}
+	  
+	to {
+		width: 90%;
+	}
+
+}
+
 
 .statusMenu > button {
 	border: none;

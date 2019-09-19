@@ -25,6 +25,8 @@ public class Queue {
     @Column(name = "rank", nullable = false)
     private Integer rank;
 
+    public Queue() {}
+
     public Queue(Integer rank) {
         this.rank = rank;
     }

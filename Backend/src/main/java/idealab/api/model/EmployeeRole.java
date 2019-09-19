@@ -1,8 +1,8 @@
 package idealab.api.model;
 
 public enum EmployeeRole {
-    ADMIN ("Admin"),
-    STAFF ("Staff");
+    ADMIN ("ADMIN"),
+    STAFF ("STAFF");
 
     private final String name;
 
