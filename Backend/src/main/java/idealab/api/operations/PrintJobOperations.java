@@ -1,5 +1,15 @@
 package idealab.api.operations;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import idealab.api.dto.request.PrintJobDeleteRequest;
 import idealab.api.dto.request.PrintJobNewRequest;
 import idealab.api.dto.request.PrintJobUpdateRequest;
@@ -9,17 +19,18 @@ import idealab.api.dto.response.GetAllPrintJobListResponse;
 import idealab.api.dto.response.GetAllPrintJobResponse;
 import idealab.api.dto.response.GetPrintJobDataResponse;
 import idealab.api.exception.ErrorType;
-import idealab.api.model.*;
-import idealab.api.repositories.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import idealab.api.model.ColorType;
+import idealab.api.model.CustomerInfo;
+import idealab.api.model.EmailHash;
+import idealab.api.model.Employee;
+import idealab.api.model.EmployeeRole;
+import idealab.api.model.PrintJob;
+import idealab.api.model.Status;
+import idealab.api.repositories.ColorTypeRepo;
+import idealab.api.repositories.CustomerInfoRepo;
+import idealab.api.repositories.EmailHashRepo;
+import idealab.api.repositories.EmployeeRepo;
+import idealab.api.repositories.PrintJobRepo;
 
 @Service
 public class PrintJobOperations {
@@ -70,6 +81,13 @@ public class PrintJobOperations {
             emailHashRepo.save(databaseEmail);
         }
 
+        // Check that there are not more than 5 print jobs created by that email that day
+        List<PrintJob> printJobsCreatedTodayByUser = printJobRepo.findByEmailHashAndCreatedToday(databaseEmail.getId());
+        if (printJobsCreatedTodayByUser.size() >= 5) {
+            response.setMessage("The user has already requested 5 print jobs today.");
+            return response;
+        }
+
         // Create customer record with email hash if it does not already exist
         CustomerInfo customer = customerInfoRepo.findByEmailHashId(databaseEmail);
         if (customer == null) {
@@ -118,6 +136,7 @@ public class PrintJobOperations {
         response.setMessage("Successfully saved new file to database!");
         response.setData(printJobData);
         response.setHttpStatus(HttpStatus.ACCEPTED);
+        
 
         return response;
     }

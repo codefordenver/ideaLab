@@ -29,6 +29,10 @@ public class EmailHash {
     }
 
     //getters and setters
+    public Integer getId() {
+        return this.id;
+    }
+
     public String getEmailHash() {
         return emailHash;
     }
