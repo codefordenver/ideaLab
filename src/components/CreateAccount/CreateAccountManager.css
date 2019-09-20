@@ -22,18 +22,9 @@ h1 {
 	margin-top: 3em;
 }
 
-input {
-	display: block;
-	height: 2em;
-	width: 15em;
-	margin: 2rem;
+.container input {
 	background-color: #00aeef;
 	border-color: #00aeef;
-	border-radius: 2px;
-	outline: none;
-	border-style: solid;
-	font-size: 1.5rem;
-	padding: 0.25rem;
 }
 
 .container > button {

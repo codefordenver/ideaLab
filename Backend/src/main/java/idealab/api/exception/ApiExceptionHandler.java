@@ -8,7 +8,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.time.LocalDateTime;
 
-@ControllerAdvice
+// @ControllerAdvice this breaks validation errors for the front end.
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {   // Loglama işlemi burada yapılmalı !!!
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ExceptionResponse> handleGeneralException(Exception ex){

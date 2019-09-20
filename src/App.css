@@ -1,6 +1,8 @@
 /* Layout */
 :root {
   --light-blue: #00AEEF;
+  --dark-blue: #1F4393;
+  --white-text: #FFFFFF;
   --default-background: white;
 }
 
@@ -73,3 +75,21 @@ a {
   color: white;
 }
 
+input {
+	display: block;
+	height: 2em;
+	margin: 2rem;
+	border-radius: 10px;
+	outline: none;
+	border-style: solid;
+	font-size: 1.5rem;
+	padding: 0.25rem;
+}
+
+.shapedButton {
+	display: block;
+	height: 2.5em;
+	margin: 2rem;
+	border-radius: 10px;
+	font-size: 1.5rem;
+}

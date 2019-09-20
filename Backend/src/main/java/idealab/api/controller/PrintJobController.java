@@ -8,6 +8,9 @@ import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.GetAllPrintJobListResponse;
 import idealab.api.dto.response.GetPrintJobResponse;
 import idealab.api.operations.PrintJobOperations;
+
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -36,8 +39,7 @@ public class PrintJobController {
     }
 
     @PostMapping
-    public ResponseEntity<?> printJobNew(@ModelAttribute PrintJobNewRequest model) {
-        LOGGER.info("PrintJobNew request is:" + model.toString());
+    public ResponseEntity<?> printJobNew(@ModelAttribute @Valid PrintJobNewRequest model) {
         GetPrintJobResponse response = printJobOperations.newPrintJob(model);
 
         return new ResponseEntity<>(response, response.getHttpStatus());
