@@ -6,7 +6,7 @@ import idealab.api.dto.request.PrintJobUpdateRequest;
 import idealab.api.dto.request.PrintModelUpdateRequest;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.GetAllPrintJobListResponse;
-import idealab.api.dto.response.GetPrintJobDataResponse;
+import idealab.api.dto.response.GetPrintJobResponse;
 import idealab.api.operations.PrintJobOperations;
 
 import javax.validation.Valid;
@@ -30,17 +30,17 @@ public class PrintJobController {
     }
 
     @GetMapping
-    public ResponseEntity<GetAllPrintJobListResponse> getAllPrintJobs(){
-        GetAllPrintJobListResponse response = printJobOperations.getAllPrintJobs();
+    public ResponseEntity<?> printJobGetAll() {
+//        TODO: Add parameter that will find all and return based on status
+        LOGGER.info("Return all print jobs");
+        GetPrintJobResponse response = printJobOperations.getAllPrintJobs();
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(response);
+        return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     @PostMapping
     public ResponseEntity<?> printJobNew(@ModelAttribute @Valid PrintJobNewRequest model) {
-        GetPrintJobDataResponse response = printJobOperations.newPrintJob(model);
+        GetPrintJobResponse response = printJobOperations.newPrintJob(model);
 
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
@@ -50,7 +50,7 @@ public class PrintJobController {
                                                   @ModelAttribute PrintModelUpdateRequest model) {
 
         LOGGER.info("PrintJobUpdateModel request is job:" + printId.toString() + "| model: " + model.toString());
-        GetPrintJobDataResponse response = printJobOperations.updateModel(printId, model);
+        GetPrintJobResponse response = printJobOperations.updateModel(printId, model);
 
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
