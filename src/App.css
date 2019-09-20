@@ -3,7 +3,7 @@
   --light-blue: #00AEEF;
   --dark-blue: #1F4393;
   --white-text: #FFFFFF;
-  --default-background: #282c34;
+  --default-background: white;
 }
 
 html {
