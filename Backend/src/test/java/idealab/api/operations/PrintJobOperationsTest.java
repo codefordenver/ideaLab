@@ -3,6 +3,7 @@ package idealab.api.operations;
 import idealab.api.dto.request.PrintJobDeleteRequest;
 import idealab.api.dto.request.PrintJobNewRequest;
 import idealab.api.dto.request.PrintJobUpdateRequest;
+import idealab.api.dto.request.PrintModelUpdateRequest;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.GetAllPrintJobListResponse;
 import idealab.api.dto.response.GetPrintJobResponse;
@@ -401,5 +402,121 @@ public class PrintJobOperationsTest {
         GetPrintJobResponse opResponse = operations.newPrintJob(request);
 
         assert(opResponse.equals(response));
+    }
+
+    @Test
+    public void createNewPrintJobNullFile() {
+        GetPrintJobResponse response = new GetPrintJobResponse();
+        response.setHttpStatus(HttpStatus.BAD_REQUEST);
+        response.setMessage("No file was submitted.  Please attach a file to the request");
+        response.setSuccess(false);
+
+        MultipartFile file = null;
+
+        PrintJobNewRequest request = new PrintJobNewRequest();
+        request.setColor("RED");
+        request.setComments("COMMENTS");
+        request.setCustomerFirstName("test");
+        request.setCustomerLastName("testLast");
+        request.setEmail("test@email.com");
+        request.setFile(file);
+
+        GetPrintJobResponse opResponse = operations.newPrintJob(request);
+
+        assert(opResponse.equals(response));
+    }
+
+    @Test
+    public void updateModelSuccess() {
+        byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
+        MultipartFile file = new MockMultipartFile("Something", a);
+
+        PrintModelUpdateRequest request = new PrintModelUpdateRequest();
+        request.setFile(file);
+
+        PrintJob printJob = new PrintJob();
+        printJob.setId(999);
+
+        GetPrintJobResponse response = new GetPrintJobResponse();
+        response.setSuccess(true);
+        response.setMessage("Successfully updated file to database!");
+        response.setHttpStatus(HttpStatus.ACCEPTED);
+        List<PrintJob> printJobs = new ArrayList<>();
+        printJobs.add(printJob);
+        response.setData(printJobs);
+
+        Map<String, String> data = new HashMap<>();
+        data.put("filePath", "DROPBOX_PATH");
+        data.put("sharableLink", "http://testlink.com");
+
+        when(printJobRepo.findPrintJobById(printJob.getId())).thenReturn(printJob);
+        when(dropboxOperations.updateDropboxFile(printJob, request.getFile())).thenReturn(data);
+        when(printJobRepo.save(printJob)).thenReturn(printJob);
+
+        GetPrintJobResponse opResponse = operations.updateModel(printJob.getId(), request);
+
+        assert(opResponse.equals(response));
+    }
+
+    @Test(expected = IdeaLabApiException.class)
+    public void updateModelPrintJobNotFound() {
+        byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
+        MultipartFile file = new MockMultipartFile("Something", a);
+
+        PrintModelUpdateRequest request = new PrintModelUpdateRequest();
+        request.setFile(file);
+
+        PrintJob printJob = new PrintJob();
+        printJob.setId(999);
+
+        when(printJobRepo.findPrintJobById(printJob.getId())).thenReturn(null);
+
+        operations.updateModel(printJob.getId(), request);
+    }
+
+    @Test(expected = IdeaLabApiException.class)
+    public void updateModelDropboxFail() {
+        byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
+        MultipartFile file = new MockMultipartFile("Something", a);
+
+        PrintModelUpdateRequest request = new PrintModelUpdateRequest();
+        request.setFile(file);
+
+        PrintJob printJob = new PrintJob();
+        printJob.setId(999);
+
+        when(printJobRepo.findPrintJobById(printJob.getId())).thenReturn(printJob);
+        when(dropboxOperations.updateDropboxFile(printJob, request.getFile())).thenReturn(null);
+
+        operations.updateModel(printJob.getId(), request);
+    }
+
+    @Test
+    public void deleteModelSuccess() {
+        GenericResponse response = new GenericResponse();
+        response.setSuccess(true);
+        response.setMessage("Successfully deleted file from DropBox");
+        response.setHttpStatus(HttpStatus.ACCEPTED);
+
+        PrintJob printJob = new PrintJob();
+        printJob.setId(999);
+
+        when(printJobRepo.findPrintJobById(printJob.getId())).thenReturn(printJob);
+        doNothing().when(dropboxOperations).deleteDropboxFile(printJob);
+        when(printJobRepo.save(printJob)).thenReturn(printJob);
+
+        GenericResponse opResponse = operations.deleteModel(printJob.getId());
+
+        assert(opResponse.equals(response));
+    }
+
+    @Test(expected = IdeaLabApiException.class)
+    public void deleteModelPrintJobNotFound() {
+        PrintJob printJob = new PrintJob();
+        printJob.setId(999);
+
+        when(printJobRepo.findPrintJobById(printJob.getId())).thenReturn(null);
+
+        operations.deleteModel(printJob.getId());
     }
 }

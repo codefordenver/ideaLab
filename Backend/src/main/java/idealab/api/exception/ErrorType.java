@@ -49,6 +49,11 @@ public enum ErrorType {
             8,
             "Error Deleting File",
             HttpStatus.INTERNAL_SERVER_ERROR
+    ),
+    DROPBOX_UPDATE_FILE_ERROR(
+            9,
+            "Error Updating File",
+            HttpStatus.INTERNAL_SERVER_ERROR
     );
 
     ErrorType(int errorCode, String errorMessage, HttpStatus responseStatus){
