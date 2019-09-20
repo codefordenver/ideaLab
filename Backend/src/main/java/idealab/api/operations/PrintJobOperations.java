@@ -67,21 +67,21 @@ public class PrintJobOperations {
         EmailHash databaseEmail = emailHashRepo.findByEmailHash(emailHash);
         if (databaseEmail == null) {
             databaseEmail = new EmailHash(emailHash);
-            emailHashRepo.save(databaseEmail);
+            databaseEmail = emailHashRepo.save(databaseEmail);
         }
 
         // Create customer record with email hash if it does not already exist
         CustomerInfo customer = customerInfoRepo.findByEmailHashId(databaseEmail);
         if (customer == null) {
             customer = new CustomerInfo(databaseEmail, customerFirstName, customerLastName, email);
-            customerInfoRepo.save(customer);
+            customer = customerInfoRepo.save(customer);
         }
 
         // Check if Color exists otherwise make a new record
         ColorType databaseColor = colorTypeRepo.findByColor(color);
         if (databaseColor == null) {
             databaseColor = new ColorType(color);
-            colorTypeRepo.save(databaseColor);
+            databaseColor = colorTypeRepo.save(databaseColor);
         }
 
         // TODO: Remove temp employee, this should be taken directly from the employee making the request through the token.

@@ -323,7 +323,80 @@ public class PrintJobOperationsTest {
         when(colorTypeRepo.findByColor(any())).thenReturn(color);
         when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
         when(printJobRepo.save(any())).thenReturn(printJob);
-        when(dropboxOperations.updateDropboxFile(any(), any())).thenReturn(data);
+        when(dropboxOperations.uploadDropboxFile(printJob.getId(), file)).thenReturn(data);
+
+        GetPrintJobDataResponse opResponse = operations.newPrintJob(request);
+
+        assert(opResponse.equals(response));
+    }
+
+    @Test
+    public void createNewPrintJobSaveAllNonExistentData() {
+        GetPrintJobDataResponse response = new GetPrintJobDataResponse();
+
+        byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
+        MultipartFile file = new MockMultipartFile("Something", a);
+
+        PrintJobNewRequest request = new PrintJobNewRequest();
+        request.setColor("RED");
+        request.setComments("COMMENTS");
+        request.setCustomerFirstName("test");
+        request.setCustomerLastName("testLast");
+        request.setEmail("test@email.com");
+        request.setFile(file);
+
+        CustomerInfo customerInfo = new CustomerInfo();
+        customerInfo.setFirstName("test");
+
+        ColorType color = new ColorType();
+        color.setColor("RED");
+        color.setAvailable(true);
+
+        Employee e = new Employee();
+        e.setId(999);
+
+        EmailHash emailHash = new EmailHash();
+        emailHash.setEmailHash("test@email.com");
+
+        Queue queue = new Queue(1);
+
+        Map<String, String> data = new HashMap<>();
+        data.put("filePath", "DROPBOX_PATH");
+        data.put("sharableLink", "http://testlink.com");
+
+        PrintJob printJob = new PrintJob();
+        printJob.setColorTypeId(color);
+        printJob.setComments("COMMENTS");
+        printJob.setCreatedAt(LocalDateTime.now());
+        printJob.setDropboxPath("DROPBOX_PATH");
+        printJob.setDropboxSharableLink("http://testlink.com");
+        printJob.setId(1);
+        printJob.setUpdatedAt(LocalDateTime.now());
+        printJob.setStatus(Status.PENDING_REVIEW);
+        printJob.setEmployeeId(e);
+        printJob.setEmailHashId(emailHash);
+        printJob.setQueueId(queue);
+        printJob.setUpdatedAt(LocalDateTime.now());
+
+        List<PrintJob> printJobData = new ArrayList<>();
+        printJobData.add(printJob);
+
+
+        response.setSuccess(true);
+        response.setMessage("Successfully saved new file to database!");
+        response.setData(printJobData);
+        response.setHttpStatus(HttpStatus.ACCEPTED);
+
+        when(emailHashRepo.findByEmailHash(any())).thenReturn(null);
+        when(emailHashRepo.save(any())).thenReturn(emailHash);
+        when(customerInfoRepo.findByEmailHashId(any())).thenReturn(null);
+        when(customerInfoRepo.save(any())).thenReturn(customerInfo);
+        when(colorTypeRepo.findByColor(any())).thenReturn(null);
+        when(colorTypeRepo.save(any())).thenReturn(color);
+        when(employeeRepo.findEmployeeByUsername(any())).thenReturn(null);
+        when(employeeRepo.save(any())).thenReturn(e);
+        when(printJobRepo.save(any())).thenReturn(printJob);
+        when(dropboxOperations.uploadDropboxFile(printJob.getId(), file)).thenReturn(data);
 
         GetPrintJobResponse opResponse = operations.newPrintJob(request);
 
