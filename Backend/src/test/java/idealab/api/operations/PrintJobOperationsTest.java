@@ -4,6 +4,7 @@ import idealab.api.dto.request.PrintJobDeleteRequest;
 import idealab.api.dto.request.PrintJobUpdateRequest;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.GetAllPrintJobListResponse;
+import idealab.api.dto.response.GetPrintJobResponse;
 import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.*;
 import idealab.api.repositories.*;
@@ -191,10 +192,10 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findAll()).thenReturn(printJobs);
 
         // when
-        GetAllPrintJobListResponse result = operations.getAllPrintJobs();
+        GetPrintJobResponse result = operations.getAllPrintJobs();
 
         // assert
-        Assert.assertEquals(result.getPrintJobs().get(0).getId(), printJob.getId());
+        Assert.assertEquals(result.getData().get(0).getId(), printJob.getId());
     }
 
     @Test(expected = IdeaLabApiException.class)

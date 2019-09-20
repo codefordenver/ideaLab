@@ -7,7 +7,7 @@ import idealab.api.dto.request.PrintModelUpdateRequest;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.GetAllPrintJobListResponse;
 import idealab.api.dto.response.GetAllPrintJobResponse;
-import idealab.api.dto.response.GetPrintJobDataResponse;
+import idealab.api.dto.response.GetPrintJobResponse;
 import idealab.api.exception.ErrorType;
 import idealab.api.model.*;
 import idealab.api.repositories.*;
@@ -42,8 +42,8 @@ public class PrintJobOperations {
         this.employeeRepo = employeeRepo;
     }
 
-    public GetPrintJobDataResponse newPrintJob(PrintJobNewRequest printJobNewRequest) {
-        GetPrintJobDataResponse response = new GetPrintJobDataResponse();
+    public GetPrintJobResponse newPrintJob(PrintJobNewRequest printJobNewRequest) {
+        GetPrintJobResponse response = new GetPrintJobResponse();
         response.setSuccess(false);
         response.setMessage("File could not be uploaded");
         response.setHttpStatus(HttpStatus.BAD_REQUEST);
@@ -122,8 +122,8 @@ public class PrintJobOperations {
         return response;
     }
 
-    public GetPrintJobDataResponse updateModel(Integer printId, PrintModelUpdateRequest model){
-        GetPrintJobDataResponse response = new GetPrintJobDataResponse();
+    public GetPrintJobResponse updateModel(Integer printId, PrintModelUpdateRequest model){
+        GetPrintJobResponse response = new GetPrintJobResponse();
 
         MultipartFile file = model.getFile();
 
@@ -219,17 +219,24 @@ public class PrintJobOperations {
         return response;
     }
 
-    public GetAllPrintJobListResponse getAllPrintJobs() {
+    public GetPrintJobResponse getAllPrintJobs() {
+        GetPrintJobResponse response = new GetPrintJobResponse();
+        response.setSuccess(false);
+        response.setMessage("Could not return all print jobs");
+        response.setHttpStatus(HttpStatus.BAD_REQUEST);
+
         List<PrintJob> printJobs = printJobRepo.findAll();
 
         if(printJobs == null || printJobs.size() == 0){
             ErrorType.PRINT_JOBS_NOT_EXIST.throwException();
         }
 
-        List<GetAllPrintJobResponse> printJobResponses = printJobs.stream()
-                .map(GetAllPrintJobResponse::new).collect(Collectors.toList());
+        response.setSuccess(true);
+        response.setMessage("Successfully returned all print jobs");
+        response.setData(printJobs);
+        response.setHttpStatus(HttpStatus.ACCEPTED);
 
-        return new GetAllPrintJobListResponse(printJobResponses);
+        return response;
     }
 
 

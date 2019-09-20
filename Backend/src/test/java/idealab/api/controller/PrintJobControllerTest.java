@@ -7,6 +7,7 @@ import idealab.api.dto.request.PrintJobUpdateRequest;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.GetAllPrintJobListResponse;
 import idealab.api.dto.response.GetAllPrintJobResponse;
+import idealab.api.dto.response.GetPrintJobResponse;
 import idealab.api.model.*;
 import idealab.api.operations.PrintJobOperations;
 import org.junit.Before;
@@ -25,6 +26,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static idealab.api.util.TestUtil.stringToGenericResponse;
@@ -184,13 +186,13 @@ public class PrintJobControllerTest {
         printJob.setEmployeeId(new Employee());
         printJob.setId(1);
 
-        GetAllPrintJobResponse getAllPrintJobResponse = new GetAllPrintJobResponse(printJob);
+        List<PrintJob> printJobList = Arrays.asList(printJob);
 
-        List<GetAllPrintJobResponse> printJobResponses = new ArrayList<GetAllPrintJobResponse>();
-
-        printJobResponses.add(getAllPrintJobResponse);
-
-        GetAllPrintJobListResponse expectedResponse = new GetAllPrintJobListResponse(printJobResponses);
+        GetPrintJobResponse expectedResponse = new GetPrintJobResponse();
+        expectedResponse.setSuccess(true);
+        expectedResponse.setMessage("Successfully returned all print jobs");
+        expectedResponse.setData(printJobList);
+        expectedResponse.setHttpStatus(HttpStatus.ACCEPTED);
 
         Mockito.when(printJobOperations.getAllPrintJobs()).thenReturn(expectedResponse);
 
@@ -199,20 +201,19 @@ public class PrintJobControllerTest {
                 MockMvcRequestBuilders.get("/api/printjobs")
                         .accept(MediaType.APPLICATION_JSON)
         )
-        .andExpect(status().isOk())
+        .andExpect(status().isAccepted())
         .andReturn().getResponse().getContentAsString();
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
-        GetAllPrintJobListResponse actualResponse = mapper.readValue(jsonString, GetAllPrintJobListResponse.class);
+        GetPrintJobResponse actualResponse = mapper.readValue(jsonString, GetPrintJobResponse.class);
 
-        int actualId = actualResponse.getPrintJobs()
-                .get(0)
+        int actualId = actualResponse.getData().get(0)
                 .getId();
 
         int expectedId = expectedResponse
-                .getPrintJobs()
+                .getData()
                 .get(0)
                 .getId();
 
