@@ -325,14 +325,14 @@ public class PrintJobOperationsTest {
         when(printJobRepo.save(any())).thenReturn(printJob);
         when(dropboxOperations.uploadDropboxFile(printJob.getId(), file)).thenReturn(data);
 
-        GetPrintJobDataResponse opResponse = operations.newPrintJob(request);
+        GetPrintJobResponse opResponse = operations.newPrintJob(request);
 
         assert(opResponse.equals(response));
     }
 
     @Test
     public void createNewPrintJobSaveAllNonExistentData() {
-        GetPrintJobDataResponse response = new GetPrintJobDataResponse();
+        GetPrintJobResponse response = new GetPrintJobResponse();
 
         byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
         MultipartFile file = new MockMultipartFile("Something", a);
