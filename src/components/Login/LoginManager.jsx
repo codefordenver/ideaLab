@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import Dropdown from '../globalStyles/Dropdown';
+import RequestService from '../../util/RequestService';
 import './LoginManager.css';
 
 import ideaLABlogo from './../../ideaLABlogo.png';
 
 const LoginManager = () => {
-	const [email, setEmail] = useState('');
+	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const locations = [
 		'Denver Central Library',
@@ -16,8 +17,24 @@ const LoginManager = () => {
 	]
 	const [location, setLocation] = useState(locations[0]);
 
+	const thenCallback = function(response){
+		const token = response.headers ? response.headers.authorization : '';
+		if (token) {
+			console.log(token);
+		} else {
+			// Something should happen
+			console.error("Token missing from response headers");
+		};
+	}
+
 	const onSubmit = e => {
 		e.preventDefault();
+		const payload = {
+			username: username,
+			password: password
+		};
+
+		RequestService.login(payload, thenCallback, thenCallback);
 	};
 
 	return (
@@ -27,12 +44,12 @@ const LoginManager = () => {
 			<h2>Sign In</h2>
 			<form onSubmit={e => onSubmit(e)}>
 				<input
-					name='email'
-					placeholder='email'
+					name='username'
+					placeholder='username'
 					autoComplete='off'
 					autoFocus
-					value={email}
-					onChange={e => setEmail(e.target.value)}
+					value={username}
+					onChange={e => setUsername(e.target.value)}
 				/>
 				<Dropdown options={locations} optionsName={'locations'} currentValue={location} />
 				<input

@@ -24,6 +24,12 @@ const RequestService = {
             .catch(catchCallback);
     },
 
+    login: function (payload, thenCallback, catchCallback) {
+        axios.post(baseurl + '/login', payload)
+            .then(thenCallback)
+            .catch(catchCallback);
+    },
+
     newPrintJob(payload, thenCallback, catchCallback) {
         console.log(payload);
         axios.post(baseurl + '/api/printjobs', payload)
