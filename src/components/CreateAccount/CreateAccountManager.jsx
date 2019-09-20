@@ -20,7 +20,7 @@ const CreateAccountManager = () => {
 	 }
 
 	function onFailure(error) {
-		const newErrorState = RequestService.validationErrorGetter(errors);
+		const newErrorState = RequestService.validationErrorGetter(error);
 		setErrors(newErrorState);
 	};
 
