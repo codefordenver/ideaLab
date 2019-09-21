@@ -62,17 +62,13 @@ public enum ErrorType {
     ),
     VALIDATION_ERROR(
             10,
+            "Validation Error",
             HttpStatus.BAD_REQUEST
     );
 
     ErrorType(int errorCode, String errorMessage, HttpStatus responseStatus){
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
-        this.responseStatus = responseStatus;
-    }
-
-    ErrorType(int errorCode, HttpStatus responseStatus){
-        this.errorCode = errorCode;
         this.responseStatus = responseStatus;
     }
 
