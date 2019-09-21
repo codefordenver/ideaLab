@@ -401,7 +401,7 @@ public class PrintJobOperationsTest {
         assert(opResponse.equals(response));
     }
 
-    @Test
+    @Test(expected = IdeaLabApiException.class)
     public void createNewPrintJobNullFile() {
         PrintJobResponse response = new PrintJobResponse();
         response.setHttpStatus(HttpStatus.BAD_REQUEST);
@@ -419,8 +419,8 @@ public class PrintJobOperationsTest {
         request.setFile(file);
 
         PrintJobResponse opResponse = operations.newPrintJob(request);
+        operations.newPrintJob(request);
 
-        assert(opResponse.equals(response));
     }
 
     @Test

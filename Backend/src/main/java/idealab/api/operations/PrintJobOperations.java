@@ -184,6 +184,7 @@ public class PrintJobOperations {
     }
 
     public GenericResponse updatePrintJobStatus(Integer printId, PrintJobUpdateRequest dto) {
+        dto.validate();
         Status requestStatus = Status.fromValue(dto.getStatus());
 
         if(requestStatus == null || !requestStatus.isValid()){
@@ -210,6 +211,7 @@ public class PrintJobOperations {
     }
 
     public GenericResponse deletePrintJob(PrintJobDeleteRequest dto) {
+        dto.validate();
         Employee employee = employeeRepo.findEmployeeById(dto.getEmployeeId());
         PrintJob printJob = printJobRepo.findPrintJobById(dto.getPrintJobId());
 
