@@ -9,15 +9,7 @@ public class UserChangePasswordRequest {
     private String newPassword;
     private String confirmNewPassword;
 
-    public UserChangePasswordRequest() {
-    }
-
-    public UserChangePasswordRequest(String username, String oldPassword, String newPassword, String confirmNewPassword) {
-        this.username = username;
-        this.oldPassword = oldPassword;
-        this.newPassword = newPassword;
-        this.confirmNewPassword = confirmNewPassword;
-    }
+    public UserChangePasswordRequest() {  }
 
     public String getUsername() {
         return username;

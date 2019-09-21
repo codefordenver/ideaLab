@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping("/password")
-    public ResponseEntity<?> changePassword(@ModelAttribute UserChangePasswordRequest request) {
+    public ResponseEntity<?> changePassword(@RequestBody UserChangePasswordRequest request) {
         GenericResponse response = userOperations.changePassword(request);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }

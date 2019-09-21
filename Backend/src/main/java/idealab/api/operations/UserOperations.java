@@ -16,18 +16,18 @@ import static idealab.api.exception.ErrorType.VALIDATION_ERROR;
 public class UserOperations {
 
     private EmployeeRepo employeeRepo;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private BCryptPasswordEncoder encoder;
 
-    public UserOperations(EmployeeRepo employeeRepo, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserOperations(EmployeeRepo employeeRepo, BCryptPasswordEncoder encoder) {
         this.employeeRepo = employeeRepo;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.encoder = encoder;
     }
 
     public GenericResponse userSignUp(Employee login) {
         GenericResponse response = new GenericResponse();
 
         try {
-            login.setPassword(bCryptPasswordEncoder.encode(login.getPassword()));
+            login.setPassword(encoder.encode(login.getPassword()));
             employeeRepo.save(login);
         } catch (Exception e) {
             e.printStackTrace();
@@ -73,10 +73,9 @@ public class UserOperations {
         Employee e = employeeRepo.findEmployeeByUsername(request.getUsername());
 
         if(e != null) {
-            String currentPassword = bCryptPasswordEncoder.encode(request.getOldPassword());
-            if(currentPassword.equals(request.getOldPassword())) {
+            if(encoder.matches(request.getOldPassword(), e.getPassword())) {
                 if(request.getNewPassword().equals(request.getConfirmNewPassword())) {
-                    e.setPassword(bCryptPasswordEncoder.encode(request.getNewPassword()));
+                    e.setPassword(encoder.encode(request.getNewPassword()));
                     e = employeeRepo.save(e);
                     response.setSuccess(true);
                     response.setMessage("Password Changed Successfully");
