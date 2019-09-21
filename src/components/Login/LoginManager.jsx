@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import Dropdown from '../globalStyles/Dropdown';
 import RequestService from '../../util/RequestService';
+import AuthContext from '../../AuthContext';
 import './LoginManager.css';
 
 import ideaLABlogo from './../../ideaLABlogo.png';
 
-const LoginManager = () => {
+const LoginManager = (props) => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const locations = [
@@ -17,52 +18,78 @@ const LoginManager = () => {
 	]
 	const [location, setLocation] = useState(locations[0]);
 
-	const thenCallback = function(response){
-		const token = response.headers ? response.headers.authorization : '';
-		if (token) {
-			console.log(token);
-		} else {
-			// Something should happen
-			console.error("Token missing from response headers");
-		};
+	function thenCallback(callbacks) {
+		console.log('thenCallback top layer');
+		return function actualCallback(response) {
+			console.log('thenCallback lower layer');
+			console.log(response);
+
+			const token = response.headers ? response.headers.authorization : '';
+			if (token) {
+			console.log('token');
+				callbacks.setToken(token);
+				callbacks.setAuthenticated(true);
+				console.log(callbacks);
+			} else {
+				// Something should happen
+				// console.error("Token missing from response headers");
+				callbacks.setAuthenticated(false);
+			};
+		}
 	}
 
-	const onSubmit = e => {
+	const onSubmit = (e, callbacks) => {
+		console.log('onSubmit');
 		e.preventDefault();
+
 		const payload = {
 			username: username,
 			password: password
 		};
 
-		RequestService.login(payload, thenCallback, thenCallback);
+		RequestService.login(payload, thenCallback(callbacks), thenCallback(callbacks));
 	};
 
 	return (
-		<div className='container'>
-			<img src={ideaLABlogo} alt='ideaLABLogo' />
-			<h4>3D Printing and Upload Queue</h4>
-			<h2>Sign In</h2>
-			<form onSubmit={e => onSubmit(e)}>
-				<input
-					name='username'
-					placeholder='username'
-					autoComplete='off'
-					autoFocus
-					value={username}
-					onChange={e => setUsername(e.target.value)}
-				/>
-				<Dropdown options={locations} optionsName={'locations'} currentValue={location} />
-				<input
-					name='password'
-					placeholder='password'
-					type='password'
-					autoComplete='off'
-					value={password}
-					onChange={e => setPassword(e.target.value)}
-				/>
-				<button type='submit'>SIGN IN</button>
-			</form>
-		</div>
+		<AuthContext.Consumer>
+			{context => {
+				console.log(context);
+				return (
+					<div className='container'>
+						{context.authenticated}
+						<img src={ideaLABlogo} alt='ideaLABLogo' />
+						<h4>3D Printing and Upload Queue</h4>
+						<h2>Sign In</h2>
+						<form onSubmit={e => {
+							const callbacks = {
+								setToken: context.setToken,
+								setAuthenticated: context.setAuthenticated
+							};
+							onSubmit(e, callbacks)
+						}}>
+							<input
+								name='username'
+								placeholder='username'
+								autoComplete='off'
+								autoFocus
+								value={username}
+								onChange={e => setUsername(e.target.value)}
+							/>
+							<Dropdown options={locations} optionsName={'locations'} currentValue={location} />
+							<input
+								name='password'
+								placeholder='password'
+								type='password'
+								autoComplete='off'
+								value={password}
+								onChange={e => setPassword(e.target.value)}
+							/>
+							<button type='submit'>SIGN IN</button>
+						</form>
+					</div>
+				)
+			}}
+		</AuthContext.Consumer>
 	);
 };
 
