@@ -56,12 +56,12 @@ public enum ErrorType {
             HttpStatus.INTERNAL_SERVER_ERROR
     ),
     USER_NOT_FOUND(
-            9,
+            10,
             "User Not Found",
             HttpStatus.BAD_REQUEST
     ),
     VALIDATION_ERROR(
-            10,
+            11,
             "Validation Error",
             HttpStatus.BAD_REQUEST
     );
