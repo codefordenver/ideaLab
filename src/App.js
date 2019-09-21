@@ -15,10 +15,10 @@ function App() {
   const activeUser = 'admin';
   const sidebar = activeUser ? <SidebarNavigation /> : null;
   const [authenticated, setAuthenticated] = useState(false);
-  const [token, setToken] = useState('');
+  const [token, setToken] = useState(null);
   return (
     <div className="App grid-container">
-      <AuthContext.Provider value={{ authenticated: authenticated, token: null, setAuthenticated: setAuthenticated, setToken: setToken }}>
+      <AuthContext.Provider value={{ authenticated: authenticated, token: token, setAuthenticated: setAuthenticated, setToken: setToken }}>
         <HashRouter>
           {sidebar}
           <Switch>
