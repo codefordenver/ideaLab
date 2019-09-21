@@ -8,14 +8,13 @@ import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.GetAllPrintJobListResponse;
 import idealab.api.dto.response.GetPrintJobResponse;
 import idealab.api.operations.PrintJobOperations;
-
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/printjobs")
@@ -38,6 +37,7 @@ public class PrintJobController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
+    // TODO W.E. : add query param or boolean to model to accept mass upload (ignore 5 file max)
     @PostMapping
     public ResponseEntity<?> printJobNew(@ModelAttribute @Valid PrintJobNewRequest model) {
         GetPrintJobResponse response = printJobOperations.newPrintJob(model);
