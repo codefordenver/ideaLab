@@ -1,4 +1,5 @@
 import React from 'react';
+import AuthContext from './AuthContext';
 import './App.css';
 import { NavLink } from 'react-router-dom';
 
@@ -6,15 +7,22 @@ class SidebarNavigation extends React.Component {
 
     render() {
         return (
-            <nav className={"grid-item-nav"}>
-                <ul className={"navList"}>
-                    <li><NavLink to="/upload" activeClassName={"selected"}>upload</NavLink></li>
-                    <li><NavLink to="/queue" activeClassName={"selected"}>queue</NavLink></li>
-                    <li><NavLink to="/manageaccounts" activeClassName={"selected"}>manage accounts</NavLink></li>
-                    <li><NavLink to="/analytics" activeClassName={"selected"}>analytics</NavLink></li>
-                    <li onClick={this.props.logout}><NavLink to="/login" activeClassName={"selected"}>log out</NavLink></li>
-                </ul>
-            </nav>
+            <AuthContext.Consumer>
+                {context => {
+                    return (
+                        <nav className={"grid-item-nav"}>
+                            <ul className={"navList"}>
+                                <li><NavLink to="/upload" activeClassName={"selected"}>upload</NavLink></li>
+                                <li><NavLink to="/queue" activeClassName={"selected"}>queue</NavLink></li>
+                                <li><NavLink to="/manageaccounts" activeClassName={"selected"}>manage accounts</NavLink></li>
+                                <li><NavLink to="/analytics" activeClassName={"selected"}>analytics</NavLink></li>
+                                <li onClick={this.props.logout}><NavLink to="/login" activeClassName={"selected"}>{context.authenticated ? 'log out' : 'log in'}</NavLink></li>
+                            </ul>
+                        </nav>
+                    )
+                }}
+            </AuthContext.Consumer>
+
         );
     }
 }

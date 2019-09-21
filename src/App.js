@@ -8,7 +8,7 @@ import CreateAccountManager from './components/CreateAccount/CreateAccountManage
 import SidebarNavigation from './SidebarNavigation';
 import PrivateRoute from './components/Routing/PrivateRoute';
 
-import { HashRouter, Switch, Route } from 'react-router-dom';
+import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 
 function App() {
@@ -25,7 +25,22 @@ function App() {
             <PrivateRoute exact path="/queue" component={QueueContainer} />
             <PrivateRoute exact path="/manageaccounts" component={CreateAccountManager} />
             <PrivateRoute exact path="/upload" component={UploadContainer} />
-            <Route path="/login" component={LoginManager} />
+            <Route
+              path="/login"
+              render={props =>
+                authenticated ? (
+                  <Redirect
+                    to={{
+                      pathname: "/queue",
+                      state: { from: props.location }
+                    }}
+                  />
+                ) : (
+                    <LoginManager{...props} />
+                  )
+              }
+            />
+
             <PrivateRoute path='/account' component={CreateAccountManager} />
             <PrivateRoute path="/*" component={UploadContainer} />
           </Switch>
