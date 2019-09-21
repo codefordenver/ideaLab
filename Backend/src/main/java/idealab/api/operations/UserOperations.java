@@ -1,11 +1,16 @@
 package idealab.api.operations;
 
+import idealab.api.dto.request.UserChangePasswordRequest;
 import idealab.api.dto.response.GenericResponse;
+import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.Employee;
 import idealab.api.repositories.EmployeeRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import static idealab.api.exception.ErrorType.USER_NOT_FOUND;
+import static idealab.api.exception.ErrorType.VALIDATION_ERROR;
 
 @Component
 public class UserOperations {
@@ -61,5 +66,30 @@ public class UserOperations {
         }
 
         return response;
+    }
+
+    public GenericResponse changePassword(UserChangePasswordRequest request) {
+        GenericResponse response = new GenericResponse();
+        Employee e = employeeRepo.findEmployeeByUsername(request.getUsername());
+
+        if(e != null) {
+            String currentPassword = bCryptPasswordEncoder.encode(request.getOldPassword());
+            if(currentPassword.equals(request.getOldPassword())) {
+                if(request.getNewPassword().equals(request.getConfirmNewPassword())) {
+                    e.setPassword(bCryptPasswordEncoder.encode(request.getNewPassword()));
+                    e = employeeRepo.save(e);
+                    response.setSuccess(true);
+                    response.setMessage("Password Changed Successfully");
+                    response.setHttpStatus(HttpStatus.ACCEPTED);
+                    return response;
+                } else {
+                    throw new IdeaLabApiException(VALIDATION_ERROR, "New Passwords do not match");
+                }
+            } else {
+                throw new IdeaLabApiException(VALIDATION_ERROR, "Previous Password does not match");
+            }
+        } else {
+            throw new IdeaLabApiException(USER_NOT_FOUND);
+        }
     }
 }

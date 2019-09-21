@@ -54,11 +54,25 @@ public enum ErrorType {
             9,
             "Error Updating File",
             HttpStatus.INTERNAL_SERVER_ERROR
+    ),
+    USER_NOT_FOUND(
+            9,
+            "User Not Found",
+            HttpStatus.BAD_REQUEST
+    ),
+    VALIDATION_ERROR(
+            10,
+            HttpStatus.BAD_REQUEST
     );
 
     ErrorType(int errorCode, String errorMessage, HttpStatus responseStatus){
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
+        this.responseStatus = responseStatus;
+    }
+
+    ErrorType(int errorCode, HttpStatus responseStatus){
+        this.errorCode = errorCode;
         this.responseStatus = responseStatus;
     }
 
