@@ -271,7 +271,7 @@ public class PrintJobOperationsTest {
         PrintJobNewRequest request = new PrintJobNewRequest();
         request.setColor("RED");
         request.setComments("COMMENTS");
-        request.setCustomerFirstName("test2");
+        request.setCustomerFirstName("test");
         request.setCustomerLastName("testLast");
         request.setEmail("test@email.com");
         request.setFile(file);
@@ -325,8 +325,6 @@ public class PrintJobOperationsTest {
         when(dropboxOperations.uploadDropboxFile(printJob.getId(), file)).thenReturn(data);
 
         PrintJobResponse opResponse = operations.newPrintJob(request);
-        System.out.println(opResponse);
-        System.out.println(response);
         assert(opResponse.equals(response));
     }
 

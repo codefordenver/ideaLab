@@ -19,7 +19,7 @@ public class PrintJobResponse extends GenericResponse {
     }
 
     public PrintJobResponse(){}
-    
+
     public PrintJobResponse(String message) {
         this.setMessage(message);
         this.setSuccess(false);
