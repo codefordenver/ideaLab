@@ -1,0 +1,95 @@
+.dropdown {
+	display: flex;
+}
+
+ul {
+    background-color: grey;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.dropdown li {
+	position: relative;
+	/* float: left; */
+	background-color: lightgray;
+}
+
+.dropdown > li {
+	padding: .5em;
+}
+
+.dropdown ul li:not(:first-child) {
+	border-top: 1px solid black;
+}
+
+.dropdown li:hover {
+	background-color: lightblue;
+}
+
+.dropdown li > ul {
+	/* position: absolute; */
+	left:-999em;
+	width:100%;
+	top:0;
+	transition:top .5s ease;
+	display: flex;
+	flex-direction: column;
+	background-color: grey;
+}
+
+.dropdown ul ul {
+	transition:transform .5s ease, opacity .3s ease;
+	transform:translateX(0);
+	opacity:0;
+}
+
+.dropdown a {
+	text-decoration: none;
+	display: block;
+	padding: 5px 10px 5px 10px;
+	text-decoration: none;	
+	white-space: nowrap;
+	width: max-content;
+	background-color: inherit;
+}
+
+.dropdown a:hover {
+	background: #ccc;
+}
+
+.dropdown li.open > ul {
+	left:0;
+	top:100%;
+	position: absolute;
+	background-color: lightgray;
+	width: max-content;
+}
+
+.dropdown li li:hover > ul {
+	left:0;
+	transform:translateX(100%);
+	top:0;
+	opacity:1;
+}
+
+.dropdown ul li {
+	/* float: none; */
+}
+
+.dropdown li:hover > a {
+	background: #ccc;
+}
+#dropdown ul li {
+	border-top: none;
+}
+
+.dropdown li.visually-hidden > ul {
+    position: absolute !important;
+    height: 1px; 
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px, 1px, 1px, 1px);
+    white-space: nowrap; /* added line */
+}
