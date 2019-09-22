@@ -269,7 +269,7 @@ public class PrintJobOperationsTest {
         MultipartFile file = new MockMultipartFile("Something", a);
 
         PrintJobNewRequest request = new PrintJobNewRequest();
-        request.setColor("RED2");
+        request.setColor("RED");
         request.setComments("COMMENTS");
         request.setCustomerFirstName("test2");
         request.setCustomerLastName("testLast");
@@ -293,7 +293,7 @@ public class PrintJobOperationsTest {
 
         Map<String, String> data = new HashMap<>();
         data.put("filePath", "DROPBOX_PATH");
-        data.put("sharableLink", "http://testlink.com2");
+        data.put("sharableLink", "http://testlink.com");
 
         PrintJob printJob = new PrintJob();
         printJob.setColorTypeId(color);
@@ -319,7 +319,7 @@ public class PrintJobOperationsTest {
 
         when(emailHashRepo.findByEmailHash(any())).thenReturn(emailHash);
         when(customerInfoRepo.findByEmailHashId(any())).thenReturn(customerInfo);
-//        when(colorTypeRepo.findByColor(any())).thenReturn(color);
+        when(colorTypeRepo.findByColor(any())).thenReturn(color);
         when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
         when(printJobRepo.save(any())).thenReturn(printJob);
         when(dropboxOperations.uploadDropboxFile(printJob.getId(), file)).thenReturn(data);
