@@ -33,7 +33,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter { // TODO: also i 
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
                 //.antMatchers(SIGN_UP_URL, LOGIN_URL).permitAll()
-                .antMatchers(HttpMethod.DELETE).hasRole(String.valueOf(EmployeeRole.ADMIN))
+                .antMatchers(HttpMethod.DELETE)
+                .hasRole(String.valueOf(EmployeeRole.ADMIN))
                 //.anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))

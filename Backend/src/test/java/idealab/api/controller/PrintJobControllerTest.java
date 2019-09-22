@@ -5,9 +5,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import idealab.api.dto.request.PrintJobDeleteRequest;
 import idealab.api.dto.request.PrintJobUpdateRequest;
 import idealab.api.dto.response.GenericResponse;
-import idealab.api.dto.response.GetAllPrintJobListResponse;
-import idealab.api.dto.response.GetAllPrintJobResponse;
-import idealab.api.dto.response.GetPrintJobResponse;
+import idealab.api.dto.response.PrintJobResponse;
 import idealab.api.model.*;
 import idealab.api.operations.PrintJobOperations;
 import org.junit.Before;
@@ -25,7 +23,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -75,7 +72,7 @@ public class PrintJobControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(inputJson)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().isAccepted())
                 .andReturn().getResponse().getContentAsString();
 
         GenericResponse returnedResponse = stringToGenericResponse(returnJson);
@@ -129,7 +126,7 @@ public class PrintJobControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(inputJson)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is2xxSuccessful())
+                .andExpect(status().isAccepted())
                 .andReturn().getResponse().getContentAsString();
 
         GenericResponse returnedResponse = stringToGenericResponse(returnJson);
@@ -188,7 +185,7 @@ public class PrintJobControllerTest {
 
         List<PrintJob> printJobList = Arrays.asList(printJob);
 
-        GetPrintJobResponse expectedResponse = new GetPrintJobResponse();
+        PrintJobResponse expectedResponse = new PrintJobResponse();
         expectedResponse.setSuccess(true);
         expectedResponse.setMessage("Successfully returned all print jobs");
         expectedResponse.setData(printJobList);
@@ -207,7 +204,7 @@ public class PrintJobControllerTest {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
-        GetPrintJobResponse actualResponse = mapper.readValue(jsonString, GetPrintJobResponse.class);
+        PrintJobResponse actualResponse = mapper.readValue(jsonString, PrintJobResponse.class);
 
         int actualId = actualResponse.getData().get(0)
                 .getId();
@@ -236,13 +233,7 @@ public class PrintJobControllerTest {
          printJob.setEmployeeId(new Employee());
          printJob.setId(1);
 
-         GetAllPrintJobResponse getAllPrintJobResponse = new GetAllPrintJobResponse(printJob);
-
-         List<GetAllPrintJobResponse> printJobResponses = new ArrayList<GetAllPrintJobResponse>();
-
-         printJobResponses.add(getAllPrintJobResponse);
-
-         GetAllPrintJobListResponse expectedResponse = new GetAllPrintJobListResponse(printJobResponses);
+         PrintJobResponse expectedResponse = new PrintJobResponse(printJob);
 
          Mockito.when(printJobOperations.getDeletablePrintJobs()).thenReturn(expectedResponse);
 
@@ -251,20 +242,20 @@ public class PrintJobControllerTest {
                  MockMvcRequestBuilders.get("/api/printjobs/deletable")
                          .accept(MediaType.APPLICATION_JSON)
          )
-         .andExpect(status().isOk())
+         .andExpect(status().isAccepted())
          .andReturn().getResponse().getContentAsString();
 
          ObjectMapper mapper = new ObjectMapper();
          mapper.registerModule(new JavaTimeModule());
 
-         GetAllPrintJobListResponse actualResponse = mapper.readValue(jsonString, GetAllPrintJobListResponse.class);
+         PrintJobResponse actualResponse = mapper.readValue(jsonString, PrintJobResponse.class);
 
-         int actualId = actualResponse.getPrintJobs()
+         int actualId = actualResponse.getData()
                  .get(0)
                  .getId();
 
          int expectedId = expectedResponse
-                 .getPrintJobs()
+                 .getData()
                  .get(0)
                  .getId();
 
