@@ -20,17 +20,22 @@ public class PrintJobResponse extends GenericResponse {
 
     public PrintJobResponse() {
         this.setSuccess(false);
-        this.setMessage("Could not return print jobs");
         this.setHttpStatus(HttpStatus.BAD_REQUEST);
     }
 
-    public PrintJobResponse(PrintJob printJob){
-      this.setSuccess(true);
-      this.setMessage("Successfully returned print job");
-      this.setHttpStatus(HttpStatus.ACCEPTED);
+    public PrintJobResponse(String message) {
+        this.setMessage(message);
+        this.setSuccess(false);
+        this.setHttpStatus(HttpStatus.BAD_REQUEST);
+    }
 
-      List<PrintJob> printJobData = Arrays.asList(printJob);
-      this.setData(printJobData);
+    public PrintJobResponse(PrintJob printJob) {
+        this.setSuccess(true);
+        this.setMessage("Successfully returned print job");
+        this.setHttpStatus(HttpStatus.ACCEPTED);
+
+        List<PrintJob> printJobData = Arrays.asList(printJob);
+        this.setData(printJobData);
     }
 
     @Override

@@ -43,10 +43,7 @@ public class PrintJobOperations {
     }
 
     public PrintJobResponse newPrintJob(PrintJobNewRequest printJobNewRequest) {
-        PrintJobResponse response = new PrintJobResponse();
-        response.setSuccess(false);
-        response.setMessage("File could not be uploaded");
-        response.setHttpStatus(HttpStatus.BAD_REQUEST);
+        PrintJobResponse response = new PrintJobResponse("File could not be uploaded");
 
         if(printJobNewRequest.getFile() == null){
             response.setMessage("No file was submitted.  Please attach a file to the request");
@@ -117,7 +114,7 @@ public class PrintJobOperations {
     }
 
     public PrintJobResponse updateModel(Integer printId, PrintModelUpdateRequest model){
-        PrintJobResponse response = new PrintJobResponse();
+        PrintJobResponse response = new PrintJobResponse("Model could not be updated");
 
         MultipartFile file = model.getFile();
 
@@ -232,7 +229,7 @@ public class PrintJobOperations {
     }
 
     public PrintJobResponse getAllPrintJobs() {
-        PrintJobResponse response = new PrintJobResponse();
+        PrintJobResponse response = new PrintJobResponse("Could not get all print jobs");
 
         List<PrintJob> printJobs = printJobRepo.findAll();
 
@@ -250,7 +247,7 @@ public class PrintJobOperations {
 
 
     public PrintJobResponse getDeletablePrintJobs() {
-        PrintJobResponse response = new PrintJobResponse();
+        PrintJobResponse response = new PrintJobResponse("Could not get deletable print jobs");
         List<Status> deletableStatuses = Arrays.asList(new Status[]{
             Status.PENDING_REVIEW,
             Status.FAILED,
