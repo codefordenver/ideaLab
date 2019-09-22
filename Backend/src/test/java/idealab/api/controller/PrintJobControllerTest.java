@@ -68,7 +68,7 @@ public class PrintJobControllerTest {
 
         when(printJobOperations.updatePrintJobStatus(printJobId, printJobUpdateRequest)).thenReturn(genericResponse);
 
-        String returnJson = mockMvc.perform(put("/api/printjobs/3/status")
+        String returnJson = mockMvc.perform(put("/api/print-jobs/3/status")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(inputJson)
                 .accept(MediaType.APPLICATION_JSON))
@@ -96,7 +96,7 @@ public class PrintJobControllerTest {
 
         when(printJobOperations.updatePrintJobStatus(printJobId, printJobUpdateRequest)).thenReturn(genericResponse);
 
-        String returnJson = mockMvc.perform(put("/api/printjobs/3/status")
+        String returnJson = mockMvc.perform(put("/api/print-jobs/3/status")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(inputJson)
                 .accept(MediaType.APPLICATION_JSON))
@@ -122,7 +122,7 @@ public class PrintJobControllerTest {
 
         when(printJobOperations.deletePrintJob(printJobDeleteRequest)).thenReturn(genericResponse);
 
-        String returnJson = mockMvc.perform(delete("/api/printjobs")
+        String returnJson = mockMvc.perform(delete("/api/print-jobs")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(inputJson)
                 .accept(MediaType.APPLICATION_JSON))
@@ -148,7 +148,7 @@ public class PrintJobControllerTest {
 
         when(printJobOperations.deletePrintJob(printJobDeleteRequest)).thenReturn(genericResponse);
 
-        String returnJson = mockMvc.perform(delete("/api/printjobs")
+        String returnJson = mockMvc.perform(delete("/api/print-jobs")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(inputJson)
                 .accept(MediaType.APPLICATION_JSON))
@@ -195,7 +195,7 @@ public class PrintJobControllerTest {
 
         // act
         String jsonString = mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/printjobs")
+                MockMvcRequestBuilders.get("/api/print-jobs")
                         .accept(MediaType.APPLICATION_JSON)
         )
         .andExpect(status().isAccepted())
@@ -239,7 +239,7 @@ public class PrintJobControllerTest {
 
          // act
          String jsonString = mockMvc.perform(
-                 MockMvcRequestBuilders.get("/api/printjobs/deletable")
+                 MockMvcRequestBuilders.get("/api/print-jobs/deletable")
                          .accept(MediaType.APPLICATION_JSON)
          )
          .andExpect(status().isAccepted())
