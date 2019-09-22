@@ -18,11 +18,8 @@ public class PrintJobResponse extends GenericResponse {
         this.data = data;
     }
 
-    public PrintJobResponse() {
-        this.setSuccess(false);
-        this.setHttpStatus(HttpStatus.BAD_REQUEST);
-    }
-
+    public PrintJobResponse(){}
+    
     public PrintJobResponse(String message) {
         this.setMessage(message);
         this.setSuccess(false);
@@ -30,8 +27,8 @@ public class PrintJobResponse extends GenericResponse {
     }
 
     public PrintJobResponse(PrintJob printJob) {
-        this.setSuccess(true);
         this.setMessage("Successfully returned print job");
+        this.setSuccess(true);
         this.setHttpStatus(HttpStatus.ACCEPTED);
 
         List<PrintJob> printJobData = Arrays.asList(printJob);
