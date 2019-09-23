@@ -68,3 +68,14 @@
     left: 0%;
     transform: translate(75%,-50%)
 }
+
+.printAdditionalInfo {
+	display: flex;
+	flex-direction: row;
+	justify-content: end;
+}
+
+.toggleArrow {
+	position: fixed;
+	margin-left: 5em;
+}

@@ -3,22 +3,23 @@ import './PrintCardContainer.css';
 import StatusDropdown from './components/StatusDropdown';
 import PrintDateAdded from './components/PrintDateAdded';
 import { CirclePicker } from 'react-color';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { FiSave } from 'react-icons/fi';
 
 const PrintCardContainer = ({data}) => {
     const [isToggled,setIsToggled] = useState(false);
-    const [circleColor, setcircleColor] = useState(data.color);
-	const [hoverState, setHoverState] = useState(false);
-	const dummyColors = ['red', 'blue', 'green'];
+    const [card, updateCard] = useState(data);
+    const [hoverState, setHoverState] = useState(false);
+    
+    const dummyColors = ['red', 'blue', 'green', 'black'];
 
 	const colorCircleStyle = {
-		backgroundColor: `${circleColor}`
+		backgroundColor: `${card.color}`
 	};
 
-	const handleChangeComplete = color => {
-		console.log('New color will be', color);
-		setcircleColor(color.hex);
+	const handleColorChange = hue => {
+        updateCard(prevState => ({...prevState, color: hue.hex}));
 	};
-
 	const handleMouseEnter = () => {
 		setHoverState(true);
 	};
@@ -29,7 +30,16 @@ const PrintCardContainer = ({data}) => {
 
     const dropItDown = () => {
         setIsToggled(!isToggled);
-	};
+    };
+
+    const saveChanges = () => {
+        //POST request goes here! placeholder:
+        alert('saving changes');
+    }
+    
+    const toggleArrow = isToggled ? <IoIosArrowUp /> : <IoIosArrowDown />;
+
+    const saveButton = data === card ? null : <div onClick={saveChanges}><FiSave /></div>;
 	
     const secondRowContent = isToggled ? (
         <div className='printCardContainerTop'>
@@ -56,9 +66,10 @@ const PrintCardContainer = ({data}) => {
 					{hoverState ? (
 						<div className='colorPickerContainer'>
 							<CirclePicker
-								onChangeComplete={handleChangeComplete}
-								color={circleColor}
-								colors={dummyColors}
+								onChangeComplete={handleColorChange}
+								color={card.color}
+                                colors={dummyColors}
+                                width='100px'
 							/>
 						</div>
 					) : (
@@ -72,8 +83,8 @@ const PrintCardContainer = ({data}) => {
                     <StatusDropdown data={data}/>
                 </div>
                 <div className='printAdditionalInfo col20'>
-                    <button onClick={dropItDown} className='dropButton'>Drop</button>
-                    {/* <img alt='arrLogo'/> */}
+                    {saveButton}
+                    <div className='toggleArrow' onClick={dropItDown}>{toggleArrow}</div>
                 </div>
             </div>
             <div className='printCardContainerBottom'>

@@ -35,7 +35,6 @@ const QueueContainer = () => {
 		});
 		setFilteredData(queuedCards);
 		setStringedValues(searchValues);
-		console.log(queuedCards);
 	}, [data, statusView]);
 
 	const filterByTerm = searchTerm => {
