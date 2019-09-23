@@ -3,7 +3,7 @@ import './PrintCardContainer.css';
 import StatusDropdown from './components/StatusDropdown';
 import PrintDateAdded from './components/PrintDateAdded';
 import { CirclePicker } from 'react-color';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { IoIosArrowDown, IoIosArrowBack } from 'react-icons/io';
 import { FiSave } from 'react-icons/fi';
 
 const PrintCardContainer = ({data}) => {
@@ -26,7 +26,16 @@ const PrintCardContainer = ({data}) => {
 
 	const handleMouseLeave = () => {
 		setHoverState(false);
-	};
+    };
+    
+    const updateComment = (event) => {
+        event.persist();
+        updateCard(prevState => ({...prevState, comments: event.target.value}));
+    }
+
+    const updatePrintingStatus = (event) => {
+        updateCard(prevState => ({...prevState, status: event.target.value}));
+    }
 
     const dropItDown = () => {
         setIsToggled(!isToggled);
@@ -37,18 +46,17 @@ const PrintCardContainer = ({data}) => {
         alert('saving changes');
     }
     
-    const toggleArrow = isToggled ? <IoIosArrowUp /> : <IoIosArrowDown />;
+    const toggleArrow = isToggled ? <IoIosArrowDown /> : <IoIosArrowBack />;
 
-    const saveButton = data === card ? null : <div onClick={saveChanges}><FiSave /></div>;
+    const saveButton = data === card ? null : <div className='saveIcon' onClick={saveChanges}><FiSave /></div>;
 	
     const secondRowContent = isToggled ? (
         <div className='printCardContainerTop'>
             <p className='col20'>{data.name}</p>
             <p className='col20'>Stuff</p>
-            <textarea className='col20'/>
+            <textarea onChange={updateComment} name='comments' value={card.comments} className='commentSection col20'/>
         </div> 
         ) : null;
-
     return (
         <div className='printCardContainer'>
             <div className='printCardContainerTop'>
@@ -80,7 +88,7 @@ const PrintCardContainer = ({data}) => {
                     <PrintDateAdded data={data}/>
                 </div>
                 <div>
-                    <StatusDropdown data={data}/>
+                    <StatusDropdown currentStatus={card.status} statusChanged={updatePrintingStatus} />
                 </div>
                 <div className='printAdditionalInfo col20'>
                     {saveButton}

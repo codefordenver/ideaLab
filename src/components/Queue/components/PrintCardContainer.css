@@ -69,6 +69,10 @@
     transform: translate(75%,-50%)
 }
 
+.toggleArrow:hover, .saveButton:hover {
+	cursor: pointer;
+}
+
 .printAdditionalInfo {
 	display: flex;
 	flex-direction: row;

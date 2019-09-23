@@ -1,16 +1,15 @@
-import React, {useState} from 'react'
+import React from 'react'
 import './StatusDropdown.css'
 
-const StatusDropdown = ({data}) => {
-    const [printStatus,setPrintStatus] = useState(data.status);
-
+const StatusDropdown = ({currentStatus, statusChanged}) => {
     return (
         <div className='statusDropdown'>
-            <select className='statusDropdownSelect' name='printStatus' defaultValue={printStatus}>
-                <option>PRINTING</option>
-                <option>QUEUEING</option>
-                <option>FAILED</option>
-                <option>FAILED AGAIN</option>
+            <select className='statusDropdownSelect' name='status' defaultValue={currentStatus} onChange={statusChanged}>
+                <option value='QUEUEING'>QUEUEING</option>
+                <option value='PRINTING'>PRINTING</option>
+                <option value='SUCCESS'>SUCCESS</option>
+                <option value='FAILED'>FAILED</option>
+                <option value='FAILED_AGAIN'>FAILED AGAIN</option>
             </select>
         </div>
     )
