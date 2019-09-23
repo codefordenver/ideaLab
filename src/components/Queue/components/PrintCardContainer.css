@@ -11,9 +11,19 @@
 	align-items: center;
 }
 
+.printCardContainer > div {
+	padding: 10px;
+    margin: 5px;
+    text-align: left;
+    width: 100%;
+    height: fit-content;
+    display: flex;
+}
+
 .colorContainer {
 	width: 10em;
-	height: 3em;
+	height: 2em;
+	padding: 0.5em 0;
 	justify-content: space-between;
 	align-items: center;
 	display: flex;
@@ -35,17 +45,16 @@
 
 .submitDate {
 	margin-right: 5em;
-
+	text-align: center;
 }
 
 .printCardContainerTop {
-    padding: 10px;
-    margin: 5px;
-    text-align: left;
-    width: 100%;
-    height: fit-content;
-    display: flex;
     justify-content: center;
+}
+
+.printCardContainerBottom {
+	position: relative;
+	justify-content: space-between;
 }
 
 .printCardContainer .col10 {
@@ -69,17 +78,30 @@
     transform: translate(75%,-50%)
 }
 
-.toggleArrow:hover, .saveButton:hover {
+.toggleArrow:hover, .saveButton:hover, .emailRecipient:hover {
 	cursor: pointer;
 }
 
 .printAdditionalInfo {
 	display: flex;
 	flex-direction: row;
-	justify-content: end;
+	justify-content: flex-end;
+	align-items: center;
 }
 
-.toggleArrow {
-	position: fixed;
-	margin-left: 5em;
+.toggleArrow, .saveIcon {
+	transform: scale(1.5);
+	padding-right: 3em;
+}
+
+.emailRecipient {
+	text-decoration: underline;
+	margin-left: 4em;
+}
+
+.commentSection {
+	margin-right: 18em;
+	width: 38%;
+	height: 100%;
+	border-radius: 5px;
 }

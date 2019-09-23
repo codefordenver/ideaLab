@@ -4,7 +4,7 @@ import StatusDropdown from './components/StatusDropdown';
 import PrintDateAdded from './components/PrintDateAdded';
 import { CirclePicker } from 'react-color';
 import { IoIosArrowDown, IoIosArrowBack } from 'react-icons/io';
-import { FiSave } from 'react-icons/fi';
+import { FiSave, FiMail } from 'react-icons/fi';
 
 const PrintCardContainer = ({data}) => {
     const [isToggled,setIsToggled] = useState(false);
@@ -34,6 +34,7 @@ const PrintCardContainer = ({data}) => {
     }
 
     const updatePrintingStatus = (event) => {
+        event.persist();
         updateCard(prevState => ({...prevState, status: event.target.value}));
     }
 
@@ -51,10 +52,9 @@ const PrintCardContainer = ({data}) => {
     const saveButton = data === card ? null : <div className='saveIcon' onClick={saveChanges}><FiSave /></div>;
 	
     const secondRowContent = isToggled ? (
-        <div className='printCardContainerTop'>
-            <p className='col20'>{data.name}</p>
-            <p className='col20'>Stuff</p>
-            <textarea onChange={updateComment} name='comments' value={card.comments} className='commentSection col20'/>
+        <div className='printCardContainerBottom'>
+            <div className='emailRecipient col20'>{data.name} <FiMail /></div>
+            <textarea onChange={updateComment} name='comments' value={card.comments} className='commentSection'/>
         </div> 
         ) : null;
     return (
@@ -95,9 +95,7 @@ const PrintCardContainer = ({data}) => {
                     <div className='toggleArrow' onClick={dropItDown}>{toggleArrow}</div>
                 </div>
             </div>
-            <div className='printCardContainerBottom'>
-                    {secondRowContent}
-            </div>         
+            {secondRowContent}        
         </div>
   );
 };
