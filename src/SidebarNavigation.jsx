@@ -16,7 +16,7 @@ class SidebarNavigation extends React.Component {
                                 <li><NavLink to="/queue" activeClassName={"selected"}>queue</NavLink></li>
                                 <li><NavLink to="/manageaccounts" activeClassName={"selected"}>manage accounts</NavLink></li>
                                 <li><NavLink to="/analytics" activeClassName={"selected"}>analytics</NavLink></li>
-                                <li onClick={this.props.logout}><NavLink to="/login" activeClassName={"selected"}>{context.authenticated ? 'log out' : 'log in'}</NavLink></li>
+                                <li onClick={context.authenticated ?  this.props.logout : null}><NavLink to="/login" activeClassName={"selected"}>{context.authenticated ? 'log out' : 'log in'}</NavLink></li>
                             </ul>
                         </nav>
                     )

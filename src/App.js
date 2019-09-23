@@ -12,15 +12,16 @@ import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 
 function App() {
-  const activeUser = 'admin';
-  const sidebar = activeUser ? <SidebarNavigation /> : null;
   const [authenticated, setAuthenticated] = useState(false);
   const [token, setToken] = useState(null);
   return (
     <div className="App grid-container">
       <AuthContext.Provider value={{ authenticated: authenticated, token: token, setAuthenticated: setAuthenticated, setToken: setToken }}>
         <HashRouter>
-          {sidebar}
+          <SidebarNavigation logout={() => {
+            setToken('');
+            setAuthenticated(false);
+          }} />
           <Switch>
             <PrivateRoute exact path="/queue" component={QueueContainer} />
             <PrivateRoute exact path="/manageaccounts" component={CreateAccountManager} />
