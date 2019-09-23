@@ -76,7 +76,7 @@ const RequestService = {
   newPrintJob(payload, thenCallback, catchCallback) {
     const backendInstance = generateApiInstance();
     backendInstance
-      .post(backendUrl + '/api/printjobs', payload)
+      .post(backendUrl + '/api/print-jobs', payload)
       .then(thenCallback)
       .catch(catchCallback);
   },
