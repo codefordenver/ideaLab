@@ -3,6 +3,8 @@ import dummyData from '../dummyData';
 import PrintCardContainer from './components/PrintCardContainer';
 import './QueueContainer.css';
 import SearchBar from './components/SearchBar';
+import MenuBar from '../globalStyles/MenuBar';
+import { MenuTabs } from '../globalStyles/MenuTabs';
 
 const QueueContainer = () => {
 	const [data] = useState(dummyData);
@@ -49,20 +51,14 @@ const QueueContainer = () => {
 		<PrintCardContainer data={el} key={i} />
 	));
 
+	const setStatus = (view) => {
+		setStatusView(view);
+	}
+
 	return (
 		<div>
 			<div className='queueFilterInfo'>
-				<ul className='statusMenu'>
-					<li className={statusView === 'QUEUEING' ? 'selectedTab' : ''}>
-						<button onClick={() => setStatusView('QUEUEING')}>Queue</button>
-					</li>
-					<li className={statusView === 'DONE' ? 'selectedTab' : ''}>
-						<button onClick={() => setStatusView('DONE')}>Recently Completed</button>
-					</li>
-					<li className={statusView === 'PRINTING' ? 'selectedTab' : ''}>
-						<button onClick={() => setStatusView('PRINTING')}>In Progress</button>
-					</li>
-				</ul>
+				<MenuBar selectedTab={statusView} tabOptions={MenuTabs.QueueTabs} setView={setStatus} />
 				<SearchBar filterByTerm={filterByTerm} />
 			</div>
 			<ul className='queueBanner'>
