@@ -1,14 +1,26 @@
 package idealab.api.dto.request;
 
+import javax.validation.constraints.NotBlank;
+
+import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
 public class PrintJobNewRequest {
 
+    @NotBlank
     private String customerFirstName;
+
+    @NotBlank
     private String customerLastName;
+
+    @NotBlank
     private String email;
+
+    @NotBlank
     private String color;
+
     private String comments;
+
     private MultipartFile file;
 
     public String getEmail() {

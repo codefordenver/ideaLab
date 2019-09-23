@@ -1,0 +1,3 @@
+[submodule "idealabFrontend"]
+	path = idealabFrontend
+	url = https://github.com/ethoreson/idealabFrontend

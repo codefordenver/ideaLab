@@ -1,5 +1,6 @@
 package idealab.api.security;
 
+import idealab.api.model.EmployeeRole;
 import idealab.api.repositories.EmployeeRepo;
 import idealab.api.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +18,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurity extends WebSecurityConfigurerAdapter {
+public class WebSecurity extends WebSecurityConfigurerAdapter { // TODO: also i think it's better name it as WebSecurityConfigurer since it's duty configure security related operations.
     private UserDetailsServiceImpl userDetailsService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private EmployeeRepo employeeRepo;
@@ -32,7 +33,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
                 //.antMatchers(SIGN_UP_URL, LOGIN_URL).permitAll()
-                .antMatchers(HttpMethod.DELETE).hasRole("Admin")
+                .antMatchers(HttpMethod.DELETE).hasRole(String.valueOf(EmployeeRole.ADMIN))
                 //.anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))

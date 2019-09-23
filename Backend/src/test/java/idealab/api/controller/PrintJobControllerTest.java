@@ -1,11 +1,14 @@
 package idealab.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import idealab.api.dto.request.PrintJobDeleteRequest;
 import idealab.api.dto.request.PrintJobUpdateRequest;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.GetAllPrintJobListResponse;
 import idealab.api.dto.response.GetAllPrintJobResponse;
+import idealab.api.dto.response.GetPrintJobResponse;
+import idealab.api.model.*;
 import idealab.api.operations.PrintJobOperations;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,7 +24,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static idealab.api.util.TestUtil.stringToGenericResponse;
@@ -36,8 +40,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(MockitoJUnitRunner.class)
 @EnableAutoConfiguration
 public class PrintJobControllerTest {
-
-    @Autowired
     private MockMvc mockMvc;
 
     @Mock
@@ -47,7 +49,7 @@ public class PrintJobControllerTest {
     private PrintJobController controller;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(){
         mockMvc = MockMvcBuilders
                 .standaloneSetup(controller).build();
     }
@@ -67,9 +69,9 @@ public class PrintJobControllerTest {
 
         String inputJson = printJobRequestAsJsonString(printJobUpdateRequest);
 
-        when(printJobOperations.updatePrintJob(printJobId, printJobUpdateRequest)).thenReturn(genericResponse);
+        when(printJobOperations.updatePrintJobStatus(printJobId, printJobUpdateRequest)).thenReturn(genericResponse);
 
-        String returnJson = mockMvc.perform(put("/api/printjobs/3/status")
+        String returnJson = mockMvc.perform(put("/api/print-jobs/3/status")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(inputJson)
                 .accept(MediaType.APPLICATION_JSON))
@@ -95,9 +97,9 @@ public class PrintJobControllerTest {
 
         String inputJson = printJobRequestAsJsonString(printJobUpdateRequest);
 
-        when(printJobOperations.updatePrintJob(printJobId, printJobUpdateRequest)).thenReturn(genericResponse);
+        when(printJobOperations.updatePrintJobStatus(printJobId, printJobUpdateRequest)).thenReturn(genericResponse);
 
-        String returnJson = mockMvc.perform(put("/api/printjobs/3/status")
+        String returnJson = mockMvc.perform(put("/api/print-jobs/3/status")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(inputJson)
                 .accept(MediaType.APPLICATION_JSON))
@@ -123,7 +125,7 @@ public class PrintJobControllerTest {
 
         when(printJobOperations.deletePrintJob(printJobDeleteRequest)).thenReturn(genericResponse);
 
-        String returnJson = mockMvc.perform(delete("/api/printjobs")
+        String returnJson = mockMvc.perform(delete("/api/print-jobs")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(inputJson)
                 .accept(MediaType.APPLICATION_JSON))
@@ -149,7 +151,7 @@ public class PrintJobControllerTest {
 
         when(printJobOperations.deletePrintJob(printJobDeleteRequest)).thenReturn(genericResponse);
 
-        String returnJson = mockMvc.perform(delete("/api/printjobs")
+        String returnJson = mockMvc.perform(delete("/api/print-jobs")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(inputJson)
                 .accept(MediaType.APPLICATION_JSON))
@@ -160,7 +162,7 @@ public class PrintJobControllerTest {
         assert (returnedResponse.equals(genericResponse));
     }
 
-    public String printJobRequestAsJsonString(Object obj) {
+    private String printJobRequestAsJsonString(Object obj) {
         try {
             final ObjectMapper mapper = new ObjectMapper();
             return mapper.writeValueAsString(obj);
@@ -173,45 +175,100 @@ public class PrintJobControllerTest {
     @Test
     public void getAllPrintJobs() throws Exception {
         // given
-        GetAllPrintJobResponse printJob = new GetAllPrintJobResponse(1, null, null, null,
-                null, null, null, null);
-        List<GetAllPrintJobResponse> printJobResponses = new ArrayList<GetAllPrintJobResponse>();
-        printJobResponses.add(printJob);
-        GetAllPrintJobListResponse expectedResponse = new GetAllPrintJobListResponse(printJobResponses);
+        PrintJob printJob = new PrintJob();
+
+        printJob.setColorTypeId(new ColorType("Red"));
+        printJob.setComments("comments");
+        printJob.setCreatedAt(LocalDateTime.now());
+        printJob.setEmailHashId(new EmailHash());
+        printJob.setQueueId(new Queue(1));
+        printJob.setStatus(Status.ARCHIVED);
+        printJob.setEmployeeId(new Employee());
+        printJob.setId(1);
+
+        List<PrintJob> printJobList = Arrays.asList(printJob);
+
+        GetPrintJobResponse expectedResponse = new GetPrintJobResponse();
+        expectedResponse.setSuccess(true);
+        expectedResponse.setMessage("Successfully returned all print jobs");
+        expectedResponse.setData(printJobList);
+        expectedResponse.setHttpStatus(HttpStatus.ACCEPTED);
 
         Mockito.when(printJobOperations.getAllPrintJobs()).thenReturn(expectedResponse);
 
         // act
         String jsonString = mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/printjobs")
+                MockMvcRequestBuilders.get("/api/print-jobs")
                         .accept(MediaType.APPLICATION_JSON)
         )
-        .andExpect(status().isOk())
+        .andExpect(status().isAccepted())
         .andReturn().getResponse().getContentAsString();
 
         ObjectMapper mapper = new ObjectMapper();
-        GetAllPrintJobListResponse actualResponse = mapper.readValue(jsonString, GetAllPrintJobListResponse.class);
+        mapper.registerModule(new JavaTimeModule());
 
-        int actualId = actualResponse.getPrintJobs().get(0).getId();
-        int expectedId = expectedResponse.getPrintJobs().get(0).getId();
+        GetPrintJobResponse actualResponse = mapper.readValue(jsonString, GetPrintJobResponse.class);
+
+        int actualId = actualResponse.getData().get(0)
+                .getId();
+
+        int expectedId = expectedResponse
+                .getData()
+                .get(0)
+                .getId();
 
         // assert
         assertEquals(expectedId, actualId);
     }
 
-    @Test
-    public void getAllPrintJobs_shouldReturn_404_when_thereIsNone() throws Exception {
-        // given
-        Mockito.when(printJobOperations.getAllPrintJobs()).thenReturn(null);
-        int expectedResponseStatus = HttpStatus.BAD_REQUEST.value();
 
-        // act
-        int actualResponseStatus = mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/printjobs")
-                        .accept(MediaType.APPLICATION_JSON)
-        ).andReturn().getResponse().getStatus();
+     @Test
+     public void getDeletablePrintJobs() throws Exception {
+         // given
+         PrintJob printJob = new PrintJob();
 
-        // assert
-        assertEquals(expectedResponseStatus, actualResponseStatus);
-    }
+         printJob.setColorTypeId(new ColorType("Red"));
+         printJob.setComments("comments");
+         printJob.setCreatedAt(LocalDateTime.now());
+         printJob.setEmailHashId(new EmailHash());
+         printJob.setQueueId(new Queue(1));
+         printJob.setStatus(Status.PENDING_REVIEW);
+         printJob.setEmployeeId(new Employee());
+         printJob.setId(1);
+
+         GetAllPrintJobResponse getAllPrintJobResponse = new GetAllPrintJobResponse(printJob);
+
+         List<GetAllPrintJobResponse> printJobResponses = new ArrayList<GetAllPrintJobResponse>();
+
+         printJobResponses.add(getAllPrintJobResponse);
+
+         GetAllPrintJobListResponse expectedResponse = new GetAllPrintJobListResponse(printJobResponses);
+
+         Mockito.when(printJobOperations.getDeletablePrintJobs()).thenReturn(expectedResponse);
+
+         // act
+         String jsonString = mockMvc.perform(
+                 MockMvcRequestBuilders.get("/api/print-jobs/deletable")
+                         .accept(MediaType.APPLICATION_JSON)
+         )
+         .andExpect(status().isOk())
+         .andReturn().getResponse().getContentAsString();
+
+         ObjectMapper mapper = new ObjectMapper();
+         mapper.registerModule(new JavaTimeModule());
+
+         GetAllPrintJobListResponse actualResponse = mapper.readValue(jsonString, GetAllPrintJobListResponse.class);
+
+         int actualId = actualResponse.getPrintJobs()
+                 .get(0)
+                 .getId();
+
+         int expectedId = expectedResponse
+                 .getPrintJobs()
+                 .get(0)
+                 .getId();
+
+         // assert
+         assertEquals(expectedId, actualId);
+     }
 }
