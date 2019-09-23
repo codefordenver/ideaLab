@@ -66,10 +66,12 @@ public class WebSecurity extends WebSecurityConfigurerAdapter { // TODO: also i 
         methods.add("HEAD");
         methods.add("GET");
         methods.add("POST");
+        methods.add("OPTIONS");
         methods.add("PUT");
         methods.add("DELETE");
         methods.add("PATCH");
         configuration.setAllowedMethods(methods);
+        configuration.applyPermitDefaultValues();
 
         configuration.setExposedHeaders(Arrays.asList("X-Requested-With","Origin","Content-Type","Accept","Authorization"));
         source.registerCorsConfiguration("/**", configuration);
