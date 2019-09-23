@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 class SidebarNavigation extends React.Component {
   render() {
     return (
-      <nav className={'grid-item-nav'}>
+      <nav className={"grid-item-nav"}>
         <ul className={'navList'}>
           <li>
             <NavLink to="/upload" activeClassName={'selected'}>
