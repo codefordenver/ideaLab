@@ -19,27 +19,21 @@ const LoginManager = (props) => {
 	const [location, setLocation] = useState(locations[0]);
 
 	function thenCallback(callbacks) {
-		console.log('thenCallback top layer');
 		return function actualCallback(response) {
-			console.log('thenCallback lower layer');
-			console.log(response);
-
 			const token = response.headers ? response.headers.authorization : '';
 			if (token) {
-			console.log('token');
 				callbacks.setToken(token);
 				callbacks.setAuthenticated(true);
-				console.log(callbacks);
+				RequestService.requestState.token = token;
 			} else {
 				// Something should happen
-				// console.error("Token missing from response headers");
+				console.error("Token missing from response headers");
 				callbacks.setAuthenticated(false);
 			};
 		}
 	}
 
 	const onSubmit = (e, callbacks) => {
-		console.log('onSubmit');
 		e.preventDefault();
 
 		const payload = {
@@ -53,7 +47,6 @@ const LoginManager = (props) => {
 	return (
 		<AuthContext.Consumer>
 			{context => {
-				console.log(context);
 				return (
 					<div className='container'>
 						{context.authenticated}
