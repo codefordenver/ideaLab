@@ -1,5 +1,6 @@
 package idealab.api.security;
 
+import idealab.api.model.EmployeeRole;
 import idealab.api.repositories.EmployeeRepo;
 import idealab.api.service.UserDetailsServiceImpl;
 import idealab.api.security.SecurityConstants;
