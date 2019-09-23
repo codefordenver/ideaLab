@@ -11,6 +11,11 @@
  * 
  * There's a weird issue where you can upload a file and a new entry is created in the database, 
  * but you still get a 500 error because the file upload failed.
+ * 
+ * Instructions for creating a new request to the back end api:
+ * 1. Run generateApiInstance to get an axios instance and assign it to a variable.
+ * 2. Call that variable and pass it the url (combination of backendURL and the rest of the path, which you will find in the relevant controller file)
+ * 3. And as the 2nd and 3rd arguments pass it a callback that will allow your component to respond accordingly to the response
  */
 import axios from 'axios';
 
@@ -48,9 +53,7 @@ const RequestService = {
             return { form: 'There was a problem with what you were trying to do.' };
         }
         const newErrorState = {};
-        console.log(errors);
         errors.forEach(error => {
-            console.log(error);
             newErrorState[error.field] = error.defaultMessage;
         });
         return newErrorState;
