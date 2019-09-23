@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styles from './MenuBar.css';
 
 const MenuBar = ({ selectedTab, tabOptions, setView }) => {
 
