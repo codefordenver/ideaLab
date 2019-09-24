@@ -1,13 +1,13 @@
 package idealab.api.controller;
 
+import idealab.api.dto.request.UserChangePasswordRequest;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.model.Employee;
 import idealab.api.operations.UserOperations;
-import javax.validation.Valid;
-
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
@@ -28,6 +28,12 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Integer id) {
         GenericResponse response = userOperations.deleteUser(id);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
+    @PostMapping("/password")
+    public ResponseEntity<?> changePassword(@RequestBody UserChangePasswordRequest request) {
+        GenericResponse response = userOperations.changePassword(request);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
