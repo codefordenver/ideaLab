@@ -16,7 +16,6 @@ function UploadContainer() {
 
   function onFailure(error) {
     const validationErrors = RequestService.validationErrorGetter(error);
-    console.log(validationErrors);
     setErrors(validationErrors);
   };
 
