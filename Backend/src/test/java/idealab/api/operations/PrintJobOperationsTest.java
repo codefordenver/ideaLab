@@ -5,8 +5,7 @@ import idealab.api.dto.request.PrintJobNewRequest;
 import idealab.api.dto.request.PrintJobUpdateRequest;
 import idealab.api.dto.request.PrintModelUpdateRequest;
 import idealab.api.dto.response.GenericResponse;
-import idealab.api.dto.response.GetAllPrintJobListResponse;
-import idealab.api.dto.response.GetPrintJobResponse;
+import idealab.api.dto.response.PrintJobResponse;
 import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.*;
 import idealab.api.repositories.*;
@@ -201,7 +200,7 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findAll()).thenReturn(printJobs);
 
         // when
-        GetPrintJobResponse result = operations.getAllPrintJobs();
+        PrintJobResponse result = operations.getAllPrintJobs();
 
         // assert
         Assert.assertEquals(result.getData().get(0).getId(), printJob.getId());
@@ -255,16 +254,16 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findByStatusIn(deletableStatuses)).thenReturn(printJobs);
 
         // when
-        GetAllPrintJobListResponse result = operations.getDeletablePrintJobs();
+        PrintJobResponse result = operations.getDeletablePrintJobs();
 
         // assert
-        Assert.assertEquals(result.getPrintJobs().get(0).getId(), printJob.getId());
+        Assert.assertEquals(result.getData().get(0).getId(), printJob.getId());
     }
 
 
     @Test
     public void createNewPrintJob() {
-        GetPrintJobResponse response = new GetPrintJobResponse();
+        PrintJobResponse response = new PrintJobResponse();
 
         byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
         MultipartFile file = new MockMultipartFile("Something", a);
@@ -313,7 +312,6 @@ public class PrintJobOperationsTest {
         List<PrintJob> printJobData = new ArrayList<>();
         printJobData.add(printJob);
 
-
         response.setSuccess(true);
         response.setMessage("Successfully saved new file to database!");
         response.setData(printJobData);
@@ -326,14 +324,13 @@ public class PrintJobOperationsTest {
         when(printJobRepo.save(any())).thenReturn(printJob);
         when(dropboxOperations.uploadDropboxFile(printJob.getId(), file)).thenReturn(data);
 
-        GetPrintJobResponse opResponse = operations.newPrintJob(request);
-
+        PrintJobResponse opResponse = operations.newPrintJob(request);
         assert(opResponse.equals(response));
     }
 
     @Test
     public void createNewPrintJobSaveAllNonExistentData() {
-        GetPrintJobResponse response = new GetPrintJobResponse();
+        PrintJobResponse response = new PrintJobResponse();
 
         byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
         MultipartFile file = new MockMultipartFile("Something", a);
@@ -399,14 +396,14 @@ public class PrintJobOperationsTest {
         when(printJobRepo.save(any())).thenReturn(printJob);
         when(dropboxOperations.uploadDropboxFile(printJob.getId(), file)).thenReturn(data);
 
-        GetPrintJobResponse opResponse = operations.newPrintJob(request);
+        PrintJobResponse opResponse = operations.newPrintJob(request);
 
         assert(opResponse.equals(response));
     }
 
     @Test
     public void createNewPrintJobNullFile() {
-        GetPrintJobResponse response = new GetPrintJobResponse();
+        PrintJobResponse response = new PrintJobResponse();
         response.setHttpStatus(HttpStatus.BAD_REQUEST);
         response.setMessage("No file was submitted.  Please attach a file to the request");
         response.setSuccess(false);
@@ -421,7 +418,7 @@ public class PrintJobOperationsTest {
         request.setEmail("test@email.com");
         request.setFile(file);
 
-        GetPrintJobResponse opResponse = operations.newPrintJob(request);
+        PrintJobResponse opResponse = operations.newPrintJob(request);
 
         assert(opResponse.equals(response));
     }
@@ -437,7 +434,7 @@ public class PrintJobOperationsTest {
         PrintJob printJob = new PrintJob();
         printJob.setId(999);
 
-        GetPrintJobResponse response = new GetPrintJobResponse();
+        PrintJobResponse response = new PrintJobResponse();
         response.setSuccess(true);
         response.setMessage("Successfully updated file to database!");
         response.setHttpStatus(HttpStatus.ACCEPTED);
@@ -453,7 +450,7 @@ public class PrintJobOperationsTest {
         when(dropboxOperations.updateDropboxFile(printJob, request.getFile())).thenReturn(data);
         when(printJobRepo.save(printJob)).thenReturn(printJob);
 
-        GetPrintJobResponse opResponse = operations.updateModel(printJob.getId(), request);
+        PrintJobResponse opResponse = operations.updateModel(printJob.getId(), request);
 
         assert(opResponse.equals(response));
     }
