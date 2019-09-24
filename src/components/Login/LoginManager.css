@@ -1,78 +1,82 @@
 * {
-	font-family: 'Montserrat', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .container {
-	width: auto;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	height: 100%;
-	width: 30%;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 30%;
 }
 
 h4 {
-	margin-top: 1em;
+  margin-top: 1em;
 }
 
 .container > input {
-	display: block;
-	height: 2em;
-	width: 15em;
-	margin: 2rem;
-	text-align: center;
-	background-color: #00aeef;
-	border-color: #00aeef;
-	border-radius: 2px;
-	outline: none;
-	border-style: solid;
-	font-size: 1.5rem;
-	padding: 0.25rem;
+  display: block;
+  height: 2em;
+  width: 15em;
+  margin: 2rem;
+  text-align: center;
+  background-color: #00aeef;
+  border-color: #00aeef;
+  border-radius: 2px;
+  outline: none;
+  border-style: solid;
+  font-size: 1.5rem;
+  padding: 0.25rem;
 }
 
 .container > button {
-	display: block;
-	height: 2.5em;
-	width: 15.5em;
-	margin: 2rem;
-	background-color: #00aeef;
-	border-color: #00aeef;
-	border-radius: 2px;
-	font-size: 1.5rem;
-	color: #4b4b4b;
+  display: block;
+  height: 2.5em;
+  width: 15.5em;
+  margin: 2rem;
+  background-color: #00aeef;
+  border-color: #00aeef;
+  border-radius: 2px;
+  font-size: 1.5rem;
+  color: #4b4b4b;
 }
 
 .container > button:hover {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .container > ::-webkit-input-placeholder {
-	text-align: center;
-	font-size: 1.5rem;
-	color: #4b4b4b;
-	vertical-align: middle;
+  text-align: center;
+  font-size: 1.5rem;
+  color: #4b4b4b;
+  vertical-align: middle;
 }
 
 .container > :-moz-placeholder {
-	/* Firefox 18- */
-	text-align: center;
-	font-size: 1.5rem;
-	color: #4b4b4b;
-	vertical-align: middle;
+  /* Firefox 18- */
+  text-align: center;
+  font-size: 1.5rem;
+  color: #4b4b4b;
+  vertical-align: middle;
 }
 
 .container > ::-moz-placeholder {
-	/* Firefox 19+ */
-	text-align: center;
-	font-size: 1.5rem;
-	color: #4b4b4b;
-	vertical-align: middle;
+  /* Firefox 19+ */
+  text-align: center;
+  font-size: 1.5rem;
+  color: #4b4b4b;
+  vertical-align: middle;
 }
 
 .container > :-ms-input-placeholder {
-	text-align: center;
-	font-size: 1.5rem;
-	color: #4b4b4b;
-	vertical-align: middle;
+  text-align: center;
+  font-size: 1.5rem;
+  color: #4b4b4b;
+  vertical-align: middle;
+}
+
+.ideaLabLogo {
+  width: 600px;
 }

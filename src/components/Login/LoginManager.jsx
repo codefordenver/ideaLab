@@ -5,7 +5,7 @@ import RequestService from '../../util/RequestService';
 import AuthContext from '../../AuthContext';
 import './LoginManager.css';
 
-import ideaLABlogo from './../../ideaLABlogo.png';
+import ideaLABlogo from '../globalStyles/img/ideaLabLogo.png';
 
 const LoginManager = props => {
   const [errors, setErrors] = useState({});
@@ -58,7 +58,7 @@ const LoginManager = props => {
         return (
           <div className="container">
             {context.authenticated}
-            <img src={ideaLABlogo} alt="ideaLABLogo" />
+            <img className="ideaLabLogo" src={ideaLABlogo} alt="ideaLABLogo" />
             <h4>3D Printing and Upload Queue</h4>
             <h2>Sign In</h2>
             <form

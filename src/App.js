@@ -10,21 +10,33 @@ import PrivateRoute from './components/Routing/PrivateRoute';
 
 import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 
-
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
   const [token, setToken] = useState(null);
   return (
     <div className="App grid-container">
-      <AuthContext.Provider value={{ authenticated: authenticated, token: token, setAuthenticated: setAuthenticated, setToken: setToken }}>
+      <AuthContext.Provider
+        value={{
+          authenticated: authenticated,
+          token: token,
+          setAuthenticated: setAuthenticated,
+          setToken: setToken,
+        }}
+      >
         <HashRouter>
-          <SidebarNavigation logout={() => {
-            setToken('');
-            setAuthenticated(false);
-          }} />
+          <SidebarNavigation
+            logout={() => {
+              setToken('');
+              setAuthenticated(false);
+            }}
+          />
           <Switch>
             <PrivateRoute exact path="/queue" component={QueueContainer} />
-            <PrivateRoute exact path="/manageaccounts" component={CreateAccountManager} />
+            <PrivateRoute
+              exact
+              path="/manageaccounts"
+              component={CreateAccountManager}
+            />
             <PrivateRoute exact path="/upload" component={UploadContainer} />
             <Route
               path="/login"
@@ -32,22 +44,21 @@ function App() {
                 authenticated ? (
                   <Redirect
                     to={{
-                      pathname: "/queue",
-                      state: { from: props.location }
+                      pathname: '/queue',
+                      state: { from: props.location },
                     }}
                   />
                 ) : (
-                    <LoginManager{...props} />
-                  )
+                  <LoginManager {...props} />
+                )
               }
             />
 
-            <PrivateRoute path='/account' component={CreateAccountManager} />
+            <PrivateRoute path="/account" component={CreateAccountManager} />
             <PrivateRoute path="/*" component={UploadContainer} />
           </Switch>
         </HashRouter>
       </AuthContext.Provider>
-
     </div>
   );
 }
