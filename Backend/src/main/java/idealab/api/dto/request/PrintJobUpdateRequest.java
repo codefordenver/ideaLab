@@ -49,8 +49,8 @@ public class PrintJobUpdateRequest implements GenericRequest {
     @Override
     public void validate() {
         if(this.employeeId == null || this.employeeId < 0)
-            throw new IdeaLabApiException(VALIDATION_ERROR, "employeeId is invalid");
+            throw new IdeaLabApiException(VALIDATION_ERROR, "Employee Id is invalid");
         if(this.status == null || this.status.trim().isEmpty())
-            throw new IdeaLabApiException(VALIDATION_ERROR, "status is invalid");
+            throw new IdeaLabApiException(VALIDATION_ERROR, "Status is invalid");
     }
 }

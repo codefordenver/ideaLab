@@ -77,14 +77,14 @@ public class PrintJobNewRequest implements GenericRequest {
     @Override
     public void validate() {
         if(this.customerFirstName == null || this.customerFirstName.trim().isEmpty())
-            throw new IdeaLabApiException(VALIDATION_ERROR, "customerFirstName is invalid");
+            throw new IdeaLabApiException(VALIDATION_ERROR, "Customer first name is invalid");
         if(this.customerLastName == null || this.customerLastName.trim().isEmpty())
-            throw new IdeaLabApiException(VALIDATION_ERROR, "customerLastName is invalid");
+            throw new IdeaLabApiException(VALIDATION_ERROR, "Customer last name is invalid");
         if(this.email == null || this.email.trim().isEmpty())
-            throw new IdeaLabApiException(VALIDATION_ERROR, "email is invalid");
+            throw new IdeaLabApiException(VALIDATION_ERROR, "Email is invalid");
         if(this.color == null || this.color.trim().isEmpty())
-            throw new IdeaLabApiException(VALIDATION_ERROR, "color is invalid");
+            throw new IdeaLabApiException(VALIDATION_ERROR, "Color is invalid");
         if(this.file == null || this.file.isEmpty())
-            throw new IdeaLabApiException(VALIDATION_ERROR, "file is invalid");
+            throw new IdeaLabApiException(VALIDATION_ERROR, "File is invalid");
     }
 }
