@@ -1,10 +1,13 @@
 package idealab.api.security;
 
-import idealab.api.model.EmployeeRole;
 import idealab.api.repositories.EmployeeRepo;
 import idealab.api.service.UserDetailsServiceImpl;
+import idealab.api.security.SecurityConstants;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,9 +35,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter { // TODO: also i 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
-                //.antMatchers(SIGN_UP_URL, LOGIN_URL).permitAll()
-                .antMatchers(HttpMethod.DELETE)
-                .hasRole(String.valueOf(EmployeeRole.ADMIN))
+                .antMatchers("**/**").permitAll() //TODO W.E. : Remove when authentication starts
+                //.antMatchers(LOGIN_URL).permitAll()
+                //.antMatchers(CHANGE_PASSWORD_URL, SIGN_UP_URL).hasRole(EmployeeRole.ADMIN.getText())
+                //.antMatchers(HttpMethod.DELETE).hasRole(EmployeeRole.ADMIN.getText())
                 //.anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
@@ -51,7 +55,25 @@ public class WebSecurity extends WebSecurityConfigurerAdapter { // TODO: also i 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        final CorsConfiguration configuration = new CorsConfiguration();
+
+        List<String> origins = new ArrayList<String>();
+        origins.add("*");
+        configuration.setAllowedOrigins(origins);
+
+        List<String> methods = new ArrayList<String>();
+        methods.add("HEAD");
+        methods.add("GET");
+        methods.add("POST");
+        methods.add("OPTIONS");
+        methods.add("PUT");
+        methods.add("DELETE");
+        methods.add("PATCH");
+        configuration.setAllowedMethods(methods);
+        configuration.applyPermitDefaultValues();
+
+        configuration.setExposedHeaders(Arrays.asList("X-Requested-With","Origin","Content-Type","Accept","Authorization"));
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 }
