@@ -29,10 +29,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 
-@Component
+@Service
 public class ColorTypesOperations {
+    private final ColorTypeRepo colorTypeRepo;
 
-    public ColorTypesOperations () {
+    public final ColorTypesOperations(ColorTypeRepo colorTypeRepo) {
+        this.colorTypeRepo = colorTypeRepo;
+    }
+
+    public ColorTypesOperations() {
     }
 
     AllColorsResponse getAllColors() {
@@ -51,20 +56,11 @@ public class ColorTypesOperations {
         response.setMessage("Color could not be uploaded");
         response.setHttpStatus(HttpStatus.BAD_REQUEST);
 
-        // Create new record based off of the printJobNewRequest
+        //need to check for existence of color first
         String color = color.getColor();
         Boolean available = color.getAvailable();
 
-
-        // Check if Color exists otherwise make a new record
-//        ColorType databaseColor = colorTypeRepo.findByColor(color);
-//        if (databaseColor == null) {
-//            databaseColor = new ColorType(color);
-//            colorTypeRepo.save(databaseColor);
-//        }
-
-        // Create a new print model first with temp dropbox link
-        ColorType colorType = new ColorType(color);
+        ColorType colorType = new ColorType(color, available);
         colorTypeRepo.save(colorType);
 
         response.setSuccess(true);
@@ -72,4 +68,23 @@ public class ColorTypesOperations {
         response.setData(color);
         response.setHttpStatus(HttpStatus.ACCEPTED);
         return response;
+    }
+
+    public ColorResponse updateColor(Integer colorId, UpdateColorRequest model) {
+        ColorResponse response = new ColorResponse();
+
+        ColorType color = colorTypeRepo.findbyColorId(colorId);
+
+        color.setColor(model.GetColor());
+        color.setAvailable(model.GetAvailable());
+
+        color = colorTypeRepo.save(color);
+
+        response.setSuccess(true);
+        response.setMessage("Successfully updated color");
+        response.setData(color);
+
+        response.setHttpStatus(HttpStatus.ACCEPTED);
+        return response;
+    }
 }

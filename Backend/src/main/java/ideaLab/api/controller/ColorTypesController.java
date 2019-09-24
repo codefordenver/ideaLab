@@ -37,17 +37,10 @@ public class ColorTypesController {
     //get all colors
     @GetMapping
     public ResponseEntity<AllColorsResponse> getAllColors(){
+        LOGGER.info("Return all colors");
         AllColorsResponse response = colorTypesOperations.getAllColors();
 
-        if(response == null || response.getPrintJobs() == null || response.getPrintJobs().size() == 0){
-            return ResponseEntity.badRequest()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .build();
-        }
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(response);
+        return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     //getAllAvailableColors
@@ -55,27 +48,27 @@ public class ColorTypesController {
     public ResponseEntity<AllColorsResponse> getAllAvailableColors(){
         AllColorsResponse response = colorTypesOperations.getAllAvailableColors();
 
-        if(response == null || response.getPrintJobs() == null || response.getPrintJobs().size() == 0){
-            return ResponseEntity.badRequest()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .build();
-        }
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(response);
+        return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     //put ColorTypesAdd new color
     @PostMapping
-    public ResponseEntity<?> addColor(AddColorRequest model) {
+    public ResponseEntity<?> addColor(@ModelAttribute @Valid AddColorRequest model) {
         LOGGER.info("AddColor request is:" + model.toString());
         ColorResponse response = colorTypesOperations.addColor(model);
 
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-
     //update color availability
+    @PutMapping("/{colorId}/model")
+    public ResponseEntity<?> updateColor(@PathVariable("colorId) Integer colorId,
+                                                 @ModelAttribute colorUpdateRequest model) {
+
+        LOGGER.info("Update color request is color:" + colorId.toString() + "| model: " + model.toString());
+        ColorResponse response = colorTypesOperations.updateColor(colorId, model);
+
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
 
 }

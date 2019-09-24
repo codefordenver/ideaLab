@@ -29,9 +29,9 @@ public class ColorType {
     public ColorType() {
     }
 
-    public ColorType(String color) {
+    public ColorType(String color, Boolean available = true) {
         this.color = color;
-        this.available = true;
+        this.available = available;
     }
 
     //getters and setters
