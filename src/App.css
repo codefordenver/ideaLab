@@ -4,6 +4,7 @@
   --dark-blue: #1F4393;
   --white-text: #FFFFFF;
   --default-background: white;
+  --error-color: red;
 }
 
 html {
@@ -92,4 +93,8 @@ input {
 	margin: 2rem;
 	border-radius: 10px;
 	font-size: 1.5rem;
+}
+
+.error {
+  color: var(--error-color);
 }
