@@ -1,6 +1,8 @@
 package idealab.api.operations;
 
+import idealab.api.dto.request.UserChangePasswordRequest;
 import idealab.api.dto.response.GenericResponse;
+import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.Employee;
 import idealab.api.repositories.EmployeeRepo;
 import org.junit.Before;
@@ -8,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -112,5 +115,82 @@ public class UserOperationsTest {
         assertTrue(response.isSuccess() == false);
         assertTrue(response.getMessage().equalsIgnoreCase("Employee Could Not Be Deleted"));
     }
+
+    @Test
+    public void changePasswordSuccess() {
+        UserChangePasswordRequest request = new UserChangePasswordRequest();
+        request.setUsername("testuser");
+        request.setOldPassword("testpassword");
+        request.setNewPassword("New1");
+        request.setConfirmNewPassword("New1");
+
+        Employee e = new Employee();
+        e.setUsername("testuser");
+        e.setPassword("testpassword");
+
+        when(employeeRepo.findEmployeeByUsername(e.getUsername())).thenReturn(e);
+        when(bCryptPasswordEncoder.matches(request.getOldPassword(), e.getPassword())).thenReturn(true);
+        when(employeeRepo.save(e)).thenReturn(e);
+
+        GenericResponse response = new GenericResponse();
+        response.setSuccess(true);
+        response.setMessage("Password Changed Successfully");
+        response.setHttpStatus(HttpStatus.ACCEPTED);
+
+        GenericResponse opResponse = operations.changePassword(request);
+
+        assert(opResponse.equals(response));
+    }
+
+    @Test(expected = IdeaLabApiException.class)
+    public void changePasswordInvalidEmployee() {
+        UserChangePasswordRequest request = new UserChangePasswordRequest();
+        request.setUsername("testuser");
+        request.setOldPassword("testpassword");
+        request.setNewPassword("New1");
+        request.setConfirmNewPassword("New1");
+
+        when(employeeRepo.findEmployeeByUsername(anyString())).thenReturn(null);
+
+        operations.changePassword(request);
+
+    }
+
+    @Test(expected = IdeaLabApiException.class)
+    public void changePasswordOldPasswordNoMatch() {
+        UserChangePasswordRequest request = new UserChangePasswordRequest();
+        request.setUsername("testuser");
+        request.setOldPassword("testpassword");
+        request.setNewPassword("New1");
+        request.setConfirmNewPassword("New1");
+
+        Employee e = new Employee();
+        e.setUsername("testuser");
+        e.setPassword("nonmatch");
+
+        when(employeeRepo.findEmployeeByUsername(e.getUsername())).thenReturn(e);
+        when(bCryptPasswordEncoder.matches(request.getOldPassword(), e.getPassword())).thenReturn(false);
+
+        operations.changePassword(request);
+    }
+
+    @Test(expected = IdeaLabApiException.class)
+    public void changePasswordNewPasswordNoMatch() {
+        UserChangePasswordRequest request = new UserChangePasswordRequest();
+        request.setUsername("testuser");
+        request.setOldPassword("testpassword");
+        request.setNewPassword("New1");
+        request.setConfirmNewPassword("New2");
+
+        Employee e = new Employee();
+        e.setUsername("testuser");
+        e.setPassword("nonmatch");
+
+        when(employeeRepo.findEmployeeByUsername(e.getUsername())).thenReturn(e);
+        when(bCryptPasswordEncoder.matches(request.getOldPassword(), e.getPassword())).thenReturn(true);
+
+        operations.changePassword(request);
+    }
+
 
 }
