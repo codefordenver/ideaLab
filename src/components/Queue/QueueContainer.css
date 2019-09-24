@@ -1,92 +1,32 @@
 .queueBanner {
-    list-style-type: none;
-    text-align: left;
-    display: flex;
+  list-style-type: none;
+  text-align: left;
+  display: flex;
 }
 
 body {
-    margin: 0px 50px;
+  margin: 0px 50px;
 }
 
 .queueFilterInfo {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.statusMenu {
-	display: flex;
-	flex-direction: row;
-	list-style: none;
-	align-items: center;
-}
-
-.statusMenu li {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-}
-
-.statusMenu button {
-	outline: none;
-	border: none;
-	background-color: var(--default-background);
-	font-size: 1em;
-}
-
-
-.statusMenu li:not(:first-child) button{
-	border-left: 1px solid black;
-}
-
-.statusMenu li:after {
-	content: "";
-	display: block;
-	color: var(--default-background);
-	border-bottom: thick solid;
-	width: 90%;
-}
-
-.statusMenu .selectedTab:after {
-	content: "";
-	display: block;
-	color: var(--light-blue);
-	border-bottom: thick solid;
-	animation-duration: .3s;
-	animation-name: slidein;
-}
-
-	
-@keyframes slidein {
-	from {
-		width: 0%; 
-	}
-	  
-	to {
-		width: 90%;
-	}
-
-}
-
-
-.statusMenu > button {
-	border: none;
-	margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .search-container input {
-	padding: 2px;
-	border: none;
-	font-size: 14px;
-	background: white;
-	border: solid 1px #333;
-	border-radius: 6px;
-	text-align: left;
+  padding: 2px;
+  border: none;
+  font-size: 14px;
+  background: white;
+  border: solid 1px #333;
+  border-radius: 6px;
+  text-align: left;
 }
 
 .queueBanner .col10 {
-    width: 5%;
+  width: 5%;
 }
 .queueBanner .col20 {
-    width:20%;
+  width: 20%;
 }
