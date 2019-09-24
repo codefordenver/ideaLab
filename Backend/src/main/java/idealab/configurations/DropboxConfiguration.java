@@ -1,11 +1,14 @@
 package idealab.configurations;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@ConfigurationProperties("app.dropbox")
+@PropertySource("classpath:dropbox.properties")
 public class DropboxConfiguration {
+
+    @Value("${dropbox.ACCESS_TOKEN}")
     private String accessToken;
 
     public String getAccessToken(){

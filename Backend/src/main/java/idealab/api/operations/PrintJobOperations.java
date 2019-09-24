@@ -5,10 +5,9 @@ import idealab.api.dto.request.PrintJobNewRequest;
 import idealab.api.dto.request.PrintJobUpdateRequest;
 import idealab.api.dto.request.PrintModelUpdateRequest;
 import idealab.api.dto.response.GenericResponse;
-import idealab.api.dto.response.GetAllPrintJobListResponse;
-import idealab.api.dto.response.GetAllPrintJobResponse;
-import idealab.api.dto.response.GetPrintJobResponse;
+import idealab.api.dto.response.PrintJobResponse;
 import idealab.api.exception.ErrorType;
+import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.*;
 import idealab.api.repositories.*;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,8 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
+import static idealab.api.exception.ErrorType.*;
 
 @Service
 public class PrintJobOperations {
@@ -42,11 +42,8 @@ public class PrintJobOperations {
         this.employeeRepo = employeeRepo;
     }
 
-    public GetPrintJobResponse newPrintJob(PrintJobNewRequest printJobNewRequest) {
-        GetPrintJobResponse response = new GetPrintJobResponse();
-        response.setSuccess(false);
-        response.setMessage("File could not be uploaded");
-        response.setHttpStatus(HttpStatus.BAD_REQUEST);
+    public PrintJobResponse newPrintJob(PrintJobNewRequest printJobNewRequest) {
+        PrintJobResponse response = new PrintJobResponse("File could not be uploaded");
 
         if(printJobNewRequest.getFile() == null){
             response.setMessage("No file was submitted.  Please attach a file to the request");
@@ -67,21 +64,21 @@ public class PrintJobOperations {
         EmailHash databaseEmail = emailHashRepo.findByEmailHash(emailHash);
         if (databaseEmail == null) {
             databaseEmail = new EmailHash(emailHash);
-            emailHashRepo.save(databaseEmail);
+            databaseEmail = emailHashRepo.save(databaseEmail);
         }
 
         // Create customer record with email hash if it does not already exist
         CustomerInfo customer = customerInfoRepo.findByEmailHashId(databaseEmail);
         if (customer == null) {
             customer = new CustomerInfo(databaseEmail, customerFirstName, customerLastName, email);
-            customerInfoRepo.save(customer);
+            customer = customerInfoRepo.save(customer);
         }
 
         // Check if Color exists otherwise make a new record
         ColorType databaseColor = colorTypeRepo.findByColor(color);
         if (databaseColor == null) {
             databaseColor = new ColorType(color);
-            colorTypeRepo.save(databaseColor);
+            databaseColor = colorTypeRepo.save(databaseColor);
         }
 
         // TODO: Remove temp employee, this should be taken directly from the employee making the request through the token.
@@ -98,32 +95,26 @@ public class PrintJobOperations {
 
         // Create a new print model first with temp dropbox link
         PrintJob printJob = new PrintJob(databaseEmail, databaseColor, databaseEmployee, Status.PENDING_REVIEW, comments, currentTime, currentTime);
-        printJobRepo.save(printJob);
+        printJob = printJobRepo.save(printJob);
 
-        System.out.println(printJob.toString());
         // TODO: set the queue position of the new job to be at the end of the list.
 
         // Make a dropbox sharable link here using the ID of the database record
         Map<String, String> data;
         data = dropboxOperations.uploadDropboxFile(printJob.getId(), printJobNewRequest.getFile());
-        printJob.setDropboxPath(data.get("filePath"));
-        printJob.setDropboxSharableLink(data.get("sharableLink"));
 
-        printJobRepo.save(printJob);
+        if(data == null) {
+            printJob.setDropboxPath("Error creating file");
+            printJob.setDropboxSharableLink("Error creating file");
+            printJob = printJobRepo.save(printJob);
+            throw new IdeaLabApiException(DROPBOX_UPLOAD_FILE_ERROR);
+        }
 
-        System.out.println(printJob.toString());
-        List<PrintJob> printJobData = Arrays.asList(printJob);
-
-        response.setSuccess(true);
-        response.setMessage("Successfully saved new file to database!");
-        response.setData(printJobData);
-        response.setHttpStatus(HttpStatus.ACCEPTED);
-
-        return response;
+        return getPrintJobResponse(response, printJob, data, "Successfully saved new file to database!");
     }
 
-    public GetPrintJobResponse updateModel(Integer printId, PrintModelUpdateRequest model){
-        GetPrintJobResponse response = new GetPrintJobResponse();
+    public PrintJobResponse updateModel(Integer printId, PrintModelUpdateRequest model){
+        PrintJobResponse response = new PrintJobResponse("Model could not be updated");
 
         MultipartFile file = model.getFile();
 
@@ -133,20 +124,34 @@ public class PrintJobOperations {
         }
 
         PrintJob printJob = printJobRepo.findPrintJobById(printId);
+        if(printJob == null) {
+            throw new IdeaLabApiException(PRINT_JOB_CANT_FIND_BY_ID);
+        }
 
-        Map<String, String> data = null;
+        Map<String, String> data;
         data = dropboxOperations.updateDropboxFile(printJob, model.getFile());
+
+        if(data == null) {
+            printJob.setDropboxPath("Error updating file");
+            printJob.setDropboxSharableLink("Error updating file");
+            printJob = printJobRepo.save(printJob);
+
+            throw new IdeaLabApiException(DROPBOX_UPDATE_FILE_ERROR);
+        }
+
+        return getPrintJobResponse(response, printJob, data, "Successfully updated file to database!");
+    }
+
+    private PrintJobResponse getPrintJobResponse(PrintJobResponse response, PrintJob printJob, Map<String, String> data, String s) {
         printJob.setDropboxPath(data.get("filePath"));
         printJob.setDropboxSharableLink(data.get("sharableLink"));
-        printJob.setDropboxPath("Error updating file");
-        printJob.setDropboxSharableLink("Error updating file");
 
-        printJobRepo.save(printJob);
+        printJob = printJobRepo.save(printJob);
 
         List<PrintJob> printJobData = Arrays.asList(printJob);
 
         response.setSuccess(true);
-        response.setMessage("Successfully updated file to database!");
+        response.setMessage(s);
         response.setData(printJobData);
 
         response.setHttpStatus(HttpStatus.ACCEPTED);
@@ -161,11 +166,15 @@ public class PrintJobOperations {
 
         PrintJob printJob = printJobRepo.findPrintJobById(printId);
 
+        if(printJob == null) {
+            throw new IdeaLabApiException(PRINT_JOBS_NOT_EXIST);
+        }
+
         dropboxOperations.deleteDropboxFile(printJob);
         printJob.setDropboxPath("Deleted");
 
         printJob.setDropboxSharableLink("Deleted");
-        printJobRepo.save(printJob);
+        printJob = printJobRepo.save(printJob);
 
         response.setSuccess(true);
         response.setMessage("Successfully deleted file from DropBox");
@@ -219,11 +228,8 @@ public class PrintJobOperations {
         return response;
     }
 
-    public GetPrintJobResponse getAllPrintJobs() {
-        GetPrintJobResponse response = new GetPrintJobResponse();
-        response.setSuccess(false);
-        response.setMessage("Could not return all print jobs");
-        response.setHttpStatus(HttpStatus.BAD_REQUEST);
+    public PrintJobResponse getAllPrintJobs() {
+        PrintJobResponse response = new PrintJobResponse("Could not get all print jobs");
 
         List<PrintJob> printJobs = printJobRepo.findAll();
 
@@ -240,7 +246,8 @@ public class PrintJobOperations {
     }
 
 
-    public GetAllPrintJobListResponse getDeletablePrintJobs() {
+    public PrintJobResponse getDeletablePrintJobs() {
+        PrintJobResponse response = new PrintJobResponse("Could not get deletable print jobs");
         List<Status> deletableStatuses = Arrays.asList(new Status[]{
             Status.PENDING_REVIEW,
             Status.FAILED,
@@ -250,8 +257,12 @@ public class PrintJobOperations {
             Status.ARCHIVED
         });
         List<PrintJob> printJobs = printJobRepo.findByStatusIn(deletableStatuses);
-        List<GetAllPrintJobResponse> printJobResponses = printJobs.stream()
-                .map(GetAllPrintJobResponse::new).collect(Collectors.toList());
-        return new GetAllPrintJobListResponse(printJobResponses);
+
+        response.setSuccess(true);
+        response.setMessage("Successfully returned deletable print jobs");
+        response.setData(printJobs);
+        response.setHttpStatus(HttpStatus.ACCEPTED);
+
+        return response;
     }
 }
