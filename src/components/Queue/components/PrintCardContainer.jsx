@@ -3,42 +3,60 @@ import './PrintCardContainer.css';
 import StatusDropdown from './components/StatusDropdown';
 import PrintDateAdded from './components/PrintDateAdded';
 import { CirclePicker } from 'react-color';
+import { IoIosArrowDown, IoIosArrowBack } from 'react-icons/io';
+import { FiSave, FiMail } from 'react-icons/fi';
 
 const PrintCardContainer = ({data}) => {
     const [isToggled,setIsToggled] = useState(false);
-    const [circleColor, setcircleColor] = useState(data.color);
-	const [hoverState, setHoverState] = useState(false);
-	const dummyColors = ['red', 'blue', 'green'];
+    const [card, updateCard] = useState(data);
+    const [hoverState, setHoverState] = useState(false);
+    
+    const dummyColors = ['red', 'blue', 'green', 'black'];
 
 	const colorCircleStyle = {
-		backgroundColor: `${circleColor}`
+		backgroundColor: `${card.color}`
 	};
 
-	const handleChangeComplete = color => {
-		console.log('New color will be', color);
-		setcircleColor(color.hex);
+	const handleColorChange = hue => {
+        updateCard(prevState => ({...prevState, color: hue.hex}));
 	};
-
 	const handleMouseEnter = () => {
 		setHoverState(true);
 	};
 
 	const handleMouseLeave = () => {
 		setHoverState(false);
-	};
+    };
+    
+    const updateComment = (event) => {
+        event.persist();
+        updateCard(prevState => ({...prevState, comments: event.target.value}));
+    }
+
+    const updatePrintingStatus = (event) => {
+        event.persist();
+        updateCard(prevState => ({...prevState, status: event.target.value}));
+    }
 
     const dropItDown = () => {
         setIsToggled(!isToggled);
-	};
+    };
+
+    const saveChanges = () => {
+        //POST request goes here! placeholder:
+        alert('saving changes');
+    }
+    
+    const toggleArrow = isToggled ? <IoIosArrowDown /> : <IoIosArrowBack />;
+
+    const saveButton = data === card ? null : <div className='saveIcon' onClick={saveChanges}><FiSave /></div>;
 	
     const secondRowContent = isToggled ? (
-        <div className='printCardContainerTop'>
-            <p className='col20'>{data.name}</p>
-            <p className='col20'>Stuff</p>
-            <textarea className='col20'/>
+        <div className='printCardContainerBottom'>
+            <div className='emailRecipient col20'>{data.name} <FiMail /></div>
+            <textarea onChange={updateComment} name='comments' value={card.comments} className='commentSection'/>
         </div> 
         ) : null;
-
     return (
         <div className='printCardContainer'>
             <div className='printCardContainerTop'>
@@ -56,9 +74,10 @@ const PrintCardContainer = ({data}) => {
 					{hoverState ? (
 						<div className='colorPickerContainer'>
 							<CirclePicker
-								onChangeComplete={handleChangeComplete}
-								color={circleColor}
-								colors={dummyColors}
+								onChangeComplete={handleColorChange}
+								color={card.color}
+                                colors={dummyColors}
+                                width='100px'
 							/>
 						</div>
 					) : (
@@ -69,16 +88,14 @@ const PrintCardContainer = ({data}) => {
                     <PrintDateAdded data={data}/>
                 </div>
                 <div>
-                    <StatusDropdown data={data}/>
+                    <StatusDropdown currentStatus={card.status} statusChanged={updatePrintingStatus} />
                 </div>
                 <div className='printAdditionalInfo col20'>
-                    <button onClick={dropItDown} className='dropButton'>Drop</button>
-                    {/* <img alt='arrLogo'/> */}
+                    {saveButton}
+                    <div className='toggleArrow' onClick={dropItDown}>{toggleArrow}</div>
                 </div>
             </div>
-            <div className='printCardContainerBottom'>
-                    {secondRowContent}
-            </div>         
+            {secondRowContent}        
         </div>
   );
 };
