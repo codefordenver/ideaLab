@@ -1,74 +1,64 @@
 * {
-	font-family: 'Montserrat', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .container {
-	width: auto;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 100%;
-}
-
-.card {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	width: 30%;
+  width: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 h1 {
-	margin-top: 3em;
+  margin-top: 3em;
 }
 
 .container input {
-	background-color: #00aeef;
-	border-color: #00aeef;
+  background-color: #00aeef;
+  border-color: #00aeef;
 }
 
 .container > button {
-	display: block;
-	height: 2.5em;
-	width: 15.5em;
-	margin: 2rem;
-	background-color: #00aeef;
-	border-color: #00aeef;
-	border-radius: 2px;
-	font-size: 1.5rem;
-	color: #4b4b4b;
+  display: block;
+  height: 2.5em;
+  width: 15.5em;
+  margin: 2rem;
+  background-color: #00aeef;
+  border-color: #00aeef;
+  border-radius: 2px;
+  font-size: 1.5rem;
+  color: #4b4b4b;
 }
 
 button:hover {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 ::-webkit-input-placeholder {
-	text-align: center;
-	font-size: 1.5rem;
-	color: #4b4b4b;
-	vertical-align: middle;
+  text-align: center;
+  font-size: 1.5rem;
+  color: #4b4b4b;
+  vertical-align: middle;
 }
 
 :-moz-placeholder {
-	/* Firefox 18- */
-	text-align: center;
-	font-size: 1.5rem;
-	color: #4b4b4b;
-	vertical-align: middle;
+  /* Firefox 18- */
+  text-align: center;
+  font-size: 1.5rem;
+  color: #4b4b4b;
+  vertical-align: middle;
 }
 
 ::-moz-placeholder {
-	/* Firefox 19+ */
-	text-align: center;
-	font-size: 1.5rem;
-	color: #4b4b4b;
-	vertical-align: middle;
+  /* Firefox 19+ */
+  text-align: center;
+  font-size: 1.5rem;
+  color: #4b4b4b;
+  vertical-align: middle;
 }
 
 :-ms-input-placeholder {
-	text-align: center;
-	font-size: 1.5rem;
-	color: #4b4b4b;
-	vertical-align: middle;
+  text-align: center;
+  font-size: 1.5rem;
+  color: #4b4b4b;
+  vertical-align: middle;
 }

@@ -57,8 +57,12 @@ const CreateAccountManager = () => {
 
   return (
     <div className="container">
-      <div></div>
-      <div className="card">
+      <div className="banner">
+        <img src={ideaLABlogo} alt="ideaLABLogo" />
+        <h1>3D Printing and Upload Queue</h1>
+        <h2>Create an Account</h2>
+      </div>
+      <div className="form">
         <form onSubmit={e => onSubmit(e)}>
           <input
             name="email"
