@@ -6,7 +6,7 @@ import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.sharing.ListSharedLinksErrorException;
 import com.dropbox.core.v2.sharing.ListSharedLinksResult;
-import idealab.api.exception.ErrorType;
+import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.PrintJob;
 import idealab.configurations.DropboxConfiguration;
 import org.springframework.stereotype.Component;
@@ -15,8 +15,12 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+
+import static idealab.api.exception.ErrorType.DROPBOX_DELETE_FILE_ERROR;
+import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
 
 @Component
 public class DropboxOperations {
@@ -53,13 +57,13 @@ public class DropboxOperations {
         listSharedLinksResult = getListSharedLinkResult(filePath);
       }
     }catch (Exception ex){
-      ErrorType.DROPBOX_UPLOAD_FILE_ERROR.throwException();
+      throw new IdeaLabApiException(DROPBOX_UPLOAD_FILE_ERROR);
     }
 
     return listSharedLinksResult.getLinks().get(0).getUrl();
   }
 
-  public Map<String, String> uploadDropboxFile(int id, MultipartFile file){
+  public Map<String, String> uploadDropboxFile(Long id, MultipartFile file){
     String dropboxFilePath = "/" + id + "-" + file.getOriginalFilename();
     Map<String, String> data = new HashMap<>();
 
@@ -76,7 +80,7 @@ public class DropboxOperations {
       in.close();
     }
     catch(Exception ex){
-      ErrorType.DROPBOX_UPLOAD_FILE_ERROR.throwException();
+      throw new IdeaLabApiException(DROPBOX_UPLOAD_FILE_ERROR);
     }
 
     return data;
@@ -87,7 +91,7 @@ public class DropboxOperations {
       client.files().deleteV2(printJob.getDropboxPath());
     }
     catch (DbxException e) {
-      ErrorType.DROPBOX_DELETE_FILE_ERROR.throwException();
+      throw new IdeaLabApiException(DROPBOX_DELETE_FILE_ERROR);
     }
   }
 
@@ -98,6 +102,7 @@ public class DropboxOperations {
       deleteDropboxFile(printJob);
     }
     // 2. Create new sharable data link using uploadDropboxFile() method
-    return uploadDropboxFile(printJob.getId(), file);
+    LocalDateTime currentTime = LocalDateTime.now();
+    return uploadDropboxFile(currentTime.toLocalTime().toNanoOfDay(), file);
   }
 }

@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping("/api/print-jobs")
 public class PrintJobController {
@@ -37,7 +35,7 @@ public class PrintJobController {
 
     // TODO W.E. : add query param or boolean to model to accept mass upload (ignore 5 file max)
     @PostMapping
-    public ResponseEntity<?> printJobNew(@ModelAttribute @Valid PrintJobNewRequest model) {
+    public ResponseEntity<?> printJobNew(@ModelAttribute PrintJobNewRequest model) {
         PrintJobResponse response = printJobOperations.newPrintJob(model);
 
         return new ResponseEntity<>(response, response.getHttpStatus());

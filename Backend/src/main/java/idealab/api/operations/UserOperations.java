@@ -69,6 +69,7 @@ public class UserOperations {
     }
 
     public GenericResponse changePassword(UserChangePasswordRequest request) {
+        request.validate();
         GenericResponse response = new GenericResponse();
         Employee e = employeeRepo.findEmployeeByUsername(request.getUsername());
 
