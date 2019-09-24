@@ -80,7 +80,7 @@ public class PrintJobController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @GetMapping("deletable")
+    @GetMapping("/deletable")
     public ResponseEntity<?> getDeletablePrintJobs() {
         LOGGER.info("getDeletablePrintJobs ");
 
