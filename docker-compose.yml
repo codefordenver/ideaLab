@@ -10,7 +10,7 @@ services:
       - "8080:8080"
     volumes: 
       - "./Backend:/srv"
-    command: gradle bootRun 
+    command: ash -c  "gradle build --continuous & gradle bootRun"
   postgres:
     image: postgres:11-alpine
     hostname: postgres
