@@ -19,12 +19,24 @@ Our backend is split into 2 sections: our API app & our database. Our API is wri
 
 ### Setting up Resource File
 1. Request the latest dev resource file (if starting a new project see Backend/src/main/resources/sample_dropbox.properties) 
+> :warning: When contributing to the existing project, make sure to make a copy of the sample properties file and do not rename directly.  If you rename and commit it will be deleted from the master branch.
 2. Place the resource file and values in /Backend/src/main/resources/dropbox.properties (delete "sample_" if starting a new project)
-3. Values can be accessed using the @Value annotation.  i.e.
+3. To run dropbox yourself, create a dropbox app using the DBX Platform developer portal and get an access token
+- Step 1: Navigate to the [DBX Platform](https://www.dropbox.com/developers/reference/getting-started?_tk=guides_lp&_ad=guides2&_camp=get_started#app%20console) and follow the directions to make a new app.
+- Step 2: Select the regular Dropbox API
+- Step 3: For this project you only need a single App folder
+- Step 4: From the console, create an access token and paste that into the dropbox.properties file.
+
+The final directory should like like the following once the dropbox.properties file is setup. ❗ The dropbox.properties file is on the .gitignore so keys will not be commited and the sample_dropbox.properties needs to always be commited for future users):
+![Dropbox Directory Example](/images/sample_dropbox-properties.png)
+
+If they needed to be used elsewhere, the values from the properties file can be accessed using the @Value annotation.  i.e.
 ```
   @Value("${dropbox.ACCESS_TOKEN}")
   private String ACCESS_TOKEN;
 ```
+
+
 
 ### API & Java Spring & Gradle
 1. Make sure you have everything downloaded appropriately the first time. Go to our Google docs presentation if you still need to do that.
