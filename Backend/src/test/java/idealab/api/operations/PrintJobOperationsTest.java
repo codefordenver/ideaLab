@@ -7,6 +7,7 @@ import idealab.api.dto.request.PrintModelUpdateRequest;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.PrintJobResponse;
 import idealab.api.exception.IdeaLabApiException;
+import idealab.api.model.Queue;
 import idealab.api.model.*;
 import idealab.api.repositories.*;
 import org.junit.Assert;
@@ -20,15 +21,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.util.AssertionErrors.assertTrue;
@@ -322,7 +319,7 @@ public class PrintJobOperationsTest {
         when(colorTypeRepo.findByColor(any())).thenReturn(color);
         when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
         when(printJobRepo.save(any())).thenReturn(printJob);
-        when(dropboxOperations.uploadDropboxFile(printJob.getId(), file)).thenReturn(data);
+        when(dropboxOperations.uploadDropboxFile(anyLong(), any())).thenReturn(data);
 
         PrintJobResponse opResponse = operations.newPrintJob(request);
         assert(opResponse.equals(response));
@@ -394,21 +391,19 @@ public class PrintJobOperationsTest {
         when(employeeRepo.findEmployeeByUsername(any())).thenReturn(null);
         when(employeeRepo.save(any())).thenReturn(e);
         when(printJobRepo.save(any())).thenReturn(printJob);
-        when(dropboxOperations.uploadDropboxFile(printJob.getId(), file)).thenReturn(data);
+        when(dropboxOperations.uploadDropboxFile(anyLong(), any())).thenReturn(data);
 
         PrintJobResponse opResponse = operations.newPrintJob(request);
 
         assert(opResponse.equals(response));
     }
 
-    @Test
+    @Test(expected = IdeaLabApiException.class)
     public void createNewPrintJobNullFile() {
         PrintJobResponse response = new PrintJobResponse();
         response.setHttpStatus(HttpStatus.BAD_REQUEST);
         response.setMessage("No file was submitted.  Please attach a file to the request");
         response.setSuccess(false);
-
-        MultipartFile file = null;
 
         PrintJobNewRequest request = new PrintJobNewRequest();
         request.setColor("RED");
@@ -416,11 +411,10 @@ public class PrintJobOperationsTest {
         request.setCustomerFirstName("test");
         request.setCustomerLastName("testLast");
         request.setEmail("test@email.com");
-        request.setFile(file);
+        request.setFile(null);
 
-        PrintJobResponse opResponse = operations.newPrintJob(request);
+        operations.newPrintJob(request);
 
-        assert(opResponse.equals(response));
     }
 
     @Test
@@ -483,7 +477,7 @@ public class PrintJobOperationsTest {
         printJob.setId(999);
 
         when(printJobRepo.findPrintJobById(printJob.getId())).thenReturn(printJob);
-        when(dropboxOperations.updateDropboxFile(printJob, request.getFile())).thenReturn(null);
+        when(dropboxOperations.updateDropboxFile(printJob, request.getFile())).thenThrow(new IdeaLabApiException(DROPBOX_UPLOAD_FILE_ERROR));
 
         operations.updateModel(printJob.getId(), request);
     }

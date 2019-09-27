@@ -113,7 +113,6 @@ const PrintCardContainer = ({ data }) => {
         </div>
       </div>
       {secondRowContent}
-      <div className="printCardContainerBottom">{secondRowContent}</div>
     </div>
   );
 };
