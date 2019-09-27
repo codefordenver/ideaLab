@@ -42,3 +42,5 @@ Our backend is split into 2 sections: our API app & our database. Our API is wri
 
 ## Frontend
 1. The frontend is written in React.[If you need help with react, refer to its ](https://reactjs.org/docs/getting-started.html "documentation")
+2. In order to run the application, make sure you have npm installed on your computer, and run `npm install` and then `npm start`.
+3. To terminate, on a macOS type control + C.
