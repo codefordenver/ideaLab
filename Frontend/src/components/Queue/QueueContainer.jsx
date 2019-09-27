@@ -1,16 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import RequestService from '../../util/RequestService';
 import dummyData from '../dummyData';
 import PrintCardContainer from './components/PrintCardContainer';
 import './QueueContainer.css';
-import SearchBar from './components/SearchBar';
-import MenuBar from '../globalStyles/MenuBar';
-import { MenuTabs } from '../globalStyles/MenuTabs';
+import Queue from './components/Queue';
 
 const QueueContainer = () => {
-  const [data] = useState(dummyData);
+  const [data, setData] = useState([]);
+  const [stale, setStale] = useState(false);
   const [filteredData, setFilteredData] = useState(data);
   const [stringedValues, setStringedValues] = useState([]);
   const [statusView, setStatusView] = useState('QUEUEING');
+
+  useEffect(() => {
+    RequestService.getPrintJobs(
+      response => {
+        const data = response.data.data;
+        setData(response.data.data);
+      },
+      error => console.log(error),
+    );
+  }, [stale]);
 
   useEffect(() => {
     const filteredKeys = [
@@ -48,35 +58,17 @@ const QueueContainer = () => {
     setFilteredData(filteredSearch);
   };
 
-  const renderPrintCards = filteredData.map((el, i) => (
-    <PrintCardContainer data={el} key={i} />
-  ));
-
   const setStatus = view => {
     setStatusView(view);
   };
 
   return (
-    <div>
-      <div className="queueFilterInfo">
-        <MenuBar
-          selectedTab={statusView}
-          tabOptions={MenuTabs.QueueTabs}
-          setView={setStatus}
-        />
-        <SearchBar filterByTerm={filterByTerm} />
-      </div>
-      <ul className="queueBanner">
-        <li className="col10"></li>
-        <li className="col20">File Name</li>
-        <li className="col20">Color</li>
-        <li className="col20">Submitted</li>
-        <li className="col20">Status</li>
-      </ul>
-      {renderPrintCards.length > 0
-        ? renderPrintCards
-        : `No items are currently ${statusView.toLowerCase()}`}
-    </div>
+    <Queue
+      statusView={statusView}
+      setStatus={setStatus}
+      filterByTerm={filterByTerm}
+      filteredData={filteredData}
+    />
   );
 };
 

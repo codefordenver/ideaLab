@@ -1,12 +1,18 @@
-class MenuTabs {
+/** 
+ * Refer to Status.java for possible values of queue statuses
+ */class MenuTabs {
   QueueTabs = [
     {
-      name: 'QUEUEING',
-      label: 'Queue',
+      name: 'PENDING_REVIEW',
+      label: 'Pending Review',
     },
     {
       name: 'PRINTING',
       label: 'In Progress',
+    },
+    {
+      name: 'PENDING_CUSTOMER_REVIEW',
+      label: 'Pending Customer Review',
     },
     {
       name: 'DONE',
