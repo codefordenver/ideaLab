@@ -41,3 +41,4 @@ Our backend is split into 2 sections: our API app & our database. Our API is wri
 
 
 ## Frontend
+1. The frontend is written in React.[If you need help with react, refer to its ](https://reactjs.org/docs/getting-started.html "documentation")
