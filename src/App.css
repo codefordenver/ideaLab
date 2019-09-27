@@ -39,6 +39,7 @@ body {
 
 .navList a {
   flex-grow: 1;
+  text-align: center;
 }
 
 .navList a:hover {
@@ -93,6 +94,5 @@ input {
 }
 
 .sidebarIcon {
-  transform: scale(1.25);
   padding: 2em 0;
 }

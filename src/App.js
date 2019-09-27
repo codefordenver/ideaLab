@@ -4,14 +4,14 @@ import AuthContext from './AuthContext';
 import QueueContainer from './components/Queue/QueueContainer';
 import UploadContainer from './components/Upload/UploadContainer';
 import LoginManager from './components/Login/LoginManager';
-import CreateAccountManager from './components/CreateAccount/CreateAccountManager';
+import CreateAccountManager from './components/AdminSettings/CreateAccountManager';
 import SidebarNavigation from './SidebarNavigation';
 import PrivateRoute from './components/Routing/PrivateRoute';
 
 import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 function App() {
-  const [authenticated, setAuthenticated] = useState(false);
+  const [authenticated, setAuthenticated] = useState(true);
   const [token, setToken] = useState(null);
   return (
     <div className="App grid-container">

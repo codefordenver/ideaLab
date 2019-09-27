@@ -15,8 +15,8 @@ class MenuTabs {
   ];
   ManageAccountTabs = [
     {
-      name: 'components',
-      label: 'Components',
+      name: 'settings',
+      label: 'Settings',
     },
     {
       name: 'users',
