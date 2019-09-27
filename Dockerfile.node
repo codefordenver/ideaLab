@@ -1,0 +1,9 @@
+FROM node:12-alpine
+
+
+WORKDIR /srv
+
+COPY ./Frontend /srv
+RUN npm install
+
+VOLUME /srv/node_modules
