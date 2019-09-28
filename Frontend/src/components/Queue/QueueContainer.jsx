@@ -1,26 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import RequestService from '../../util/RequestService';
-import dummyData from '../dummyData';
-import PrintCardContainer from './components/PrintCardContainer';
 import './QueueContainer.css';
 import Queue from './components/Queue';
 
+
 const QueueContainer = () => {
   const [data, setData] = useState([]);
-  const [stale, setStale] = useState(false);
   const [filteredData, setFilteredData] = useState(data);
   const [stringedValues, setStringedValues] = useState([]);
-  const [statusView, setStatusView] = useState('QUEUEING');
+  const [statusView, setStatusView] = useState('PENDING_REVIEW');
 
   useEffect(() => {
     RequestService.getPrintJobs(
       response => {
         const data = response.data.data;
-        setData(response.data.data);
+        const formattedData = data.map(printjob => {
+          return {
+            color: printjob.colorTypeId.color,
+            submitted: printjob.createdAt,
+            comments: printjob.comments,
+            status: printjob.status,
+          };
+        });
+        setData(formattedData);
       },
-      error => console.log(error),
+      error => console.error(error),
     );
-  }, [stale]);
+  }, []);
 
   useEffect(() => {
     const filteredKeys = [

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import MenuBar from '../../globalStyles/MenuBar';
 import { MenuTabs } from '../../globalStyles/MenuTabs';
 import SearchBar from './SearchBar';

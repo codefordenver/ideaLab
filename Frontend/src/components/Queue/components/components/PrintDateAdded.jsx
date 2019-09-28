@@ -1,8 +1,7 @@
 import React from 'react'
 
-const PrintDateAdded = ({data}) => {
-    const dateDigit = data.dateAdded;
-    const dateAddedFull = new Date(dateDigit);
+const PrintDateAdded = (props) => {
+    const dateAddedFull = new Date(props.submitted);
     const dateAdded = `${dateAddedFull.getMonth()}/${dateAddedFull.getDay()}/${dateAddedFull.getFullYear()}`
 
     return (
