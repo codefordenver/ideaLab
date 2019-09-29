@@ -1,16 +1,21 @@
 package idealab.api.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import org.hibernate.validator.constraints.Length;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-import javax.persistence.*;
-import java.util.Set;
+import org.hibernate.validator.constraints.Length;
 
 
 @Entity
 @Table(name = "employee")
-public class Employee {
+public class Employee extends Auditable {
+	
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
