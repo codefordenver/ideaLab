@@ -97,7 +97,7 @@ const PrintCardContainer = ({ data }) => {
           )}
         </div>
         <div className="submitDate col20">
-          <PrintDateAdded data={data} />
+          <PrintDateAdded submitted={data.submitted} />
         </div>
         <div>
           <StatusDropdown
