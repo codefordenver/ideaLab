@@ -19,6 +19,15 @@ public class UserController {
         this.userOperations = userOperations;
     }
 
+
+
+@GetMapping("/{id}")
+public ResponseEntity<?> getUser(@PathVariable("id") Integer id) {
+        GenericResponse response = userOperations.getUser(id);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
+
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@RequestBody @Valid Employee user) {
         GenericResponse response = userOperations.userSignUp(user);
