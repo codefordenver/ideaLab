@@ -1,16 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import dummyData from '../dummyData';
-import PrintCardContainer from './components/PrintCardContainer';
+import RequestService from '../../util/RequestService';
 import './QueueContainer.css';
-import SearchBar from './components/SearchBar';
-import MenuBar from '../globalStyles/MenuBar';
-import { MenuTabs } from '../globalStyles/MenuTabs';
+import Queue from './components/Queue';
 
 const QueueContainer = () => {
-  const [data] = useState(dummyData);
+  const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState(data);
   const [stringedValues, setStringedValues] = useState([]);
-  const [statusView, setStatusView] = useState('QUEUEING');
+  const [statusView, setStatusView] = useState('PENDING_REVIEW');
+
+  useEffect(() => {
+    RequestService.getPrintJobs(
+      response => {
+        const data = response.data.data;
+        const formattedData = data.map(printjob => {
+          return {
+            color: printjob.colorTypeId.color,
+            submitted: printjob.createdAt,
+            comments: printjob.comments,
+            status: printjob.status,
+          };
+        });
+        setData(formattedData);
+      },
+      error => console.error(error),
+    );
+  }, []);
 
   useEffect(() => {
     const filteredKeys = [
@@ -48,35 +63,17 @@ const QueueContainer = () => {
     setFilteredData(filteredSearch);
   };
 
-  const renderPrintCards = filteredData.map((el, i) => (
-    <PrintCardContainer data={el} key={i} />
-  ));
-
   const setStatus = view => {
     setStatusView(view);
   };
 
   return (
-    <div>
-      <div className="queueFilterInfo">
-        <MenuBar
-          selectedTab={statusView}
-          tabOptions={MenuTabs.QueueTabs}
-          setView={setStatus}
-        />
-        <SearchBar filterByTerm={filterByTerm} />
-      </div>
-      <ul className="queueBanner">
-        <li className="col10"></li>
-        <li className="col20">File Name</li>
-        <li className="col20">Color</li>
-        <li className="col20">Submitted</li>
-        <li className="col20">Status</li>
-      </ul>
-      {renderPrintCards.length > 0
-        ? renderPrintCards
-        : `No items are currently ${statusView.toLowerCase()}`}
-    </div>
+    <Queue
+      statusView={statusView}
+      setStatus={setStatus}
+      filterByTerm={filterByTerm}
+      filteredData={filteredData}
+    />
   );
 };
 

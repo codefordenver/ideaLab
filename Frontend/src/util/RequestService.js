@@ -80,6 +80,14 @@ const RequestService = {
       .then(thenCallback)
       .catch(catchCallback);
   },
+
+  getPrintJobs(thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .get(backendUrl + '/api/print-jobs')
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
 };
 
 export default RequestService;
