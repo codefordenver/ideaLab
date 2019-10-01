@@ -1,5 +1,18 @@
 package idealab.api.operations;
 
+import static idealab.api.exception.ErrorType.COLOR_CANT_FIND_BY_TYPE;
+import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
+import static idealab.api.exception.ErrorType.PRINT_JOBS_NOT_EXIST;
+import static idealab.api.exception.ErrorType.PRINT_JOB_CANT_FIND_BY_ID;
+
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
 import idealab.api.dto.request.PrintJobDeleteRequest;
 import idealab.api.dto.request.PrintJobNewRequest;
 import idealab.api.dto.request.PrintJobUpdateRequest;
@@ -8,17 +21,18 @@ import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.PrintJobResponse;
 import idealab.api.exception.ErrorType;
 import idealab.api.exception.IdeaLabApiException;
-import idealab.api.model.*;
-import idealab.api.repositories.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import static idealab.api.exception.ErrorType.*;
+import idealab.api.model.ColorType;
+import idealab.api.model.CustomerInfo;
+import idealab.api.model.EmailHash;
+import idealab.api.model.Employee;
+import idealab.api.model.EmployeeRole;
+import idealab.api.model.PrintJob;
+import idealab.api.model.Status;
+import idealab.api.repositories.ColorTypeRepo;
+import idealab.api.repositories.CustomerInfoRepo;
+import idealab.api.repositories.EmailHashRepo;
+import idealab.api.repositories.EmployeeRepo;
+import idealab.api.repositories.PrintJobRepo;
 
 @Service
 public class PrintJobOperations {
@@ -45,7 +59,7 @@ public class PrintJobOperations {
         printJobNewRequest.validate();
         PrintJobResponse response = new PrintJobResponse("File could not be uploaded");
 
-        if(printJobNewRequest.getFile() == null){
+        if (printJobNewRequest.getFile() == null) {
             throw new IdeaLabApiException(DROPBOX_UPLOAD_FILE_ERROR);
         }
 
@@ -61,6 +75,7 @@ public class PrintJobOperations {
         // TODO: Hash email so it is not in plaintext!!
         String emailHash = printJobNewRequest.getEmail();
         EmailHash databaseEmail = emailHashRepo.findByEmailHash(emailHash);
+        
         if (databaseEmail == null) {
             databaseEmail = new EmailHash(emailHash);
             databaseEmail = emailHashRepo.save(databaseEmail);
@@ -68,6 +83,7 @@ public class PrintJobOperations {
 
         // Create customer record with email hash if it does not already exist
         CustomerInfo customer = customerInfoRepo.findByEmailHashId(databaseEmail);
+        
         if (customer == null) {
             customer = new CustomerInfo(databaseEmail, customerFirstName, customerLastName, email);
             customer = customerInfoRepo.save(customer);
@@ -75,9 +91,9 @@ public class PrintJobOperations {
 
         // Check if Color exists otherwise make a new record
         ColorType databaseColor = colorTypeRepo.findByColor(color);
+        
         if (databaseColor == null) {
-            databaseColor = new ColorType(color);
-            databaseColor = colorTypeRepo.save(databaseColor);
+        	throw new IdeaLabApiException(COLOR_CANT_FIND_BY_TYPE);
         }
 
         // TODO: Remove temp employee, this should be taken directly from the employee making the request through the token.

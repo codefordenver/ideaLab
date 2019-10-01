@@ -386,8 +386,7 @@ public class PrintJobOperationsTest {
         when(emailHashRepo.save(any())).thenReturn(emailHash);
         when(customerInfoRepo.findByEmailHashId(any())).thenReturn(null);
         when(customerInfoRepo.save(any())).thenReturn(customerInfo);
-        when(colorTypeRepo.findByColor(any())).thenReturn(null);
-        when(colorTypeRepo.save(any())).thenReturn(color);
+        when(colorTypeRepo.findByColor(any())).thenReturn(color);
         when(employeeRepo.findEmployeeByUsername(any())).thenReturn(null);
         when(employeeRepo.save(any())).thenReturn(e);
         when(printJobRepo.save(any())).thenReturn(printJob);
@@ -398,6 +397,45 @@ public class PrintJobOperationsTest {
         assert(opResponse.equals(response));
     }
 
+    @Test(expected = IdeaLabApiException.class)
+    public void createNewPrintJobWithNotFoundColor() {
+    	byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
+        MultipartFile file = new MockMultipartFile("Something", a);
+
+        PrintJobNewRequest request = new PrintJobNewRequest();
+        request.setColor("RED");
+        request.setComments("COMMENTS");
+        request.setCustomerFirstName("test");
+        request.setCustomerLastName("testLast");
+        request.setEmail("test@email.com");
+        request.setFile(file);
+
+        CustomerInfo customerInfo = new CustomerInfo();
+        customerInfo.setFirstName("test");
+
+        ColorType color = new ColorType();
+        color.setColor("RED");
+        color.setAvailable(true);
+
+        Employee e = new Employee();
+        e.setId(999);
+
+        EmailHash emailHash = new EmailHash();
+        emailHash.setEmailHash("test@email.com");
+
+        Map<String, String> data = new HashMap<>();
+        data.put("filePath", "DROPBOX_PATH");
+        data.put("sharableLink", "http://testlink.com");
+
+        when(emailHashRepo.findByEmailHash(any())).thenReturn(null);
+        when(emailHashRepo.save(any())).thenReturn(emailHash);
+        when(customerInfoRepo.findByEmailHashId(any())).thenReturn(null);
+        when(customerInfoRepo.save(any())).thenReturn(customerInfo);
+        when(colorTypeRepo.findByColor(any())).thenReturn(null);
+
+        operations.newPrintJob(request);
+    }
+    
     @Test(expected = IdeaLabApiException.class)
     public void createNewPrintJobNullFile() {
         PrintJobResponse response = new PrintJobResponse();
