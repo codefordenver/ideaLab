@@ -13,7 +13,7 @@ class SidebarNavigation extends React.Component {
             <nav className={'grid-item-nav'}>
               <div className={'navList'}>
                 <li>
-                  <NavLink to="/upload" activeClassName={'selected'}>
+                  <NavLink to="/" activeClassName={'selected'}>
                     <div className="sidebarIcon" title="Upload">
                       <FiUpload />
                     </div>
