@@ -210,12 +210,12 @@ public class PrintJobOperations {
         return response;
     }
 
-    public PrintJobResponse getAllPrintJobs() {
+    public PrintJobResponse getAllPrintJobs(String status) {
         PrintJobResponse response = new PrintJobResponse("Could not get all print jobs");
 
-        List<PrintJob> printJobs = printJobRepo.findAll();
+        List<PrintJob> printJobs = status == null? printJobRepo.findAll() : printJobRepo.findPrintJobByStatus(Status.fromValue(status));
 
-        if(printJobs == null || printJobs.size() == 0){
+        if (printJobs == null || printJobs.isEmpty()){
             ErrorType.PRINT_JOBS_NOT_EXIST.throwException();
         }
 
@@ -226,7 +226,6 @@ public class PrintJobOperations {
 
         return response;
     }
-
 
     public PrintJobResponse getDeletablePrintJobs() {
         PrintJobResponse response = new PrintJobResponse("Could not get deletable print jobs");

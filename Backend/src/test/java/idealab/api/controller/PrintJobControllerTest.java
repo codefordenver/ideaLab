@@ -191,7 +191,7 @@ public class PrintJobControllerTest {
         expectedResponse.setData(printJobList);
         expectedResponse.setHttpStatus(HttpStatus.ACCEPTED);
 
-        Mockito.when(printJobOperations.getAllPrintJobs()).thenReturn(expectedResponse);
+        Mockito.when(printJobOperations.getAllPrintJobs(null)).thenReturn(expectedResponse);
 
         // act
         String jsonString = mockMvc.perform(

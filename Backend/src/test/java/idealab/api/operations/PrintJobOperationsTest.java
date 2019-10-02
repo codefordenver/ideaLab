@@ -197,7 +197,7 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findAll()).thenReturn(printJobs);
 
         // when
-        PrintJobResponse result = operations.getAllPrintJobs();
+        PrintJobResponse result = operations.getAllPrintJobs(null);
 
         // assert
         Assert.assertEquals(result.getData().get(0).getId(), printJob.getId());
@@ -209,7 +209,7 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findAll()).thenReturn(null);
 
         // when
-        operations.getAllPrintJobs();
+        operations.getAllPrintJobs(null);
     }
 
     @Test(expected = IdeaLabApiException.class)
@@ -218,10 +218,10 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findAll()).thenReturn(new ArrayList<>());
 
         // when
-        operations.getAllPrintJobs();
+        operations.getAllPrintJobs(null);
 
         // when
-        operations.getAllPrintJobs();
+        operations.getAllPrintJobs(null);
     }
 
     @Test
