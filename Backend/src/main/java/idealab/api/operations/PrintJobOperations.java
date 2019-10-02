@@ -63,7 +63,6 @@ public class PrintJobOperations {
             throw new IdeaLabApiException(DROPBOX_UPLOAD_FILE_ERROR);
         }
 
-        // Create new record based off of the printJobNewRequest
         String email = printJobNewRequest.getEmail();
         String customerFirstName = printJobNewRequest.getCustomerFirstName();
         String customerLastName = printJobNewRequest.getCustomerLastName();
@@ -71,7 +70,6 @@ public class PrintJobOperations {
         String comments = printJobNewRequest.getComments();
         LocalDateTime currentTime = LocalDateTime.now();
 
-        // Check if EmailHash Exists otherwise make a new record
         // TODO: Hash email so it is not in plaintext!!
         String emailHash = printJobNewRequest.getEmail();
         EmailHash databaseEmail = emailHashRepo.findByEmailHash(emailHash);
@@ -81,7 +79,6 @@ public class PrintJobOperations {
             databaseEmail = emailHashRepo.save(databaseEmail);
         }
 
-        // Create customer record with email hash if it does not already exist
         CustomerInfo customer = customerInfoRepo.findByEmailHashId(databaseEmail);
         
         if (customer == null) {
@@ -89,7 +86,6 @@ public class PrintJobOperations {
             customer = customerInfoRepo.save(customer);
         }
 
-        // Check if Color exists otherwise make a new record
         ColorType databaseColor = colorTypeRepo.findByColor(color);
         
         if (databaseColor == null) {
@@ -114,8 +110,7 @@ public class PrintJobOperations {
         // TODO: set the queue position of the new job to be at the end of the list.
 
         // Make a dropbox sharable link here using the ID of the database record
-        Map<String, String> data;
-        data = dropboxOperations.uploadDropboxFile(currentTime.toLocalTime().toNanoOfDay(), printJobNewRequest.getFile());
+        Map<String, String> data = dropboxOperations.uploadDropboxFile(currentTime.toLocalTime().toNanoOfDay(), printJobNewRequest.getFile());
 
         printJob.setDropboxPath(data.get("filePath"));
         printJob.setDropboxSharableLink(data.get("sharableLink"));

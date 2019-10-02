@@ -1,15 +1,23 @@
 package idealab.api.operations;
 
-import idealab.api.dto.request.PrintJobDeleteRequest;
-import idealab.api.dto.request.PrintJobNewRequest;
-import idealab.api.dto.request.PrintJobUpdateRequest;
-import idealab.api.dto.request.PrintModelUpdateRequest;
-import idealab.api.dto.response.GenericResponse;
-import idealab.api.dto.response.PrintJobResponse;
-import idealab.api.exception.IdeaLabApiException;
-import idealab.api.model.Queue;
-import idealab.api.model.*;
-import idealab.api.repositories.*;
+import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
+import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.util.AssertionErrors.assertTrue;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,15 +28,25 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
-import java.util.*;
-
-import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
-import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.util.AssertionErrors.assertTrue;
+import idealab.api.dto.request.PrintJobDeleteRequest;
+import idealab.api.dto.request.PrintJobNewRequest;
+import idealab.api.dto.request.PrintJobUpdateRequest;
+import idealab.api.dto.request.PrintModelUpdateRequest;
+import idealab.api.dto.response.GenericResponse;
+import idealab.api.dto.response.PrintJobResponse;
+import idealab.api.exception.IdeaLabApiException;
+import idealab.api.model.ColorType;
+import idealab.api.model.CustomerInfo;
+import idealab.api.model.EmailHash;
+import idealab.api.model.Employee;
+import idealab.api.model.PrintJob;
+import idealab.api.model.Queue;
+import idealab.api.model.Status;
+import idealab.api.repositories.ColorTypeRepo;
+import idealab.api.repositories.CustomerInfoRepo;
+import idealab.api.repositories.EmailHashRepo;
+import idealab.api.repositories.EmployeeRepo;
+import idealab.api.repositories.PrintJobRepo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PrintJobOperationsTest {
@@ -399,6 +417,7 @@ public class PrintJobOperationsTest {
 
     @Test(expected = IdeaLabApiException.class)
     public void createNewPrintJobWithNotFoundColor() {
+    	// given
     	byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
         MultipartFile file = new MockMultipartFile("Something", a);
 
@@ -410,30 +429,13 @@ public class PrintJobOperationsTest {
         request.setEmail("test@email.com");
         request.setFile(file);
 
-        CustomerInfo customerInfo = new CustomerInfo();
-        customerInfo.setFirstName("test");
-
-        ColorType color = new ColorType();
-        color.setColor("RED");
-        color.setAvailable(true);
-
-        Employee e = new Employee();
-        e.setId(999);
-
-        EmailHash emailHash = new EmailHash();
-        emailHash.setEmailHash("test@email.com");
-
-        Map<String, String> data = new HashMap<>();
-        data.put("filePath", "DROPBOX_PATH");
-        data.put("sharableLink", "http://testlink.com");
-
-        when(emailHashRepo.findByEmailHash(any())).thenReturn(null);
-        when(emailHashRepo.save(any())).thenReturn(emailHash);
-        when(customerInfoRepo.findByEmailHashId(any())).thenReturn(null);
-        when(customerInfoRepo.save(any())).thenReturn(customerInfo);
         when(colorTypeRepo.findByColor(any())).thenReturn(null);
 
+        // when
         operations.newPrintJob(request);
+        
+        // assert
+        verify(operations, times(1)).newPrintJob(request);
     }
     
     @Test(expected = IdeaLabApiException.class)
