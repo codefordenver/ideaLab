@@ -11,7 +11,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @MappedSuperclass
-public class Auditable {
+public class RecordTimestamp {
 
 	@CreatedDate
 	@Column(name = "created_at", updatable = false)

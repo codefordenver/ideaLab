@@ -9,12 +9,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-
-
 @Entity
 @Table(name = "queue")
-public class Queue {
-    @Id
+public class Queue extends RecordTimestamp {
+    
+	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 

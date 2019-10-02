@@ -1,13 +1,14 @@
 package idealab.api.schedule;
 
-import idealab.api.model.CustomerInfo;
-import idealab.api.repositories.CustomerInfoRepo;
+import java.time.LocalDateTime;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
+import idealab.api.model.CustomerInfo;
+import idealab.api.repositories.CustomerInfoRepo;
 
 @Component
 public class DeleteUserInfoCronJob {
@@ -27,10 +28,12 @@ public class DeleteUserInfoCronJob {
     public void deleteUserInfo() {
         LOGGER.info("Running cron job to delete users");
         Iterable<CustomerInfo> customerInfoList = customerInfoRepo.findAll();
-        if(customerInfoList != null) {
+        
+        if (customerInfoList != null) {
             for (CustomerInfo c : customerInfoList) {
-                LocalDate d = c.getCreatedDate().toLocalDate();
-                if (d.isBefore(LocalDate.now().minusDays(NUM_DAYS_RETENTION))) {
+                LocalDateTime d = c.getCreatedAt();
+                
+                if (d.isBefore(LocalDateTime.now().minusDays(NUM_DAYS_RETENTION))) {
                     customerInfoRepo.delete(c);
                 }
             }

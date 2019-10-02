@@ -14,7 +14,7 @@ import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "employee")
-public class Employee extends Auditable {
+public class Employee extends RecordTimestamp {
 	
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

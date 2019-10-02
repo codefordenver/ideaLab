@@ -1,12 +1,17 @@
 package idealab.api.model;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "print_status_audit")
-public class PrintStatusAudit {
+public class PrintStatusAudit extends RecordTimestamp {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -21,20 +26,16 @@ public class PrintStatusAudit {
     @Column(name = "status_after")
     private String statusAfter;
 
-    @Column(name = "created_at",  nullable = false)
-    private LocalDateTime createdAt;
-
     @Column(name = "fk_print_model_id", nullable = false)
     private Integer printModelId;
 
     public PrintStatusAudit() {
     }
 
-    public PrintStatusAudit(Integer employeeId, String statusBefore, String statusAfter, LocalDateTime createdAt) {
+    public PrintStatusAudit(Integer employeeId, String statusBefore, String statusAfter) {
         this.employeeId = employeeId;
         this.statusBefore = statusBefore;
         this.statusAfter = statusAfter;
-        this.createdAt = createdAt;
     }
 
     public Integer getId() {
@@ -69,14 +70,6 @@ public class PrintStatusAudit {
         this.statusAfter = statusAfter;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public void setPrintModelId(Integer id) {
         this.printModelId = id;
     }
@@ -92,7 +85,6 @@ public class PrintStatusAudit {
                 ", employeeId=" + employeeId +
                 ", statusBefore='" + statusBefore + '\'' +
                 ", statusAfter='" + statusAfter + '\'' +
-                ", createdAt=" + createdAt +
                 '}';
     }
 
@@ -104,8 +96,7 @@ public class PrintStatusAudit {
         return Objects.equals(id, that.id) &&
                 Objects.equals(employeeId, that.employeeId) &&
                 Objects.equals(statusBefore, that.statusBefore) &&
-                Objects.equals(statusAfter, that.statusAfter) &&
-                Objects.equals(createdAt, that.createdAt);
+                Objects.equals(statusAfter, that.statusAfter);
     }
 
 }
