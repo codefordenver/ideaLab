@@ -93,7 +93,7 @@ public class PrintJobOperations {
         }
 
         // Create a new print model first with temp dropbox link
-        PrintJob printJob = new PrintJob(databaseEmail, databaseColor, databaseEmployee, Status.PENDING_REVIEW, comments, currentTime, currentTime);
+        PrintJob printJob = new PrintJob(databaseEmail, databaseColor, databaseEmployee, Status.PENDING_REVIEW, comments);
 
         // TODO: set the queue position of the new job to be at the end of the list.
 
