@@ -29,6 +29,7 @@ import static idealab.api.exception.ErrorType.*;
 
 @Component
 public class DropboxOperations {
+
   private final DropboxConfiguration dropboxConfig;
   private DbxClientV2 client;
   private PrintJobRepo printJobRepo;

@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/dropbox")
-public class DropBoxController {
+@RequestMapping("/api/dropbox")
+public class DropboxController {
 
     private final DropboxOperations dropboxOperations;
 
-    public DropBoxController(DropboxOperations dropboxOperations) {
+    public DropboxController(DropboxOperations dropboxOperations) {
         this.dropboxOperations = dropboxOperations;
     }
 
