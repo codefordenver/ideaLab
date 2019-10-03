@@ -4,11 +4,17 @@ import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
+import com.dropbox.core.v2.files.Metadata;
+import com.dropbox.core.v2.files.RelocationResult;
 import com.dropbox.core.v2.sharing.ListSharedLinksErrorException;
 import com.dropbox.core.v2.sharing.ListSharedLinksResult;
+import idealab.api.dto.request.DropBoxFilePathRequest;
+import idealab.api.dto.response.GenericResponse;
 import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.PrintJob;
+import idealab.api.repositories.PrintJobRepo;
 import idealab.configurations.DropboxConfiguration;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,16 +25,17 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static idealab.api.exception.ErrorType.DROPBOX_DELETE_FILE_ERROR;
-import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
+import static idealab.api.exception.ErrorType.*;
 
 @Component
 public class DropboxOperations {
   private final DropboxConfiguration dropboxConfig;
   private DbxClientV2 client;
+  private PrintJobRepo printJobRepo;
 
-  public DropboxOperations(DropboxConfiguration dropboxConfig) {
+  public DropboxOperations(DropboxConfiguration dropboxConfig, PrintJobRepo printJobRepo) {
     this.dropboxConfig = dropboxConfig;
+    this.printJobRepo = printJobRepo;
   }
 
   @PostConstruct
@@ -105,4 +112,32 @@ public class DropboxOperations {
     LocalDateTime currentTime = LocalDateTime.now();
     return uploadDropboxFile(currentTime.toLocalTime().toNanoOfDay(), file);
   }
+
+  public GenericResponse updateDropboxPath(DropBoxFilePathRequest request) {
+    PrintJob printJob = printJobRepo.findPrintJobById(request.getPrintJobId());
+
+    if(printJob == null)
+      throw new IdeaLabApiException(PRINT_JOB_CANT_FIND_BY_ID);
+
+    String oldPath = printJob.getDropboxPath();
+
+    try {
+      RelocationResult result = client.files().copyV2(oldPath, request.getNewPath());
+      Metadata metaData = result.getMetadata();
+      if(metaData.getPathDisplay().equalsIgnoreCase(request.getNewPath())) {
+        printJob.setDropboxPath(metaData.getPathDisplay());
+        printJob = printJobRepo.save(printJob);
+      }
+    } catch (DbxException e) {
+      e.printStackTrace();
+      throw new IdeaLabApiException(DROPBOX_UPDATE_FILE_ERROR);
+    }
+
+    GenericResponse response = new GenericResponse();
+    response.setMessage("Dropbox file path updated successfully");
+    response.setSuccess(true);
+    response.setHttpStatus(HttpStatus.ACCEPTED);
+    return response;
+  }
+
 }
