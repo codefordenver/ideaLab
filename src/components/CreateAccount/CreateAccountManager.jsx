@@ -65,6 +65,40 @@ const CreateAccountManager = () => {
       <div className="form">
         <form onSubmit={e => onSubmit(e)}>
           <input
+            name="firstName"
+            placeholder="First Name"
+            type="input"
+            autoComplete="off"
+            value={firstName}
+            onChange={e => setFirstName(e.target.value)}
+          />
+          <input
+            name="lastName"
+            placeholder="Last Name"
+            type="input"
+            autoComplete="off"
+            value={lastName}
+            onChange={e => setLastName(e.target.value)}
+          />
+          <div className="select-role">
+            <input
+              name="role"
+              type="radio"
+              autoComplete="off"
+              value={'STAFF'}
+              onChange={e => setRole(e.target.value)}
+            />
+            <label htmlFor="role">Staff</label>
+            <input
+              name="role"
+              type="radio"
+              autoComplete="off"
+              value={'ADMIN'}
+              onChange={e => setRole(e.target.value)}
+            />
+            <label htmlFor="role">Admin</label>
+          </div>
+          <input
             name="email"
             placeholder="email"
             autoComplete="off"
@@ -87,44 +121,6 @@ const CreateAccountManager = () => {
             value={password}
             onChange={e => setPassword(e.target.value)}
           />
-          <input
-            name="firstName"
-            placeholder="First Name"
-            type="input"
-            autoComplete="off"
-            value={firstName}
-            onChange={e => setFirstName(e.target.value)}
-          />
-          <input
-            name="lastName"
-            placeholder="Last Name"
-            type="input"
-            autoComplete="off"
-            value={lastName}
-            onChange={e => setLastName(e.target.value)}
-          />
-          <div>
-            <label>
-              <input
-                name="role"
-                type="radio"
-                autoComplete="off"
-                value={'STAFF'}
-                onChange={e => setRole(e.target.value)}
-              />
-              Staff
-            </label>
-            <label>
-              <input
-                name="role"
-                type="radio"
-                autoComplete="off"
-                value={'ADMIN'}
-                onChange={e => setRole(e.target.value)}
-              />
-              Admin
-            </label>
-          </div>
           {renderErrors()}
           <button type="submit">Create Account</button>
         </form>

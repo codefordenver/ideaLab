@@ -17,6 +17,20 @@ h1 {
   border-color: #00aeef;
 }
 
+.select-role input {
+  display: inline;
+  height: 1em;
+  margin: 1em;
+  outline: none;
+  border-style: none;
+  font-size: 1.5rem;
+  padding: none;
+}
+
+.select-role * {
+  font-size: 2em;
+}
+
 .container > button {
   display: block;
   height: 2.5em;
