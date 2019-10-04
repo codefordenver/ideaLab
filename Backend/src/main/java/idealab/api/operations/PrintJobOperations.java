@@ -1,38 +1,22 @@
 package idealab.api.operations;
 
-import static idealab.api.exception.ErrorType.COLOR_CANT_FIND_BY_TYPE;
-import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
-import static idealab.api.exception.ErrorType.PRINT_JOBS_NOT_EXIST;
-import static idealab.api.exception.ErrorType.PRINT_JOB_CANT_FIND_BY_ID;
-
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
-import idealab.api.dto.request.PrintJobDeleteRequest;
-import idealab.api.dto.request.PrintJobNewRequest;
-import idealab.api.dto.request.PrintJobUpdateRequest;
-import idealab.api.dto.request.PrintModelUpdateRequest;
+import idealab.api.dto.request.*;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.PrintJobResponse;
 import idealab.api.exception.ErrorType;
 import idealab.api.exception.IdeaLabApiException;
-import idealab.api.model.ColorType;
-import idealab.api.model.CustomerInfo;
-import idealab.api.model.EmailHash;
-import idealab.api.model.Employee;
-import idealab.api.model.EmployeeRole;
-import idealab.api.model.PrintJob;
-import idealab.api.model.Status;
-import idealab.api.repositories.ColorTypeRepo;
-import idealab.api.repositories.CustomerInfoRepo;
-import idealab.api.repositories.EmailHashRepo;
-import idealab.api.repositories.EmployeeRepo;
-import idealab.api.repositories.PrintJobRepo;
+import idealab.api.model.*;
+import idealab.api.repositories.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import static idealab.api.exception.ErrorType.*;
 
 @Service
 public class PrintJobOperations {
@@ -254,6 +238,56 @@ public class PrintJobOperations {
         response.setMessage("Successfully returned deletable print jobs");
         response.setData(printJobs);
         response.setHttpStatus(HttpStatus.ACCEPTED);
+
+        return response;
+    }
+
+    public PrintJobResponse updatePrintJobProps(Integer printJobId, UpdatePrintJobPropertiesRequest request) {
+        request.validate();
+        boolean isChanged = false;
+
+        Employee employee = employeeRepo.findEmployeeById(request.getEmployeeId());
+        if(employee == null)
+            throw new IdeaLabApiException(PRINT_JOB_UPDATE_FAILED, "Employee not found");
+
+        PrintJob printJob = printJobRepo.findPrintJobById(printJobId);
+        if(printJob == null)
+            throw new IdeaLabApiException(PRINT_JOB_CANT_FIND_BY_ID);
+
+        ColorType colorType = null;
+        if(request.getColorType() != null && !request.getColorType().trim().isEmpty()) {
+            colorType = colorTypeRepo.findByColor(request.getColorType());
+            if (colorType == null)
+                throw new IdeaLabApiException(PRINT_JOB_UPDATE_FAILED, "Color type is invalid");
+        }
+
+        if(request.getStatus() != null && !request.getStatus().trim().isEmpty()) {
+            isChanged = true;
+            printJob.setStatus(Status.fromValue(request.getStatus()));
+        }
+
+        if(request.getComments() != null) {
+            isChanged = true;
+            printJob.setComments(request.getComments());
+        }
+
+        if(colorType != null && colorType.getColor() != null && !colorType.getColor().trim().isEmpty()) {
+            isChanged = true;
+            printJob.setColorTypeId(colorType);
+        }
+
+        // Dont save if nothing actually updated
+        if(isChanged)
+            printJob = printJobRepo.save(printJob);
+
+        List<PrintJob> printJobs = new ArrayList<>();
+        printJobs.add(printJob);
+
+        PrintJobResponse response = new PrintJobResponse();
+        response.setSuccess(true);
+        response.setMessage("Print job properties updated successfully");
+        response.setHttpStatus(HttpStatus.ACCEPTED);
+        response.setData(printJobs);
 
         return response;
     }

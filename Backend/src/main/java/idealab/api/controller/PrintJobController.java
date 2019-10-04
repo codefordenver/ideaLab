@@ -83,8 +83,10 @@ public class PrintJobController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @PutMapping("/{printId}")
-    public ResponseEntity<?> updatePrintJobProperties(@RequestBody UpdatePrintJobPropertiesRequest request) {
-        return null;
+    //Don't include the field in the JSON if you dont want it updated
+    @PutMapping("/{print-id}")
+    public ResponseEntity<?> updatePrintJobProperties(@PathVariable("print-id") Integer printId, @RequestBody UpdatePrintJobPropertiesRequest request) {
+        PrintJobResponse response = printJobOperations.updatePrintJobProps(printId, request);
+        return new ResponseEntity<>(response, response.getHttpStatus());
     }
 }
