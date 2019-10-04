@@ -1,9 +1,6 @@
 package idealab.api.controller;
 
-import idealab.api.dto.request.PrintJobDeleteRequest;
-import idealab.api.dto.request.PrintJobNewRequest;
-import idealab.api.dto.request.PrintJobUpdateRequest;
-import idealab.api.dto.request.PrintModelUpdateRequest;
+import idealab.api.dto.request.*;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.PrintJobResponse;
 import idealab.api.operations.PrintJobOperations;
@@ -84,5 +81,10 @@ public class PrintJobController {
         PrintJobResponse response = printJobOperations.getDeletablePrintJobs();
 
         return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
+    @PutMapping("/{printId}")
+    public ResponseEntity<?> updatePrintJobProperties(@RequestBody UpdatePrintJobPropertiesRequest request) {
+        return null;
     }
 }
