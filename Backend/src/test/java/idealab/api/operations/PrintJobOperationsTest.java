@@ -590,4 +590,103 @@ public class PrintJobOperationsTest {
         assertTrue("status is not equal", response.getData().get(0).getStatus() == Status.fromValue(request.getStatus()));
         assertTrue("color is not equal", response.getData().get(0).getColorTypeId().getColor().equals(request.getColorType()));
     }
+
+    @Test
+    public void updatePrintJobColorProp() {
+        UpdatePrintJobPropertiesRequest request = new UpdatePrintJobPropertiesRequest();
+        request.setColorType("red");
+        request.setEmployeeId(1);
+
+        PrintJob printJob = new PrintJob();
+        printJob.setComments("old comments");
+        printJob.setStatus(Status.valueOf("FAILED"));
+        ColorType colorType = new ColorType();
+        colorType.setColor("blue");
+        printJob.setColorTypeId(colorType);
+
+        Employee e = new Employee();
+        e.setId(1);
+
+        ColorType newColorType = new ColorType();
+        newColorType.setColor("red");
+        newColorType.setAvailable(true);
+
+
+        when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
+        when(employeeRepo.findEmployeeById(anyInt())).thenReturn(e);
+        when(colorTypeRepo.findByColor("red")).thenReturn(newColorType);
+        when(printJobRepo.save(printJob)).thenReturn(null);
+
+        PrintJobResponse response = operations.updatePrintJobProps(1, request);
+        assertTrue("response is null", response != null);
+        assertTrue("comments are not equal", response.getData().get(0).getComments().equals(printJob.getComments()));
+        assertTrue("status is not equal", response.getData().get(0).getStatus() == printJob.getStatus());
+        assertTrue("color is not equal", response.getData().get(0).getColorTypeId().getColor().equals(request.getColorType()));
+    }
+
+    @Test
+    public void updatePrintJobStatusProp() {
+        UpdatePrintJobPropertiesRequest request = new UpdatePrintJobPropertiesRequest();
+        request.setStatus("REJECTED");
+        request.setEmployeeId(1);
+
+        PrintJob printJob = new PrintJob();
+        printJob.setComments("old comments");
+        printJob.setStatus(Status.valueOf("FAILED"));
+        ColorType colorType = new ColorType();
+        colorType.setColor("blue");
+        printJob.setColorTypeId(colorType);
+
+        Employee e = new Employee();
+        e.setId(1);
+
+        ColorType newColorType = new ColorType();
+        newColorType.setColor("red");
+        newColorType.setAvailable(true);
+
+
+        when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
+        when(employeeRepo.findEmployeeById(anyInt())).thenReturn(e);
+        when(colorTypeRepo.findByColor("red")).thenReturn(newColorType);
+        when(printJobRepo.save(printJob)).thenReturn(null);
+
+        PrintJobResponse response = operations.updatePrintJobProps(1, request);
+        assertTrue("response is null", response != null);
+        assertTrue("comments are not equal", response.getData().get(0).getComments().equals(printJob.getComments()));
+        assertTrue("status is not equal", response.getData().get(0).getStatus() == Status.fromValue(request.getStatus()));
+        assertTrue("color is not equal", response.getData().get(0).getColorTypeId().getColor().equals(printJob.getColorTypeId().getColor()));
+    }
+
+    @Test
+    public void updatePrintJobCommentsProp() {
+        UpdatePrintJobPropertiesRequest request = new UpdatePrintJobPropertiesRequest();
+        request.setComments("comments");
+        request.setEmployeeId(1);
+
+        PrintJob printJob = new PrintJob();
+        printJob.setComments("old comments");
+        printJob.setStatus(Status.valueOf("FAILED"));
+        ColorType colorType = new ColorType();
+        colorType.setColor("blue");
+        printJob.setColorTypeId(colorType);
+
+        Employee e = new Employee();
+        e.setId(1);
+
+        ColorType newColorType = new ColorType();
+        newColorType.setColor("red");
+        newColorType.setAvailable(true);
+
+
+        when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
+        when(employeeRepo.findEmployeeById(anyInt())).thenReturn(e);
+        when(colorTypeRepo.findByColor("red")).thenReturn(newColorType);
+        when(printJobRepo.save(printJob)).thenReturn(null);
+
+        PrintJobResponse response = operations.updatePrintJobProps(1, request);
+        assertTrue("response is null", response != null);
+        assertTrue("comments are not equal", response.getData().get(0).getComments().equals(request.getComments()));
+        assertTrue("status is not equal", response.getData().get(0).getStatus() == printJob.getStatus());
+        assertTrue("color is not equal", response.getData().get(0).getColorTypeId().getColor().equals(printJob.getColorTypeId().getColor()));
+    }
 }
