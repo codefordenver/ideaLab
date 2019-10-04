@@ -1,7 +1,14 @@
 package idealab.api.schedule;
 
-import idealab.api.model.CustomerInfo;
-import idealab.api.repositories.CustomerInfoRepo;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,14 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import idealab.api.model.CustomerInfo;
+import idealab.api.repositories.CustomerInfoRepo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class DeleteUserInfoCronJobTest {
@@ -34,9 +35,10 @@ public class DeleteUserInfoCronJobTest {
 
     @Test
     public void deleteUserInfo() {
-        List<CustomerInfo> customerInfoList = new ArrayList<>();
         CustomerInfo ci = new CustomerInfo();
-        ci.setCreatedDate(Date.valueOf("2019-01-01"));
+        ci.setCreatedAt(LocalDateTime.of(2019, Month.JANUARY, 1, 0, 0));
+        
+        List<CustomerInfo> customerInfoList = new ArrayList<>();
         customerInfoList.add(ci);
 
         when(customerInfoRepo.findAll()).thenReturn(customerInfoList);
@@ -49,7 +51,7 @@ public class DeleteUserInfoCronJobTest {
     public void deleteUserInfoNoOlderUsers() {
         List<CustomerInfo> customerInfoList = new ArrayList<>();
         CustomerInfo ci = new CustomerInfo();
-        ci.setCreatedDate(Date.valueOf(LocalDate.now()));
+        ci.setCreatedAt(LocalDateTime.now());
         customerInfoList.add(ci);
 
         when(customerInfoRepo.findAll()).thenReturn(customerInfoList);

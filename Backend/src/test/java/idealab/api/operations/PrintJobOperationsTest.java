@@ -2,6 +2,9 @@ package idealab.api.operations;
 
 import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
 import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -9,7 +12,6 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -215,10 +217,36 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findAll()).thenReturn(printJobs);
 
         // when
-        PrintJobResponse result = operations.getAllPrintJobs();
+        PrintJobResponse result = operations.getAllPrintJobs(null);
 
         // assert
         Assert.assertEquals(result.getData().get(0).getId(), printJob.getId());
+    }
+    
+    @Test
+    public void getAllPrintJobsByStatus() throws Exception {
+        // given
+        PrintJob printJob = new PrintJob();
+
+        printJob.setColorTypeId(new ColorType("Red"));
+        printJob.setComments("comments");
+        printJob.setCreatedAt(LocalDateTime.now());
+        printJob.setEmailHashId(new EmailHash());
+        printJob.setQueueId(new Queue(1));
+        printJob.setStatus(Status.ARCHIVED);
+        printJob.setEmployeeId(new Employee());
+        printJob.setId(1);
+
+        List<PrintJob> printJobList = Arrays.asList(printJob);
+
+        when(printJobRepo.findPrintJobByStatus(Status.ARCHIVED)).thenReturn(printJobList);
+        
+        // when
+        PrintJobResponse result = operations.getAllPrintJobs(Status.ARCHIVED.getName());
+        
+        // assert
+        verify(printJobRepo, times(1)).findPrintJobByStatus(Status.ARCHIVED);
+        assertEquals(result.getData().get(0).getId(), printJob.getId());
     }
 
     @Test(expected = IdeaLabApiException.class)
@@ -227,7 +255,7 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findAll()).thenReturn(null);
 
         // when
-        operations.getAllPrintJobs();
+        operations.getAllPrintJobs(null);
     }
 
     @Test(expected = IdeaLabApiException.class)
@@ -236,10 +264,10 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findAll()).thenReturn(new ArrayList<>());
 
         // when
-        operations.getAllPrintJobs();
+        operations.getAllPrintJobs(null);
 
         // when
-        operations.getAllPrintJobs();
+        operations.getAllPrintJobs(null);
     }
 
     @Test

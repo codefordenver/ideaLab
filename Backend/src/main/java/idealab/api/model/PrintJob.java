@@ -1,10 +1,20 @@
 package idealab.api.model;
 
-import org.hibernate.validator.constraints.Length;
-
-import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.hibernate.validator.constraints.Length;
 
 /**
  * This class holds the model that represents the print job table. It is related to email hash, color type, queue, and employee ID. Additionally,
@@ -12,7 +22,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "print_job")
-public class PrintJob {
+public class PrintJob extends RecordTimestamp {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -48,24 +58,15 @@ public class PrintJob {
     @Length(min = 1, max = 254)
     private String dropboxPath;
 
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
+    public PrintJob() {}
 
-    @Column(name = "created_at",  nullable = false)
-    private LocalDateTime createdAt;
-
-    public PrintJob() {
-    }
-
-    public PrintJob(EmailHash emailHashId, ColorType colorTypeId, Employee employeeId, Status status,
-                    String comments, LocalDateTime updatedAt, LocalDateTime createdAt) {
+    public PrintJob(EmailHash emailHashId, ColorType colorTypeId, Employee employeeId, 
+    		Status status, String comments) {
         this.emailHashId = emailHashId;
         this.colorTypeId = colorTypeId;
         this.employeeId = employeeId;
         this.status = status;
         this.comments = comments;
-        this.updatedAt = updatedAt;
-        this.createdAt = createdAt;
     }
 
     public Integer getId() {
@@ -140,22 +141,6 @@ public class PrintJob {
         this.dropboxPath = dropboxPath;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -169,9 +154,7 @@ public class PrintJob {
                 Objects.equals(queueId, printJob.queueId) &&
                 Objects.equals(comments, printJob.comments) &&
                 Objects.equals(dropboxPath, printJob.dropboxPath) &&
-                Objects.equals(dropboxSharableLink, printJob.dropboxSharableLink) &&
-                Objects.equals(updatedAt, printJob.updatedAt) &&
-                Objects.equals(createdAt, printJob.createdAt);
+                Objects.equals(dropboxSharableLink, printJob.dropboxSharableLink);
     }
 
     @Override
@@ -186,8 +169,7 @@ public class PrintJob {
                 ", comments='" + comments + '\'' +
                 ", dropboxPath='" + dropboxPath + '\'' +
                 ", dropboxSharableLink='" + dropboxSharableLink + '\'' +
-                ", updatedAt=" + updatedAt +
-                ", createdAt=" + createdAt +
                 '}';
     }
+    
 }

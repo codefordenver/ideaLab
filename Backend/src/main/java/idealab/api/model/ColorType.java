@@ -12,7 +12,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "color_type")
-public class ColorType {
+public class ColorType extends RecordTimestamp {
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -34,7 +35,6 @@ public class ColorType {
         this.available = true;
     }
 
-    //getters and setters
     public String getColor() {
         return color;
     }

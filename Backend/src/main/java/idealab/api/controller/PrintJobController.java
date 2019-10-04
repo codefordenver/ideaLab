@@ -25,10 +25,9 @@ public class PrintJobController {
     }
 
     @GetMapping
-    public ResponseEntity<?> printJobGetAll() {
-//        TODO: Add parameter that will find all and return based on status
+    public ResponseEntity<?> printJobGetAll(@RequestParam(required = false) String status) {
         LOGGER.info("Return all print jobs");
-        PrintJobResponse response = printJobOperations.getAllPrintJobs();
+        PrintJobResponse response = printJobOperations.getAllPrintJobs(status);
 
         return new ResponseEntity<>(response, response.getHttpStatus());
     }

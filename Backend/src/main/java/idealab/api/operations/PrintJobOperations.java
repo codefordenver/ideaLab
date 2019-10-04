@@ -105,7 +105,7 @@ public class PrintJobOperations {
         }
 
         // Create a new print model first with temp dropbox link
-        PrintJob printJob = new PrintJob(databaseEmail, databaseColor, databaseEmployee, Status.PENDING_REVIEW, comments, currentTime, currentTime);
+        PrintJob printJob = new PrintJob(databaseEmail, databaseColor, databaseEmployee, Status.PENDING_REVIEW, comments);
 
         // TODO: set the queue position of the new job to be at the end of the list.
 
@@ -221,23 +221,22 @@ public class PrintJobOperations {
         return response;
     }
 
-    public PrintJobResponse getAllPrintJobs() {
+    public PrintJobResponse getAllPrintJobs(String status) {
         PrintJobResponse response = new PrintJobResponse("Could not get all print jobs");
 
-        List<PrintJob> printJobs = printJobRepo.findAll();
+        List<PrintJob> printJobs = status == null? printJobRepo.findAll() : printJobRepo.findPrintJobByStatus(Status.fromValue(status));
 
-        if(printJobs == null || printJobs.size() == 0){
+        if (printJobs == null || printJobs.isEmpty()){
             ErrorType.PRINT_JOBS_NOT_EXIST.throwException();
         }
 
         response.setSuccess(true);
-        response.setMessage("Successfully returned all print jobs");
+        response.setMessage(status == null? "Successfully returned all print jobs" : "Successfully returned print jobs by " + status + " status");
         response.setData(printJobs);
         response.setHttpStatus(HttpStatus.ACCEPTED);
 
         return response;
     }
-
 
     public PrintJobResponse getDeletablePrintJobs() {
         PrintJobResponse response = new PrintJobResponse("Could not get deletable print jobs");
