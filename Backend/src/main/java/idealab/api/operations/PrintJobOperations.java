@@ -278,7 +278,7 @@ public class PrintJobOperations {
 
         // Dont save if nothing actually updated
         if(isChanged)
-            printJob = printJobRepo.save(printJob);
+            printJobRepo.save(printJob);
 
         List<PrintJob> printJobs = new ArrayList<>();
         printJobs.add(printJob);
