@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import static idealab.api.exception.ErrorType.*;
 
@@ -96,9 +97,9 @@ public class DropboxOperations {
     return data;
   }
 
-  public void deleteDropboxFile(PrintJob printJob){
+  public void deleteDropboxFile(String dropboxPath){
     try{
-      client.files().deleteV2(printJob.getDropboxPath());
+      client.files().deleteV2(dropboxPath);
     }
     catch (DbxException e) {
       throw new IdeaLabApiException(DROPBOX_DELETE_FILE_ERROR);
@@ -109,7 +110,7 @@ public class DropboxOperations {
     // 1. Delete existing dropbox file using deleteDropboxFile() method
     // Note:  if the file path does not start with a "/" then there is either an error or it was deleted already.
     if(printJob.getDropboxPath().startsWith("/")){
-      deleteDropboxFile(printJob);
+      deleteDropboxFile(printJob.getDropboxPath());
     }
     // 2. Create new sharable data link using uploadDropboxFile() method
     LocalDateTime currentTime = LocalDateTime.now();
@@ -131,7 +132,8 @@ public class DropboxOperations {
       RelocationResult result = client.files().copyV2(oldPath, newPath);
       Metadata metaData = result.getMetadata();
       if(metaData.getPathDisplay().equalsIgnoreCase(newPath)) {
-        deleteDropboxFile(printJob);
+        String dropboxPath = printJob.getDropboxPath();
+        DeletePrintJobAsync(dropboxPath);
         printJob.setDropboxPath(metaData.getPathDisplay());
         String sharableLink = getSharableLink(metaData.getPathLower());
         printJob.setDropboxSharableLink(sharableLink);
@@ -151,6 +153,18 @@ public class DropboxOperations {
     printJobs.add(printJob);
     response.setData(printJobs);
     return response;
+  }
+
+  //Run it and forget it, runs asynchronously
+  private void DeletePrintJobAsync(String dropboxPath) {
+    CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+      try {
+        deleteDropboxFile(dropboxPath);
+      } catch (Exception e) {
+        //swallow exception since whether or not it deletes isn't super important
+        e.printStackTrace();
+      }
+    });
   }
 
 }

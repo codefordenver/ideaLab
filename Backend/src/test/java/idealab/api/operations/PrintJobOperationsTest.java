@@ -493,7 +493,7 @@ public class PrintJobOperationsTest {
         printJob.setId(999);
 
         when(printJobRepo.findPrintJobById(printJob.getId())).thenReturn(printJob);
-        doNothing().when(dropboxOperations).deleteDropboxFile(printJob);
+        doNothing().when(dropboxOperations).deleteDropboxFile(printJob.getDropboxPath());
         when(printJobRepo.save(printJob)).thenReturn(printJob);
 
         GenericResponse opResponse = operations.deleteModel(printJob.getId());
