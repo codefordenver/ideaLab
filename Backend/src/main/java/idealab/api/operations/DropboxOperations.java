@@ -123,14 +123,18 @@ public class DropboxOperations {
       throw new IdeaLabApiException(PRINT_JOB_CANT_FIND_BY_ID);
 
     LocalDateTime currentTime = LocalDateTime.now();
-    String newPath = currentTime.toLocalTime().toNanoOfDay() + request.getNewPath();
+    String newPath = "/" + currentTime.toLocalTime().toNanoOfDay() + request.getNewPath();
     String oldPath = printJob.getDropboxPath();
 
     try {
+      //Copy file to new location in dropbox, delete old file from dropbox, update database
       RelocationResult result = client.files().copyV2(oldPath, newPath);
       Metadata metaData = result.getMetadata();
       if(metaData.getPathDisplay().equalsIgnoreCase(newPath)) {
+        deleteDropboxFile(printJob);
         printJob.setDropboxPath(metaData.getPathDisplay());
+        String sharableLink = getSharableLink(metaData.getPathLower());
+        printJob.setDropboxSharableLink(sharableLink);
         printJob = printJobRepo.save(printJob);
       }
     } catch (DbxException e) {
