@@ -9,7 +9,7 @@ import com.dropbox.core.v2.files.RelocationResult;
 import com.dropbox.core.v2.sharing.ListSharedLinksErrorException;
 import com.dropbox.core.v2.sharing.ListSharedLinksResult;
 import idealab.api.dto.request.DropBoxFilePathRequest;
-import idealab.api.dto.response.GenericResponse;
+import idealab.api.dto.response.PrintJobResponse;
 import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.PrintJob;
 import idealab.api.repositories.PrintJobRepo;
@@ -22,7 +22,9 @@ import javax.annotation.PostConstruct;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static idealab.api.exception.ErrorType.*;
@@ -114,18 +116,20 @@ public class DropboxOperations {
     return uploadDropboxFile(currentTime.toLocalTime().toNanoOfDay(), file);
   }
 
-  public GenericResponse updateDropboxPath(DropBoxFilePathRequest request) {
+  public PrintJobResponse updateDropboxPath(DropBoxFilePathRequest request) {
     PrintJob printJob = printJobRepo.findPrintJobById(request.getPrintJobId());
 
     if(printJob == null)
       throw new IdeaLabApiException(PRINT_JOB_CANT_FIND_BY_ID);
 
+    LocalDateTime currentTime = LocalDateTime.now();
+    String newPath = currentTime.toLocalTime().toNanoOfDay() + request.getNewPath();
     String oldPath = printJob.getDropboxPath();
 
     try {
-      RelocationResult result = client.files().copyV2(oldPath, request.getNewPath());
+      RelocationResult result = client.files().copyV2(oldPath, newPath);
       Metadata metaData = result.getMetadata();
-      if(metaData.getPathDisplay().equalsIgnoreCase(request.getNewPath())) {
+      if(metaData.getPathDisplay().equalsIgnoreCase(newPath)) {
         printJob.setDropboxPath(metaData.getPathDisplay());
         printJob = printJobRepo.save(printJob);
       }
@@ -134,10 +138,14 @@ public class DropboxOperations {
       throw new IdeaLabApiException(DROPBOX_UPDATE_FILE_ERROR);
     }
 
-    GenericResponse response = new GenericResponse();
+    PrintJobResponse response = new PrintJobResponse();
     response.setMessage("Dropbox file path updated successfully");
     response.setSuccess(true);
     response.setHttpStatus(HttpStatus.ACCEPTED);
+
+    List<PrintJob> printJobs = new ArrayList<>();
+    printJobs.add(printJob);
+    response.setData(printJobs);
     return response;
   }
 
