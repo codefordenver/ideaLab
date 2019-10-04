@@ -2,6 +2,7 @@ package idealab.api.operations;
 
 import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
 import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -431,8 +432,7 @@ public class PrintJobOperationsTest {
         when(emailHashRepo.save(any())).thenReturn(emailHash);
         when(customerInfoRepo.findByEmailHashId(any())).thenReturn(null);
         when(customerInfoRepo.save(any())).thenReturn(customerInfo);
-        when(colorTypeRepo.findByColor(any())).thenReturn(null);
-        when(colorTypeRepo.save(any())).thenReturn(color);
+        when(colorTypeRepo.findByColor(any())).thenReturn(color);
         when(employeeRepo.findEmployeeByUsername(any())).thenReturn(null);
         when(employeeRepo.save(any())).thenReturn(e);
         when(printJobRepo.save(any())).thenReturn(printJob);
@@ -443,6 +443,29 @@ public class PrintJobOperationsTest {
         assert(opResponse.equals(response));
     }
 
+    @Test(expected = IdeaLabApiException.class)
+    public void createNewPrintJobWithNotFoundColor() {
+    	// given
+    	byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
+        MultipartFile file = new MockMultipartFile("Something", a);
+
+        PrintJobNewRequest request = new PrintJobNewRequest();
+        request.setColor("RED");
+        request.setComments("COMMENTS");
+        request.setCustomerFirstName("test");
+        request.setCustomerLastName("testLast");
+        request.setEmail("test@email.com");
+        request.setFile(file);
+
+        when(colorTypeRepo.findByColor(any())).thenReturn(null);
+
+        // when
+        operations.newPrintJob(request);
+        
+        // assert
+        verify(operations, times(1)).newPrintJob(request);
+    }
+    
     @Test(expected = IdeaLabApiException.class)
     public void createNewPrintJobNullFile() {
         PrintJobResponse response = new PrintJobResponse();
