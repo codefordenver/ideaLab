@@ -68,6 +68,36 @@ public class UserControllerTest {
         GenericResponse returnedResponse = stringToGenericResponse(returnJson);
         assert (returnedResponse.equals(genericResponse));
     }
+    
+    @Test
+    public void userSignUpWithAnExistingUser() throws Exception {
+    	// given
+        GenericResponse genericResponse = new GenericResponse();
+        genericResponse.setSuccess(false);
+        genericResponse.setMessage("User already exists");
+        genericResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
+
+        Employee e = new Employee();
+        e.setUsername("test");
+        e.setPassword("password");
+
+        String inputJson = employeeAsJsonString(e);
+
+        when(operations.userSignUp(any())).thenReturn(genericResponse);
+
+        // act
+        String returnJson = mockMvc.perform(post("/users/sign-up")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(inputJson)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError())
+                .andReturn().getResponse().getContentAsString();
+     
+        GenericResponse returnedResponse = stringToGenericResponse(returnJson);
+        
+        // assert
+        assert (returnedResponse.equals(genericResponse));
+    }
 
     @Test
     public void userSignUpFail() throws Exception {
