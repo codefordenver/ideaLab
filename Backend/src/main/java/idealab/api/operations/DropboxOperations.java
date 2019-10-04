@@ -118,6 +118,8 @@ public class DropboxOperations {
   }
 
   public PrintJobResponse updateDropboxPath(DropBoxFilePathRequest request) {
+    request.validate();
+
     PrintJob printJob = printJobRepo.findPrintJobById(request.getPrintJobId());
 
     if(printJob == null)
