@@ -1,15 +1,24 @@
 package idealab.api.operations;
 
-import idealab.api.dto.request.PrintJobDeleteRequest;
-import idealab.api.dto.request.PrintJobNewRequest;
-import idealab.api.dto.request.PrintJobUpdateRequest;
-import idealab.api.dto.request.PrintModelUpdateRequest;
-import idealab.api.dto.response.GenericResponse;
-import idealab.api.dto.response.PrintJobResponse;
-import idealab.api.exception.IdeaLabApiException;
-import idealab.api.model.Queue;
-import idealab.api.model.*;
-import idealab.api.repositories.*;
+import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
+import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,15 +29,25 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
-import java.util.*;
-
-import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
-import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.util.AssertionErrors.assertTrue;
+import idealab.api.dto.request.PrintJobDeleteRequest;
+import idealab.api.dto.request.PrintJobNewRequest;
+import idealab.api.dto.request.PrintJobUpdateRequest;
+import idealab.api.dto.request.PrintModelUpdateRequest;
+import idealab.api.dto.response.GenericResponse;
+import idealab.api.dto.response.PrintJobResponse;
+import idealab.api.exception.IdeaLabApiException;
+import idealab.api.model.ColorType;
+import idealab.api.model.CustomerInfo;
+import idealab.api.model.EmailHash;
+import idealab.api.model.Employee;
+import idealab.api.model.PrintJob;
+import idealab.api.model.Queue;
+import idealab.api.model.Status;
+import idealab.api.repositories.ColorTypeRepo;
+import idealab.api.repositories.CustomerInfoRepo;
+import idealab.api.repositories.EmailHashRepo;
+import idealab.api.repositories.EmployeeRepo;
+import idealab.api.repositories.PrintJobRepo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PrintJobOperationsTest {
@@ -197,10 +216,36 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findAll()).thenReturn(printJobs);
 
         // when
-        PrintJobResponse result = operations.getAllPrintJobs();
+        PrintJobResponse result = operations.getAllPrintJobs(null);
 
         // assert
         Assert.assertEquals(result.getData().get(0).getId(), printJob.getId());
+    }
+    
+    @Test
+    public void getAllPrintJobsByStatus() throws Exception {
+        // given
+        PrintJob printJob = new PrintJob();
+
+        printJob.setColorTypeId(new ColorType("Red"));
+        printJob.setComments("comments");
+        printJob.setCreatedAt(LocalDateTime.now());
+        printJob.setEmailHashId(new EmailHash());
+        printJob.setQueueId(new Queue(1));
+        printJob.setStatus(Status.ARCHIVED);
+        printJob.setEmployeeId(new Employee());
+        printJob.setId(1);
+
+        List<PrintJob> printJobList = Arrays.asList(printJob);
+
+        when(printJobRepo.findPrintJobByStatus(Status.ARCHIVED)).thenReturn(printJobList);
+        
+        // when
+        PrintJobResponse result = operations.getAllPrintJobs(Status.ARCHIVED.getName());
+        
+        // assert
+        verify(printJobRepo, times(1)).findPrintJobByStatus(Status.ARCHIVED);
+        assertEquals(result.getData().get(0).getId(), printJob.getId());
     }
 
     @Test(expected = IdeaLabApiException.class)
@@ -209,7 +254,7 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findAll()).thenReturn(null);
 
         // when
-        operations.getAllPrintJobs();
+        operations.getAllPrintJobs(null);
     }
 
     @Test(expected = IdeaLabApiException.class)
@@ -218,10 +263,10 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findAll()).thenReturn(new ArrayList<>());
 
         // when
-        operations.getAllPrintJobs();
+        operations.getAllPrintJobs(null);
 
         // when
-        operations.getAllPrintJobs();
+        operations.getAllPrintJobs(null);
     }
 
     @Test
