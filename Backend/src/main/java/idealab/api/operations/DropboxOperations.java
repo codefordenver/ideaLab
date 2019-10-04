@@ -157,7 +157,7 @@ public class DropboxOperations {
 
   //Run it and forget it, runs asynchronously
   private void DeletePrintJobAsync(String dropboxPath) {
-    CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+    CompletableFuture.runAsync(() -> {
       try {
         deleteDropboxFile(dropboxPath);
       } catch (Exception e) {
