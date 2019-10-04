@@ -15,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -47,6 +49,27 @@ public class UserOperationsTest {
         assertTrue(response.isSuccess() == true);
         assertTrue(response.getMessage().equalsIgnoreCase("User Sign Up Successful"));
 
+    }
+    
+    @Test
+    public void userSignUpWithAnExistingUser() {
+    	// given
+    	Employee e = new Employee();
+    	e.setUsername("username");
+        e.setPassword("password");
+
+        when(bCryptPasswordEncoder.encode(e.getPassword())).thenReturn(e.getPassword());
+        when(employeeRepo.findEmployeeByUsername(anyString())).thenReturn(e);
+  
+        // act
+        GenericResponse response = operations.userSignUp(e);
+        
+        // assert
+        verify(employeeRepo, times(1)).findEmployeeByUsername(e.getUsername());
+        verify(employeeRepo, never()).save(e);
+        assertFalse(response.isSuccess());
+        assertEquals(response.getMessage(), "User already exists");
+        assertEquals(response.getHttpStatus(), HttpStatus.BAD_REQUEST);
     }
 
     @Test
