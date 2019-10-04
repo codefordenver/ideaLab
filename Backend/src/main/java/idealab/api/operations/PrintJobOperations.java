@@ -220,7 +220,7 @@ public class PrintJobOperations {
         }
 
         response.setSuccess(true);
-        response.setMessage("Successfully returned all print jobs");
+        response.setMessage(status == null? "Successfully returned all print jobs" : "Successfully returned print jobs by " + status + " status");
         response.setData(printJobs);
         response.setHttpStatus(HttpStatus.ACCEPTED);
 
