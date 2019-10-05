@@ -69,6 +69,11 @@ public enum ErrorType {
     		12,
     		"Color not found. Check the sent color!",
     		HttpStatus.NOT_FOUND
+    ),
+    EMAIL_CANT_FIND_BY_HASH(
+            13,
+            "Email not found. Check your Email id !",
+            HttpStatus.NOT_FOUND
     );
 
     ErrorType(int errorCode, String errorMessage, HttpStatus responseStatus){

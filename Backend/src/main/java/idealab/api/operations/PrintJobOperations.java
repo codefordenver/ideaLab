@@ -4,6 +4,7 @@ import static idealab.api.exception.ErrorType.COLOR_CANT_FIND_BY_TYPE;
 import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
 import static idealab.api.exception.ErrorType.PRINT_JOBS_NOT_EXIST;
 import static idealab.api.exception.ErrorType.PRINT_JOB_CANT_FIND_BY_ID;
+import static idealab.api.exception.ErrorType.EMAIL_CANT_FIND_BY_HASH;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -75,8 +76,7 @@ public class PrintJobOperations {
         EmailHash databaseEmail = emailHashRepo.findByEmailHash(emailHash);
         
         if (databaseEmail == null) {
-            databaseEmail = new EmailHash(emailHash);
-            databaseEmail = emailHashRepo.save(databaseEmail);
+        	throw new IdeaLabApiException(EMAIL_CANT_FIND_BY_HASH);
         }
 
         CustomerInfo customer = customerInfoRepo.findByEmailHashId(databaseEmail);
