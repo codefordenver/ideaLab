@@ -30,22 +30,22 @@ public class PrintJob extends RecordTimestamp {
 
     @ManyToOne()
     @JoinColumn(name="fk_email_hash_id", referencedColumnName = "id", nullable = false)
-    private EmailHash emailHashId;
+    private EmailHash emailHash;
 
     @ManyToOne()
     @JoinColumn(name="fk_color_type_id", referencedColumnName = "id", nullable = false)
-    private ColorType colorTypeId;
+    private ColorType colorType;
 
     @ManyToOne()
     @JoinColumn(name="fk_employee_id", referencedColumnName = "id", nullable = false)
-    private Employee employeeId;
+    private Employee employee;
 
     @Column(name = "status",  nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
 
     @OneToOne(targetEntity=Queue.class, mappedBy="printJobId")
-    private Queue queueId;
+    private Queue queue;
 
     @Column(name = "comments")
     private String comments;
@@ -60,11 +60,11 @@ public class PrintJob extends RecordTimestamp {
 
     public PrintJob() {}
 
-    public PrintJob(EmailHash emailHashId, ColorType colorTypeId, Employee employeeId, 
+    public PrintJob(EmailHash emailHash, ColorType colorType, Employee employee, 
     		Status status, String comments) {
-        this.emailHashId = emailHashId;
-        this.colorTypeId = colorTypeId;
-        this.employeeId = employeeId;
+        this.emailHash = emailHash;
+        this.colorType = colorType;
+        this.employee = employee;
         this.status = status;
         this.comments = comments;
     }
@@ -77,28 +77,28 @@ public class PrintJob extends RecordTimestamp {
         this.id = id;
     }
 
-    public EmailHash getEmailHashId() {
-        return emailHashId;
+    public EmailHash getEmailHash() {
+        return emailHash;
     }
 
-    public void setEmailHashId(EmailHash emailHashId) {
-        this.emailHashId = emailHashId;
+    public void setEmailHash(EmailHash emailHash) {
+        this.emailHash = emailHash;
     }
 
-    public ColorType getColorTypeId() {
-        return colorTypeId;
+    public ColorType getColorType() {
+        return colorType;
     }
 
-    public void setColorTypeId(ColorType colorTypeId) {
-        this.colorTypeId = colorTypeId;
+    public void setColorType(ColorType colorType) {
+        this.colorType = colorType;
     }
 
-    public Employee getEmployeeId() {
-        return employeeId;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setEmployeeId(Employee employeeId) {
-        this.employeeId = employeeId;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public Status getStatus() {
@@ -109,12 +109,12 @@ public class PrintJob extends RecordTimestamp {
         this.status = status;
     }
 
-    public Queue getQueueId() {
-        return queueId;
+    public Queue getQueue() {
+        return queue;
     }
 
-    public void setQueueId(Queue queueId) {
-        this.queueId = queueId;
+    public void setQueue(Queue queue) {
+        this.queue = queue;
     }
 
     public String getComments() {
@@ -147,11 +147,11 @@ public class PrintJob extends RecordTimestamp {
         if (o == null || getClass() != o.getClass()) return false;
         PrintJob printJob = (PrintJob) o;
         return Objects.equals(id, printJob.id) &&
-                Objects.equals(emailHashId, printJob.emailHashId) &&
-                Objects.equals(colorTypeId, printJob.colorTypeId) &&
-                Objects.equals(employeeId, printJob.employeeId) &&
+                Objects.equals(emailHash, printJob.emailHash) &&
+                Objects.equals(colorType, printJob.colorType) &&
+                Objects.equals(employee, printJob.employee) &&
                 status == printJob.status &&
-                Objects.equals(queueId, printJob.queueId) &&
+                Objects.equals(queue, printJob.queue) &&
                 Objects.equals(comments, printJob.comments) &&
                 Objects.equals(dropboxPath, printJob.dropboxPath) &&
                 Objects.equals(dropboxSharableLink, printJob.dropboxSharableLink);
@@ -161,11 +161,11 @@ public class PrintJob extends RecordTimestamp {
     public String toString() {
         return "PrintJob{" +
                 "id=" + id +
-                ", emailHashId=" + emailHashId +
-                ", colorTypeId=" + colorTypeId +
-                ", employeeId=" + employeeId +
+                ", emailHash=" + emailHash +
+                ", colorType=" + colorType +
+                ", employee=" + employee +
                 ", status=" + status +
-                ", queueId=" + queueId +
+                ", queue=" + queue +
                 ", comments='" + comments + '\'' +
                 ", dropboxPath='" + dropboxPath + '\'' +
                 ", dropboxSharableLink='" + dropboxSharableLink + '\'' +

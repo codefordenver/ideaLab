@@ -95,7 +95,7 @@ public class PrintJobOperationsTest {
         employee.setId(1);
 
         PrintJob printJob = new PrintJob();
-        printJob.setEmployeeId(employee);
+        printJob.setEmployee(employee);
         printJob.setId(2);
         printJob.setStatus(Status.COMPLETED);
 
@@ -123,7 +123,7 @@ public class PrintJobOperationsTest {
         employee.setId(1);
 
         PrintJob printJob = new PrintJob();
-        printJob.setEmployeeId(employee);
+        printJob.setEmployee(employee);
         printJob.setId(2);
         printJob.setStatus(Status.COMPLETED);
 
@@ -144,7 +144,7 @@ public class PrintJobOperationsTest {
         employee.setId(1);
 
         PrintJob printJob = new PrintJob();
-        printJob.setEmployeeId(employee);
+        printJob.setEmployee(employee);
         printJob.setId(2);
 
         when(employeeRepo.findEmployeeById(anyInt())).thenReturn(employee);
@@ -168,7 +168,7 @@ public class PrintJobOperationsTest {
         employee.setId(1);
 
         PrintJob printJob = new PrintJob();
-        printJob.setEmployeeId(employee);
+        printJob.setEmployee(employee);
         printJob.setId(2);
 
         when(employeeRepo.findEmployeeById(anyInt())).thenReturn(null);
@@ -202,13 +202,13 @@ public class PrintJobOperationsTest {
         // given
         PrintJob printJob = new PrintJob();
 
-        printJob.setColorTypeId(new ColorType("Red"));
+        printJob.setColorType(new ColorType("Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setEmailHashId(new EmailHash());
-        printJob.setQueueId(new Queue(1));
+        printJob.setEmailHash(new EmailHash());
+        printJob.setQueue(new Queue(1));
         printJob.setStatus(Status.ARCHIVED);
-        printJob.setEmployeeId(new Employee());
+        printJob.setEmployee(new Employee());
         printJob.setId(1);
 
         List<PrintJob> printJobs = new ArrayList<PrintJob>();
@@ -228,13 +228,13 @@ public class PrintJobOperationsTest {
         // given
         PrintJob printJob = new PrintJob();
 
-        printJob.setColorTypeId(new ColorType("Red"));
+        printJob.setColorType(new ColorType("Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setEmailHashId(new EmailHash());
-        printJob.setQueueId(new Queue(1));
+        printJob.setEmailHash(new EmailHash());
+        printJob.setQueue(new Queue(1));
         printJob.setStatus(Status.ARCHIVED);
-        printJob.setEmployeeId(new Employee());
+        printJob.setEmployee(new Employee());
         printJob.setId(1);
 
         List<PrintJob> printJobList = Arrays.asList(printJob);
@@ -275,13 +275,13 @@ public class PrintJobOperationsTest {
         // given
         PrintJob printJob = new PrintJob();
 
-        printJob.setColorTypeId(new ColorType("Red"));
+        printJob.setColorType(new ColorType("Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setEmailHashId(new EmailHash());
-        printJob.setQueueId(new Queue(1));
+        printJob.setEmailHash(new EmailHash());
+        printJob.setQueue(new Queue(1));
         printJob.setStatus(Status.PENDING_REVIEW);
-        printJob.setEmployeeId(new Employee());
+        printJob.setEmployee(new Employee());
         printJob.setId(1);
 
         List<PrintJob> printJobs = new ArrayList<PrintJob>();
@@ -339,7 +339,7 @@ public class PrintJobOperationsTest {
         data.put("sharableLink", "http://testlink.com");
 
         PrintJob printJob = new PrintJob();
-        printJob.setColorTypeId(color);
+        printJob.setColorType(color);
         printJob.setComments("COMMENTS");
         printJob.setCreatedAt(LocalDateTime.now());
         printJob.setDropboxPath("DROPBOX_PATH");
@@ -347,9 +347,9 @@ public class PrintJobOperationsTest {
         printJob.setId(1);
         printJob.setUpdatedAt(LocalDateTime.now());
         printJob.setStatus(Status.PENDING_REVIEW);
-        printJob.setEmployeeId(e);
-        printJob.setEmailHashId(emailHash);
-        printJob.setQueueId(queue);
+        printJob.setEmployee(e);
+        printJob.setEmailHash(emailHash);
+        printJob.setQueue(queue);
         printJob.setUpdatedAt(LocalDateTime.now());
 
         List<PrintJob> printJobData = new ArrayList<>();
@@ -406,7 +406,7 @@ public class PrintJobOperationsTest {
         data.put("sharableLink", "http://testlink.com");
 
         PrintJob printJob = new PrintJob();
-        printJob.setColorTypeId(color);
+        printJob.setColorType(color);
         printJob.setComments("COMMENTS");
         printJob.setCreatedAt(LocalDateTime.now());
         printJob.setDropboxPath("DROPBOX_PATH");
@@ -414,9 +414,9 @@ public class PrintJobOperationsTest {
         printJob.setId(1);
         printJob.setUpdatedAt(LocalDateTime.now());
         printJob.setStatus(Status.PENDING_REVIEW);
-        printJob.setEmployeeId(e);
-        printJob.setEmailHashId(emailHash);
-        printJob.setQueueId(queue);
+        printJob.setEmployee(e);
+        printJob.setEmailHash(emailHash);
+        printJob.setQueue(queue);
         printJob.setUpdatedAt(LocalDateTime.now());
 
         List<PrintJob> printJobData = new ArrayList<>();

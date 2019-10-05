@@ -21,7 +21,7 @@ public class CustomerInfo extends RecordTimestamp {
 
     @ManyToOne()
     @JoinColumn(name="fk_email_hash_id", referencedColumnName = "id", nullable = false)    
-    private EmailHash emailHashId;
+    private EmailHash emailHash;
 
     @Column(name = "first_name", nullable = false)
     @Length(min = 1, max = 254)
@@ -37,19 +37,19 @@ public class CustomerInfo extends RecordTimestamp {
 
     public CustomerInfo() {}
 
-    public CustomerInfo(EmailHash emailHashId, String firstName, String lastName, String email) {
-        this.emailHashId = emailHashId;
+    public CustomerInfo(EmailHash emailHash, String firstName, String lastName, String email) {
+        this.emailHash = emailHash;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
     }
 
-    public EmailHash getEmailHashId() {
-        return emailHashId;
+    public EmailHash getEmailHash() {
+        return emailHash;
     }
 
-    public void setEmailHashId(EmailHash emailHashId) {
-        this.emailHashId = emailHashId;
+    public void setEmailHash(EmailHash emailHash) {
+        this.emailHash = emailHash;
     }
 
     public String getFirstName() {

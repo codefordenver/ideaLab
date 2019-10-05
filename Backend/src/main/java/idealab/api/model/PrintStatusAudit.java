@@ -18,7 +18,7 @@ public class PrintStatusAudit extends RecordTimestamp {
     private Integer id;
 
     @Column(name = "fk_employee_id")
-    private Integer employeeId;
+    private Integer employee;
 
     @Column(name = "status_before")
     private String statusBefore;
@@ -32,8 +32,8 @@ public class PrintStatusAudit extends RecordTimestamp {
     public PrintStatusAudit() {
     }
 
-    public PrintStatusAudit(Integer employeeId, String statusBefore, String statusAfter) {
-        this.employeeId = employeeId;
+    public PrintStatusAudit(Integer employee, String statusBefore, String statusAfter) {
+        this.employee = employee;
         this.statusBefore = statusBefore;
         this.statusAfter = statusAfter;
     }
@@ -46,12 +46,12 @@ public class PrintStatusAudit extends RecordTimestamp {
         this.id = id;
     }
 
-    public Integer getEmployeeId() {
-        return employeeId;
+    public Integer getEmployee() {
+        return employee;
     }
 
-    public void setEmployeeId(Integer employeeId) {
-        this.employeeId = employeeId;
+    public void setEmployee(Integer employee) {
+        this.employee = employee;
     }
 
     public String getStatusBefore() {
@@ -82,7 +82,7 @@ public class PrintStatusAudit extends RecordTimestamp {
     public String toString() {
         return "PrintStatusAudit{" +
                 "id=" + id +
-                ", employeeId=" + employeeId +
+                ", employee=" + employee +
                 ", statusBefore='" + statusBefore + '\'' +
                 ", statusAfter='" + statusAfter + '\'' +
                 '}';
@@ -94,7 +94,7 @@ public class PrintStatusAudit extends RecordTimestamp {
         if (o == null || getClass() != o.getClass()) return false;
         PrintStatusAudit that = (PrintStatusAudit) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(employeeId, that.employeeId) &&
+                Objects.equals(employee, that.employee) &&
                 Objects.equals(statusBefore, that.statusBefore) &&
                 Objects.equals(statusAfter, that.statusAfter);
     }
