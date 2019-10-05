@@ -12,11 +12,10 @@ services:
       - "./Backend:/srv"
     command: ash -c  "gradle build --continuous & gradle bootRun"
     environment:
-    environment:
-      - SPRING_PROFILES_ACTIVE: prod
-      - DB_URL: jdbc:postgresql://postgres:5432/postgres
-      - DB_USERNAME: postgres
-      - DB_PASSWORD: postgres
+      - "SPRING_PROFILES_ACTIVE=prod"
+      - "DB_URL=jdbc:postgresql://postgres:5432/postgres"
+      - "DB_USERNAME=postgres"
+      - "DB_PASSWORD=postgres"
   postgres:
     image: postgres:11-alpine
     hostname: postgres
