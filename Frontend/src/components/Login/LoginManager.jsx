@@ -13,7 +13,6 @@ const LoginManager = props => {
 
   function thenCallback(callbacks) {
     return function actualCallback(response) {
-      console.log('!!!!', response);
       const token = response.headers ? response.headers.authorization : '';
       if (token) {
         callbacks.setToken(token);
