@@ -1,8 +1,8 @@
 /* Layout */
 :root {
-  --light-blue: #00AEEF;
-  --dark-blue: #1F4393;
-  --white-text: #FFFFFF;
+  --light-blue: #00aeef;
+  --dark-blue: #1f4393;
+  --white-text: #ffffff;
   --default-background: white;
 }
 
@@ -21,13 +21,12 @@ body {
 .grid-container {
   height: 100%;
   display: grid;
-  grid-template-columns: 1fr 4fr;
+  grid-template-columns: 1fr 8fr;
 }
 
 .grid-item-nav {
   border-right: solid;
 }
-
 
 .selected {
   color: var(--light-blue);
@@ -38,13 +37,13 @@ body {
   display: flex;
 }
 
-
 .navList a {
   flex-grow: 1;
+  text-align: center;
 }
 
 .navList a:hover {
-  background-color: var(--light-blue);
+  background-color: rgba(30, 144, 255, 0.25);
   color: black;
 }
 
@@ -76,20 +75,28 @@ a {
 }
 
 input {
-	display: block;
-	height: 2em;
-	margin: 2rem;
-	border-radius: 10px;
-	outline: none;
-	border-style: solid;
-	font-size: 1.5rem;
-	padding: 0.25rem;
+  display: block;
+  height: 2em;
+  margin: 2rem;
+  border-radius: 10px;
+  outline: none;
+  border-style: solid;
+  font-size: 1.5rem;
+  padding: 0.25rem;
 }
 
 .shapedButton {
-	display: block;
-	height: 2.5em;
-	margin: 2rem;
-	border-radius: 10px;
-	font-size: 1.5rem;
+  display: block;
+  height: 2.5em;
+  margin: 2rem;
+  border-radius: 10px;
+  font-size: 1.5rem;
+}
+
+.sidebarIcon {
+  padding: 2em 0;
+}
+
+.hidden {
+  display: none;
 }
