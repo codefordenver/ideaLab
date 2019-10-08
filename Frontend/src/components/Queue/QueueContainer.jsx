@@ -3,7 +3,6 @@ import RequestService from '../../util/RequestService';
 import './QueueContainer.css';
 import Queue from './components/Queue';
 
-
 const QueueContainer = () => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState(data);
