@@ -59,7 +59,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         Employee e = employeeRepo.findEmployeeByUsernameEquals(user.getUsername());
 
         String token = JWT.create()
-                .withSubject(user.getUsername()).withClaim("role", e.getRole().toString())
+                .withSubject(user.getUsername())
+                .withClaim("role", e.getRole().toString())
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(HMAC512(SECRET.getBytes()));
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
