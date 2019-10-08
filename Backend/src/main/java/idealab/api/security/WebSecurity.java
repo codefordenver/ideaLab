@@ -41,7 +41,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter { // TODO: also i 
                 //.antMatchers(HttpMethod.DELETE).hasRole(EmployeeRole.ADMIN.getText())
                 //.anyRequest().authenticated()
                 .and()
-                .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(), employeeRepo))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager(), employeeRepo))
                 // this disables session creation on Spring Security
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
