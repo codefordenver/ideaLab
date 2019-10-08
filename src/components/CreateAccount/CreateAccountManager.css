@@ -27,6 +27,19 @@ h1 {
   padding: none;
 }
 
+.select-location {
+}
+
+.select-location input {
+  display: inline;
+  height: 1em;
+  margin: 1em;
+  outline: none;
+  border-style: none;
+  font-size: 1.5rem;
+  padding: none;
+}
+
 .select-role * {
   font-size: 2em;
 }

@@ -82,21 +82,23 @@ const CreateAccountManager = () => {
           />
           <div className="select-role">
             <input
+              id="staff"
               name="role"
               type="radio"
               autoComplete="off"
               value={'STAFF'}
               onChange={e => setRole(e.target.value)}
             />
-            <label htmlFor="role">Staff</label>
+            <label htmlFor="staff">Staff</label>
             <input
+              id="admin"
               name="role"
               type="radio"
               autoComplete="off"
               value={'ADMIN'}
               onChange={e => setRole(e.target.value)}
             />
-            <label htmlFor="role">Admin</label>
+            <label htmlFor="admin">Admin</label>
           </div>
           <input
             name="email"
@@ -122,6 +124,19 @@ const CreateAccountManager = () => {
             onChange={e => setPassword(e.target.value)}
           />
           {renderErrors()}
+          <div className="select-location">
+            <h3>Location</h3>
+            <input id="downtown" type="radio" />
+            <label htmlFor="downtown">Downtown</label>
+            <input id="hampden" type="radio" />
+            <label htmlFor="downtown">Downtown</label>
+            <input id="corky-lab" type="radio" />
+            <label htmlFor="corky-lab">"Corky" Lab</label>
+            <input id="hadley" type="radio" />
+            <label htmlFor="hadley">Hadley</label>
+            <input id="montebello" type="radio" />
+            <label htmlFor="montebello">Montebello</label>
+          </div>
           <button type="submit">Create Account</button>
         </form>
       </div>
