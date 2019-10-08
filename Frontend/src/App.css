@@ -96,3 +96,7 @@ input {
 .sidebarIcon {
   padding: 2em 0;
 }
+
+.hidden {
+  display: none;
+}

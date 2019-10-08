@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Dropdown from '../globalStyles/Dropdown';
 import BasicInput from '../BasicInput';
 import RequestService from '../../util/RequestService';
 import AuthContext from '../../AuthContext';
@@ -11,24 +10,16 @@ const LoginManager = props => {
   const [errors, setErrors] = useState({});
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const locations = [
-    'Denver Central Library',
-    'Blair-Caldwell',
-    'Ford-Warren',
-    'Ross-Cherry',
-    'Park Hill',
-  ];
-  const [location, setLocation] = useState(locations[0]);
 
   function thenCallback(callbacks) {
     return function actualCallback(response) {
+      console.log('!!!!', response);
       const token = response.headers ? response.headers.authorization : '';
       if (token) {
         callbacks.setToken(token);
         callbacks.setAuthenticated(true);
         RequestService.requestState.token = token;
       } else {
-        // Something should happen
         callbacks.setAuthenticated(false);
         setErrors({
           form: 'Unable to log in with the information provided',
@@ -66,6 +57,7 @@ const LoginManager = props => {
                 const callbacks = {
                   setToken: context.setToken,
                   setAuthenticated: context.setAuthenticated,
+                  setIsAdmin: context.setIsAdmin,
                 };
                 onSubmit(e, callbacks);
               }}
@@ -76,11 +68,6 @@ const LoginManager = props => {
                 placeHolder="username"
                 changeHandler={setUsername}
                 error={errors.username}
-              />
-              <Dropdown
-                options={locations}
-                optionsName={'locations'}
-                currentValue={location}
               />
               <BasicInput
                 name="password"

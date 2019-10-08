@@ -13,7 +13,7 @@ class SidebarNavigation extends React.Component {
             <nav className={'grid-item-nav'}>
               <div className={'navList'}>
                 <li>
-                  <NavLink to="/" activeClassName={'selected'}>
+                  <NavLink to="/upload" activeClassName={'selected'}>
                     <div className="sidebarIcon" title="Upload">
                       <FiUpload />
                     </div>
@@ -26,7 +26,7 @@ class SidebarNavigation extends React.Component {
                     </div>
                   </NavLink>
                 </li>
-                <li>
+                <li className={context.isAdmin ? '' : 'hidden'}>
                   <NavLink to="/manageaccounts" activeClassName={'selected'}>
                     <div className="sidebarIcon" title="Manage Accounts">
                       <FiUserPlus />

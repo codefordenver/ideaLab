@@ -11,8 +11,10 @@ import PrivateRoute from './components/Routing/PrivateRoute';
 import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 function App() {
-  const [authenticated, setAuthenticated] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
   const [token, setToken] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+
   return (
     <div className="App grid-container">
       <AuthContext.Provider
@@ -21,6 +23,7 @@ function App() {
           token: token,
           setAuthenticated: setAuthenticated,
           setToken: setToken,
+          isAdmin: isAdmin,
         }}
       >
         <HashRouter>
@@ -28,7 +31,9 @@ function App() {
             logout={() => {
               setToken('');
               setAuthenticated(false);
+              setIsAdmin(false);
             }}
+            isAdmin={isAdmin}
           />
           <Switch>
             <PrivateRoute exact path="/queue" component={QueueContainer} />
