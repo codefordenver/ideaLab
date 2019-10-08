@@ -1,5 +1,18 @@
 package idealab.api.operations;
 
+import static idealab.api.exception.ErrorType.COLOR_CANT_FIND_BY_TYPE;
+import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
+import static idealab.api.exception.ErrorType.PRINT_JOBS_NOT_EXIST;
+import static idealab.api.exception.ErrorType.PRINT_JOB_CANT_FIND_BY_ID;
+
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
 import idealab.api.dto.request.PrintJobDeleteRequest;
 import idealab.api.dto.request.PrintJobNewRequest;
 import idealab.api.dto.request.PrintJobUpdateRequest;
@@ -8,17 +21,18 @@ import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.PrintJobResponse;
 import idealab.api.exception.ErrorType;
 import idealab.api.exception.IdeaLabApiException;
-import idealab.api.model.*;
-import idealab.api.repositories.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import static idealab.api.exception.ErrorType.*;
+import idealab.api.model.ColorType;
+import idealab.api.model.CustomerInfo;
+import idealab.api.model.EmailHash;
+import idealab.api.model.Employee;
+import idealab.api.model.EmployeeRole;
+import idealab.api.model.PrintJob;
+import idealab.api.model.Status;
+import idealab.api.repositories.ColorTypeRepo;
+import idealab.api.repositories.CustomerInfoRepo;
+import idealab.api.repositories.EmailHashRepo;
+import idealab.api.repositories.EmployeeRepo;
+import idealab.api.repositories.PrintJobRepo;
 
 @Service
 public class PrintJobOperations {
@@ -45,11 +59,10 @@ public class PrintJobOperations {
         printJobNewRequest.validate();
         PrintJobResponse response = new PrintJobResponse("File could not be uploaded");
 
-        if(printJobNewRequest.getFile() == null){
+        if (printJobNewRequest.getFile() == null) {
             throw new IdeaLabApiException(DROPBOX_UPLOAD_FILE_ERROR);
         }
 
-        // Create new record based off of the printJobNewRequest
         String email = printJobNewRequest.getEmail();
         String customerFirstName = printJobNewRequest.getCustomerFirstName();
         String customerLastName = printJobNewRequest.getCustomerLastName();
@@ -57,27 +70,26 @@ public class PrintJobOperations {
         String comments = printJobNewRequest.getComments();
         LocalDateTime currentTime = LocalDateTime.now();
 
-        // Check if EmailHash Exists otherwise make a new record
         // TODO: Hash email so it is not in plaintext!!
         String emailHash = printJobNewRequest.getEmail();
         EmailHash databaseEmail = emailHashRepo.findByEmailHash(emailHash);
+        
         if (databaseEmail == null) {
             databaseEmail = new EmailHash(emailHash);
             databaseEmail = emailHashRepo.save(databaseEmail);
         }
 
-        // Create customer record with email hash if it does not already exist
         CustomerInfo customer = customerInfoRepo.findByEmailHashId(databaseEmail);
+        
         if (customer == null) {
             customer = new CustomerInfo(databaseEmail, customerFirstName, customerLastName, email);
             customer = customerInfoRepo.save(customer);
         }
 
-        // Check if Color exists otherwise make a new record
         ColorType databaseColor = colorTypeRepo.findByColor(color);
+        
         if (databaseColor == null) {
-            databaseColor = new ColorType(color);
-            databaseColor = colorTypeRepo.save(databaseColor);
+        	throw new IdeaLabApiException(COLOR_CANT_FIND_BY_TYPE);
         }
 
         // TODO: Remove temp employee, this should be taken directly from the employee making the request through the token.
@@ -98,8 +110,7 @@ public class PrintJobOperations {
         // TODO: set the queue position of the new job to be at the end of the list.
 
         // Make a dropbox sharable link here using the ID of the database record
-        Map<String, String> data;
-        data = dropboxOperations.uploadDropboxFile(currentTime.toLocalTime().toNanoOfDay(), printJobNewRequest.getFile());
+        Map<String, String> data = dropboxOperations.uploadDropboxFile(currentTime.toLocalTime().toNanoOfDay(), printJobNewRequest.getFile());
 
         printJob.setDropboxPath(data.get("filePath"));
         printJob.setDropboxSharableLink(data.get("sharableLink"));
@@ -210,23 +221,22 @@ public class PrintJobOperations {
         return response;
     }
 
-    public PrintJobResponse getAllPrintJobs() {
+    public PrintJobResponse getAllPrintJobs(String status) {
         PrintJobResponse response = new PrintJobResponse("Could not get all print jobs");
 
-        List<PrintJob> printJobs = printJobRepo.findAll();
+        List<PrintJob> printJobs = status == null? printJobRepo.findAll() : printJobRepo.findPrintJobByStatus(Status.fromValue(status));
 
-        if(printJobs == null || printJobs.size() == 0){
+        if (printJobs == null || printJobs.isEmpty()){
             ErrorType.PRINT_JOBS_NOT_EXIST.throwException();
         }
 
         response.setSuccess(true);
-        response.setMessage("Successfully returned all print jobs");
+        response.setMessage(status == null? "Successfully returned all print jobs" : "Successfully returned print jobs by " + status + " status");
         response.setData(printJobs);
         response.setHttpStatus(HttpStatus.ACCEPTED);
 
         return response;
     }
-
 
     public PrintJobResponse getDeletablePrintJobs() {
         PrintJobResponse response = new PrintJobResponse("Could not get deletable print jobs");

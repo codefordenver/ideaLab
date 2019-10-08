@@ -27,6 +27,15 @@ public class UserOperations {
         GenericResponse response = new GenericResponse();
 
         try {
+        	Employee userFound = employeeRepo.findEmployeeByUsername(login.getUsername());
+        	
+        	if (userFound != null) {
+        		response.setSuccess(false);
+                response.setMessage("User already exists");
+                response.setHttpStatus(HttpStatus.BAD_REQUEST);
+                return response;
+        	}
+        	
             login.setPassword(encoder.encode(login.getPassword()));
             employeeRepo.save(login);
         } catch (Exception e) {

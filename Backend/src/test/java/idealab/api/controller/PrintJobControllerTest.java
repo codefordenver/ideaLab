@@ -29,6 +29,8 @@ import java.util.List;
 import static idealab.api.util.TestUtil.stringToGenericResponse;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -168,7 +170,6 @@ public class PrintJobControllerTest {
         }
     }
 
-
     @Test
     public void getAllPrintJobs() throws Exception {
         // given
@@ -191,7 +192,7 @@ public class PrintJobControllerTest {
         expectedResponse.setData(printJobList);
         expectedResponse.setHttpStatus(HttpStatus.ACCEPTED);
 
-        Mockito.when(printJobOperations.getAllPrintJobs()).thenReturn(expectedResponse);
+        Mockito.when(printJobOperations.getAllPrintJobs(null)).thenReturn(expectedResponse);
 
         // act
         String jsonString = mockMvc.perform(
@@ -217,49 +218,91 @@ public class PrintJobControllerTest {
         // assert
         assertEquals(expectedId, actualId);
     }
+    
+    @Test
+    public void getAllPrintJobsByStatus() throws Exception {
+        // given
+        PrintJob printJob = new PrintJob();
 
+        printJob.setColorTypeId(new ColorType("Red"));
+        printJob.setComments("comments");
+        printJob.setCreatedAt(LocalDateTime.now());
+        printJob.setEmailHashId(new EmailHash());
+        printJob.setQueueId(new Queue(1));
+        printJob.setStatus(Status.ARCHIVED);
+        printJob.setEmployeeId(new Employee());
+        printJob.setId(1);
 
-     @Test
-     public void getDeletablePrintJobs() throws Exception {
-         // given
-         PrintJob printJob = new PrintJob();
+        List<PrintJob> printJobList = Arrays.asList(printJob);
 
-         printJob.setColorTypeId(new ColorType("Red"));
-         printJob.setComments("comments");
-         printJob.setCreatedAt(LocalDateTime.now());
-         printJob.setEmailHashId(new EmailHash());
-         printJob.setQueueId(new Queue(1));
-         printJob.setStatus(Status.PENDING_REVIEW);
-         printJob.setEmployeeId(new Employee());
-         printJob.setId(1);
+        PrintJobResponse expectedResponse = new PrintJobResponse();
+        expectedResponse.setSuccess(true);
+        expectedResponse.setMessage("Successfully returned print jobs by " + Status.ARCHIVED.getName() + " status");
+        expectedResponse.setData(printJobList);
+        expectedResponse.setHttpStatus(HttpStatus.ACCEPTED);
 
-         PrintJobResponse expectedResponse = new PrintJobResponse(printJob);
+        Mockito.when(printJobOperations.getAllPrintJobs(Status.ARCHIVED.getName())).thenReturn(expectedResponse);
 
-         Mockito.when(printJobOperations.getDeletablePrintJobs()).thenReturn(expectedResponse);
+        // act
+        String jsonString = mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/print-jobs")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("status", Status.ARCHIVED.getName())
+        )
+        .andExpect(status().isAccepted())
+        .andReturn().getResponse().getContentAsString();
 
-         // act
-         String jsonString = mockMvc.perform(
-                 MockMvcRequestBuilders.get("/api/print-jobs/deletable")
-                         .accept(MediaType.APPLICATION_JSON)
-         )
-         .andExpect(status().isAccepted())
-         .andReturn().getResponse().getContentAsString();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
 
-         ObjectMapper mapper = new ObjectMapper();
-         mapper.registerModule(new JavaTimeModule());
+        PrintJobResponse actualResponse = mapper.readValue(jsonString, PrintJobResponse.class);
 
-         PrintJobResponse actualResponse = mapper.readValue(jsonString, PrintJobResponse.class);
+        // assert
+        verify(printJobOperations, times(1)).getAllPrintJobs(Status.ARCHIVED.getName());
+        assertEquals(actualResponse.getMessage(), expectedResponse.getMessage());
+    }
 
-         int actualId = actualResponse.getData()
-                 .get(0)
-                 .getId();
-
-         int expectedId = expectedResponse
-                 .getData()
-                 .get(0)
-                 .getId();
-
-         // assert
-         assertEquals(expectedId, actualId);
-     }
+	 @Test
+	 public void getDeletablePrintJobs() throws Exception {
+	     // given
+		 PrintJob printJob = new PrintJob();
+		
+		 printJob.setColorTypeId(new ColorType("Red"));
+		 printJob.setComments("comments");
+		 printJob.setCreatedAt(LocalDateTime.now());
+		 printJob.setEmailHashId(new EmailHash());
+		 printJob.setQueueId(new Queue(1));
+		 printJob.setStatus(Status.PENDING_REVIEW);
+		 printJob.setEmployeeId(new Employee());
+		 printJob.setId(1);
+		
+		 PrintJobResponse expectedResponse = new PrintJobResponse(printJob);
+		
+		 Mockito.when(printJobOperations.getDeletablePrintJobs()).thenReturn(expectedResponse);
+		
+		 // act
+		 String jsonString = mockMvc.perform(
+		         MockMvcRequestBuilders.get("/api/print-jobs/deletable")
+		                 .accept(MediaType.APPLICATION_JSON)
+		 )
+		 .andExpect(status().isAccepted())
+		 .andReturn().getResponse().getContentAsString();
+		
+		 ObjectMapper mapper = new ObjectMapper();
+		 mapper.registerModule(new JavaTimeModule());
+		
+		 PrintJobResponse actualResponse = mapper.readValue(jsonString, PrintJobResponse.class);
+		
+		 int actualId = actualResponse.getData()
+		         .get(0)
+		         .getId();
+		
+		 int expectedId = expectedResponse
+		         .getData()
+		         .get(0)
+		         .getId();
+		
+		 // assert
+		 assertEquals(expectedId, actualId);
+	 }
 }
