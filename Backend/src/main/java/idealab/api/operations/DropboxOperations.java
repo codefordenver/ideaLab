@@ -126,7 +126,7 @@ public class DropboxOperations {
       throw new IdeaLabApiException(PRINT_JOB_CANT_FIND_BY_ID);
 
     LocalDateTime currentTime = LocalDateTime.now();
-    String newPath = "/" + currentTime.toLocalTime().toNanoOfDay() + request.getNewPath();
+    String newPath = "/" + currentTime.toLocalTime().toNanoOfDay() + "-" + request.getNewPath();
     String oldPath = printJob.getDropboxPath();
 
     try {
