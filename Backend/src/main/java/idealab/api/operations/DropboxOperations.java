@@ -4,11 +4,17 @@ import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
+import com.dropbox.core.v2.files.Metadata;
+import com.dropbox.core.v2.files.RelocationResult;
 import com.dropbox.core.v2.sharing.ListSharedLinksErrorException;
 import com.dropbox.core.v2.sharing.ListSharedLinksResult;
+import idealab.api.dto.request.DropBoxFilePathRequest;
+import idealab.api.dto.response.PrintJobResponse;
 import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.PrintJob;
+import idealab.api.repositories.PrintJobRepo;
 import idealab.configurations.DropboxConfiguration;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,19 +22,24 @@ import javax.annotation.PostConstruct;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
-import static idealab.api.exception.ErrorType.DROPBOX_DELETE_FILE_ERROR;
-import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
+import static idealab.api.exception.ErrorType.*;
 
 @Component
 public class DropboxOperations {
+
   private final DropboxConfiguration dropboxConfig;
   private DbxClientV2 client;
+  private PrintJobRepo printJobRepo;
 
-  public DropboxOperations(DropboxConfiguration dropboxConfig) {
+  public DropboxOperations(DropboxConfiguration dropboxConfig, PrintJobRepo printJobRepo) {
     this.dropboxConfig = dropboxConfig;
+    this.printJobRepo = printJobRepo;
   }
 
   @PostConstruct
@@ -86,9 +97,9 @@ public class DropboxOperations {
     return data;
   }
 
-  public void deleteDropboxFile(PrintJob printJob){
+  public void deleteDropboxFile(String dropboxPath){
     try{
-      client.files().deleteV2(printJob.getDropboxPath());
+      client.files().deleteV2(dropboxPath);
     }
     catch (DbxException e) {
       throw new IdeaLabApiException(DROPBOX_DELETE_FILE_ERROR);
@@ -99,10 +110,63 @@ public class DropboxOperations {
     // 1. Delete existing dropbox file using deleteDropboxFile() method
     // Note:  if the file path does not start with a "/" then there is either an error or it was deleted already.
     if(printJob.getDropboxPath().startsWith("/")){
-      deleteDropboxFile(printJob);
+      deleteDropboxFile(printJob.getDropboxPath());
     }
     // 2. Create new sharable data link using uploadDropboxFile() method
     LocalDateTime currentTime = LocalDateTime.now();
     return uploadDropboxFile(currentTime.toLocalTime().toNanoOfDay(), file);
   }
+
+  public PrintJobResponse updateDropboxPath(DropBoxFilePathRequest request) {
+    request.validate();
+
+    PrintJob printJob = printJobRepo.findPrintJobById(request.getPrintJobId());
+
+    if(printJob == null)
+      throw new IdeaLabApiException(PRINT_JOB_CANT_FIND_BY_ID);
+
+    LocalDateTime currentTime = LocalDateTime.now();
+    String newPath = "/" + currentTime.toLocalTime().toNanoOfDay() + "-" + request.getNewPath();
+    String oldPath = printJob.getDropboxPath();
+
+    try {
+      //Copy file to new location in dropbox, delete old file from dropbox, update database
+      RelocationResult result = client.files().copyV2(oldPath, newPath);
+      Metadata metaData = result.getMetadata();
+      if(metaData.getPathDisplay().equalsIgnoreCase(newPath)) {
+        String dropboxPath = printJob.getDropboxPath();
+        DeletePrintJobAsync(dropboxPath);
+        printJob.setDropboxPath(metaData.getPathDisplay());
+        String sharableLink = getSharableLink(metaData.getPathLower());
+        printJob.setDropboxSharableLink(sharableLink);
+        printJob = printJobRepo.save(printJob);
+      }
+    } catch (DbxException e) {
+      e.printStackTrace();
+      throw new IdeaLabApiException(DROPBOX_UPDATE_FILE_ERROR);
+    }
+
+    PrintJobResponse response = new PrintJobResponse();
+    response.setMessage("Dropbox file path updated successfully");
+    response.setSuccess(true);
+    response.setHttpStatus(HttpStatus.ACCEPTED);
+
+    List<PrintJob> printJobs = new ArrayList<>();
+    printJobs.add(printJob);
+    response.setData(printJobs);
+    return response;
+  }
+
+  //Run it and forget it, runs asynchronously
+  private void DeletePrintJobAsync(String dropboxPath) {
+    CompletableFuture.runAsync(() -> {
+      try {
+        deleteDropboxFile(dropboxPath);
+      } catch (Exception e) {
+        //swallow exception since whether or not it deletes isn't super important
+        e.printStackTrace();
+      }
+    });
+  }
+
 }
