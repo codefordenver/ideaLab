@@ -4,15 +4,17 @@ import AuthContext from './AuthContext';
 import QueueContainer from './components/Queue/QueueContainer';
 import UploadContainer from './components/Upload/UploadContainer';
 import LoginManager from './components/Login/LoginManager';
-import CreateAccountManager from './components/CreateAccount/CreateAccountManager';
+import AdminContainer from './components/AdminSettings/AdminContainer';
 import SidebarNavigation from './SidebarNavigation';
 import PrivateRoute from './components/Routing/PrivateRoute';
 
 import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 function App() {
-  const [authenticated, setAuthenticated] = useState(false);
+  const [authenticated, setAuthenticated] = useState(true);
   const [token, setToken] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+
   return (
     <div className="App grid-container">
       <AuthContext.Provider
@@ -21,6 +23,7 @@ function App() {
           token: token,
           setAuthenticated: setAuthenticated,
           setToken: setToken,
+          isAdmin: isAdmin,
         }}
       >
         <HashRouter>
@@ -28,14 +31,16 @@ function App() {
             logout={() => {
               setToken('');
               setAuthenticated(false);
+              setIsAdmin(false);
             }}
+            isAdmin={isAdmin}
           />
           <Switch>
             <PrivateRoute exact path="/queue" component={QueueContainer} />
             <PrivateRoute
               exact
               path="/manageaccounts"
-              component={CreateAccountManager}
+              component={AdminContainer}
             />
             <PrivateRoute exact path="/upload" component={UploadContainer} />
             <Route
@@ -54,8 +59,8 @@ function App() {
               }
             />
 
-            <PrivateRoute path="/account" component={CreateAccountManager} />
-            <PrivateRoute path="/*" component={UploadContainer} />
+            <PrivateRoute path="/account" component={AdminContainer} />
+            <PrivateRoute path="/" component={UploadContainer} />
           </Switch>
         </HashRouter>
       </AuthContext.Provider>

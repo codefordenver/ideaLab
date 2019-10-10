@@ -145,7 +145,7 @@ public class PrintJobOperations {
             throw new IdeaLabApiException(PRINT_JOBS_NOT_EXIST);
         }
 
-        dropboxOperations.deleteDropboxFile(printJob);
+        dropboxOperations.deleteDropboxFile(printJob.getDropboxPath());
         printJob.setDropboxPath("Deleted");
 
         printJob.setDropboxSharableLink("Deleted");

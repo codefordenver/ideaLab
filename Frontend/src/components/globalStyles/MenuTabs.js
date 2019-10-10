@@ -1,6 +1,6 @@
-/** 
+/**
  * Refer to Status.java for possible values of queue statuses
- */class MenuTabs {
+ */ class MenuTabs {
   QueueTabs = [
     {
       name: 'PENDING_REVIEW',
@@ -21,8 +21,8 @@
   ];
   ManageAccountTabs = [
     {
-      name: 'components',
-      label: 'Components',
+      name: 'settings',
+      label: 'Settings',
     },
     {
       name: 'users',

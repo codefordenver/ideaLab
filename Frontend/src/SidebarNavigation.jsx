@@ -2,48 +2,48 @@ import React from 'react';
 import AuthContext from './AuthContext';
 import './App.css';
 import { NavLink } from 'react-router-dom';
+import { FiUpload, FiUserPlus, FiList, FiLogOut } from 'react-icons/fi';
 
 class SidebarNavigation extends React.Component {
   render() {
-    const authenticatedNav = (
-      <>
-        <li>
-          <NavLink to="/upload" activeClassName={'selected'}>
-            upload
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/queue" activeClassName={'selected'}>
-            queue
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/manageaccounts" activeClassName={'selected'}>
-            manage accounts
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/analytics" activeClassName={'selected'}>
-            analytics
-          </NavLink>
-        </li>
-      </>
-    );
-
     return (
       <AuthContext.Consumer>
         {context => {
           return (
             <nav className={'grid-item-nav'}>
-              <ul className={'navList'}>
-                {context.authenticated && authenticatedNav}
-
-                <li onClick={context.authenticated ? this.props.logout : null}>
-                  <NavLink to="/login" activeClassName={'selected'}>
-                    {context.authenticated ? 'log out' : 'log in'}
+              <div className={'navList'}>
+                <li>
+                  <NavLink to="/upload" activeClassName={'selected'}>
+                    <div className="sidebarIcon" title="Upload">
+                      <FiUpload />
+                    </div>
                   </NavLink>
                 </li>
-              </ul>
+                <li>
+                  <NavLink to="/queue" activeClassName={'selected'}>
+                    <div className="sidebarIcon" title="Queue">
+                      <FiList />
+                    </div>
+                  </NavLink>
+                </li>
+                <li className={context.isAdmin ? '' : 'hidden'}>
+                  <NavLink to="/manageaccounts" activeClassName={'selected'}>
+                    <div className="sidebarIcon" title="Manage Accounts">
+                      <FiUserPlus />
+                    </div>
+                  </NavLink>
+                </li>
+                <li onClick={context.authenticated ? this.props.logout : null}>
+                  <NavLink to="/login" activeClassName={'selected'}>
+                    <div
+                      className="sidebarIcon"
+                      title={context.authenticated ? 'log out' : 'log in'}
+                    >
+                      <FiLogOut />
+                    </div>
+                  </NavLink>
+                </li>
+              </div>
             </nav>
           );
         }}

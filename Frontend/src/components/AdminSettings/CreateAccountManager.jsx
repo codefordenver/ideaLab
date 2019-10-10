@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import RequestService from '../../util/RequestService';
 import './CreateAccountManager.css';
 
-import ideaLABlogo from './../../ideaLABlogo.png';
+import ideaLABlogo from '../globalStyles/img/ideaLabLogo.png';
 
 const CreateAccountManager = () => {
   const [role, setRole] = useState('STAFF');
@@ -58,7 +58,7 @@ const CreateAccountManager = () => {
   return (
     <div className="container">
       <div className="card">
-        <img src={ideaLABlogo} alt="ideaLABLogo" />
+        <img className="ideaLabLogo" src={ideaLABlogo} alt="ideaLABLogo" />
         <h1>3D Printing and Upload Queue</h1>
         <h2>Create an Account</h2>
         <form onSubmit={e => onSubmit(e)}>
