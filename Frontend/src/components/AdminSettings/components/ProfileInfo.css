@@ -1,0 +1,36 @@
+.infoContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 5em;
+}
+
+.infoContainer > h3 {
+  margin-left: 2em;
+  margin-right: 2em;
+}
+
+.infoContainer > button.passwordBtn {
+  background-color: #577ca2;
+  border-radius: 0px;
+  width: 10em;
+  height: 2em;
+  margin-right: 2em;
+  font-size: 1rem;
+}
+
+.infoContainer > button.deleteBtn {
+  background-color: #b40000;
+  border-radius: 0px;
+  width: 5em;
+  height: 2em;
+  margin-right: 2em;
+  font-size: 1rem;
+}
+
+.dropdownContainer {
+  width: 12em;
+  display: flex;
+  justify-content: space-between;
+}
