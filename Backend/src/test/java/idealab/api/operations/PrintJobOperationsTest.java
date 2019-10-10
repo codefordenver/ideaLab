@@ -1,25 +1,12 @@
 package idealab.api.operations;
 
-import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
-import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import idealab.api.dto.request.*;
+import idealab.api.dto.response.GenericResponse;
+import idealab.api.dto.response.PrintJobResponse;
+import idealab.api.exception.IdeaLabApiException;
+import idealab.api.model.Queue;
+import idealab.api.model.*;
+import idealab.api.repositories.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,25 +17,15 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.multipart.MultipartFile;
 
-import idealab.api.dto.request.PrintJobDeleteRequest;
-import idealab.api.dto.request.PrintJobNewRequest;
-import idealab.api.dto.request.PrintJobUpdateRequest;
-import idealab.api.dto.request.PrintModelUpdateRequest;
-import idealab.api.dto.response.GenericResponse;
-import idealab.api.dto.response.PrintJobResponse;
-import idealab.api.exception.IdeaLabApiException;
-import idealab.api.model.ColorType;
-import idealab.api.model.CustomerInfo;
-import idealab.api.model.EmailHash;
-import idealab.api.model.Employee;
-import idealab.api.model.PrintJob;
-import idealab.api.model.Queue;
-import idealab.api.model.Status;
-import idealab.api.repositories.ColorTypeRepo;
-import idealab.api.repositories.CustomerInfoRepo;
-import idealab.api.repositories.EmailHashRepo;
-import idealab.api.repositories.EmployeeRepo;
-import idealab.api.repositories.PrintJobRepo;
+import java.time.LocalDateTime;
+import java.util.*;
+
+import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
+import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PrintJobOperationsTest {
@@ -577,5 +554,139 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findPrintJobById(printJob.getId())).thenReturn(null);
 
         operations.deleteModel(printJob.getId());
+    }
+
+    @Test
+    public void updatePrintJobProps() {
+        UpdatePrintJobPropertiesRequest request = new UpdatePrintJobPropertiesRequest();
+        request.setColorType("red");
+        request.setComments("comments");
+        request.setStatus("REJECTED");
+        request.setEmployeeId(1);
+
+        PrintJob printJob = new PrintJob();
+        printJob.setComments("old comments");
+        printJob.setStatus(Status.valueOf("FAILED"));
+        ColorType colorType = new ColorType();
+        colorType.setColor("blue");
+        printJob.setColorTypeId(colorType);
+
+        Employee e = new Employee();
+        e.setId(1);
+
+        ColorType newColorType = new ColorType();
+        newColorType.setColor("red");
+        newColorType.setAvailable(true);
+
+
+        when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
+        when(employeeRepo.findEmployeeById(anyInt())).thenReturn(e);
+        when(colorTypeRepo.findByColor("red")).thenReturn(newColorType);
+        when(printJobRepo.save(printJob)).thenReturn(null);
+
+        PrintJobResponse response = operations.updatePrintJobProps(1, request);
+        assertTrue("response is null", response != null);
+        assertTrue("comments are not equal", response.getData().get(0).getComments().equals(request.getComments()));
+        assertTrue("status is not equal", response.getData().get(0).getStatus() == Status.fromValue(request.getStatus()));
+        assertTrue("color is not equal", response.getData().get(0).getColorTypeId().getColor().equals(request.getColorType()));
+    }
+
+    @Test
+    public void updatePrintJobColorProp() {
+        UpdatePrintJobPropertiesRequest request = new UpdatePrintJobPropertiesRequest();
+        request.setColorType("red");
+        request.setEmployeeId(1);
+
+        PrintJob printJob = new PrintJob();
+        printJob.setComments("old comments");
+        printJob.setStatus(Status.valueOf("FAILED"));
+        ColorType colorType = new ColorType();
+        colorType.setColor("blue");
+        printJob.setColorTypeId(colorType);
+
+        Employee e = new Employee();
+        e.setId(1);
+
+        ColorType newColorType = new ColorType();
+        newColorType.setColor("red");
+        newColorType.setAvailable(true);
+
+
+        when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
+        when(employeeRepo.findEmployeeById(anyInt())).thenReturn(e);
+        when(colorTypeRepo.findByColor("red")).thenReturn(newColorType);
+        when(printJobRepo.save(printJob)).thenReturn(null);
+
+        PrintJobResponse response = operations.updatePrintJobProps(1, request);
+        assertTrue("response is null", response != null);
+        assertTrue("comments are not equal", response.getData().get(0).getComments().equals(printJob.getComments()));
+        assertTrue("status is not equal", response.getData().get(0).getStatus() == printJob.getStatus());
+        assertTrue("color is not equal", response.getData().get(0).getColorTypeId().getColor().equals(request.getColorType()));
+    }
+
+    @Test
+    public void updatePrintJobStatusProp() {
+        UpdatePrintJobPropertiesRequest request = new UpdatePrintJobPropertiesRequest();
+        request.setStatus("REJECTED");
+        request.setEmployeeId(1);
+
+        PrintJob printJob = new PrintJob();
+        printJob.setComments("old comments");
+        printJob.setStatus(Status.valueOf("FAILED"));
+        ColorType colorType = new ColorType();
+        colorType.setColor("blue");
+        printJob.setColorTypeId(colorType);
+
+        Employee e = new Employee();
+        e.setId(1);
+
+        ColorType newColorType = new ColorType();
+        newColorType.setColor("red");
+        newColorType.setAvailable(true);
+
+
+        when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
+        when(employeeRepo.findEmployeeById(anyInt())).thenReturn(e);
+        when(colorTypeRepo.findByColor("red")).thenReturn(newColorType);
+        when(printJobRepo.save(printJob)).thenReturn(null);
+
+        PrintJobResponse response = operations.updatePrintJobProps(1, request);
+        assertTrue("response is null", response != null);
+        assertTrue("comments are not equal", response.getData().get(0).getComments().equals(printJob.getComments()));
+        assertTrue("status is not equal", response.getData().get(0).getStatus() == Status.fromValue(request.getStatus()));
+        assertTrue("color is not equal", response.getData().get(0).getColorTypeId().getColor().equals(printJob.getColorTypeId().getColor()));
+    }
+
+    @Test
+    public void updatePrintJobCommentsProp() {
+        UpdatePrintJobPropertiesRequest request = new UpdatePrintJobPropertiesRequest();
+        request.setComments("comments");
+        request.setEmployeeId(1);
+
+        PrintJob printJob = new PrintJob();
+        printJob.setComments("old comments");
+        printJob.setStatus(Status.valueOf("FAILED"));
+        ColorType colorType = new ColorType();
+        colorType.setColor("blue");
+        printJob.setColorTypeId(colorType);
+
+        Employee e = new Employee();
+        e.setId(1);
+
+        ColorType newColorType = new ColorType();
+        newColorType.setColor("red");
+        newColorType.setAvailable(true);
+
+
+        when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
+        when(employeeRepo.findEmployeeById(anyInt())).thenReturn(e);
+        when(colorTypeRepo.findByColor("red")).thenReturn(newColorType);
+        when(printJobRepo.save(printJob)).thenReturn(null);
+
+        PrintJobResponse response = operations.updatePrintJobProps(1, request);
+        assertTrue("response is null", response != null);
+        assertTrue("comments are not equal", response.getData().get(0).getComments().equals(request.getComments()));
+        assertTrue("status is not equal", response.getData().get(0).getStatus() == printJob.getStatus());
+        assertTrue("color is not equal", response.getData().get(0).getColorTypeId().getColor().equals(printJob.getColorTypeId().getColor()));
     }
 }
