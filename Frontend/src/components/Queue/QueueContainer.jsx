@@ -5,14 +5,17 @@ import Queue from './components/Queue';
 
 const QueueContainer = () => {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [filteredData, setFilteredData] = useState(data);
   const [stringedValues, setStringedValues] = useState([]);
   const [statusView, setStatusView] = useState('PENDING_REVIEW');
 
   useEffect(() => {
+    setLoading(true);
     RequestService.getPrintJobs(
       response => {
         const data = response.data.data;
+        setLoading(false);
         const formattedData = data.map(printjob => {
           return {
             color: printjob.colorTypeId.color,
@@ -69,6 +72,7 @@ const QueueContainer = () => {
 
   return (
     <Queue
+      loading={loading}
       statusView={statusView}
       setStatus={setStatus}
       filterByTerm={filterByTerm}
