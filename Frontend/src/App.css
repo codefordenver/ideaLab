@@ -4,6 +4,7 @@
   --dark-blue: #1f4393;
   --white-text: #ffffff;
   --default-background: white;
+  --error-color: red;
 }
 
 html {
@@ -99,4 +100,8 @@ input {
 
 .hidden {
   display: none;
+}
+
+.error {
+  color: var(--error-color);
 }
