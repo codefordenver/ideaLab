@@ -1,0 +1,45 @@
+version: "3"
+services:
+  api:
+    depends_on:
+      - postgres
+    build:
+      context: .
+      dockerfile: gradle.dockerfile
+    ports:
+      - "8080:8080"
+    volumes: 
+      - "./Backend:/srv"
+    command: ash -c  'nodemon --legacy-watch --watch ./src --exec "gradle bootRun" --ext .java'
+  postgres:
+    image: postgres:11-alpine
+    hostname: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - postgres
+    ports:
+      - "5555:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+    restart: unless-stopped
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.node
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    environment:
+      BACKEND: api:9000
+    volumes:
+      - ./Frontend:/srv
+    command: ["npm", "run", "start"]

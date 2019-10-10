@@ -3,11 +3,10 @@ package idealab.api.model;
 import javax.persistence.*;
 import java.util.Set;
 
-
-
 @Entity
 @Table(name = "email_hash")
-public class EmailHash {
+public class EmailHash extends RecordTimestamp {
+	
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
@@ -28,7 +27,6 @@ public class EmailHash {
         this.emailHash = emailHash;
     }
 
-    //getters and setters
     public String getEmailHash() {
         return emailHash;
     }

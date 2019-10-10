@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping("/api/print-jobs")
 public class PrintJobController {
@@ -27,17 +25,16 @@ public class PrintJobController {
     }
 
     @GetMapping
-    public ResponseEntity<?> printJobGetAll() {
-//        TODO: Add parameter that will find all and return based on status
+    public ResponseEntity<?> printJobGetAll(@RequestParam(required = false) String status) {
         LOGGER.info("Return all print jobs");
-        PrintJobResponse response = printJobOperations.getAllPrintJobs();
+        PrintJobResponse response = printJobOperations.getAllPrintJobs(status);
 
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     // TODO W.E. : add query param or boolean to model to accept mass upload (ignore 5 file max)
     @PostMapping
-    public ResponseEntity<?> printJobNew(@ModelAttribute @Valid PrintJobNewRequest model) {
+    public ResponseEntity<?> printJobNew(@ModelAttribute PrintJobNewRequest model) {
         PrintJobResponse response = printJobOperations.newPrintJob(model);
 
         return new ResponseEntity<>(response, response.getHttpStatus());

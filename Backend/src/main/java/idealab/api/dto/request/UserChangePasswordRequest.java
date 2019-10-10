@@ -1,8 +1,12 @@
 package idealab.api.dto.request;
 
+import idealab.api.exception.IdeaLabApiException;
+
 import java.util.Objects;
 
-public class UserChangePasswordRequest {
+import static idealab.api.exception.ErrorType.VALIDATION_ERROR;
+
+public class UserChangePasswordRequest implements GenericRequest {
 
     private String username;
     private String oldPassword;
@@ -64,4 +68,17 @@ public class UserChangePasswordRequest {
                 Objects.equals(confirmNewPassword, that.confirmNewPassword);
     }
 
+    @Override
+    public void validate() {
+        if(this.username == null || this.username.trim().isEmpty())
+            throw new IdeaLabApiException(VALIDATION_ERROR, "Username is not valid");
+        if(this.oldPassword == null || this.oldPassword.trim().isEmpty())
+            throw new IdeaLabApiException(VALIDATION_ERROR, "Current password is not valid");
+        if(this.newPassword == null || this.newPassword.trim().isEmpty())
+            throw new IdeaLabApiException(VALIDATION_ERROR, "New password is not valid");
+        if(this.confirmNewPassword == null || this.confirmNewPassword.trim().isEmpty())
+            throw new IdeaLabApiException(VALIDATION_ERROR, "Confirm new password is not valid");
+        if(!this.newPassword.equals(this.confirmNewPassword))
+            throw new IdeaLabApiException(VALIDATION_ERROR, "New password and confirm new password are not equal");
+    }
 }
