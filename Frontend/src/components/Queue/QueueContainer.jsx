@@ -22,6 +22,8 @@ const QueueContainer = () => {
             submitted: printjob.createdAt,
             comments: printjob.comments,
             status: printjob.status,
+            dropboxPath: printjob.dropboxPath,
+            dropboxSharableLink: printjob.dropboxSharableLink,
           };
         });
         setData(formattedData);

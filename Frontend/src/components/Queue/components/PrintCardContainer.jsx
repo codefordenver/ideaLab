@@ -69,12 +69,27 @@ const PrintCardContainer = ({ data }) => {
       />
     </div>
   ) : null;
+
+  const updateDropboxUrlParams = dropboxSharableLink => {
+    let url = new URL(dropboxSharableLink);
+    let queryString = url.search;
+    let searchParams = new URLSearchParams(queryString);
+
+    // default dl=0, if set to 1 the file will auto download
+    searchParams.set('dl', '1');
+    url.search = searchParams.toString();
+
+    return url.toString();
+  };
+
   return (
     <div className="printCardContainer">
       <div className="printCardContainerTop">
         {/* <img src='#' alt='hamLogo' className='col10'/> */}
         <div className="printFileName col20">
-          <p>{data.fileName}</p>
+          <a href={updateDropboxUrlParams(data.dropboxSharableLink)}>
+            {data.dropboxPath}
+          </a>
         </div>
         <div className="colorContainer" onMouseLeave={handleMouseLeave}>
           <div
