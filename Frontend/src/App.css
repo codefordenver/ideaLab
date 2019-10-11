@@ -3,6 +3,7 @@
   --light-blue: #00aeef;
   --dark-blue: #1f4393;
   --white-text: #ffffff;
+  --orange-red: #D93F24;
   --default-background: white;
 }
 
@@ -100,3 +101,11 @@ input {
 .hidden {
   display: none;
 }
+
+.error {
+  color: var(--orange-red);
+  font-size: 1.5rem;
+  margin: 1rem 2rem 1rem 2rem;
+  border-radius: 5px;
+  /* color: var(--white-text); */
+ }

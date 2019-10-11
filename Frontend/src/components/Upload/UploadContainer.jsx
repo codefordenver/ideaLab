@@ -21,7 +21,6 @@ function UploadContainer() {
 
   return (
     <div className={'uploadContainer'}>
-      <span>{errors.form ? errors.form : null}</span>
       <form
         onSubmit={e => {
           e.preventDefault();
@@ -70,6 +69,9 @@ function UploadContainer() {
           changeHandler={setComments}
           error={errors.comments}
         />
+        <div>
+          <div className={"error"}>{errors.form ? errors.form : null}</div>
+        </div>
         <button className={'shapedButton'} type="submit">
           SUMBIT
         </button>
