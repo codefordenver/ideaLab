@@ -37,6 +37,12 @@ public class PrintJobController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
+    @GetMapping("/{print-id}")
+    public ResponseEntity<?> printJobGetById(@PathVariable("print-id") Integer printId) {
+        PrintJobResponse response = printJobOperations.getPrintJobById(printId);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
     @PutMapping("/{print-id}/model")
     public ResponseEntity<?> printJobUpdateModel(@PathVariable("print-id") Integer printId,
                                                   @ModelAttribute PrintModelUpdateRequest model) {

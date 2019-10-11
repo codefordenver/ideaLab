@@ -291,4 +291,21 @@ public class PrintJobOperations {
 
         return response;
     }
+
+    public PrintJobResponse getPrintJobById(Integer printJobId){
+        PrintJob printJob = printJobRepo.findPrintJobById(printJobId);
+        if(printJob == null)
+            throw new IdeaLabApiException(PRINT_JOB_CANT_FIND_BY_ID);
+
+        List<PrintJob> printJobs = new ArrayList<>();
+        printJobs.add(printJob);
+
+        PrintJobResponse response = new PrintJobResponse();
+        response.setSuccess(true);
+        response.setMessage("Print job returned successfully");
+        response.setHttpStatus(HttpStatus.ACCEPTED);
+        response.setData(printJobs);
+
+        return response;
+    }
 }
