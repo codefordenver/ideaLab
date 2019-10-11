@@ -240,14 +240,12 @@ public class PrintJobOperations {
 
     public PrintJobResponse getDeletablePrintJobs() {
         PrintJobResponse response = new PrintJobResponse("Could not get deletable print jobs");
-        List<Status> deletableStatuses = Arrays.asList(new Status[]{
-            Status.PENDING_REVIEW,
+        List<Status> deletableStatuses = Arrays.asList(Status.PENDING_REVIEW,
             Status.FAILED,
             Status.PENDING_CUSTOMER_RESPONSE,
             Status.REJECTED,
             Status.COMPLETED,
-            Status.ARCHIVED
-        });
+            Status.ARCHIVED);
         List<PrintJob> printJobs = printJobRepo.findByStatusIn(deletableStatuses);
 
         response.setSuccess(true);
