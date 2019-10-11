@@ -13,10 +13,17 @@ function UploadContainer() {
   const [comments, setComments] = useState('');
 
   const [errors, setErrors] = useState({});
+  const [success, setSuccess] = useState();
 
   function onFailure(error) {
     const validationErrors = RequestService.validationErrorGetter(error);
     setErrors(validationErrors);
+  }
+
+  function onSuccess(response) {
+    if (response.data.message) {
+      setSuccess(response.data.message);
+    }
   }
 
   return (
@@ -24,6 +31,8 @@ function UploadContainer() {
       <form
         onSubmit={e => {
           e.preventDefault();
+          setErrors({});
+          setSuccess();
           const formData = new FormData();
           formData.append('file', file);
           formData.append('email', email);
@@ -31,9 +40,10 @@ function UploadContainer() {
           formData.append('customerLastName', customerLastName);
           formData.append('color', color);
           formData.append('comments', comments);
-          RequestService.newPrintJob(formData, response => response, onFailure);
+          RequestService.newPrintJob(formData, onSuccess, onFailure);
         }}
       >
+        <div className={"success"}>{success}</div>
         <Upload
           className={'upload'}
           callback={files => setFile(files[0])}
