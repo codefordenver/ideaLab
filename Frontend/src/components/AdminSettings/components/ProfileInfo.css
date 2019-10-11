@@ -4,20 +4,22 @@
   align-items: center;
   justify-content: space-evenly;
   height: 5em;
+  background: red;
+  width: 100%;
 }
 
 .infoContainer > h3 {
   margin-left: 2em;
-  margin-right: 2em;
 }
 
 .infoContainer > button.passwordBtn {
   background-color: #577ca2;
   border-radius: 0px;
-  width: 10em;
   height: 2em;
-  margin-right: 2em;
-  font-size: 1rem;
+  font-size: 0.8rem;
+  width: 12em;
+  margin-left: 14em;
+  position: absolute;
 }
 
 .infoContainer > button.deleteBtn {
@@ -26,11 +28,10 @@
   width: 5em;
   height: 2em;
   margin-right: 2em;
-  font-size: 1rem;
+  font-size: 0.8rem;
 }
 
 .dropdownContainer {
-  width: 12em;
-  display: flex;
-  justify-content: space-between;
+  position: absolute;
+  padding-right: 8em;
 }
