@@ -263,14 +263,12 @@ public class PrintJobOperationsTest {
 
         List<PrintJob> printJobs = new ArrayList<PrintJob>();
         printJobs.add(printJob);
-        List<Status> deletableStatuses = Arrays.asList(new Status[]{
-            Status.PENDING_REVIEW,
+        List<Status> deletableStatuses = Arrays.asList(Status.PENDING_REVIEW,
             Status.FAILED,
             Status.PENDING_CUSTOMER_RESPONSE,
             Status.REJECTED,
             Status.COMPLETED,
-            Status.ARCHIVED
-        });
+            Status.ARCHIVED);
         when(printJobRepo.findByStatusIn(deletableStatuses)).thenReturn(printJobs);
 
         // when
