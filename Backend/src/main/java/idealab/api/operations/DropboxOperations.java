@@ -157,16 +157,4 @@ public class DropboxOperations {
     return response;
   }
 
-  //Run it and forget it, runs asynchronously
-  private void DeletePrintJobAsync(String dropboxPath) {
-    CompletableFuture.runAsync(() -> {
-      try {
-        deleteDropboxFile(dropboxPath);
-      } catch (Exception e) {
-        //swallow exception since whether or not it deletes isn't super important
-        e.printStackTrace();
-      }
-    });
-  }
-
 }
