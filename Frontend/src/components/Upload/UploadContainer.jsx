@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import RequestService from '../../util/RequestService';
+import Loader from '../globalStyles/Loader';
 import Upload from './components/Upload';
 import BasicInput from '../BasicInput';
 import './UploadContainer.css';
@@ -12,15 +13,18 @@ function UploadContainer() {
   const [color, setColor] = useState('');
   const [comments, setComments] = useState('');
 
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState();
 
   function onFailure(error) {
+    setLoading(false);
     const validationErrors = RequestService.validationErrorGetter(error);
     setErrors(validationErrors);
   }
 
   function onSuccess(response) {
+    setLoading(false);
     if (response.data.message) {
       setSuccess(response.data.message);
     }
@@ -28,9 +32,11 @@ function UploadContainer() {
 
   return (
     <div className={'uploadContainer'}>
+      {loading ? <div className={'loader-container'}>Uploading File...<Loader/></div> : false}
       <form
         onSubmit={e => {
           e.preventDefault();
+          setLoading(true);
           setErrors({});
           setSuccess();
           const formData = new FormData();
