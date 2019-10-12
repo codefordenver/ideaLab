@@ -33,6 +33,7 @@ import static idealab.api.exception.ErrorType.*;
 @Component
 public class DropboxOperations {
 
+  private static final String FILE_EXTENSION = ".stl";
   private final DropboxConfiguration dropboxConfig;
   private DbxClientV2 client;
   private PrintJobRepo printJobRepo;
@@ -127,15 +128,14 @@ public class DropboxOperations {
 
     LocalDateTime currentTime = LocalDateTime.now();
     String newPath = "/" + currentTime.toLocalTime().toNanoOfDay() + "-" + request.getNewPath();
+    newPath = newPath.endsWith(FILE_EXTENSION) ? newPath : newPath + FILE_EXTENSION;
     String oldPath = printJob.getDropboxPath();
 
     try {
-      //Copy file to new location in dropbox, delete old file from dropbox, update database
-      RelocationResult result = client.files().copyV2(oldPath, newPath);
+      //Move file to new location in dropbox, update database
+      RelocationResult result = client.files().moveV2(oldPath, newPath);
       Metadata metaData = result.getMetadata();
       if(metaData.getPathDisplay().equalsIgnoreCase(newPath)) {
-        String dropboxPath = printJob.getDropboxPath();
-        DeletePrintJobAsync(dropboxPath);
         printJob.setDropboxPath(metaData.getPathDisplay());
         String sharableLink = getSharableLink(metaData.getPathLower());
         printJob.setDropboxSharableLink(sharableLink);
@@ -155,18 +155,6 @@ public class DropboxOperations {
     printJobs.add(printJob);
     response.setData(printJobs);
     return response;
-  }
-
-  //Run it and forget it, runs asynchronously
-  private void DeletePrintJobAsync(String dropboxPath) {
-    CompletableFuture.runAsync(() -> {
-      try {
-        deleteDropboxFile(dropboxPath);
-      } catch (Exception e) {
-        //swallow exception since whether or not it deletes isn't super important
-        e.printStackTrace();
-      }
-    });
   }
 
 }
