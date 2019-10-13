@@ -689,4 +689,31 @@ public class PrintJobOperationsTest {
         assertTrue("status is not equal", response.getData().get(0).getStatus() == printJob.getStatus());
         assertTrue("color is not equal", response.getData().get(0).getColorTypeId().getColor().equals(printJob.getColorTypeId().getColor()));
     }
+<<<<<<< HEAD
+=======
+
+    @Test
+    public void getPrintJobById_shouldReturnPrintJob() {
+        //Given
+        PrintJob printJob = new PrintJob();
+        printJob.setId(2);
+        printJob.setStatus(Status.COMPLETED);
+
+        //When
+        when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
+
+        PrintJobResponse printJobResponse = operations.getPrintJobById(2);
+
+        //Then
+        assertTrue("Print job is returned with id=2", printJobResponse.getData().get(0).getId() == 2);
+    }
+
+    @Test(expected = IdeaLabApiException.class)
+    public void getPrintJobById_shouldThrowException() {
+        //When
+        when(printJobRepo.findPrintJobById(anyInt())).thenReturn(null);
+
+        PrintJobResponse printJobResponse = operations.getPrintJobById(2);
+    }
+>>>>>>> 068585c6ecd8dce8b3ab4ba0b18dce54829fa926
 }
