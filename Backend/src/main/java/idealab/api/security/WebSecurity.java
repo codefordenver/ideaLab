@@ -39,7 +39,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter { // TODO: also i 
                 //.antMatchers(LOGIN_URL).permitAll()
                 //.antMatchers(CHANGE_PASSWORD_URL, SIGN_UP_URL).hasRole(EmployeeRole.ADMIN.getText())
                 //.antMatchers(HttpMethod.DELETE).hasRole(EmployeeRole.ADMIN.getText())
-                //.anyRequest().authenticated()
+                .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager(), employeeRepo))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager(), employeeRepo))
