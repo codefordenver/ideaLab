@@ -284,7 +284,7 @@ public class PrintJobOperationsTest {
         PrintJobResponse response = new PrintJobResponse();
 
         byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
-        MultipartFile file = new MockMultipartFile("Something", a);
+        MultipartFile file = new MockMultipartFile("something.stl", "something.stl", null ,a);
 
         PrintJobNewRequest request = new PrintJobNewRequest();
         request.setColor("RED");
@@ -351,7 +351,7 @@ public class PrintJobOperationsTest {
         PrintJobResponse response = new PrintJobResponse();
 
         byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
-        MultipartFile file = new MockMultipartFile("Something", a);
+        MultipartFile file = new MockMultipartFile("something.stl", "something.stl", null ,a);
 
         PrintJobNewRequest request = new PrintJobNewRequest();
         request.setColor("RED");
@@ -422,7 +422,7 @@ public class PrintJobOperationsTest {
     public void createNewPrintJobWithNotFoundColor() {
     	// given
     	byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
-        MultipartFile file = new MockMultipartFile("Something", a);
+        MultipartFile file = new MockMultipartFile("Something.stl", a);
 
         PrintJobNewRequest request = new PrintJobNewRequest();
         request.setColor("RED");
@@ -463,7 +463,7 @@ public class PrintJobOperationsTest {
     @Test
     public void updateModelSuccess() {
         byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
-        MultipartFile file = new MockMultipartFile("Something", a);
+        MultipartFile file = new MockMultipartFile("something.stl", "something.stl", null ,a);
 
         PrintModelUpdateRequest request = new PrintModelUpdateRequest();
         request.setFile(file);
