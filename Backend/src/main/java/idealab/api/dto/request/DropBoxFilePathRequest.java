@@ -31,5 +31,7 @@ public class DropBoxFilePathRequest implements GenericRequest {
             throw new IdeaLabApiException(VALIDATION_ERROR, "PrintJob Id is invalid");
         if(this.newPath == null || this.newPath.trim().isEmpty())
             throw new IdeaLabApiException(VALIDATION_ERROR, "New Path is invalid");
+        if(!this.newPath.toLowerCase().endsWith(".stl"))
+            throw new IdeaLabApiException(VALIDATION_ERROR, "File must be .stl");
     }
 }
