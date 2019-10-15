@@ -91,7 +91,7 @@ public class Employee extends RecordTimestamp {
         this.username = username;
     }
 
-    @JsonIgnore
+    // @JsonIgnore
     public String getPassword() {
         return password;
     }
