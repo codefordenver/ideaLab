@@ -18,6 +18,7 @@ const LoginManager = props => {
         callbacks.setToken(token);
         callbacks.setAuthenticated(true);
         RequestService.requestState.token = token;
+        localStorage.setItem('ideaLab', token);
       } else {
         callbacks.setAuthenticated(false);
         setErrors({
