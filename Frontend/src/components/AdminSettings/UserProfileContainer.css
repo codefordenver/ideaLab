@@ -1,11 +1,11 @@
-.container {
+.userProfileContainer {
   width: 80%;
   display: flex;
   justify-content: start;
   margin-left: 3em;
 }
 
-.container button {
+.userProfileContainer button {
   background-color: #62a257;
   font-weight: 600;
   width: 10em;
@@ -18,7 +18,7 @@
   margin-right: 0;
 }
 
-.container button:hover {
+.userProfileContainer button:hover {
   cursor: pointer;
 }
 

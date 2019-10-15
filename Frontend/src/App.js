@@ -11,9 +11,9 @@ import PrivateRoute from './components/Routing/PrivateRoute';
 import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 function App() {
-  const [authenticated, setAuthenticated] = useState(true);
-  const [token, setToken] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
+  const [token, setToken] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   return (
     <div className="App grid-container">
