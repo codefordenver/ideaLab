@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
 
 
@@ -90,6 +91,7 @@ public class Employee extends RecordTimestamp {
         this.username = username;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
