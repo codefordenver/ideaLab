@@ -1,15 +1,9 @@
 package idealab.api.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import org.hibernate.validator.constraints.Length;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name ="customer_info")
@@ -19,9 +13,8 @@ public class CustomerInfo extends RecordTimestamp {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne()
-    @JoinColumn(name="fk_email_hash_id", referencedColumnName = "id", nullable = false)    
-    private EmailHash emailHashId;
+    @OneToMany(targetEntity=PrintJob.class, mappedBy="customerInfo")
+    private List<PrintJob> printJobs;
 
     @Column(name = "first_name", nullable = false)
     @Length(min = 1, max = 254)
@@ -37,19 +30,19 @@ public class CustomerInfo extends RecordTimestamp {
 
     public CustomerInfo() {}
 
-    public CustomerInfo(EmailHash emailHashId, String firstName, String lastName, String email) {
-        this.emailHashId = emailHashId;
+    public CustomerInfo(List<PrintJob> printJobs, String firstName, String lastName, String email) {
+        this.printJobs = printJobs;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
     }
 
-    public EmailHash getEmailHashId() {
-        return emailHashId;
+    public List<PrintJob> getPrintJobs() {
+        return printJobs;
     }
 
-    public void setEmailHashId(EmailHash emailHashId) {
-        this.emailHashId = emailHashId;
+    public void setPrintJobs(List<PrintJob> printJobs) {
+        this.printJobs = printJobs;
     }
 
     public String getFirstName() {

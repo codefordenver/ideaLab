@@ -1,13 +1,11 @@
 package idealab.api.controller;
 
+import idealab.api.dto.request.EmployeeSignUpRequest;
 import idealab.api.dto.request.UserChangePasswordRequest;
 import idealab.api.dto.response.GenericResponse;
-import idealab.api.model.Employee;
 import idealab.api.operations.UserOperations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
@@ -20,7 +18,7 @@ public class UserController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<?> signUp(@RequestBody @Valid Employee user) {
+    public ResponseEntity<?> signUp(@RequestBody EmployeeSignUpRequest user) {
         GenericResponse response = userOperations.userSignUp(user);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
