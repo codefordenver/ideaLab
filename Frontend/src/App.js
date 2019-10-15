@@ -13,7 +13,7 @@ import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
   const [token, setToken] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [role, setRole] = useState('STAFF');
 
   return (
     <div className="App grid-container">
@@ -21,9 +21,10 @@ function App() {
         value={{
           authenticated: authenticated,
           token: token,
+          role: role,
           setAuthenticated: setAuthenticated,
           setToken: setToken,
-          isAdmin: isAdmin,
+          setRole: setRole,
         }}
       >
         <HashRouter>
@@ -31,9 +32,8 @@ function App() {
             logout={() => {
               setToken('');
               setAuthenticated(false);
-              setIsAdmin(false);
+              setRole('STAFF');
             }}
-            isAdmin={isAdmin}
           />
           <Switch>
             <PrivateRoute exact path="/queue" component={QueueContainer} />

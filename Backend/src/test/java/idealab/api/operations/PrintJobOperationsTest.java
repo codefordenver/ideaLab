@@ -697,8 +697,6 @@ public class PrintJobOperationsTest {
         assertTrue("status is not equal", response.getData().get(0).getStatus() == printJob.getStatus());
         assertTrue("color is not equal", response.getData().get(0).getColorTypeId().getColor().equals(printJob.getColorTypeId().getColor()));
     }
-<<<<<<< HEAD
-=======
 
     @Test
     public void getPrintJobById_shouldReturnPrintJob() {
@@ -723,5 +721,4 @@ public class PrintJobOperationsTest {
 
         PrintJobResponse printJobResponse = operations.getPrintJobById(2);
     }
->>>>>>> 068585c6ecd8dce8b3ab4ba0b18dce54829fa926
 }

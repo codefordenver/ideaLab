@@ -29,13 +29,17 @@ body {
   border-right: solid;
 }
 
+.hidden {
+  display: none;
+}
+
+.showing {
+  display: flex;
+}
+
 .selected {
   color: var(--light-blue);
   border-right: 6px solid;
-}
-
-.navList li {
-  display: flex;
 }
 
 .navList a {

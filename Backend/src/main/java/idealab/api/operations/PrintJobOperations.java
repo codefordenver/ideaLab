@@ -280,8 +280,6 @@ public class PrintJobOperations {
 
         return response;
     }
-<<<<<<< HEAD
-=======
 
     public PrintJobResponse getPrintJobById(Integer printJobId){
         PrintJob printJob = printJobRepo.findPrintJobById(printJobId);
@@ -299,5 +297,4 @@ public class PrintJobOperations {
 
         return response;
     }
->>>>>>> 068585c6ecd8dce8b3ab4ba0b18dce54829fa926
 }
