@@ -29,12 +29,14 @@ body {
   border-right: solid;
 }
 
-.hidden {
-  display: none;
+.navList li {
+  display: flex;
 }
 
-.showing {
-  display: flex;
+.hidden {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
 }
 
 .selected {

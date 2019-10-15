@@ -4,6 +4,10 @@
   display: flex;
 }
 
+body {
+  margin: 0px 50px;
+}
+
 .queueFilterInfo {
   display: flex;
   justify-content: space-between;
