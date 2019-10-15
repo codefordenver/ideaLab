@@ -16,6 +16,7 @@ function UploadContainer() {
   });
 
   const [file, setFile] = useState();
+  const [filename, setFilename] = useState('');
   const [email, setEmail] = useState('');
   const [customerFirstName, setCustomerFirstName] = useState('');
   const [customerLastName, setCustomerLastName] = useState('');
@@ -36,6 +37,13 @@ function UploadContainer() {
     setLoading(false);
     if (response.data.message) {
       setSuccess(response.data.message);
+      setFile();
+      setFilename('');
+      setEmail('');
+      setCustomerFirstName('');
+      setCustomerLastName('');
+      setColor('');
+      setComments('')
     }
   }
 
@@ -61,35 +69,42 @@ function UploadContainer() {
         <div className={"success"}>{success}</div>
         <Upload
           className={'upload'}
+          filename={filename}
+          setFilename={setFilename}
           callback={files => setFile(files[0])}
         ></Upload>
         <p>{errors.file ? errors.file : null}</p>
         <BasicInput
           className={'upload'}
+          value={customerFirstName}
           placeHolder={'First Name'}
           changeHandler={setCustomerFirstName}
           error={errors.customerFirstName}
         />
         <BasicInput
           className={'upload'}
+          value={customerLastName}
           placeHolder={'Last Name'}
           changeHandler={setCustomerLastName}
           error={errors.customerLastName}
         />
         <BasicInput
           className={'upload'}
+          value={email}
           placeHolder={'Email'}
           changeHandler={setEmail}
           error={errors.email}
         />
         <BasicInput
           className={'upload'}
+          value={color}
           placeHolder={'Color'}
           changeHandler={setColor}
           error={errors.color}
         />
         <BasicInput
           className={'upload'}
+          value={comments}
           placeHolder={'Comments'}
           changeHandler={setComments}
           error={errors.comments}

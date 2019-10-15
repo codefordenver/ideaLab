@@ -4,6 +4,7 @@ const BasicInput = props => {
   return (
     <div>
       <input
+        value={props.value}
         onChange={e => props.changeHandler(e.target.value)}
         type="text"
         placeholder={props.placeHolder}
