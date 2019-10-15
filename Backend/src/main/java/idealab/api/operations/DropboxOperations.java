@@ -33,7 +33,6 @@ import static idealab.api.exception.ErrorType.*;
 @Component
 public class DropboxOperations {
 
-  private static final String FILE_EXTENSION = ".stl";
   private final DropboxConfiguration dropboxConfig;
   private DbxClientV2 client;
   private PrintJobRepo printJobRepo;
@@ -128,7 +127,6 @@ public class DropboxOperations {
 
     LocalDateTime currentTime = LocalDateTime.now();
     String newPath = "/" + currentTime.toLocalTime().toNanoOfDay() + "-" + request.getNewPath();
-    newPath = newPath.endsWith(FILE_EXTENSION) ? newPath : newPath + FILE_EXTENSION;
     String oldPath = printJob.getDropboxPath();
 
     try {

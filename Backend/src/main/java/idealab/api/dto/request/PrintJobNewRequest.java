@@ -86,5 +86,7 @@ public class PrintJobNewRequest implements GenericRequest {
             throw new IdeaLabApiException(VALIDATION_ERROR, "Color is invalid");
         if(this.file == null || this.file.isEmpty())
             throw new IdeaLabApiException(VALIDATION_ERROR, "File is invalid");
+        if(!this.file.getOriginalFilename().toLowerCase().endsWith(".stl"))
+            throw new IdeaLabApiException(VALIDATION_ERROR, "File must be .stl");
     }
 }
