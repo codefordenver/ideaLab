@@ -1,38 +1,23 @@
 package idealab.api.operations;
 
-import static idealab.api.exception.ErrorType.COLOR_CANT_FIND_BY_TYPE;
-import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
-import static idealab.api.exception.ErrorType.PRINT_JOBS_NOT_EXIST;
-import static idealab.api.exception.ErrorType.PRINT_JOB_CANT_FIND_BY_ID;
-
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
-import idealab.api.dto.request.PrintJobDeleteRequest;
-import idealab.api.dto.request.PrintJobNewRequest;
-import idealab.api.dto.request.PrintJobUpdateRequest;
-import idealab.api.dto.request.PrintModelUpdateRequest;
+import idealab.api.dto.request.*;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.PrintJobResponse;
 import idealab.api.exception.ErrorType;
 import idealab.api.exception.IdeaLabApiException;
-import idealab.api.model.ColorType;
-import idealab.api.model.CustomerInfo;
-import idealab.api.model.EmailHash;
-import idealab.api.model.Employee;
-import idealab.api.model.EmployeeRole;
-import idealab.api.model.PrintJob;
-import idealab.api.model.Status;
-import idealab.api.repositories.ColorTypeRepo;
-import idealab.api.repositories.CustomerInfoRepo;
-import idealab.api.repositories.EmailHashRepo;
-import idealab.api.repositories.EmployeeRepo;
-import idealab.api.repositories.PrintJobRepo;
+import idealab.api.model.*;
+import idealab.api.repositories.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import static idealab.api.exception.ErrorType.*;
 
 @Service
 public class PrintJobOperations {
@@ -55,7 +40,7 @@ public class PrintJobOperations {
         this.employeeRepo = employeeRepo;
     }
 
-    public PrintJobResponse newPrintJob(PrintJobNewRequest printJobNewRequest) {
+    public PrintJobResponse newPrintJob(PrintJobNewRequest printJobNewRequest, Principal principal) {
         printJobNewRequest.validate();
         PrintJobResponse response = new PrintJobResponse("File could not be uploaded");
 
@@ -68,6 +53,7 @@ public class PrintJobOperations {
         String customerLastName = printJobNewRequest.getCustomerLastName();
         String color = printJobNewRequest.getColor();
         String comments = printJobNewRequest.getComments();
+        //Integer employeeId = printJobNewRequest.getEmployeeId();
         LocalDateTime currentTime = LocalDateTime.now();
 
         // TODO: Hash email so it is not in plaintext!!
@@ -80,40 +66,29 @@ public class PrintJobOperations {
         }
 
         CustomerInfo customer = customerInfoRepo.findByEmailHashId(databaseEmail);
-        
         if (customer == null) {
             customer = new CustomerInfo(databaseEmail, customerFirstName, customerLastName, email);
             customer = customerInfoRepo.save(customer);
         }
 
         ColorType databaseColor = colorTypeRepo.findByColor(color);
-        
         if (databaseColor == null) {
         	throw new IdeaLabApiException(COLOR_CANT_FIND_BY_TYPE);
         }
 
-        // TODO: Remove temp employee, this should be taken directly from the employee making the request through the token.
-        String tempEmployeeFirstName = "Temp John";
-        String tempEmployeeLastName = "Temp Joe";
-        String tempEmployeeUserName = "Temp Cotton Eyed Joe";
+        // Because an Employee will always be authenticated to use this endpoint,
+        // we shouldn't need error checking here because principal will never be null
+        Employee databaseEmployee = employeeRepo.findEmployeeByUsername(principal.getName());
 
-        Employee employee = new Employee(tempEmployeeUserName, "such secure, wow!", EmployeeRole.STAFF, tempEmployeeFirstName, tempEmployeeLastName);
-        Employee databaseEmployee = employeeRepo.findEmployeeByUsername(employee.getUsername());
-
-        if (databaseEmployee == null) {
-            databaseEmployee = employeeRepo.save(employee);
-        }
-
-        // Create a new print model first with temp dropbox link
         PrintJob printJob = new PrintJob(databaseEmail, databaseColor, databaseEmployee, Status.PENDING_REVIEW, comments);
+
+        // Make a dropbox sharable link here using the time of the database record
+        Map<String, String> data = dropboxOperations.uploadDropboxFile(currentTime.toLocalTime().toNanoOfDay(), printJobNewRequest.getFile());
+        printJob.setDropboxPath(data.get("filePath"));
+        printJob.setDropboxSharableLink(data.get("sharableLink"));
 
         // TODO: set the queue position of the new job to be at the end of the list.
 
-        // Make a dropbox sharable link here using the ID of the database record
-        Map<String, String> data = dropboxOperations.uploadDropboxFile(currentTime.toLocalTime().toNanoOfDay(), printJobNewRequest.getFile());
-
-        printJob.setDropboxPath(data.get("filePath"));
-        printJob.setDropboxSharableLink(data.get("sharableLink"));
         printJob = printJobRepo.save(printJob);
 
         return getPrintJobResponse(response, printJob, data, "Successfully saved new file to database!");
@@ -161,7 +136,7 @@ public class PrintJobOperations {
             throw new IdeaLabApiException(PRINT_JOBS_NOT_EXIST);
         }
 
-        dropboxOperations.deleteDropboxFile(printJob);
+        dropboxOperations.deleteDropboxFile(printJob.getDropboxPath());
         printJob.setDropboxPath("Deleted");
 
         printJob.setDropboxSharableLink("Deleted");
@@ -240,20 +215,85 @@ public class PrintJobOperations {
 
     public PrintJobResponse getDeletablePrintJobs() {
         PrintJobResponse response = new PrintJobResponse("Could not get deletable print jobs");
-        List<Status> deletableStatuses = Arrays.asList(new Status[]{
-            Status.PENDING_REVIEW,
+        List<Status> deletableStatuses = Arrays.asList(Status.PENDING_REVIEW,
             Status.FAILED,
             Status.PENDING_CUSTOMER_RESPONSE,
             Status.REJECTED,
             Status.COMPLETED,
-            Status.ARCHIVED
-        });
+            Status.ARCHIVED);
         List<PrintJob> printJobs = printJobRepo.findByStatusIn(deletableStatuses);
 
         response.setSuccess(true);
         response.setMessage("Successfully returned deletable print jobs");
         response.setData(printJobs);
         response.setHttpStatus(HttpStatus.ACCEPTED);
+
+        return response;
+    }
+
+    public PrintJobResponse updatePrintJobProps(Integer printJobId, UpdatePrintJobPropertiesRequest request) {
+        request.validate();
+        boolean isChanged = false;
+
+        Employee employee = employeeRepo.findEmployeeById(request.getEmployeeId());
+        if(employee == null)
+            throw new IdeaLabApiException(PRINT_JOB_UPDATE_FAILED, "Employee not found");
+
+        PrintJob printJob = printJobRepo.findPrintJobById(printJobId);
+        if(printJob == null)
+            throw new IdeaLabApiException(PRINT_JOB_CANT_FIND_BY_ID);
+
+        ColorType colorType = null;
+        if(request.getColorType() != null && !request.getColorType().trim().isEmpty()) {
+            colorType = colorTypeRepo.findByColor(request.getColorType());
+            if (colorType == null)
+                throw new IdeaLabApiException(PRINT_JOB_UPDATE_FAILED, "Color type is invalid");
+        }
+
+        if(request.getStatus() != null && !request.getStatus().trim().isEmpty()) {
+            isChanged = true;
+            printJob.setStatus(Status.fromValue(request.getStatus()));
+        }
+
+        if(request.getComments() != null) {
+            isChanged = true;
+            printJob.setComments(request.getComments());
+        }
+
+        if(colorType != null && colorType.getColor() != null && !colorType.getColor().trim().isEmpty()) {
+            isChanged = true;
+            printJob.setColorTypeId(colorType);
+        }
+
+        // Dont save if nothing actually updated
+        if(isChanged)
+            printJobRepo.save(printJob);
+
+        List<PrintJob> printJobs = new ArrayList<>();
+        printJobs.add(printJob);
+
+        PrintJobResponse response = new PrintJobResponse();
+        response.setSuccess(true);
+        response.setMessage("Print job properties updated successfully");
+        response.setHttpStatus(HttpStatus.ACCEPTED);
+        response.setData(printJobs);
+
+        return response;
+    }
+
+    public PrintJobResponse getPrintJobById(Integer printJobId){
+        PrintJob printJob = printJobRepo.findPrintJobById(printJobId);
+        if(printJob == null)
+            throw new IdeaLabApiException(PRINT_JOB_CANT_FIND_BY_ID);
+
+        List<PrintJob> printJobs = new ArrayList<>();
+        printJobs.add(printJob);
+
+        PrintJobResponse response = new PrintJobResponse();
+        response.setSuccess(true);
+        response.setMessage("Print job returned successfully");
+        response.setHttpStatus(HttpStatus.ACCEPTED);
+        response.setData(printJobs);
 
         return response;
     }

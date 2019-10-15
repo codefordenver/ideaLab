@@ -1,9 +1,6 @@
 package idealab.api.controller;
 
-import idealab.api.dto.request.PrintJobDeleteRequest;
-import idealab.api.dto.request.PrintJobNewRequest;
-import idealab.api.dto.request.PrintJobUpdateRequest;
-import idealab.api.dto.request.PrintModelUpdateRequest;
+import idealab.api.dto.request.*;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.PrintJobResponse;
 import idealab.api.operations.PrintJobOperations;
@@ -11,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/print-jobs")
@@ -34,9 +33,15 @@ public class PrintJobController {
 
     // TODO W.E. : add query param or boolean to model to accept mass upload (ignore 5 file max)
     @PostMapping
-    public ResponseEntity<?> printJobNew(@ModelAttribute PrintJobNewRequest model) {
-        PrintJobResponse response = printJobOperations.newPrintJob(model);
+    public ResponseEntity<?> printJobNew(@ModelAttribute PrintJobNewRequest model, Principal principal) {
+        PrintJobResponse response = printJobOperations.newPrintJob(model, principal);
 
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
+    @GetMapping("/{print-id}")
+    public ResponseEntity<?> printJobGetById(@PathVariable("print-id") Integer printId) {
+        PrintJobResponse response = printJobOperations.getPrintJobById(printId);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
@@ -83,6 +88,13 @@ public class PrintJobController {
 
         PrintJobResponse response = printJobOperations.getDeletablePrintJobs();
 
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
+    //Don't include the field in the JSON if you dont want it updated
+    @PutMapping("/{print-id}")
+    public ResponseEntity<?> updatePrintJobProperties(@PathVariable("print-id") Integer printId, @RequestBody UpdatePrintJobPropertiesRequest request) {
+        PrintJobResponse response = printJobOperations.updatePrintJobProps(printId, request);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 }
