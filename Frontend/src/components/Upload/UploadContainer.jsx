@@ -1,11 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import RequestService from '../../util/RequestService';
 import Loader from '../globalStyles/Loader';
+import {createBrowserHistory} from 'history';
 import Upload from './components/Upload';
 import BasicInput from '../BasicInput';
 import './UploadContainer.css';
 
+const history = createBrowserHistory();
 function UploadContainer() {
+  useEffect(() => {
+  const unblock = history.block('Are you sure you want to navigate away?');
+    return () => {
+      unblock();
+    };
+  });
+
   const [file, setFile] = useState();
   const [email, setEmail] = useState('');
   const [customerFirstName, setCustomerFirstName] = useState('');
