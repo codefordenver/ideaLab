@@ -12,11 +12,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -263,14 +265,12 @@ public class PrintJobOperationsTest {
 
         List<PrintJob> printJobs = new ArrayList<PrintJob>();
         printJobs.add(printJob);
-        List<Status> deletableStatuses = Arrays.asList(new Status[]{
-            Status.PENDING_REVIEW,
+        List<Status> deletableStatuses = Arrays.asList(Status.PENDING_REVIEW,
             Status.FAILED,
             Status.PENDING_CUSTOMER_RESPONSE,
             Status.REJECTED,
             Status.COMPLETED,
-            Status.ARCHIVED
-        });
+            Status.ARCHIVED);
         when(printJobRepo.findByStatusIn(deletableStatuses)).thenReturn(printJobs);
 
         // when
@@ -286,7 +286,7 @@ public class PrintJobOperationsTest {
         PrintJobResponse response = new PrintJobResponse();
 
         byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
-        MultipartFile file = new MockMultipartFile("Something", a);
+        MultipartFile file = new MockMultipartFile("something.stl", "something.stl", null ,a);
 
         PrintJobNewRequest request = new PrintJobNewRequest();
         request.setColor("RED");
@@ -303,6 +303,9 @@ public class PrintJobOperationsTest {
         color.setColor("RED");
         color.setAvailable(true);
 
+        //Principal is a place holder for the logged in user
+        Principal mockPrincipal = Mockito.mock(Principal.class);
+        Mockito.when(mockPrincipal.getName()).thenReturn("me");
         Employee e = new Employee();
         e.setId(999);
 
@@ -344,7 +347,7 @@ public class PrintJobOperationsTest {
         when(printJobRepo.save(any())).thenReturn(printJob);
         when(dropboxOperations.uploadDropboxFile(anyLong(), any())).thenReturn(data);
 
-        PrintJobResponse opResponse = operations.newPrintJob(request);
+        PrintJobResponse opResponse = operations.newPrintJob(request, mockPrincipal);
         assert(opResponse.equals(response));
     }
 
@@ -353,7 +356,7 @@ public class PrintJobOperationsTest {
         PrintJobResponse response = new PrintJobResponse();
 
         byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
-        MultipartFile file = new MockMultipartFile("Something", a);
+        MultipartFile file = new MockMultipartFile("something.stl", "something.stl", null ,a);
 
         PrintJobNewRequest request = new PrintJobNewRequest();
         request.setColor("RED");
@@ -370,6 +373,8 @@ public class PrintJobOperationsTest {
         color.setColor("RED");
         color.setAvailable(true);
 
+        Principal mockPrincipal = Mockito.mock(Principal.class);
+        Mockito.when(mockPrincipal.getName()).thenReturn("me");
         Employee e = new Employee();
         e.setId(999);
 
@@ -410,12 +415,11 @@ public class PrintJobOperationsTest {
         when(customerInfoRepo.findByEmailHashId(any())).thenReturn(null);
         when(customerInfoRepo.save(any())).thenReturn(customerInfo);
         when(colorTypeRepo.findByColor(any())).thenReturn(color);
-        when(employeeRepo.findEmployeeByUsername(any())).thenReturn(null);
-        when(employeeRepo.save(any())).thenReturn(e);
+        when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
         when(printJobRepo.save(any())).thenReturn(printJob);
         when(dropboxOperations.uploadDropboxFile(anyLong(), any())).thenReturn(data);
 
-        PrintJobResponse opResponse = operations.newPrintJob(request);
+        PrintJobResponse opResponse = operations.newPrintJob(request, mockPrincipal);
 
         assert(opResponse.equals(response));
     }
@@ -424,7 +428,9 @@ public class PrintJobOperationsTest {
     public void createNewPrintJobWithNotFoundColor() {
     	// given
     	byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
-        MultipartFile file = new MockMultipartFile("Something", a);
+        MultipartFile file = new MockMultipartFile("Something.stl", a);
+
+        Principal principal = null;
 
         PrintJobNewRequest request = new PrintJobNewRequest();
         request.setColor("RED");
@@ -437,10 +443,10 @@ public class PrintJobOperationsTest {
         when(colorTypeRepo.findByColor(any())).thenReturn(null);
 
         // when
-        operations.newPrintJob(request);
+        operations.newPrintJob(request, principal);
         
         // assert
-        verify(operations, times(1)).newPrintJob(request);
+        verify(operations, times(1)).newPrintJob(request, principal);
     }
     
     @Test(expected = IdeaLabApiException.class)
@@ -450,6 +456,8 @@ public class PrintJobOperationsTest {
         response.setMessage("No file was submitted.  Please attach a file to the request");
         response.setSuccess(false);
 
+        Principal principal = null;
+
         PrintJobNewRequest request = new PrintJobNewRequest();
         request.setColor("RED");
         request.setComments("COMMENTS");
@@ -458,14 +466,14 @@ public class PrintJobOperationsTest {
         request.setEmail("test@email.com");
         request.setFile(null);
 
-        operations.newPrintJob(request);
+        operations.newPrintJob(request, principal);
 
     }
 
     @Test
     public void updateModelSuccess() {
         byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
-        MultipartFile file = new MockMultipartFile("Something", a);
+        MultipartFile file = new MockMultipartFile("something.stl", "something.stl", null ,a);
 
         PrintModelUpdateRequest request = new PrintModelUpdateRequest();
         request.setFile(file);

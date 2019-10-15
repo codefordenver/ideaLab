@@ -10,6 +10,7 @@ import idealab.api.repositories.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +40,7 @@ public class PrintJobOperations {
         this.employeeRepo = employeeRepo;
     }
 
-    public PrintJobResponse newPrintJob(PrintJobNewRequest printJobNewRequest) {
+    public PrintJobResponse newPrintJob(PrintJobNewRequest printJobNewRequest, Principal principal) {
         printJobNewRequest.validate();
         PrintJobResponse response = new PrintJobResponse("File could not be uploaded");
 
@@ -52,6 +53,7 @@ public class PrintJobOperations {
         String customerLastName = printJobNewRequest.getCustomerLastName();
         String color = printJobNewRequest.getColor();
         String comments = printJobNewRequest.getComments();
+        //Integer employeeId = printJobNewRequest.getEmployeeId();
         LocalDateTime currentTime = LocalDateTime.now();
 
         // TODO: Hash email so it is not in plaintext!!
@@ -64,40 +66,29 @@ public class PrintJobOperations {
         }
 
         CustomerInfo customer = customerInfoRepo.findByEmailHashId(databaseEmail);
-        
         if (customer == null) {
             customer = new CustomerInfo(databaseEmail, customerFirstName, customerLastName, email);
             customer = customerInfoRepo.save(customer);
         }
 
         ColorType databaseColor = colorTypeRepo.findByColor(color);
-        
         if (databaseColor == null) {
         	throw new IdeaLabApiException(COLOR_CANT_FIND_BY_TYPE);
         }
 
-        // TODO: Remove temp employee, this should be taken directly from the employee making the request through the token.
-        String tempEmployeeFirstName = "Temp John";
-        String tempEmployeeLastName = "Temp Joe";
-        String tempEmployeeUserName = "Temp Cotton Eyed Joe";
+        // Because an Employee will always be authenticated to use this endpoint,
+        // we shouldn't need error checking here because principal will never be null
+        Employee databaseEmployee = employeeRepo.findEmployeeByUsername(principal.getName());
 
-        Employee employee = new Employee(tempEmployeeUserName, "such secure, wow!", EmployeeRole.STAFF, tempEmployeeFirstName, tempEmployeeLastName);
-        Employee databaseEmployee = employeeRepo.findEmployeeByUsername(employee.getUsername());
-
-        if (databaseEmployee == null) {
-            databaseEmployee = employeeRepo.save(employee);
-        }
-
-        // Create a new print model first with temp dropbox link
         PrintJob printJob = new PrintJob(databaseEmail, databaseColor, databaseEmployee, Status.PENDING_REVIEW, comments);
+
+        // Make a dropbox sharable link here using the time of the database record
+        Map<String, String> data = dropboxOperations.uploadDropboxFile(currentTime.toLocalTime().toNanoOfDay(), printJobNewRequest.getFile());
+        printJob.setDropboxPath(data.get("filePath"));
+        printJob.setDropboxSharableLink(data.get("sharableLink"));
 
         // TODO: set the queue position of the new job to be at the end of the list.
 
-        // Make a dropbox sharable link here using the ID of the database record
-        Map<String, String> data = dropboxOperations.uploadDropboxFile(currentTime.toLocalTime().toNanoOfDay(), printJobNewRequest.getFile());
-
-        printJob.setDropboxPath(data.get("filePath"));
-        printJob.setDropboxSharableLink(data.get("sharableLink"));
         printJob = printJobRepo.save(printJob);
 
         return getPrintJobResponse(response, printJob, data, "Successfully saved new file to database!");
@@ -224,14 +215,12 @@ public class PrintJobOperations {
 
     public PrintJobResponse getDeletablePrintJobs() {
         PrintJobResponse response = new PrintJobResponse("Could not get deletable print jobs");
-        List<Status> deletableStatuses = Arrays.asList(new Status[]{
-            Status.PENDING_REVIEW,
+        List<Status> deletableStatuses = Arrays.asList(Status.PENDING_REVIEW,
             Status.FAILED,
             Status.PENDING_CUSTOMER_RESPONSE,
             Status.REJECTED,
             Status.COMPLETED,
-            Status.ARCHIVED
-        });
+            Status.ARCHIVED);
         List<PrintJob> printJobs = printJobRepo.findByStatusIn(deletableStatuses);
 
         response.setSuccess(true);
