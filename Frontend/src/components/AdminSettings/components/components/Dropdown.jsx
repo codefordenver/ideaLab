@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './Dropdown.css';
 
 const UserProfilesContainer = props => {
   return (
