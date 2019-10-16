@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static idealab.api.security.SecurityConstants.LOGIN_URL;
+
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurity extends WebSecurityConfigurerAdapter { // TODO: also i think it's better name it as WebSecurityConfigurer since it's duty configure security related operations.
@@ -35,7 +37,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter { // TODO: also i 
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers("**/**").permitAll() //TODO W.E. : Remove when authentication starts
-                //.antMatchers(LOGIN_URL).permitAll()
+                .antMatchers(LOGIN_URL).permitAll()
                 //.antMatchers(CHANGE_PASSWORD_URL, SIGN_UP_URL).hasRole(EmployeeRole.ADMIN.getText())
                 //.antMatchers(HttpMethod.DELETE).hasRole(EmployeeRole.ADMIN.getText())
                 //.anyRequest().authenticated()

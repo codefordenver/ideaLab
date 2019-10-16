@@ -1,5 +1,6 @@
 package idealab.api.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -18,7 +19,8 @@ public class PrintJob extends RecordTimestamp {
     private Integer id;
 
     @ManyToOne()
-    @JoinColumn(name="fk_customer_info_id", referencedColumnName = "id", nullable = true)
+    @JoinColumn(name="fk_customer_info_id", referencedColumnName = "id", nullable = false)
+    @JsonManagedReference
     private CustomerInfo customerInfo;
 
     @ManyToOne()
@@ -148,9 +150,10 @@ public class PrintJob extends RecordTimestamp {
 
     @Override
     public String toString() {
+        String custId = customerInfo.getId() != null ? String.valueOf(customerInfo.getId()) : "";
         return "PrintJob{" +
                 "id=" + id +
-                ", customerInfo=" + customerInfo +
+                ", customerInfo=" + custId +
                 ", colorTypeId=" + colorTypeId +
                 ", employeeId=" + employeeId +
                 ", status=" + status +

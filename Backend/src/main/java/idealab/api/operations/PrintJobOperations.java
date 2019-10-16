@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static idealab.api.exception.ErrorType.*;
 
@@ -60,6 +57,10 @@ public class PrintJobOperations {
             customer = customerInfoRepo.save(customer);
         }
 
+        if(customer.getPrintJobs() != null && customer.getPrintJobs().size() >= 5) {
+            throw new IdeaLabApiException(GENERAL_ERROR, "Customer already has 5 print jobs queued");
+        }
+
         ColorType databaseColor = colorTypeRepo.findByColor(color);
         if (databaseColor == null) {
         	throw new IdeaLabApiException(COLOR_CANT_FIND_BY_TYPE);
@@ -78,6 +79,15 @@ public class PrintJobOperations {
 
         // TODO: set the queue position of the new job to be at the end of the list.
 
+        Set<PrintJob> printJobs;
+
+        if(customer.getPrintJobs() == null) {
+            printJobs = new HashSet<>();
+        } else {
+            printJobs = customer.getPrintJobs();
+        }
+        printJobs.add(printJob);
+        customer.setPrintJobs(printJobs);
         printJob = printJobRepo.save(printJob);
 
         return getPrintJobResponse(response, printJob, data, "Successfully saved new file to database!");

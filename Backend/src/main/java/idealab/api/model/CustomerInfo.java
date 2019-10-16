@@ -1,9 +1,10 @@
 package idealab.api.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name ="customer_info")
@@ -13,8 +14,9 @@ public class CustomerInfo extends RecordTimestamp {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToMany(targetEntity=PrintJob.class, mappedBy="customerInfo")
-    private List<PrintJob> printJobs;
+    @OneToMany(mappedBy="customerInfo", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private Set<PrintJob> printJobs;
 
     @Column(name = "first_name", nullable = false)
     @Length(min = 1, max = 254)
@@ -30,18 +32,26 @@ public class CustomerInfo extends RecordTimestamp {
 
     public CustomerInfo() {}
 
-    public CustomerInfo(List<PrintJob> printJobs, String firstName, String lastName, String email) {
+    public CustomerInfo(Set<PrintJob> printJobs, String firstName, String lastName, String email) {
         this.printJobs = printJobs;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
     }
 
-    public List<PrintJob> getPrintJobs() {
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Set<PrintJob> getPrintJobs() {
         return printJobs;
     }
 
-    public void setPrintJobs(List<PrintJob> printJobs) {
+    public void setPrintJobs(Set<PrintJob> printJobs) {
         this.printJobs = printJobs;
     }
 
@@ -69,5 +79,25 @@ public class CustomerInfo extends RecordTimestamp {
         this.email = email;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("printJobs=[");
+        if(printJobs != null && printJobs.size() > 0) {
+            printJobs.forEach(p -> {
+                sb.append(p.getId());
+                sb.append(", ");
+            });
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        sb.append("]");
+        return "CustomerInfo{" +
+                "id=" + id +
+                ", " + sb.toString() +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }
 
