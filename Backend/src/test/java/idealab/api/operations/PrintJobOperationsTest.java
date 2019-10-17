@@ -43,9 +43,6 @@ public class PrintJobOperationsTest {
     private ColorTypeRepo colorTypeRepo;
 
     @Mock
-    private EmailHashRepo emailHashRepo;
-
-    @Mock
     private CustomerInfoRepo customerInfoRepo;
 
     @Mock
@@ -57,7 +54,6 @@ public class PrintJobOperationsTest {
                 dropboxOperations,
                 printJobRepo,
                 colorTypeRepo,
-                emailHashRepo,
                 customerInfoRepo,
                 employeeRepo
         );
@@ -184,7 +180,6 @@ public class PrintJobOperationsTest {
         printJob.setColorTypeId(new ColorType("Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setEmailHashId(new EmailHash());
         printJob.setQueueId(new Queue(1));
         printJob.setStatus(Status.ARCHIVED);
         printJob.setEmployeeId(new Employee());
@@ -210,7 +205,6 @@ public class PrintJobOperationsTest {
         printJob.setColorTypeId(new ColorType("Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setEmailHashId(new EmailHash());
         printJob.setQueueId(new Queue(1));
         printJob.setStatus(Status.ARCHIVED);
         printJob.setEmployeeId(new Employee());
@@ -257,7 +251,6 @@ public class PrintJobOperationsTest {
         printJob.setColorTypeId(new ColorType("Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setEmailHashId(new EmailHash());
         printJob.setQueueId(new Queue(1));
         printJob.setStatus(Status.PENDING_REVIEW);
         printJob.setEmployeeId(new Employee());
@@ -309,9 +302,6 @@ public class PrintJobOperationsTest {
         Employee e = new Employee();
         e.setId(999);
 
-        EmailHash emailHash = new EmailHash();
-        emailHash.setEmailHash("test@email.com");
-
         Queue queue = new Queue(1);
 
         Map<String, String> data = new HashMap<>();
@@ -328,7 +318,6 @@ public class PrintJobOperationsTest {
         printJob.setUpdatedAt(LocalDateTime.now());
         printJob.setStatus(Status.PENDING_REVIEW);
         printJob.setEmployeeId(e);
-        printJob.setEmailHashId(emailHash);
         printJob.setQueueId(queue);
         printJob.setUpdatedAt(LocalDateTime.now());
 
@@ -340,8 +329,7 @@ public class PrintJobOperationsTest {
         response.setData(printJobData);
         response.setHttpStatus(HttpStatus.ACCEPTED);
 
-        when(emailHashRepo.findByEmailHash(any())).thenReturn(emailHash);
-        when(customerInfoRepo.findByEmailHashId(any())).thenReturn(customerInfo);
+        when(customerInfoRepo.findByEmail(any())).thenReturn(customerInfo);
         when(colorTypeRepo.findByColor(any())).thenReturn(color);
         when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
         when(printJobRepo.save(any())).thenReturn(printJob);
@@ -378,9 +366,6 @@ public class PrintJobOperationsTest {
         Employee e = new Employee();
         e.setId(999);
 
-        EmailHash emailHash = new EmailHash();
-        emailHash.setEmailHash("test@email.com");
-
         Queue queue = new Queue(1);
 
         Map<String, String> data = new HashMap<>();
@@ -397,7 +382,6 @@ public class PrintJobOperationsTest {
         printJob.setUpdatedAt(LocalDateTime.now());
         printJob.setStatus(Status.PENDING_REVIEW);
         printJob.setEmployeeId(e);
-        printJob.setEmailHashId(emailHash);
         printJob.setQueueId(queue);
         printJob.setUpdatedAt(LocalDateTime.now());
 
@@ -410,9 +394,7 @@ public class PrintJobOperationsTest {
         response.setData(printJobData);
         response.setHttpStatus(HttpStatus.ACCEPTED);
 
-        when(emailHashRepo.findByEmailHash(any())).thenReturn(null);
-        when(emailHashRepo.save(any())).thenReturn(emailHash);
-        when(customerInfoRepo.findByEmailHashId(any())).thenReturn(null);
+        when(customerInfoRepo.findByEmail(any())).thenReturn(null);
         when(customerInfoRepo.save(any())).thenReturn(customerInfo);
         when(colorTypeRepo.findByColor(any())).thenReturn(color);
         when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
