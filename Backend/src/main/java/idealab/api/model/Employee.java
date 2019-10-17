@@ -83,7 +83,8 @@ public class Employee extends RecordTimestamp {
         this.username = username;
     }
 
-    // @JsonIgnore
+    //@JsonIgnore - annotation caused issues
+    //TODO W.E - Need to determine how to properly implement annotation or figure another strategy
     public String getPassword() {
         return password;
     }
