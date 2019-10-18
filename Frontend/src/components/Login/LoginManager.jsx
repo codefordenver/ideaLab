@@ -30,12 +30,12 @@ const LoginManager = props => {
       const token = response.headers ? response.headers.authorization : '';
       if (token) {
         const decoded = parseJwt(token);
+        RequestService.requestState.token = token;
         callbacks.setState({
           token: token,
           authenticated: true,
           role: decoded.role
         });
-        RequestService.requestState.token = token;
       } else {
         callbacks.setState({ authenticated: false });
         setErrors({
