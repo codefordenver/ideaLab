@@ -11,28 +11,26 @@ import PrivateRoute from './components/Routing/PrivateRoute';
 import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 function App() {
-  const [authenticated, setAuthenticated] = useState(false);
-  const [token, setToken] = useState(null);
-  const [role, setRole] = useState('STAFF');
-
+  const initialState = {
+    authenticated: false,
+    token: null,
+    role: 'STAFF'
+  }
+  const [state, setState] = useState(initialState);
   return (
     <div className="App grid-container">
       <AuthContext.Provider
         value={{
-          authenticated: authenticated,
-          token: token,
-          role: role,
-          setAuthenticated: setAuthenticated,
-          setToken: setToken,
-          setRole: setRole,
+          authenticated: state.authenticated,
+          token: state.token,
+          role: state.role,
+          setState: setState,
         }}
       >
         <HashRouter>
           <SidebarNavigation
             logout={() => {
-              setToken('');
-              setAuthenticated(false);
-              setRole('STAFF');
+              setState(initialState);
             }}
           />
           <Switch>
@@ -46,7 +44,7 @@ function App() {
             <Route
               path="/login"
               render={props =>
-                authenticated ? (
+                state.authenticated ? (
                   <Redirect
                     to={{
                       pathname: '/queue',
