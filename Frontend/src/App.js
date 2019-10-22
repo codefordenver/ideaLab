@@ -13,7 +13,6 @@ import RequestService from './util/RequestService';
 import TokenParser from './util/TokenParser';
 
 function App() {
-
   const initialState = {
     authenticated: false,
     token: null,
@@ -28,11 +27,16 @@ function App() {
     if (storedToken) {
       RequestService.requestState.token = storedToken;
       const decoded = TokenParser(storedToken);
-      setState({
-        authenticated: true,
-        token: storedToken,
-        role: decoded.role,
-      });
+      const now = Date.now() / 1000;
+      if (now < decoded.exp) {
+        setState({
+          authenticated: true,
+          token: storedToken,
+          role: decoded.role,
+        });
+      } else {
+        localStorage.removeItem('ideaLab');
+      }
     }
   }, []);
 
