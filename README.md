@@ -36,10 +36,12 @@ docker-compose up
 
 If you are having any issues with getting the api or frontend to show, type
 ```docker
+docker-compose stop
 docker-compose build
+docker-compose up --force-recreate
 ```
 
-This should rebuild the containers.
+This should rebuild the images and recreate the containers so you have an up to instance running.
 
 
 ## Backend
