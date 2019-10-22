@@ -321,12 +321,16 @@ public class PrintJobOperationsTest {
         printJob.setQueueId(queue);
         printJob.setUpdatedAt(LocalDateTime.now());
 
-        List<PrintJob> printJobData = new ArrayList<>();
+        Set<PrintJob> printJobData = new HashSet<>();
         printJobData.add(printJob);
+
+        customerInfo.setPrintJobs(printJobData);
+        List<PrintJob> printJobs = new ArrayList<>();
+        printJobs.addAll(printJobData);
 
         response.setSuccess(true);
         response.setMessage("Successfully saved new file to database!");
-        response.setData(printJobData);
+        response.setData(printJobs);
         response.setHttpStatus(HttpStatus.ACCEPTED);
 
         when(customerInfoRepo.findByEmail(any())).thenReturn(customerInfo);
@@ -385,13 +389,16 @@ public class PrintJobOperationsTest {
         printJob.setQueueId(queue);
         printJob.setUpdatedAt(LocalDateTime.now());
 
-        List<PrintJob> printJobData = new ArrayList<>();
+        Set<PrintJob> printJobData = new HashSet<>();
         printJobData.add(printJob);
 
+        customerInfo.setPrintJobs(printJobData);
+        List<PrintJob> printJobs = new ArrayList<>();
+        printJobs.addAll(printJobData);
 
         response.setSuccess(true);
         response.setMessage("Successfully saved new file to database!");
-        response.setData(printJobData);
+        response.setData(printJobs);
         response.setHttpStatus(HttpStatus.ACCEPTED);
 
         when(customerInfoRepo.findByEmail(any())).thenReturn(null);
@@ -450,6 +457,68 @@ public class PrintJobOperationsTest {
 
         operations.newPrintJob(request, principal);
 
+    }
+
+    @Test(expected = IdeaLabApiException.class)
+    public void createNewPrintJob5JobError() {
+        PrintJobResponse response = new PrintJobResponse();
+
+        byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
+        MultipartFile file = new MockMultipartFile("something.stl", "something.stl", null ,a);
+
+        PrintJobNewRequest request = new PrintJobNewRequest();
+        request.setColor("RED");
+        request.setComments("COMMENTS");
+        request.setCustomerFirstName("test");
+        request.setCustomerLastName("testLast");
+        request.setEmail("test@email.com");
+        request.setFile(file);
+
+        CustomerInfo customerInfo = new CustomerInfo();
+        customerInfo.setFirstName("test");
+
+        ColorType color = new ColorType();
+        color.setColor("RED");
+        color.setAvailable(true);
+
+        //Principal is a place holder for the logged in user
+        Principal mockPrincipal = Mockito.mock(Principal.class);
+        Mockito.when(mockPrincipal.getName()).thenReturn("me");
+        Employee e = new Employee();
+        e.setId(999);
+
+        Queue queue = new Queue(1);
+
+        Map<String, String> data = new HashMap<>();
+        data.put("filePath", "DROPBOX_PATH");
+        data.put("sharableLink", "http://testlink.com");
+
+        List<PrintJob> printJobs = new ArrayList<>();
+        for(int i = 0; i < 6; i++) {
+            PrintJob printJob = new PrintJob();
+            printJob.setCreatedAt(LocalDateTime.now());
+            printJob.setId(i + 1);
+            printJob.setEmployeeId(e);
+            printJob.setQueueId(queue);
+            printJob.setUpdatedAt(LocalDateTime.now());
+            printJobs.add(printJob);
+        }
+
+        Set<PrintJob> printJobSet = new HashSet<>();
+        printJobSet.addAll(printJobs);
+        customerInfo.setPrintJobs(printJobSet);
+
+        response.setSuccess(true);
+        response.setMessage("Successfully saved new file to database!");
+        response.setData(printJobs);
+        response.setHttpStatus(HttpStatus.ACCEPTED);
+
+        when(customerInfoRepo.findByEmail(any())).thenReturn(customerInfo);
+        when(colorTypeRepo.findByColor(any())).thenReturn(color);
+        when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
+        when(printJobRepo.save(any())).thenReturn(printJobs);
+
+        operations.newPrintJob(request, mockPrincipal);
     }
 
     @Test

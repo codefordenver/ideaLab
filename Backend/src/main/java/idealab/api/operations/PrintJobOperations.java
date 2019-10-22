@@ -6,7 +6,10 @@ import idealab.api.dto.response.PrintJobResponse;
 import idealab.api.exception.ErrorType;
 import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.*;
-import idealab.api.repositories.*;
+import idealab.api.repositories.ColorTypeRepo;
+import idealab.api.repositories.CustomerInfoRepo;
+import idealab.api.repositories.EmployeeRepo;
+import idealab.api.repositories.PrintJobRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -57,8 +60,16 @@ public class PrintJobOperations {
             customer = customerInfoRepo.save(customer);
         }
 
-        if(customer.getPrintJobs() != null && customer.getPrintJobs().size() >= 5) {
-            throw new IdeaLabApiException(GENERAL_ERROR, "Customer already has 5 print jobs queued");
+        if(customer.getPrintJobs() != null && customer.getPrintJobs().size() > 5) {
+            int countForDay = 0;
+            for(PrintJob p : customer.getPrintJobs()) {
+                if(p.getCreatedAt().plusHours(24).isAfter(LocalDateTime.now())) {
+                    countForDay++;
+                }
+            }
+            if(countForDay > 5) {
+                throw new IdeaLabApiException(GENERAL_ERROR, "Customer has already created 5 print jobs in the last 24 hours");
+            }
         }
 
         ColorType databaseColor = colorTypeRepo.findByColor(color);
