@@ -11,15 +11,33 @@ const LoginManager = props => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  function parseJwt(token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join(''),
+    );
+    return JSON.parse(jsonPayload);
+  }
+
   function thenCallback(callbacks) {
     return function actualCallback(response) {
       const token = response.headers ? response.headers.authorization : '';
       if (token) {
-        callbacks.setToken(token);
-        callbacks.setAuthenticated(true);
+        const decoded = parseJwt(token);
         RequestService.requestState.token = token;
+        callbacks.setState({
+          token: token,
+          authenticated: true,
+          role: decoded.role
+        });
       } else {
-        callbacks.setAuthenticated(false);
+        callbacks.setState({ authenticated: false });
         setErrors({
           form: 'Unable to log in with the information provided',
         });
@@ -46,7 +64,7 @@ const LoginManager = props => {
     <AuthContext.Consumer>
       {context => {
         return (
-          <div className="container">
+          <div className="loginContainer">
             {context.authenticated}
             <img className="ideaLabLogo" src={ideaLABlogo} alt="ideaLABLogo" />
             <h4>3D Printing and Upload Queue</h4>
@@ -54,9 +72,7 @@ const LoginManager = props => {
             <form
               onSubmit={e => {
                 const callbacks = {
-                  setToken: context.setToken,
-                  setAuthenticated: context.setAuthenticated,
-                  setIsAdmin: context.setIsAdmin,
+                  setState: context.setState,
                 };
                 onSubmit(e, callbacks);
               }}
@@ -65,6 +81,7 @@ const LoginManager = props => {
               <BasicInput
                 name="username"
                 placeHolder="username"
+                type="text"
                 changeHandler={setUsername}
                 error={errors.username}
               />
@@ -75,7 +92,9 @@ const LoginManager = props => {
                 changeHandler={setPassword}
                 error={errors.password}
               />
-              <button type="submit">SIGN IN</button>
+              <button type="submit" className="accountSubmitButton">
+                SIGN IN
+              </button>
             </form>
           </div>
         );
