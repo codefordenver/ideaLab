@@ -26,7 +26,7 @@ class SidebarNavigation extends React.Component {
                     </div>
                   </NavLink>
                 </li>
-                <li className={context.isAdmin ? '' : 'hidden'}>
+                <li className={context.role === 'ADMIN' ? '' : 'hidden'}>
                   <NavLink to="/manageaccounts" activeClassName={'selected'}>
                     <div className="sidebarIcon" title="Manage Accounts">
                       <FiUserPlus />
