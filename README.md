@@ -29,6 +29,18 @@ To understand more about this project & how you can join, read this PowerPoint: 
 
 # Getting The Project Up and Running
 Our project is split into 2 sections: frontend & backend.
+We have our project set up with docker-compose. Navigate to the ideaLab folder and type
+```docker
+docker-compose up
+```
+
+If you are having any issues with getting the api or frontend to show, type
+```docker
+docker-compose build
+```
+
+This should rebuild the containers.
+
 
 ## Backend
 Our backend is split into 2 sections: our API app & our database. Our API is written in Java Spring & Gradle. Our database uses open source POSTGRES and we have containerized it in Docker.
@@ -52,23 +64,27 @@ If they needed to be used elsewhere, the values from the properties file can be 
   private String ACCESS_TOKEN;
 ```
 
-
-
 ### API & Java Spring & Gradle
 1. Make sure you have everything downloaded appropriately the first time. Go to our Google docs presentation if you still need to do that.
 2. Using CD and DIR (or LS) in your command line, navigate to your local repo of ideaLab/Backend.
 3. Once you are in the appropriate folder, type gradlew bootRun in your command line. (You do not need to start up our Docker container with the database because Gradle is automatically doing that for us.)
-4. In your browser, type localhost:8080/greeting. You have arrived at our Hello World page.
+4. In your browser, type localhost:8080/api/print-jobs. You have arrived at our list of print jobs page.
 
 ### Database & POSTGRES & Docker
 <i>In general, you should not have to go into this section. If for some reason you do, here are the instructions.</i>
-1. Make sure you have everything downloaded appropriately the first time. Go to our Google docs presentation if you still need to do that.
-2. Run `docker create -v /var/lib/postgresql/data --name PostgresData alpine`
-3. And then run `docker run --rm  --name postgres -e POSTGRES_PASSWORD=docker -d -p 5432:5432 --volumes-from PostgresData  postgres:12`
-4. In your IDE of choice run the app.
+1. Once you have docker-compose up and running, in a new command line type in
+```docker
+docker exec -it idealab_postgres_1 bash
+```
+
+2. Type
+```
+psql -U postgres
+```
+
+Now you can run basic postgres commands.
 
 
 ## Frontend
 1. The frontend is written in React.[If you need help with react, refer to its documentation.](https://reactjs.org/docs/getting-started.html "documentation")
-2. In order to run the application, make sure you have npm installed on your computer, and run `npm install` and then `npm start`.
-3. To terminate, on a macOS type control + C.
+2. To see our page, type into your web browser localhost:3000/#/login.
