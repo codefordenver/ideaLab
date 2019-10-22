@@ -1,20 +1,46 @@
 package idealab.api.operations;
 
-import idealab.api.dto.request.*;
+import static idealab.api.exception.ErrorType.COLOR_CANT_FIND_BY_TYPE;
+import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
+import static idealab.api.exception.ErrorType.GENERAL_ERROR;
+import static idealab.api.exception.ErrorType.PRINT_JOBS_NOT_EXIST;
+import static idealab.api.exception.ErrorType.PRINT_JOB_CANT_FIND_BY_ID;
+import static idealab.api.exception.ErrorType.PRINT_JOB_UPDATE_FAILED;
+
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
+import idealab.api.dto.request.PrintJobDeleteRequest;
+import idealab.api.dto.request.PrintJobNewRequest;
+import idealab.api.dto.request.PrintJobUpdateRequest;
+import idealab.api.dto.request.PrintModelUpdateRequest;
+import idealab.api.dto.request.UpdatePrintJobPropertiesRequest;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.PrintJobResponse;
 import idealab.api.exception.ErrorType;
 import idealab.api.exception.IdeaLabApiException;
-import idealab.api.model.*;
-import idealab.api.repositories.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.*;
-
-import static idealab.api.exception.ErrorType.*;
+import idealab.api.model.ColorType;
+import idealab.api.model.CustomerInfo;
+import idealab.api.model.Employee;
+import idealab.api.model.PrintJob;
+import idealab.api.model.Queue;
+import idealab.api.model.Status;
+import idealab.api.repositories.ColorTypeRepo;
+import idealab.api.repositories.CustomerInfoRepo;
+import idealab.api.repositories.EmployeeRepo;
+import idealab.api.repositories.PrintJobRepo;
+import idealab.api.repositories.QueueRepo;
 
 @Service
 public class PrintJobOperations {
@@ -23,16 +49,18 @@ public class PrintJobOperations {
     private final ColorTypeRepo colorTypeRepo;
     private final CustomerInfoRepo customerInfoRepo;
     private final EmployeeRepo employeeRepo;
+    private final QueueRepo queueRepo;
 
     public PrintJobOperations(DropboxOperations dropboxOperations, PrintJobRepo printJobRepo,
                               ColorTypeRepo colorTypeRepo, CustomerInfoRepo customerInfoRepo,
-                              EmployeeRepo employeeRepo) {
+                              EmployeeRepo employeeRepo, QueueRepo queueRepo) {
 
         this.dropboxOperations = dropboxOperations; // service'lerin üstüne bir layer daha cekmek lazim aslında belki de ? cok fazla dependent burada cunku
         this.printJobRepo = printJobRepo;
         this.colorTypeRepo = colorTypeRepo;
         this.customerInfoRepo = customerInfoRepo;
         this.employeeRepo = employeeRepo;
+        this.queueRepo = queueRepo;
     }
 
     public PrintJobResponse newPrintJob(PrintJobNewRequest printJobNewRequest, Principal principal) {
@@ -77,8 +105,6 @@ public class PrintJobOperations {
         printJob.setDropboxPath(data.get("filePath"));
         printJob.setDropboxSharableLink(data.get("sharableLink"));
 
-        // TODO: set the queue position of the new job to be at the end of the list.
-
         Set<PrintJob> printJobs;
 
         if(customer.getPrintJobs() == null) {
@@ -89,6 +115,12 @@ public class PrintJobOperations {
         printJobs.add(printJob);
         customer.setPrintJobs(printJobs);
         printJob = printJobRepo.save(printJob);
+
+        // If there is only one print job for the given customer (itself), add the rank to the bottom of the queue
+        if (printJobRepo.findByCustomerInfo(customer).size() == 1) {
+            Queue queue = new Queue(printJob, queueRepo.count()+1);
+            queue = queueRepo.save(queue);
+        }
 
         return getPrintJobResponse(response, printJob, data, "Successfully saved new file to database!");
     }
@@ -161,6 +193,35 @@ public class PrintJobOperations {
 
         if(employee == null || printJob == null){
             ErrorType.PRINT_JOB_UPDATE_FAILED.throwException();
+        } 
+
+        // If the status is changed to final, delete the print job rank from the rank table
+        // and check if another one needs to be added
+        if (requestStatus == Status.REJECTED || requestStatus == Status.COMPLETED) {
+            // Delete rank from queue table
+            Queue deleteQueue = queueRepo.findByPrintJobId(printJob);
+            queueRepo.delete(deleteQueue);
+
+            // Get list of print jobs for customer + remove any completed/rejected
+            // + get oldest date in list
+            CustomerInfo customer = printJob.getCustomerInfo();
+            List<PrintJob> printJobs = printJobRepo.findByCustomerInfo(customer);
+            printJobs.removeIf(job -> (job.getStatus() == Status.REJECTED || job.getStatus() == Status.COMPLETED));
+
+            if (printJobs.size() > 1) {
+                Collections.sort(printJobs, new Comparator<PrintJob>() {
+                    @Override
+                    public int compare(PrintJob one, PrintJob two) {
+                        return one.getCreatedAt().compareTo(two.getCreatedAt());
+                    }
+                });
+            }
+
+            // Add most recent one to Queue table
+            if (printJobs.size() > 0) {
+                Queue newQueue = new Queue(printJobs.get(0), queueRepo.count()+1);
+                newQueue = queueRepo.save(newQueue);
+            }
         }
 
         GenericResponse response = new GenericResponse();

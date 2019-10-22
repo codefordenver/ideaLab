@@ -48,6 +48,9 @@ public class PrintJobOperationsTest {
     @Mock
     private EmployeeRepo employeeRepo;
 
+    @Mock
+    private QueueRepo queueRepo;
+
     @Before
     public void setup() {
         operations = new PrintJobOperations(
@@ -55,7 +58,8 @@ public class PrintJobOperationsTest {
                 printJobRepo,
                 colorTypeRepo,
                 customerInfoRepo,
-                employeeRepo
+                employeeRepo,
+                queueRepo
         );
     }
 
@@ -180,7 +184,7 @@ public class PrintJobOperationsTest {
         printJob.setColorTypeId(new ColorType("Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setQueueId(new Queue(1));
+        printJob.setQueueId(new Queue(printJob, new Long(1)));
         printJob.setStatus(Status.ARCHIVED);
         printJob.setEmployeeId(new Employee());
         printJob.setId(1);
@@ -205,7 +209,7 @@ public class PrintJobOperationsTest {
         printJob.setColorTypeId(new ColorType("Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setQueueId(new Queue(1));
+        printJob.setQueueId(new Queue(printJob, new Long(1)));
         printJob.setStatus(Status.ARCHIVED);
         printJob.setEmployeeId(new Employee());
         printJob.setId(1);
@@ -251,7 +255,7 @@ public class PrintJobOperationsTest {
         printJob.setColorTypeId(new ColorType("Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setQueueId(new Queue(1));
+        printJob.setQueueId(new Queue(printJob, new Long(1)));
         printJob.setStatus(Status.PENDING_REVIEW);
         printJob.setEmployeeId(new Employee());
         printJob.setId(1);
@@ -302,8 +306,6 @@ public class PrintJobOperationsTest {
         Employee e = new Employee();
         e.setId(999);
 
-        Queue queue = new Queue(1);
-
         Map<String, String> data = new HashMap<>();
         data.put("filePath", "DROPBOX_PATH");
         data.put("sharableLink", "http://testlink.com");
@@ -318,7 +320,7 @@ public class PrintJobOperationsTest {
         printJob.setUpdatedAt(LocalDateTime.now());
         printJob.setStatus(Status.PENDING_REVIEW);
         printJob.setEmployeeId(e);
-        printJob.setQueueId(queue);
+        printJob.setQueueId(new Queue(printJob, new Long(1)));
         printJob.setUpdatedAt(LocalDateTime.now());
 
         List<PrintJob> printJobData = new ArrayList<>();
@@ -366,8 +368,6 @@ public class PrintJobOperationsTest {
         Employee e = new Employee();
         e.setId(999);
 
-        Queue queue = new Queue(1);
-
         Map<String, String> data = new HashMap<>();
         data.put("filePath", "DROPBOX_PATH");
         data.put("sharableLink", "http://testlink.com");
@@ -382,7 +382,7 @@ public class PrintJobOperationsTest {
         printJob.setUpdatedAt(LocalDateTime.now());
         printJob.setStatus(Status.PENDING_REVIEW);
         printJob.setEmployeeId(e);
-        printJob.setQueueId(queue);
+        printJob.setQueueId(new Queue(printJob, new Long(1));
         printJob.setUpdatedAt(LocalDateTime.now());
 
         List<PrintJob> printJobData = new ArrayList<>();
