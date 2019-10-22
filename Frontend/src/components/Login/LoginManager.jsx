@@ -30,12 +30,14 @@ const LoginManager = props => {
       const token = response.headers ? response.headers.authorization : '';
       if (token) {
         const decoded = parseJwt(token);
-        callbacks.setToken(token);
-        callbacks.setAuthenticated(true);
-        callbacks.setRole(decoded.role);
         RequestService.requestState.token = token;
+        callbacks.setState({
+          token: token,
+          authenticated: true,
+          role: decoded.role
+        });
       } else {
-        callbacks.setAuthenticated(false);
+        callbacks.setState({ authenticated: false });
         setErrors({
           form: 'Unable to log in with the information provided',
         });
@@ -70,9 +72,7 @@ const LoginManager = props => {
             <form
               onSubmit={e => {
                 const callbacks = {
-                  setToken: context.setToken,
-                  setAuthenticated: context.setAuthenticated,
-                  setRole: context.setRole,
+                  setState: context.setState,
                 };
                 onSubmit(e, callbacks);
               }}
