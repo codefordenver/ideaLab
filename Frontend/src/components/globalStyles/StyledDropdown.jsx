@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './StyledDropdown.css';
 
 const StyledDropdown = props => {
   const [currentVal, updateValue] = useState(props.value);

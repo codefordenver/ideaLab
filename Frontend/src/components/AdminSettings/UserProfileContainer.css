@@ -13,7 +13,7 @@
   align-self: flex-end;
 }
 
-.createAccountButton > button {
+.createAccountButton > a > button {
   background-color: #62a257;
   border-radius: 6px;
   color: #fff;

@@ -12,7 +12,7 @@ import PrivateRoute from './components/Routing/PrivateRoute';
 import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 function App() {
-  const [authenticated, setAuthenticated] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
   const [token, setToken] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -62,6 +62,7 @@ function App() {
 
             <PrivateRoute path="/account" component={AdminContainer} />
             <PrivateRoute path="/create" component={CreateAccountManager} />
+            <PrivateRoute path="/" component={LoginManager} />
           </Switch>
         </HashRouter>
       </AuthContext.Provider>
