@@ -1,37 +1,41 @@
 .infoContainer {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: space-evenly;
   height: 5em;
-  background: red;
-  width: 100%;
 }
 
-.infoContainer > h3 {
-  margin-left: 2em;
+.infoContainer > * {
+  margin: 2em;
+  flex: 1 100%;
 }
 
-.infoContainer > button.passwordBtn {
+.infoContainer > button {
+  border: none;
+  box-shadow: 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.infoContainer > .employeeNameDisplay {
+  font-weight: bold;
+  margin-left: 5em;
+  text-align: left;
+}
+
+.infoContainer > button.changePasswordButton {
   background-color: #577ca2;
-  border-radius: 0px;
+  color: #fff;
   height: 2em;
   font-size: 0.8rem;
-  width: 12em;
-  margin-left: 14em;
-  position: absolute;
 }
 
-.infoContainer > button.deleteBtn {
+.infoContainer > button.deleteUserButton {
   background-color: #b40000;
-  border-radius: 0px;
-  width: 5em;
+  color: #fff;
+  flex: 0;
   height: 2em;
-  margin-right: 2em;
+  padding: 0 13px;
   font-size: 0.8rem;
 }
 
 .dropdownContainer {
-  position: absolute;
-  padding-right: 8em;
+  display: inherit;
 }

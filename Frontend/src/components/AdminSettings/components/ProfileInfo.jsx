@@ -1,18 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './ProfileInfo.css';
-
-import Dropdown from './components/Dropdown';
+import StyledDropdown from '../../globalStyles/StyledDropdown';
 
 const UserProfilesContainer = props => {
-  const { name } = props.userData;
+  const { name, role } = props.userData;
+  //TODO: get request, all employees at admin's current location
 
-  const locationOptions = [
-    'Downtown',
-    'Central',
-    'Bear Valley',
-    'Park Hill',
-    'Hampden',
-  ];
   const titleOptions = ['Admin', 'Staff'];
 
   const triggerDelete = () => {
@@ -23,18 +16,26 @@ const UserProfilesContainer = props => {
     alert(`Are you sure you want to change your password? ${name}`);
   };
 
+  const updateUserRole = newRole => {
+    console.log('new role:', newRole);
+  };
+
   return (
     <div style={{ backgroundColor: props.color }} className="infoContainer">
-      <h3>{name}</h3>
+      <div className="employeeNameDisplay">{name}</div>
       <div className="dropdownContainer">
-        <Dropdown dropdownOptions={titleOptions} />
-        <Dropdown dropdownOptions={locationOptions} />
+        <StyledDropdown
+          dropdownOptions={titleOptions}
+          header="Role"
+          value={role}
+          saveDropdownChange={updateUserRole}
+        />
       </div>
 
-      <button className="passwordBtn" onClick={triggerPasswordChange}>
+      <button className="changePasswordButton" onClick={triggerPasswordChange}>
         Change Password
       </button>
-      <button className="deleteBtn" onClick={triggerDelete}>
+      <button className="deleteUserButton" onClick={triggerDelete}>
         Delete
       </button>
     </div>
