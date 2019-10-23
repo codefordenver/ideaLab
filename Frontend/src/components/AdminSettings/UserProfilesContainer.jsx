@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import './UserProfileContainer.css';
 
 import ProfileInfo from './components/ProfileInfo';
@@ -9,8 +9,12 @@ const UserProfilesContainer = () => {
   const colors = ['#81B7E3', '#C4C4C4'];
 
   return (
-    <Fragment>
-      <button>Create Account</button>
+    <div className="profilesStyles">
+      <div className="createAccountButton">
+        <a href="#/create">
+          <button>CREATE ACCOUNT</button>
+        </a>
+      </div>
       <div className="userProfileContainer">
         <div className="profilesContainer">
           {data.map((userData, index) => (
@@ -22,7 +26,7 @@ const UserProfilesContainer = () => {
           ))}
         </div>
       </div>
-    </Fragment>
+    </div>
   );
 };
 

@@ -5,6 +5,7 @@ import QueueContainer from './components/Queue/QueueContainer';
 import UploadContainer from './components/Upload/UploadContainer';
 import LoginManager from './components/Login/LoginManager';
 import AdminContainer from './components/AdminSettings/AdminContainer';
+import CreateAccountManager from './components/AdminSettings/CreateAccountManager';
 import SidebarNavigation from './SidebarNavigation';
 import PrivateRoute from './components/Routing/PrivateRoute';
 
@@ -60,7 +61,8 @@ function App() {
             />
 
             <PrivateRoute path="/account" component={AdminContainer} />
-            <PrivateRoute path="/" component={UploadContainer} />
+            <PrivateRoute path="/create" component={CreateAccountManager} />
+            <PrivateRoute path="/" component={LoginManager} />
           </Switch>
         </HashRouter>
       </AuthContext.Provider>
