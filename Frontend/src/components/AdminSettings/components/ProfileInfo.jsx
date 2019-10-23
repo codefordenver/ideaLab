@@ -4,7 +4,6 @@ import StyledDropdown from '../../globalStyles/StyledDropdown';
 
 const UserProfilesContainer = props => {
   const { name, role } = props.userData;
-  //TODO: get request, all employees at admin's current location
 
   const titleOptions = ['Admin', 'Staff'];
 
@@ -18,6 +17,7 @@ const UserProfilesContainer = props => {
 
   const updateUserRole = newRole => {
     console.log('new role:', newRole);
+    //TODO: get request, all employees at admin's current location
   };
 
   return (

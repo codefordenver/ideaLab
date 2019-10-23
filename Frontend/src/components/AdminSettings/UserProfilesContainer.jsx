@@ -11,7 +11,9 @@ const UserProfilesContainer = () => {
   return (
     <div className="profilesStyles">
       <div className="createAccountButton">
-        <button>CREATE ACCOUNT</button>
+        <a href="#/create">
+          <button>CREATE ACCOUNT</button>
+        </a>
       </div>
       <div className="userProfileContainer">
         <div className="profilesContainer">
