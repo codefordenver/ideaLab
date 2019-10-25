@@ -1,15 +1,20 @@
 package idealab.api.model;
 
+import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import java.util.Objects;
+
+import static org.hibernate.envers.RelationTargetAuditMode.AUDITED;
+import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
 
 /**
  * This class holds the model that represents the print job table. It is related to email hash, color type, queue, and employee ID. Additionally,
  * it has a spot for comments, dropbox link, and a way to state when it was created + last updated.
  */
 @Entity
+@Audited
 @Table(name = "print_job")
 public class PrintJob extends RecordTimestamp {
 
@@ -18,14 +23,17 @@ public class PrintJob extends RecordTimestamp {
     private Integer id;
 
     @ManyToOne()
+    @Audited(targetAuditMode = NOT_AUDITED)
     @JoinColumn(name="fk_customer_info_id", referencedColumnName = "id", nullable = false)
     private CustomerInfo customerInfo;
 
     @ManyToOne()
+    @Audited(targetAuditMode = NOT_AUDITED)
     @JoinColumn(name="fk_color_type_id", referencedColumnName = "id", nullable = false)
     private ColorType colorTypeId;
 
     @ManyToOne()
+    @Audited(targetAuditMode = NOT_AUDITED)
     @JoinColumn(name="fk_employee_id", referencedColumnName = "id", nullable = false)
     private Employee employeeId;
 
@@ -47,6 +55,10 @@ public class PrintJob extends RecordTimestamp {
     @Length(min = 1, max = 254)
     private String dropboxPath;
 
+    @Column(name = "email_hash")
+    @Length(min = 1, max = 254)
+    private String emailHash;
+
     public PrintJob() {}
 
     public PrintJob(CustomerInfo customerInfo, ColorType colorTypeId, Employee employeeId,
@@ -56,6 +68,8 @@ public class PrintJob extends RecordTimestamp {
         this.employeeId = employeeId;
         this.status = status;
         this.comments = comments;
+        //Make the email hash directly on the record so it is added to the audit table
+        this.emailHash = "make this a hash!" + customerInfo.getEmail();
     }
 
     public Integer getId() {
