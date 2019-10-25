@@ -62,14 +62,14 @@ public class PrintJob extends RecordTimestamp {
     public PrintJob() {}
 
     public PrintJob(CustomerInfo customerInfo, ColorType colorTypeId, Employee employeeId,
-    		Status status, String comments) {
+    		Status status, String comments, String emailHash) {
         this.customerInfo = customerInfo;
         this.colorTypeId = colorTypeId;
         this.employeeId = employeeId;
         this.status = status;
         this.comments = comments;
         //Make the email hash directly on the record so it is added to the audit table
-        this.emailHash = "make this a hash!" + customerInfo.getEmail();
+        this.emailHash =  emailHash;
     }
 
     public Integer getId() {
@@ -144,6 +144,14 @@ public class PrintJob extends RecordTimestamp {
         this.dropboxPath = dropboxPath;
     }
 
+    public String getEmailHash() {
+        return emailHash;
+    }
+
+    public void setEmailHash(String emailHash) {
+        this.emailHash = emailHash;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -157,7 +165,8 @@ public class PrintJob extends RecordTimestamp {
                 Objects.equals(queueId, printJob.queueId) &&
                 Objects.equals(comments, printJob.comments) &&
                 Objects.equals(dropboxSharableLink, printJob.dropboxSharableLink) &&
-                Objects.equals(dropboxPath, printJob.dropboxPath);
+                Objects.equals(dropboxPath, printJob.dropboxPath) &&
+                Objects.equals(emailHash, printJob.emailHash);
     }
 
     @Override
@@ -173,6 +182,7 @@ public class PrintJob extends RecordTimestamp {
                 ", comments='" + comments + '\'' +
                 ", dropboxSharableLink='" + dropboxSharableLink + '\'' +
                 ", dropboxPath='" + dropboxPath + '\'' +
+                ", emailHash='" + emailHash + '\'' +
                 '}';
     }
 }
