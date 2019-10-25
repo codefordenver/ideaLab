@@ -6,7 +6,6 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import java.util.Objects;
 
-import static org.hibernate.envers.RelationTargetAuditMode.AUDITED;
 import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
 
 /**
