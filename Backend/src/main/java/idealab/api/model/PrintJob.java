@@ -1,6 +1,7 @@
 package idealab.api.model;
 
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -40,6 +41,7 @@ public class PrintJob extends RecordTimestamp {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @NotAudited
     @OneToOne(targetEntity=Queue.class, mappedBy="printJobId")
     private Queue queueId;
 

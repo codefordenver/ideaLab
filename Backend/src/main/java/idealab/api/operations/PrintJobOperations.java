@@ -34,7 +34,7 @@ public class PrintJobOperations {
                               ColorTypeRepo colorTypeRepo, CustomerInfoRepo customerInfoRepo,
                               EmployeeRepo employeeRepo, EmailHashUtil emailHashUtil) {
 
-        this.dropboxService = dropboxService; // service'lerin üstüne bir layer daha cekmek lazim aslında belki de ? cok fazla dependent burada cunku
+        this.dropboxService = dropboxService;
         this.printJobRepo = printJobRepo;
         this.colorTypeRepo = colorTypeRepo;
         this.customerInfoRepo = customerInfoRepo;
