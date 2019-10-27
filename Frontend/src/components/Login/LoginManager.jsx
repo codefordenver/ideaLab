@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import BasicInput from '../BasicInput';
 import RequestService from '../../util/RequestService';
 import AuthContext from '../../AuthContext';
+import TokenParser from '../../util/TokenParser';
 import './LoginManager.css';
 
 import ideaLABlogo from '../globalStyles/img/ideaLabLogo.png';
@@ -11,26 +12,13 @@ const LoginManager = props => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  function parseJwt(token) {
-    var base64Url = token.split('.')[1];
-    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    var jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split('')
-        .map(function(c) {
-          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join(''),
-    );
-    return JSON.parse(jsonPayload);
-  }
-
   function thenCallback(callbacks) {
     return function actualCallback(response) {
       const token = response.headers ? response.headers.authorization : '';
       if (token) {
-        const decoded = parseJwt(token);
+        const decoded = TokenParser(token);
         RequestService.requestState.token = token;
+        localStorage.setItem('ideaLab', token);
         callbacks.setState({
           token: token,
           authenticated: true,
