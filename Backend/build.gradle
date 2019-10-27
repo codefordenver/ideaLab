@@ -32,6 +32,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-devtools') // TODO(e-carlin): Make sure this isn't pulled in in the production jar
 	implementation('org.springframework.boot:spring-boot-starter-data-jpa')
 	implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation("org.springframework.data:spring-data-envers")
 	implementation('org.postgresql:postgresql')
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("com.auth0:java-jwt:3.4.0")
