@@ -2,7 +2,7 @@
   font-family: 'Montserrat', sans-serif;
 }
 
-.container {
+.loginContainer {
   width: auto;
   display: flex;
   flex-direction: column;
@@ -16,7 +16,7 @@ h4 {
   margin-top: 1em;
 }
 
-.container > input {
+.loginContainer > input {
   display: block;
   height: 2em;
   width: 15em;
@@ -31,30 +31,30 @@ h4 {
   padding: 0.25rem;
 }
 
-.container > button {
+.accountSubmitButton {
   display: block;
-  height: 2.5em;
-  width: 15.5em;
+  height: 2em;
+  width: 81%;
   margin: 2rem;
-  background-color: #00aeef;
-  border-color: #00aeef;
+  background-color: #577ca2;
+  border-color: #577ca2;
   border-radius: 2px;
   font-size: 1.5rem;
-  color: #4b4b4b;
+  color: #fff;
 }
 
-.container > button:hover {
+.accountSubmitButton:hover {
   cursor: pointer;
 }
 
-.container > ::-webkit-input-placeholder {
+.loginContainer > ::-webkit-input-placeholder {
   text-align: center;
   font-size: 1.5rem;
   color: #4b4b4b;
   vertical-align: middle;
 }
 
-.container > :-moz-placeholder {
+.loginContainer > :-moz-placeholder {
   /* Firefox 18- */
   text-align: center;
   font-size: 1.5rem;
@@ -62,7 +62,7 @@ h4 {
   vertical-align: middle;
 }
 
-.container > ::-moz-placeholder {
+.loginContainer > ::-moz-placeholder {
   /* Firefox 19+ */
   text-align: center;
   font-size: 1.5rem;
@@ -70,7 +70,7 @@ h4 {
   vertical-align: middle;
 }
 
-.container > :-ms-input-placeholder {
+.loginContainer > :-ms-input-placeholder {
   text-align: center;
   font-size: 1.5rem;
   color: #4b4b4b;
