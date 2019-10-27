@@ -15,7 +15,7 @@ import idealab.api.model.PrintJob;
 import idealab.api.repositories.PrintJobRepo;
 import idealab.configurations.DropboxConfiguration;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
@@ -29,14 +29,14 @@ import java.util.Map;
 
 import static idealab.api.exception.ErrorType.*;
 
-@Component
-public class DropboxOperations {
+@Service
+public class DropboxService {
 
   private final DropboxConfiguration dropboxConfig;
   private DbxClientV2 client;
   private PrintJobRepo printJobRepo;
 
-  public DropboxOperations(DropboxConfiguration dropboxConfig, PrintJobRepo printJobRepo) {
+  public DropboxService(DropboxConfiguration dropboxConfig, PrintJobRepo printJobRepo) {
     this.dropboxConfig = dropboxConfig;
     this.printJobRepo = printJobRepo;
   }
