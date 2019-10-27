@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import styles from './Loader.css';
+import React from 'react';
 
-const Loader = ({ selectedTab, tabOptions, setView }) => {
+const Loader = () => {
   return (
     <div className="lds-spinner">
       <div></div>

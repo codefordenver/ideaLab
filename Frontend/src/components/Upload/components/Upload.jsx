@@ -4,7 +4,7 @@ import { useDropzone } from 'react-dropzone';
 function Upload(props) {
   const onDrop = useCallback(acceptedFiles => {
     props.callback(acceptedFiles);
-  }, []);
+  }, [props]);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
