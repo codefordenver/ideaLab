@@ -4,6 +4,7 @@
   --dark-blue: #1f4393;
   --white-text: #ffffff;
   --default-background: white;
+  --error-color: red;
 }
 
 html {
@@ -28,13 +29,19 @@ body {
   border-right: solid;
 }
 
+.navList li {
+  display: flex;
+}
+
+.hidden {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+}
+
 .selected {
   color: var(--light-blue);
   border-right: 6px solid;
-}
-
-.navList li {
-  display: flex;
 }
 
 .navList a {
@@ -99,4 +106,8 @@ input {
 
 .hidden {
   display: none;
+}
+
+.error {
+  color: var(--error-color);
 }

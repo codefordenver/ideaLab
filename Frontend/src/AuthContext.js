@@ -3,7 +3,7 @@ import React from 'react';
 const AuthContext = React.createContext({
   authenticated: false,
   token: null,
-  isAdmin: false,
+  role: null,
 });
 
 export default AuthContext;

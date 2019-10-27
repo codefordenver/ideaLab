@@ -7,6 +7,7 @@ import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.Queue;
 import idealab.api.model.*;
 import idealab.api.repositories.*;
+import idealab.api.service.EmailHashUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,13 +44,13 @@ public class PrintJobOperationsTest {
     private ColorTypeRepo colorTypeRepo;
 
     @Mock
-    private EmailHashRepo emailHashRepo;
-
-    @Mock
     private CustomerInfoRepo customerInfoRepo;
 
     @Mock
     private EmployeeRepo employeeRepo;
+
+    @Mock
+    private EmailHashUtil emailHashUtil;
 
     @Before
     public void setup() {
@@ -57,9 +58,9 @@ public class PrintJobOperationsTest {
                 dropboxOperations,
                 printJobRepo,
                 colorTypeRepo,
-                emailHashRepo,
                 customerInfoRepo,
-                employeeRepo
+                employeeRepo,
+                emailHashUtil
         );
     }
 
@@ -184,7 +185,6 @@ public class PrintJobOperationsTest {
         printJob.setColorTypeId(new ColorType("Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setEmailHashId(new EmailHash());
         printJob.setQueueId(new Queue(1));
         printJob.setStatus(Status.ARCHIVED);
         printJob.setEmployeeId(new Employee());
@@ -210,7 +210,6 @@ public class PrintJobOperationsTest {
         printJob.setColorTypeId(new ColorType("Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setEmailHashId(new EmailHash());
         printJob.setQueueId(new Queue(1));
         printJob.setStatus(Status.ARCHIVED);
         printJob.setEmployeeId(new Employee());
@@ -257,7 +256,6 @@ public class PrintJobOperationsTest {
         printJob.setColorTypeId(new ColorType("Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setEmailHashId(new EmailHash());
         printJob.setQueueId(new Queue(1));
         printJob.setStatus(Status.PENDING_REVIEW);
         printJob.setEmployeeId(new Employee());
@@ -309,9 +307,6 @@ public class PrintJobOperationsTest {
         Employee e = new Employee();
         e.setId(999);
 
-        EmailHash emailHash = new EmailHash();
-        emailHash.setEmailHash("test@email.com");
-
         Queue queue = new Queue(1);
 
         Map<String, String> data = new HashMap<>();
@@ -328,20 +323,22 @@ public class PrintJobOperationsTest {
         printJob.setUpdatedAt(LocalDateTime.now());
         printJob.setStatus(Status.PENDING_REVIEW);
         printJob.setEmployeeId(e);
-        printJob.setEmailHashId(emailHash);
         printJob.setQueueId(queue);
         printJob.setUpdatedAt(LocalDateTime.now());
 
-        List<PrintJob> printJobData = new ArrayList<>();
+        Set<PrintJob> printJobData = new HashSet<>();
         printJobData.add(printJob);
+
+        customerInfo.setPrintJobs(printJobData);
+        List<PrintJob> printJobs = new ArrayList<>();
+        printJobs.addAll(printJobData);
 
         response.setSuccess(true);
         response.setMessage("Successfully saved new file to database!");
-        response.setData(printJobData);
+        response.setData(printJobs);
         response.setHttpStatus(HttpStatus.ACCEPTED);
 
-        when(emailHashRepo.findByEmailHash(any())).thenReturn(emailHash);
-        when(customerInfoRepo.findByEmailHashId(any())).thenReturn(customerInfo);
+        when(customerInfoRepo.findByEmail(any())).thenReturn(customerInfo);
         when(colorTypeRepo.findByColor(any())).thenReturn(color);
         when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
         when(printJobRepo.save(any())).thenReturn(printJob);
@@ -378,9 +375,6 @@ public class PrintJobOperationsTest {
         Employee e = new Employee();
         e.setId(999);
 
-        EmailHash emailHash = new EmailHash();
-        emailHash.setEmailHash("test@email.com");
-
         Queue queue = new Queue(1);
 
         Map<String, String> data = new HashMap<>();
@@ -397,22 +391,22 @@ public class PrintJobOperationsTest {
         printJob.setUpdatedAt(LocalDateTime.now());
         printJob.setStatus(Status.PENDING_REVIEW);
         printJob.setEmployeeId(e);
-        printJob.setEmailHashId(emailHash);
         printJob.setQueueId(queue);
         printJob.setUpdatedAt(LocalDateTime.now());
 
-        List<PrintJob> printJobData = new ArrayList<>();
+        Set<PrintJob> printJobData = new HashSet<>();
         printJobData.add(printJob);
 
+        customerInfo.setPrintJobs(printJobData);
+        List<PrintJob> printJobs = new ArrayList<>();
+        printJobs.addAll(printJobData);
 
         response.setSuccess(true);
         response.setMessage("Successfully saved new file to database!");
-        response.setData(printJobData);
+        response.setData(printJobs);
         response.setHttpStatus(HttpStatus.ACCEPTED);
 
-        when(emailHashRepo.findByEmailHash(any())).thenReturn(null);
-        when(emailHashRepo.save(any())).thenReturn(emailHash);
-        when(customerInfoRepo.findByEmailHashId(any())).thenReturn(null);
+        when(customerInfoRepo.findByEmail(any())).thenReturn(null);
         when(customerInfoRepo.save(any())).thenReturn(customerInfo);
         when(colorTypeRepo.findByColor(any())).thenReturn(color);
         when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
@@ -468,6 +462,68 @@ public class PrintJobOperationsTest {
 
         operations.newPrintJob(request, principal);
 
+    }
+
+    @Test(expected = IdeaLabApiException.class)
+    public void createNewPrintJob5JobError() {
+        PrintJobResponse response = new PrintJobResponse();
+
+        byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
+        MultipartFile file = new MockMultipartFile("something.stl", "something.stl", null ,a);
+
+        PrintJobNewRequest request = new PrintJobNewRequest();
+        request.setColor("RED");
+        request.setComments("COMMENTS");
+        request.setCustomerFirstName("test");
+        request.setCustomerLastName("testLast");
+        request.setEmail("test@email.com");
+        request.setFile(file);
+
+        CustomerInfo customerInfo = new CustomerInfo();
+        customerInfo.setFirstName("test");
+
+        ColorType color = new ColorType();
+        color.setColor("RED");
+        color.setAvailable(true);
+
+        //Principal is a place holder for the logged in user
+        Principal mockPrincipal = Mockito.mock(Principal.class);
+        Mockito.when(mockPrincipal.getName()).thenReturn("me");
+        Employee e = new Employee();
+        e.setId(999);
+
+        Queue queue = new Queue(1);
+
+        Map<String, String> data = new HashMap<>();
+        data.put("filePath", "DROPBOX_PATH");
+        data.put("sharableLink", "http://testlink.com");
+
+        List<PrintJob> printJobs = new ArrayList<>();
+        for(int i = 0; i < 6; i++) {
+            PrintJob printJob = new PrintJob();
+            printJob.setCreatedAt(LocalDateTime.now());
+            printJob.setId(i + 1);
+            printJob.setEmployeeId(e);
+            printJob.setQueueId(queue);
+            printJob.setUpdatedAt(LocalDateTime.now());
+            printJobs.add(printJob);
+        }
+
+        Set<PrintJob> printJobSet = new HashSet<>();
+        printJobSet.addAll(printJobs);
+        customerInfo.setPrintJobs(printJobSet);
+
+        response.setSuccess(true);
+        response.setMessage("Successfully saved new file to database!");
+        response.setData(printJobs);
+        response.setHttpStatus(HttpStatus.ACCEPTED);
+
+        when(customerInfoRepo.findByEmail(any())).thenReturn(customerInfo);
+        when(colorTypeRepo.findByColor(any())).thenReturn(color);
+        when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
+        when(printJobRepo.save(any())).thenReturn(printJobs);
+
+        operations.newPrintJob(request, mockPrincipal);
     }
 
     @Test

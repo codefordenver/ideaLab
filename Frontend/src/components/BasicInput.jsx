@@ -5,7 +5,7 @@ const BasicInput = props => {
     <div>
       <input
         onChange={e => props.changeHandler(e.target.value)}
-        type="text"
+        type={props.type}
         placeholder={props.placeHolder}
       />
       <span>{props.error ? props.error : null}</span>

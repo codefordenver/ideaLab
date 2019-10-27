@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import AuthContext from './AuthContext';
 import QueueContainer from './components/Queue/QueueContainer';
@@ -10,31 +10,53 @@ import SidebarNavigation from './SidebarNavigation';
 import PrivateRoute from './components/Routing/PrivateRoute';
 
 import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
+import RequestService from './util/RequestService';
+import TokenParser from './util/TokenParser';
 
 function App() {
-  const [authenticated, setAuthenticated] = useState(false);
-  const [token, setToken] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const initialState = {
+    authenticated: false,
+    token: null,
+    role: 'STAFF',
+  };
+
+  const [state, setState] = useState(initialState);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('ideaLab');
+
+    if (storedToken) {
+      RequestService.requestState.token = storedToken;
+      const decoded = TokenParser(storedToken);
+      const now = Date.now() / 1000;
+      if (now < decoded.exp) {
+        setState({
+          authenticated: true,
+          token: storedToken,
+          role: decoded.role,
+        });
+      } else {
+        localStorage.removeItem('ideaLab');
+      }
+    }
+  }, []);
 
   return (
     <div className="App grid-container">
       <AuthContext.Provider
         value={{
-          authenticated: authenticated,
-          token: token,
-          setAuthenticated: setAuthenticated,
-          setToken: setToken,
-          isAdmin: isAdmin,
+          authenticated: state.authenticated,
+          token: state.token,
+          role: state.role,
+          setState: setState,
         }}
       >
         <HashRouter>
           <SidebarNavigation
             logout={() => {
-              setToken('');
-              setAuthenticated(false);
-              setIsAdmin(false);
+              localStorage.removeItem('ideaLab');
+              setState(initialState);
             }}
-            isAdmin={isAdmin}
           />
           <Switch>
             <PrivateRoute exact path="/queue" component={QueueContainer} />
@@ -47,7 +69,7 @@ function App() {
             <Route
               path="/login"
               render={props =>
-                authenticated ? (
+                state.authenticated ? (
                   <Redirect
                     to={{
                       pathname: '/queue',
