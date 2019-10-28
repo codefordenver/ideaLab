@@ -30,13 +30,13 @@ import java.util.Map;
 import static idealab.api.exception.ErrorType.*;
 
 @Service
-public class DropboxService {
+public class FileService {
 
   private final DropboxConfiguration dropboxConfig;
   private DbxClientV2 client;
   private PrintJobRepo printJobRepo;
 
-  public DropboxService(DropboxConfiguration dropboxConfig, PrintJobRepo printJobRepo) {
+  public FileService(DropboxConfiguration dropboxConfig, PrintJobRepo printJobRepo) {
     this.dropboxConfig = dropboxConfig;
     this.printJobRepo = printJobRepo;
   }

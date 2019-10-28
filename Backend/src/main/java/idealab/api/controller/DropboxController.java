@@ -2,7 +2,7 @@ package idealab.api.controller;
 
 import idealab.api.dto.request.DropBoxFilePathRequest;
 import idealab.api.dto.response.PrintJobResponse;
-import idealab.api.service.DropboxService;
+import idealab.api.service.FileService;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/dropbox")
 public class DropboxController {
 
-    private final DropboxService dropboxService;
+    private final FileService fileService;
 
-    public DropboxController(DropboxService dropboxService) {
-        this.dropboxService = dropboxService;
+    public DropboxController(FileService fileService) {
+        this.fileService = fileService;
     }
 
     @PutMapping("/file-path")
     public PrintJobResponse updateFilePath(@RequestBody DropBoxFilePathRequest request) {
-        return dropboxService.updateDropboxPath(request);
+        return fileService.updateDropboxPath(request);
     }
 
 }
