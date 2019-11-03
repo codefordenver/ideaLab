@@ -173,12 +173,14 @@ public class PrintJobControllerTest {
     @Test
     public void getAllPrintJobs() throws Exception {
         // given
+        CustomerInfo customerInfo = new CustomerInfo();
+        customerInfo.setId(1);
+
         PrintJob printJob = new PrintJob();
 
         printJob.setColorTypeId(new ColorType("Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setEmailHashId(new EmailHash());
         printJob.setQueueId(new Queue(1));
         printJob.setStatus(Status.ARCHIVED);
         printJob.setEmployeeId(new Employee());
@@ -222,15 +224,18 @@ public class PrintJobControllerTest {
     @Test
     public void getAllPrintJobsByStatus() throws Exception {
         // given
+        CustomerInfo customerInfo = new CustomerInfo();
+        customerInfo.setId(1);
+
         PrintJob printJob = new PrintJob();
 
         printJob.setColorTypeId(new ColorType("Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setEmailHashId(new EmailHash());
         printJob.setQueueId(new Queue(1));
         printJob.setStatus(Status.ARCHIVED);
         printJob.setEmployeeId(new Employee());
+        printJob.setCustomerInfo(customerInfo);
         printJob.setId(1);
 
         List<PrintJob> printJobList = Arrays.asList(printJob);
@@ -265,12 +270,14 @@ public class PrintJobControllerTest {
 	 @Test
 	 public void getDeletablePrintJobs() throws Exception {
 	     // given
+         CustomerInfo customerInfo = new CustomerInfo();
+         customerInfo.setId(1);
+
 		 PrintJob printJob = new PrintJob();
 		
 		 printJob.setColorTypeId(new ColorType("Red"));
 		 printJob.setComments("comments");
 		 printJob.setCreatedAt(LocalDateTime.now());
-		 printJob.setEmailHashId(new EmailHash());
 		 printJob.setQueueId(new Queue(1));
 		 printJob.setStatus(Status.PENDING_REVIEW);
 		 printJob.setEmployeeId(new Employee());

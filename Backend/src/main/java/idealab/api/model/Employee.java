@@ -1,16 +1,8 @@
 package idealab.api.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
+
+import javax.persistence.*;
 
 
 @Entity
@@ -91,7 +83,8 @@ public class Employee extends RecordTimestamp {
         this.username = username;
     }
 
-    // @JsonIgnore
+    //@JsonIgnore - annotation caused issues
+    //TODO W.E - Need to determine how to properly implement annotation or figure another strategy
     public String getPassword() {
         return password;
     }

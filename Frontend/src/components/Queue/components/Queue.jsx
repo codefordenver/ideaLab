@@ -17,7 +17,14 @@ const Queue = props => {
           tabOptions={MenuTabs.QueueTabs}
           setView={props.setStatus}
         />
-        {props.loading ? <div className={'loader-container'}>Loading Fresh Data...<Loader/></div> : false}
+        {props.loading ? (
+          <div className={'loader-container'}>
+            Loading Fresh Data...
+            <Loader />
+          </div>
+        ) : (
+          false
+        )}
 
         <SearchBar filterByTerm={props.filterByTerm} />
       </div>

@@ -16,6 +16,7 @@
   --sage: #C0C382;
   --orange-red: #D93F24;
   --default-background: white;
+  --error-color: red;
 }
 
 html {
@@ -40,13 +41,19 @@ body {
   border-right: solid;
 }
 
+.navList li {
+  display: flex;
+}
+
+.hidden {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+}
+
 .selected {
   color: var(--light-blue);
   border-right: 6px solid;
-}
-
-.navList li {
-  display: flex;
 }
 
 .navList a {

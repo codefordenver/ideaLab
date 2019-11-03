@@ -1,4 +1,4 @@
-package idealab.api.operations;
+package idealab.api.service;
 
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
@@ -15,7 +15,7 @@ import idealab.api.model.PrintJob;
 import idealab.api.repositories.PrintJobRepo;
 import idealab.configurations.DropboxConfiguration;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
@@ -26,18 +26,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 import static idealab.api.exception.ErrorType.*;
 
-@Component
-public class DropboxOperations {
+@Service
+public class FileService {
 
   private final DropboxConfiguration dropboxConfig;
   private DbxClientV2 client;
   private PrintJobRepo printJobRepo;
 
-  public DropboxOperations(DropboxConfiguration dropboxConfig, PrintJobRepo printJobRepo) {
+  public FileService(DropboxConfiguration dropboxConfig, PrintJobRepo printJobRepo) {
     this.dropboxConfig = dropboxConfig;
     this.printJobRepo = printJobRepo;
   }
@@ -109,8 +108,8 @@ public class DropboxOperations {
   public Map<String, String> updateDropboxFile(PrintJob printJob, MultipartFile file){
     // 1. Delete existing dropbox file using deleteDropboxFile() method
     // Note:  if the file path does not start with a "/" then there is either an error or it was deleted already.
-    if(printJob.getDropboxPath().startsWith("/")){
-      deleteDropboxFile(printJob.getDropboxPath());
+    if(printJob.getFilePath().startsWith("/")){
+      deleteDropboxFile(printJob.getFilePath());
     }
     // 2. Create new sharable data link using uploadDropboxFile() method
     LocalDateTime currentTime = LocalDateTime.now();
@@ -127,16 +126,16 @@ public class DropboxOperations {
 
     LocalDateTime currentTime = LocalDateTime.now();
     String newPath = "/" + currentTime.toLocalTime().toNanoOfDay() + "-" + request.getNewPath();
-    String oldPath = printJob.getDropboxPath();
+    String oldPath = printJob.getFilePath();
 
     try {
       //Move file to new location in dropbox, update database
       RelocationResult result = client.files().moveV2(oldPath, newPath);
       Metadata metaData = result.getMetadata();
       if(metaData.getPathDisplay().equalsIgnoreCase(newPath)) {
-        printJob.setDropboxPath(metaData.getPathDisplay());
+        printJob.setFilePath(metaData.getPathDisplay());
         String sharableLink = getSharableLink(metaData.getPathLower());
-        printJob.setDropboxSharableLink(sharableLink);
+        printJob.setFileSharableLink(sharableLink);
         printJob = printJobRepo.save(printJob);
       }
     } catch (DbxException e) {

@@ -1,9 +1,11 @@
 package idealab.api.operations;
 
+import idealab.api.dto.request.EmployeeSignUpRequest;
 import idealab.api.dto.request.UserChangePasswordRequest;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.Employee;
+import idealab.api.model.EmployeeRole;
 import idealab.api.repositories.EmployeeRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,7 +25,9 @@ public class UserOperations {
         this.encoder = encoder;
     }
 
-    public GenericResponse userSignUp(Employee login) {
+    public GenericResponse userSignUp(EmployeeSignUpRequest request) {
+        request.validate();
+        Employee login = fromEmployeeSignUpRequest(request);
         GenericResponse response = new GenericResponse();
 
         try {
@@ -100,5 +104,15 @@ public class UserOperations {
         } else {
             throw new IdeaLabApiException(USER_NOT_FOUND);
         }
+    }
+
+    private Employee fromEmployeeSignUpRequest(EmployeeSignUpRequest request) {
+        Employee e = new Employee();
+        e.setUsername(request.getUsername());
+        e.setPassword(request.getPassword());
+        e.setFirstName(request.getFirstName());
+        e.setLastName(request.getLastName());
+        e.setRole(EmployeeRole.fromString(request.getRole()));
+        return e;
     }
 }

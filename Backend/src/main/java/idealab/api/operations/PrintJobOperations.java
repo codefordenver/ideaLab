@@ -6,38 +6,40 @@ import idealab.api.dto.response.PrintJobResponse;
 import idealab.api.exception.ErrorType;
 import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.*;
-import idealab.api.repositories.*;
+import idealab.api.repositories.ColorTypeRepo;
+import idealab.api.repositories.CustomerInfoRepo;
+import idealab.api.repositories.EmployeeRepo;
+import idealab.api.repositories.PrintJobRepo;
+import idealab.api.service.FileService;
+import idealab.api.service.EmailHashUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static idealab.api.exception.ErrorType.*;
 
 @Service
 public class PrintJobOperations {
-    private final DropboxOperations dropboxOperations;
+    private final FileService fileService;
     private final PrintJobRepo printJobRepo;
     private final ColorTypeRepo colorTypeRepo;
-    private final EmailHashRepo emailHashRepo;
     private final CustomerInfoRepo customerInfoRepo;
     private final EmployeeRepo employeeRepo;
+    private final EmailHashUtil emailHashUtil;
 
-    public PrintJobOperations(DropboxOperations dropboxOperations, PrintJobRepo printJobRepo,
-                              ColorTypeRepo colorTypeRepo, EmailHashRepo emailHashRepo, CustomerInfoRepo customerInfoRepo,
-                              EmployeeRepo employeeRepo) {
+    public PrintJobOperations(FileService fileService, PrintJobRepo printJobRepo,
+                              ColorTypeRepo colorTypeRepo, CustomerInfoRepo customerInfoRepo,
+                              EmployeeRepo employeeRepo, EmailHashUtil emailHashUtil) {
 
-        this.dropboxOperations = dropboxOperations; // service'lerin üstüne bir layer daha cekmek lazim aslında belki de ? cok fazla dependent burada cunku
+        this.fileService = fileService;
         this.printJobRepo = printJobRepo;
         this.colorTypeRepo = colorTypeRepo;
-        this.emailHashRepo = emailHashRepo;
         this.customerInfoRepo = customerInfoRepo;
         this.employeeRepo = employeeRepo;
+        this.emailHashUtil = emailHashUtil;
     }
 
     public PrintJobResponse newPrintJob(PrintJobNewRequest printJobNewRequest, Principal principal) {
@@ -49,26 +51,30 @@ public class PrintJobOperations {
         }
 
         String email = printJobNewRequest.getEmail();
+        String emailHash = emailHashUtil.MD5Hash(email);
         String customerFirstName = printJobNewRequest.getCustomerFirstName();
         String customerLastName = printJobNewRequest.getCustomerLastName();
         String color = printJobNewRequest.getColor();
         String comments = printJobNewRequest.getComments();
-        //Integer employeeId = printJobNewRequest.getEmployeeId();
+
         LocalDateTime currentTime = LocalDateTime.now();
 
-        // TODO: Hash email so it is not in plaintext!!
-        String emailHash = printJobNewRequest.getEmail();
-        EmailHash databaseEmail = emailHashRepo.findByEmailHash(emailHash);
-        
-        if (databaseEmail == null) {
-            databaseEmail = new EmailHash(emailHash);
-            databaseEmail = emailHashRepo.save(databaseEmail);
+        CustomerInfo customer = customerInfoRepo.findByEmail(email);
+        if (customer == null) {
+            customer = new CustomerInfo(null, customerFirstName, customerLastName, email);
+            customer = customerInfoRepo.save(customer);
         }
 
-        CustomerInfo customer = customerInfoRepo.findByEmailHashId(databaseEmail);
-        if (customer == null) {
-            customer = new CustomerInfo(databaseEmail, customerFirstName, customerLastName, email);
-            customer = customerInfoRepo.save(customer);
+        if(customer.getPrintJobs() != null && customer.getPrintJobs().size() > 5) {
+            int countForDay = 0;
+            for(PrintJob p : customer.getPrintJobs()) {
+                if(p.getCreatedAt().plusHours(24).isAfter(LocalDateTime.now())) {
+                    countForDay++;
+                }
+            }
+            if(countForDay > 5) {
+                throw new IdeaLabApiException(GENERAL_ERROR, "Customer has already created 5 print jobs in the last 24 hours");
+            }
         }
 
         ColorType databaseColor = colorTypeRepo.findByColor(color);
@@ -80,15 +86,23 @@ public class PrintJobOperations {
         // we shouldn't need error checking here because principal will never be null
         Employee databaseEmployee = employeeRepo.findEmployeeByUsername(principal.getName());
 
-        PrintJob printJob = new PrintJob(databaseEmail, databaseColor, databaseEmployee, Status.PENDING_REVIEW, comments);
+        PrintJob printJob = new PrintJob(customer, databaseColor, databaseEmployee, Status.PENDING_REVIEW, comments, emailHash);
 
         // Make a dropbox sharable link here using the time of the database record
-        Map<String, String> data = dropboxOperations.uploadDropboxFile(currentTime.toLocalTime().toNanoOfDay(), printJobNewRequest.getFile());
-        printJob.setDropboxPath(data.get("filePath"));
-        printJob.setDropboxSharableLink(data.get("sharableLink"));
+        Map<String, String> data = fileService.uploadDropboxFile(currentTime.toLocalTime().toNanoOfDay(), printJobNewRequest.getFile());
+        printJob.setFilePath(data.get("filePath"));
+        printJob.setFileSharableLink(data.get("sharableLink"));
 
         // TODO: set the queue position of the new job to be at the end of the list.
+        Set<PrintJob> printJobs;
 
+        if(customer.getPrintJobs() == null) {
+            printJobs = new HashSet<>();
+        } else {
+            printJobs = customer.getPrintJobs();
+        }
+        printJobs.add(printJob);
+        customer.setPrintJobs(printJobs);
         printJob = printJobRepo.save(printJob);
 
         return getPrintJobResponse(response, printJob, data, "Successfully saved new file to database!");
@@ -104,10 +118,10 @@ public class PrintJobOperations {
         }
 
         Map<String, String> data;
-        data = dropboxOperations.updateDropboxFile(printJob, model.getFile());
+        data = fileService.updateDropboxFile(printJob, model.getFile());
 
-        printJob.setDropboxPath(data.get("filePath"));
-        printJob.setDropboxSharableLink(data.get("sharableLink"));
+        printJob.setFilePath(data.get("filePath"));
+        printJob.setFileSharableLink(data.get("sharableLink"));
         printJob = printJobRepo.save(printJob);
 
         return getPrintJobResponse(response, printJob, data, "Successfully updated file to database!");
@@ -136,10 +150,10 @@ public class PrintJobOperations {
             throw new IdeaLabApiException(PRINT_JOBS_NOT_EXIST);
         }
 
-        dropboxOperations.deleteDropboxFile(printJob.getDropboxPath());
-        printJob.setDropboxPath("Deleted");
+        fileService.deleteDropboxFile(printJob.getFilePath());
+        printJob.setFilePath("Deleted");
 
-        printJob.setDropboxSharableLink("Deleted");
+        printJob.setFileSharableLink("Deleted");
         printJob = printJobRepo.save(printJob);
 
         response.setSuccess(true);
