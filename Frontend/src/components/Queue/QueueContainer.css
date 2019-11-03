@@ -8,6 +8,11 @@ body {
   margin: 0px 50px;
 }
 
+table {
+  width: 100%;
+  margin: 10px 2em;
+}
+
 tbody {
   display: block;
   overflow: auto;
@@ -17,7 +22,7 @@ tbody {
 
 td,
 th {
-  padding: 0.5rem;
+  padding: 0.5rem 4em;
 }
 
 thead tr {
