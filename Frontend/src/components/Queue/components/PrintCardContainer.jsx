@@ -11,7 +11,21 @@ const PrintCardContainer = ({ data }) => {
   const [card, updateCard] = useState(data);
   const [hoverState, setHoverState] = useState(false);
 
-  const dummyColors = ['red', 'blue', 'green', 'black'];
+  const dummyColors = [
+    'red',
+    'orange',
+    'yellow',
+    'lightgreen',
+    'darkgreen',
+    'lightblue',
+    'darkblue',
+    'black',
+    'grey',
+    'white',
+    'pink',
+    'gold',
+    'silver',
+  ];
 
   const colorCircleStyle = {
     backgroundColor: `${card.color}`,
@@ -50,7 +64,9 @@ const PrintCardContainer = ({ data }) => {
   const toggleArrow = isToggled ? <IoIosArrowDown /> : <IoIosArrowBack />;
 
   const saveButton =
-    data === card ? null : (
+    data === card ? (
+      <Fragment />
+    ) : (
       <div className="saveIcon" onClick={saveChanges}>
         <FiSave />
       </div>
@@ -85,49 +101,51 @@ const PrintCardContainer = ({ data }) => {
   return (
     <div className="printCardContainer">
       <tr>
-        <div className="printCardContainerTop">
-          {/* <img src='#' alt='hamLogo' className='col10'/> */}
-          <td className="printFileName">
-            <a href={updateFileUrlParams(data.fileSharableLink)}>
-              {data.filePath}
-            </a>
-          </td>
-          <td className="colorContainer" onMouseLeave={handleMouseLeave}>
-            <div
-              className="colorCircle"
-              style={colorCircleStyle}
-              onMouseEnter={handleMouseEnter}
-            ></div>
+        <td className="printFileName">
+          <a href={updateFileUrlParams(data.fileSharableLink)}>
+            {data.filePath}
+          </a>
+        </td>
+        <td
+          className="colorContainer"
+          colspan="4"
+          onMouseLeave={handleMouseLeave}
+        >
+          <div
+            className="colorCircle"
+            style={colorCircleStyle}
+            onMouseEnter={handleMouseEnter}
+          ></div>
 
-            {hoverState ? (
-              <div className="colorPickerContainer">
-                <CirclePicker
-                  onChangeComplete={handleColorChange}
-                  color={card.color}
-                  colors={dummyColors}
-                  width="100px"
-                />
-              </div>
-            ) : (
-              <Fragment />
-            )}
-          </td>
-          <td className="submitDate">
-            <PrintDateAdded submitted={data.submitted} />
-          </td>
-          <td>
-            <StatusDropdown
-              currentStatus={card.status}
-              statusChanged={updatePrintingStatus}
-            />
-          </td>
-          <td className="printAdditionalInfo">
-            {saveButton}
-            <div className="toggleArrow" onClick={dropItDown}>
-              {toggleArrow}
+          {hoverState ? (
+            <div className="colorPickerContainer">
+              <CirclePicker
+                onChangeComplete={handleColorChange}
+                color={card.color}
+                colors={dummyColors}
+                circleSize={18}
+                circleSpacing={8}
+              />
             </div>
-          </td>
-        </div>
+          ) : (
+            <Fragment />
+          )}
+        </td>
+        <td className="submitDate">
+          <PrintDateAdded submitted={data.submitted} />
+        </td>
+        <td>
+          <StatusDropdown
+            currentStatus={card.status}
+            statusChanged={updatePrintingStatus}
+          />
+        </td>
+        <td className="printAdditionalInfo">
+          <div className="toggleArrow" onClick={dropItDown}>
+            {toggleArrow}
+          </div>
+          {saveButton}
+        </td>
         {secondRowContent}
       </tr>
     </div>

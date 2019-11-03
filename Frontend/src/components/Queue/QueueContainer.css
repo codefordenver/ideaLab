@@ -11,6 +11,7 @@ body {
 table {
   width: 100%;
   margin: 10px 2em;
+  table-layout: fixed;
 }
 
 tbody {
@@ -26,7 +27,33 @@ th {
 }
 
 thead tr {
-  display: block;
+  display: flex;
+  text-align: left;
+}
+
+tbody tr {
+  display: flex;
+  align-items: center;
+}
+
+.printFileName {
+  overflow: hidden;
+}
+
+tr td:nth-child(1),
+tr th:nth-child(1),
+tr td:nth-child(3),
+tr th:nth-child(3),
+tr td:nth-child(4),
+tr th:nth-child(4),
+tr td:nth-child(5),
+tr th:nth-child(5) {
+  width: 10%;
+}
+
+tr td:nth-child(2),
+tr th:nth-child(2) {
+  width: 60%;
 }
 
 .queueFilterInfo {

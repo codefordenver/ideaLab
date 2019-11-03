@@ -32,7 +32,7 @@ const Queue = props => {
         <thead>
           <tr>
             <th className="fileNameHeader">File Name</th>
-            <th colspan="4" className="colorHeader">
+            <th className="colorHeader" colspan="4">
               Color
             </th>
             <th className="submittedHeader">Submitted</th>
