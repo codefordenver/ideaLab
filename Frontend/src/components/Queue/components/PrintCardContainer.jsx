@@ -1,7 +1,7 @@
 import React, { useState, Fragment } from 'react';
 import './PrintCardContainer.css';
-import StatusDropdown from './components/StatusDropdown';
-import PrintDateAdded from './components/PrintDateAdded';
+import StatusDropdown from './StatusDropdown';
+import PrintDateAdded from './PrintDateAdded';
 import { CirclePicker } from 'react-color';
 import { IoIosArrowDown, IoIosArrowBack } from 'react-icons/io';
 import { FiSave, FiMail } from 'react-icons/fi';
@@ -84,50 +84,52 @@ const PrintCardContainer = ({ data }) => {
 
   return (
     <div className="printCardContainer">
-      <div className="printCardContainerTop">
-        {/* <img src='#' alt='hamLogo' className='col10'/> */}
-        <div className="printFileName col20">
-          <a href={updateFileUrlParams(data.fileSharableLink)}>
-            {data.filePath}
-          </a>
-        </div>
-        <div className="colorContainer" onMouseLeave={handleMouseLeave}>
-          <div
-            className="colorCircle"
-            style={colorCircleStyle}
-            onMouseEnter={handleMouseEnter}
-          ></div>
+      <tr>
+        <div className="printCardContainerTop">
+          {/* <img src='#' alt='hamLogo' className='col10'/> */}
+          <td className="printFileName">
+            <a href={updateFileUrlParams(data.fileSharableLink)}>
+              {data.filePath}
+            </a>
+          </td>
+          <td className="colorContainer" onMouseLeave={handleMouseLeave}>
+            <div
+              className="colorCircle"
+              style={colorCircleStyle}
+              onMouseEnter={handleMouseEnter}
+            ></div>
 
-          {hoverState ? (
-            <div className="colorPickerContainer">
-              <CirclePicker
-                onChangeComplete={handleColorChange}
-                color={card.color}
-                colors={dummyColors}
-                width="100px"
-              />
+            {hoverState ? (
+              <div className="colorPickerContainer">
+                <CirclePicker
+                  onChangeComplete={handleColorChange}
+                  color={card.color}
+                  colors={dummyColors}
+                  width="100px"
+                />
+              </div>
+            ) : (
+              <Fragment />
+            )}
+          </td>
+          <td className="submitDate">
+            <PrintDateAdded submitted={data.submitted} />
+          </td>
+          <td>
+            <StatusDropdown
+              currentStatus={card.status}
+              statusChanged={updatePrintingStatus}
+            />
+          </td>
+          <td className="printAdditionalInfo">
+            {saveButton}
+            <div className="toggleArrow" onClick={dropItDown}>
+              {toggleArrow}
             </div>
-          ) : (
-            <Fragment />
-          )}
+          </td>
         </div>
-        <div className="submitDate col20">
-          <PrintDateAdded submitted={data.submitted} />
-        </div>
-        <div>
-          <StatusDropdown
-            currentStatus={card.status}
-            statusChanged={updatePrintingStatus}
-          />
-        </div>
-        <div className="printAdditionalInfo col20">
-          {saveButton}
-          <div className="toggleArrow" onClick={dropItDown}>
-            {toggleArrow}
-          </div>
-        </div>
-      </div>
-      {secondRowContent}
+        {secondRowContent}
+      </tr>
     </div>
   );
 };

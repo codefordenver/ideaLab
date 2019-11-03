@@ -28,16 +28,25 @@ const Queue = props => {
 
         <SearchBar filterByTerm={props.filterByTerm} />
       </div>
-      <ul className="queueBanner">
-        <li className="col10"></li>
-        <li className="col20">File Name</li>
-        <li className="col20">Color</li>
-        <li className="col20">Submitted</li>
-        <li className="col20">Status</li>
-      </ul>
-      {renderPrintCards.length > 0
-        ? renderPrintCards
-        : `No items are currently ${props.statusView.toLowerCase()}`}
+      <table id="queueTable">
+        <thead>
+          <tr>
+            <th className="fileNameHeader">File Name</th>
+            <th colspan="4" className="colorHeader">
+              Color
+            </th>
+            <th className="submittedHeader">Submitted</th>
+            <th className="statusHeader">Status</th>
+            <th></th>
+            {/* <--- dropdown arrow column */}
+          </tr>
+        </thead>
+        <tbody>
+          {renderPrintCards.length > 0
+            ? renderPrintCards
+            : `No items are currently ${props.statusView.toLowerCase()}`}
+        </tbody>
+      </table>
     </div>
   );
 };

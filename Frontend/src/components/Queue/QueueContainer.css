@@ -8,6 +8,22 @@ body {
   margin: 0px 50px;
 }
 
+tbody {
+  display: block;
+  overflow: auto;
+  height: 1000px;
+  width: 100%;
+}
+
+td,
+th {
+  padding: 0.5rem;
+}
+
+thead tr {
+  display: block;
+}
+
 .queueFilterInfo {
   display: flex;
   justify-content: space-between;
