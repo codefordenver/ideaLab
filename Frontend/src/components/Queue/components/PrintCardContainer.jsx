@@ -23,6 +23,7 @@ const PrintCardContainer = ({ data }) => {
     'grey',
     'white',
     'pink',
+    'purple',
     'gold',
     'silver',
   ];
@@ -73,18 +74,21 @@ const PrintCardContainer = ({ data }) => {
     );
 
   const secondRowContent = isToggled ? (
-    <div className="printCardContainerBottom">
-      <div className="emailRecipient col20">
-        {data.name} <FiMail />
-      </div>
+    <td id="secondRowContent">
+      <span>Unique ID: {card.id}</span>
+      <span className="emailRecipient">
+        Contact {card.customerFirstName} <FiMail />
+      </span>
       <textarea
         onChange={updateComment}
         name="comments"
         value={card.comments}
         className="commentSection"
       />
-    </div>
-  ) : null;
+    </td>
+  ) : (
+    <Fragment />
+  );
 
   const updateFileUrlParams = fileSharableLink => {
     let url = new URL(fileSharableLink);
@@ -108,7 +112,7 @@ const PrintCardContainer = ({ data }) => {
         </td>
         <td
           className="colorContainer"
-          colspan="4"
+          colSpan="3"
           onMouseLeave={handleMouseLeave}
         >
           <div
@@ -146,8 +150,8 @@ const PrintCardContainer = ({ data }) => {
           </div>
           {saveButton}
         </td>
-        {secondRowContent}
       </tr>
+      <tr>{secondRowContent}</tr>
     </div>
   );
 };

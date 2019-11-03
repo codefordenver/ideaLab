@@ -33,11 +33,15 @@ thead tr {
 
 tbody tr {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
 }
 
 .printFileName {
   overflow: hidden;
+}
+
+td:last-child {
+  display: inline-block;
 }
 
 tr td:nth-child(1),
@@ -54,6 +58,13 @@ tr th:nth-child(5) {
 tr td:nth-child(2),
 tr th:nth-child(2) {
   width: 60%;
+}
+
+#secondRowContent {
+  width: 85%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 }
 
 .queueFilterInfo {

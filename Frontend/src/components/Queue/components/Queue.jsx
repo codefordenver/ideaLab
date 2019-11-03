@@ -6,7 +6,7 @@ import SearchBar from './SearchBar';
 import PrintCardContainer from '../components/PrintCardContainer';
 
 const Queue = props => {
-  const renderPrintCards = props.filteredData.map((el, i) => (
+  const renderPrintCards = props.data.map((el, i) => (
     <PrintCardContainer data={el} key={i} />
   ));
   return (
@@ -32,7 +32,7 @@ const Queue = props => {
         <thead>
           <tr>
             <th className="fileNameHeader">File Name</th>
-            <th className="colorHeader" colspan="4">
+            <th className="colorHeader" colSpan="4">
               Color
             </th>
             <th className="submittedHeader">Submitted</th>
@@ -42,9 +42,15 @@ const Queue = props => {
           </tr>
         </thead>
         <tbody>
-          {renderPrintCards.length > 0
-            ? renderPrintCards
-            : `No items are currently ${props.statusView.toLowerCase()}`}
+          {renderPrintCards.length > 0 ? (
+            renderPrintCards
+          ) : (
+            <tr>
+              <td>
+                `No items are currently ${props.statusView.toLowerCase()}`
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>

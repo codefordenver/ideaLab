@@ -18,7 +18,9 @@ const QueueContainer = () => {
         setLoading(false);
         const formattedData = data.map(printjob => {
           return {
+            id: printjob.id,
             color: printjob.colorTypeId.color,
+            customerFirstName: printjob.customerInfo.firstName,
             submitted: printjob.createdAt,
             comments: printjob.comments,
             status: printjob.status,
@@ -79,6 +81,7 @@ const QueueContainer = () => {
       setStatus={setStatus}
       filterByTerm={filterByTerm}
       filteredData={filteredData}
+      data={data}
     />
   );
 };

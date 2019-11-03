@@ -42,14 +42,8 @@
   padding-right: 3em;
 }
 
-.emailRecipient {
-  text-decoration: underline;
-  margin-left: 4em;
-}
-
 .commentSection {
-  margin-right: 18em;
-  width: 38%;
+  width: 42%;
   height: 100%;
   border-radius: 5px;
 }
