@@ -7,31 +7,32 @@ const QueueContainer = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filteredData, setFilteredData] = useState(data);
-  const [stringedValues, setStringedValues] = useState([]);
-  const [statusView, setStatusView] = useState();
+  const [stringedValues, setStringedValues] = useState({});
+  const [statusView, setStatusView] = useState('');
 
-  const setSearchValues = () => {
-    const formattedData = data.map(printjob => {
-      return {
-        id: printjob.id,
-        color: printjob.colorTypeId.color,
-        customerFirstName: printjob.customerInfo.firstName,
-        submitted: printjob.createdAt,
-        comments: printjob.comments,
-        status: printjob.status,
-        filePath: printjob.filePath,
-        fileSharableLink: printjob.fileSharableLink,
-      };
-    });
-    const searchValues = data.map((printJob, index) => {
-      let valueString = '';
-      for (var key in printJob) {
-        // formattedData filter here
-        valueString = valueString + ' ' + printJob[key];
+  const setSearchValues = printjob => {
+    const formattedData = {
+      id: printjob.id,
+      submitted: printjob.createdAt,
+      comments: printjob.comments,
+      status: printjob.status,
+      filePath: printjob.filePath,
+      fileSharableLink: printjob.fileSharableLink,
+    };
+
+    let valueString = '';
+    for (var key in printjob) {
+      if (key === 'colorTypeId') {
+        valueString = valueString + ' ' + printjob.colorTypeId.color;
       }
-      return (printJob[index] = valueString.toLowerCase());
-    });
-    setStringedValues(searchValues);
+      if (key === 'customerInfo') {
+        valueString = valueString + ' ' + printjob.customerInfo.firstName;
+      }
+      if (formattedData[key]) {
+        valueString = valueString + ' ' + printjob[key];
+      }
+    }
+    setStringedValues({ ...stringedValues, printjob: { id: valueString } });
   };
 
   useEffect(() => {
@@ -40,9 +41,8 @@ const QueueContainer = () => {
       response => {
         const data = response.data.data;
         setData(data);
-        setLoading(false);
         setStatus('PENDING_REVIEW');
-        setSearchValues();
+        setLoading(false);
       },
       error => console.error(error),
     );
@@ -50,16 +50,17 @@ const QueueContainer = () => {
 
   const saveCard = updatedCard => {
     RequestService.saveCard(updatedCard);
-    // update stringed values for id
+    setSearchValues(updatedCard);
   };
 
   useEffect(() => {
-    console.log('status view updated', statusView);
     const activeCards = data.filter(card => {
       if (card.status === 'FAILED' && statusView === 'DONE') {
+        setSearchValues(card);
         return card;
       }
       if (card.status === statusView) {
+        setSearchValues(card);
         return card;
       }
     });
@@ -67,10 +68,15 @@ const QueueContainer = () => {
   }, [statusView]);
 
   const filterByTerm = searchTerm => {
-    const filteredSearch = data.filter((printJob, i) => {
-      return stringedValues[i].indexOf(searchTerm.toLowerCase()) !== -1;
+    setLoading(true);
+    const filteredSearch = filteredData.filter((printJob, i) => {
+      if (stringedValues.length > 0) {
+        let stringSearch = stringedValues[i];
+        return stringSearch.indexOf(searchTerm.toLowerCase()) !== -1;
+      }
     });
     setFilteredData(filteredSearch);
+    setLoading(false);
   };
 
   const setStatus = view => {

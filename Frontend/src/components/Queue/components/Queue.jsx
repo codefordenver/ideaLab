@@ -9,7 +9,6 @@ const Queue = props => {
   const saveCard = updatedInfo => {
     props.saveCard(updatedInfo);
   };
-  console.log('QUEUE LOADED:', props.data);
   const renderPrintCards = props.data.map((card, i) => (
     <PrintCardContainer data={card} key={i} saveCard={saveCard} />
   ));
@@ -50,7 +49,7 @@ const Queue = props => {
             renderPrintCards
           ) : (
             <tr>
-              <td>No items fit this status</td>
+              <td>No cards fit this criteria</td>
             </tr>
           )}
         </tbody>
