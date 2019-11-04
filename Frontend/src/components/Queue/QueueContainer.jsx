@@ -8,60 +8,63 @@ const QueueContainer = () => {
   const [loading, setLoading] = useState(false);
   const [filteredData, setFilteredData] = useState(data);
   const [stringedValues, setStringedValues] = useState([]);
-  const [statusView, setStatusView] = useState('PENDING_REVIEW');
+  const [statusView, setStatusView] = useState();
+
+  const setSearchValues = () => {
+    const formattedData = data.map(printjob => {
+      return {
+        id: printjob.id,
+        color: printjob.colorTypeId.color,
+        customerFirstName: printjob.customerInfo.firstName,
+        submitted: printjob.createdAt,
+        comments: printjob.comments,
+        status: printjob.status,
+        filePath: printjob.filePath,
+        fileSharableLink: printjob.fileSharableLink,
+      };
+    });
+    const searchValues = data.map((printJob, index) => {
+      let valueString = '';
+      for (var key in printJob) {
+        // formattedData filter here
+        valueString = valueString + ' ' + printJob[key];
+      }
+      return (printJob[index] = valueString.toLowerCase());
+    });
+    setStringedValues(searchValues);
+  };
 
   useEffect(() => {
     setLoading(true);
     RequestService.getPrintJobs(
       response => {
         const data = response.data.data;
+        setData(data);
         setLoading(false);
-        const formattedData = data.map(printjob => {
-          return {
-            id: printjob.id,
-            color: printjob.colorTypeId.color,
-            customerFirstName: printjob.customerInfo.firstName,
-            submitted: printjob.createdAt,
-            comments: printjob.comments,
-            status: printjob.status,
-            filePath: printjob.filePath,
-            fileSharableLink: printjob.fileSharableLink,
-          };
-        });
-        setData(formattedData);
+        setStatus('PENDING_REVIEW');
+        setSearchValues();
       },
       error => console.error(error),
     );
   }, []);
 
+  const saveCard = updatedCard => {
+    RequestService.saveCard(updatedCard);
+    // update stringed values for id
+  };
+
   useEffect(() => {
-    const filteredKeys = [
-      'name',
-      'email',
-      'color',
-      'status',
-      'fileName',
-      'comments',
-    ];
-    const searchValues = data.map((printJob, index) => {
-      let valueString = '';
-      for (var key in printJob) {
-        if (filteredKeys.indexOf(key) !== -1) {
-          valueString = valueString + ' ' + printJob[key];
-        }
+    console.log('status view updated', statusView);
+    const activeCards = data.filter(card => {
+      if (card.status === 'FAILED' && statusView === 'DONE') {
+        return card;
       }
-      return (printJob[index] = valueString.toLowerCase());
+      if (card.status === statusView) {
+        return card;
+      }
     });
-    const queuedCards = data.filter(card => {
-      var sameStatus = card.status === statusView;
-      var doneAndFailed =
-        statusView === 'DONE' &&
-        (card.status === 'DONE' || card.status === 'FAILED');
-      return sameStatus || doneAndFailed;
-    });
-    setFilteredData(queuedCards);
-    setStringedValues(searchValues);
-  }, [data, statusView]);
+    setFilteredData(activeCards);
+  }, [statusView]);
 
   const filterByTerm = searchTerm => {
     const filteredSearch = data.filter((printJob, i) => {
@@ -80,8 +83,8 @@ const QueueContainer = () => {
       statusView={statusView}
       setStatus={setStatus}
       filterByTerm={filterByTerm}
-      filteredData={filteredData}
-      data={data}
+      data={filteredData}
+      saveCard={saveCard}
     />
   );
 };

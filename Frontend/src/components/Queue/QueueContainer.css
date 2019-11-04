@@ -14,6 +14,12 @@ table {
   table-layout: fixed;
 }
 
+.submittedHeader,
+.statusHeader {
+  padding-left: 0;
+  padding-right: 8em;
+}
+
 tbody {
   display: block;
   overflow: auto;
@@ -40,24 +46,26 @@ tbody tr {
   overflow: hidden;
 }
 
-td:last-child {
-  display: inline-block;
-}
-
 tr td:nth-child(1),
-tr th:nth-child(1),
-tr td:nth-child(3),
-tr th:nth-child(3),
-tr td:nth-child(4),
-tr th:nth-child(4),
-tr td:nth-child(5),
-tr th:nth-child(5) {
-  width: 10%;
+tr th:nth-child(1) {
+  width: 22%;
 }
 
 tr td:nth-child(2),
 tr th:nth-child(2) {
-  width: 60%;
+  width: 54%;
+}
+
+tr td:nth-child(3),
+tr th:nth-child(3),
+tr td:nth-child(4),
+tr th:nth-child(4) {
+  width: 8%;
+}
+
+tr td:nth-child(5),
+tr th:nth-child(5) {
+  width: 8%;
 }
 
 #secondRowContent {

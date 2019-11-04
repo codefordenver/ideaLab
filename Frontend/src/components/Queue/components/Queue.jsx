@@ -6,8 +6,12 @@ import SearchBar from './SearchBar';
 import PrintCardContainer from '../components/PrintCardContainer';
 
 const Queue = props => {
-  const renderPrintCards = props.data.map((el, i) => (
-    <PrintCardContainer data={el} key={i} />
+  const saveCard = updatedInfo => {
+    props.saveCard(updatedInfo);
+  };
+  console.log('QUEUE LOADED:', props.data);
+  const renderPrintCards = props.data.map((card, i) => (
+    <PrintCardContainer data={card} key={i} saveCard={saveCard} />
   ));
   return (
     <div>
@@ -46,9 +50,7 @@ const Queue = props => {
             renderPrintCards
           ) : (
             <tr>
-              <td>
-                `No items are currently ${props.statusView.toLowerCase()}`
-              </td>
+              <td>No items fit this status</td>
             </tr>
           )}
         </tbody>

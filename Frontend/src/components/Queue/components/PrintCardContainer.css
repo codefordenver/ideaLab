@@ -11,11 +11,14 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding-right: 0;
+  padding: 0;
+  margin-left: 1em;
 }
 
 .colorPickerContainer {
-  padding-left: 10px;
+  margin-left: 20px;
+  height: 100%;
+  width: 100%;
 }
 
 .colorPickerContainer > * > * > * {
@@ -28,6 +31,7 @@
   height: 25px;
   border: solid 1px black;
   border-radius: 50%;
+  margin-bottom: 5px;
 }
 
 .toggleArrow:hover,
@@ -39,7 +43,7 @@
 .toggleArrow,
 .saveIcon {
   transform: scale(1.5);
-  padding-right: 3em;
+  padding-right: 2em;
 }
 
 .commentSection {
@@ -51,4 +55,14 @@
 .printAdditionalInfo {
   display: flex;
   overflow: overlay;
+}
+
+.emailRecipient {
+  display: flex;
+  align-items: flex-end;
+  margin-right: 2em;
+}
+
+.emailRecipient > svg {
+  margin-left: 5px;
 }

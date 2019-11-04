@@ -6,10 +6,11 @@ import { CirclePicker } from 'react-color';
 import { IoIosArrowDown, IoIosArrowBack } from 'react-icons/io';
 import { FiSave, FiMail } from 'react-icons/fi';
 
-const PrintCardContainer = ({ data }) => {
+const PrintCardContainer = ({ data, saveCard }) => {
   const [isToggled, setIsToggled] = useState(false);
   const [card, updateCard] = useState(data);
   const [hoverState, setHoverState] = useState(false);
+  const [isSaveIconShowing, setSaveIconShowing] = useState(false);
 
   const dummyColors = [
     'red',
@@ -29,11 +30,15 @@ const PrintCardContainer = ({ data }) => {
   ];
 
   const colorCircleStyle = {
-    backgroundColor: `${card.color}`,
+    backgroundColor: `${card.colorTypeId.color}`,
   };
 
   const handleColorChange = hue => {
-    updateCard(prevState => ({ ...prevState, color: hue.hex }));
+    updateCard(prevState => ({
+      ...prevState,
+      colorTypeId: { ...prevState.colorTypeId, color: hue.hex },
+    }));
+    setSaveIconShowing(true);
   };
   const handleMouseEnter = () => {
     setHoverState(true);
@@ -46,11 +51,13 @@ const PrintCardContainer = ({ data }) => {
   const updateComment = event => {
     event.persist();
     updateCard(prevState => ({ ...prevState, comments: event.target.value }));
+    setSaveIconShowing(true);
   };
 
   const updatePrintingStatus = event => {
     event.persist();
     updateCard(prevState => ({ ...prevState, status: event.target.value }));
+    setSaveIconShowing(true);
   };
 
   const dropItDown = () => {
@@ -58,26 +65,27 @@ const PrintCardContainer = ({ data }) => {
   };
 
   const saveChanges = () => {
-    //POST request goes here! placeholder:
-    alert('saving changes');
+    saveCard(card);
+    setSaveIconShowing(false);
   };
 
   const toggleArrow = isToggled ? <IoIosArrowDown /> : <IoIosArrowBack />;
 
-  const saveButton =
-    data === card ? (
-      <Fragment />
-    ) : (
-      <div className="saveIcon" onClick={saveChanges}>
-        <FiSave />
-      </div>
-    );
+  const saveButton = isSaveIconShowing ? (
+    <div className="saveIcon" onClick={saveChanges}>
+      <FiSave />
+    </div>
+  ) : (
+    <Fragment />
+  );
 
   const secondRowContent = isToggled ? (
     <td id="secondRowContent">
-      <span>Unique ID: {card.id}</span>
+      <span className="uniqueId">
+        Unique ID: <b>{card.id}</b>
+      </span>
       <span className="emailRecipient">
-        Contact {card.customerFirstName} <FiMail />
+        Contact {card.customerInfo.firstName} <FiMail />
       </span>
       <textarea
         onChange={updateComment}
@@ -106,8 +114,8 @@ const PrintCardContainer = ({ data }) => {
     <div className="printCardContainer">
       <tr>
         <td className="printFileName">
-          <a href={updateFileUrlParams(data.fileSharableLink)}>
-            {data.filePath}
+          <a href={updateFileUrlParams(card.fileSharableLink)}>
+            {card.filePath}
           </a>
         </td>
         <td
@@ -125,7 +133,7 @@ const PrintCardContainer = ({ data }) => {
             <div className="colorPickerContainer">
               <CirclePicker
                 onChangeComplete={handleColorChange}
-                color={card.color}
+                color={data.colorTypeId.color}
                 colors={dummyColors}
                 circleSize={18}
                 circleSpacing={8}
@@ -136,11 +144,11 @@ const PrintCardContainer = ({ data }) => {
           )}
         </td>
         <td className="submitDate">
-          <PrintDateAdded submitted={data.submitted} />
+          <PrintDateAdded submitted={data.createdAt} />
         </td>
         <td>
           <StatusDropdown
-            currentStatus={card.status}
+            currentStatus={data.status}
             statusChanged={updatePrintingStatus}
           />
         </td>

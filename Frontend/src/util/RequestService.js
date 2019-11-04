@@ -88,6 +88,15 @@ const RequestService = {
       .then(thenCallback)
       .catch(catchCallback);
   },
+
+  saveCard(payload, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    const cardId = payload.id;
+    backendInstance
+      .post(backendUrl + `/api/print-jobs/${cardId}/model`, payload)
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
 };
 
 export default RequestService;
