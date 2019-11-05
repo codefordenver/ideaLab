@@ -3,10 +3,12 @@ package idealab.api.service;
 import idealab.api.dto.request.DropBoxFilePathRequest;
 import idealab.api.dto.response.PrintJobResponse;
 import idealab.api.model.PrintJob;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
+@Service
 public class GoogleFileServiceImpl implements FileService {
 
     @Override

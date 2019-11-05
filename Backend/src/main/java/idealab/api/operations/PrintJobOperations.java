@@ -23,18 +23,18 @@ import static idealab.api.exception.ErrorType.*;
 
 @Service
 public class PrintJobOperations {
-    private final FileService fileServiceImpl;
+    private final FileService googleFileServiceImpl;
     private final PrintJobRepo printJobRepo;
     private final ColorTypeRepo colorTypeRepo;
     private final CustomerInfoRepo customerInfoRepo;
     private final EmployeeRepo employeeRepo;
     private final EmailHashUtil emailHashUtil;
 
-    public PrintJobOperations(FileService fileServiceImpl, PrintJobRepo printJobRepo,
+    public PrintJobOperations(FileService googleFileServiceImpl, PrintJobRepo printJobRepo,
                               ColorTypeRepo colorTypeRepo, CustomerInfoRepo customerInfoRepo,
                               EmployeeRepo employeeRepo, EmailHashUtil emailHashUtil) {
 
-        this.fileServiceImpl = fileServiceImpl;
+        this.googleFileServiceImpl = googleFileServiceImpl;
         this.printJobRepo = printJobRepo;
         this.colorTypeRepo = colorTypeRepo;
         this.customerInfoRepo = customerInfoRepo;
@@ -89,7 +89,7 @@ public class PrintJobOperations {
         PrintJob printJob = new PrintJob(customer, databaseColor, databaseEmployee, Status.PENDING_REVIEW, comments, emailHash);
 
         // Make a dropbox sharable link here using the time of the database record
-        Map<String, String> data = fileServiceImpl.uploadFile(currentTime.toLocalTime().toNanoOfDay(), printJobNewRequest.getFile());
+        Map<String, String> data = googleFileServiceImpl.uploadFile(currentTime.toLocalTime().toNanoOfDay(), printJobNewRequest.getFile());
         printJob.setFilePath(data.get("filePath"));
         printJob.setFileSharableLink(data.get("sharableLink"));
 
@@ -118,7 +118,7 @@ public class PrintJobOperations {
         }
 
         Map<String, String> data;
-        data = fileServiceImpl.updateFile(printJob, model.getFile());
+        data = googleFileServiceImpl.updateFile(printJob, model.getFile());
 
         printJob.setFilePath(data.get("filePath"));
         printJob.setFileSharableLink(data.get("sharableLink"));
@@ -150,7 +150,7 @@ public class PrintJobOperations {
             throw new IdeaLabApiException(PRINT_JOBS_NOT_EXIST);
         }
 
-        fileServiceImpl.deleteFile(printJob.getFilePath());
+        googleFileServiceImpl.deleteFile(printJob.getFilePath());
         printJob.setFilePath("Deleted");
 
         printJob.setFileSharableLink("Deleted");
