@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 import AuthContext from './AuthContext';
 import QueueContainer from './components/Queue/QueueContainer';
