@@ -64,6 +64,11 @@ public enum ErrorType {
             11,
             "Validation Error",
             HttpStatus.BAD_REQUEST
+    ),
+    COLOR_CANT_FIND_BY_TYPE(
+    		12,
+    		"Color not found. Check the sent color!",
+    		HttpStatus.NOT_FOUND
     );
 
     ErrorType(int errorCode, String errorMessage, HttpStatus responseStatus){

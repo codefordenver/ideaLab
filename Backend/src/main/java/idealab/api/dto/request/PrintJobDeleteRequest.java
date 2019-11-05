@@ -1,8 +1,12 @@
 package idealab.api.dto.request;
 
+import idealab.api.exception.IdeaLabApiException;
+
 import java.util.Objects;
 
-public class PrintJobDeleteRequest {
+import static idealab.api.exception.ErrorType.VALIDATION_ERROR;
+
+public class PrintJobDeleteRequest implements GenericRequest {
 
     private Integer employeeId;
     private Integer printJobId;
@@ -39,5 +43,13 @@ public class PrintJobDeleteRequest {
                 "employeeId=" + employeeId +
                 ", printJobId=" + printJobId +
                 '}';
+    }
+
+    @Override
+    public void validate() {
+        if(this.employeeId == null || this.employeeId < 0)
+            throw new IdeaLabApiException(VALIDATION_ERROR, "Employee Id is invalid");
+        if(this.printJobId == null || this.printJobId < 0)
+            throw new IdeaLabApiException(VALIDATION_ERROR, "Print Job Id is invalid");
     }
 }

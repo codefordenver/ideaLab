@@ -1,0 +1,135 @@
+/* Layout */
+:root {
+  --light-blue: #00aeef;
+  --dark-blue: #1f4393;
+  --cream: #F0E3C4;
+  --yellow: #FFD401;
+  --white-text: #ffffff;
+  --mint: #A4C14E;
+  --light-green: #658B5A;
+  --dark-green: #415835;
+  --egg-plant: #543269;
+  --amber: #FBB116;
+  --dark-brown: #3B2314;
+  --light-brown: #826A5C;
+  --lime: #E5E216;
+  --sage: #C0C382;
+  --orange-red: #D93F24;
+  --default-background: white;
+  --error-color: red;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
+.grid-container {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 8fr;
+}
+
+.grid-item-nav {
+  border-right: solid;
+}
+
+.navList li {
+  display: flex;
+}
+
+.hidden {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+}
+
+.selected {
+  color: var(--light-blue);
+  border-right: 6px solid;
+}
+
+.navList a {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.navList a:hover {
+  background-color: rgba(30, 144, 255, 0.25);
+  color: black;
+}
+
+.navList {
+  font-size: 2rem;
+  list-style: none;
+  text-align: left;
+}
+
+a {
+  color: black;
+  font-weight: bolder;
+  text-decoration: none;
+}
+
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: var(--default-background);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+input {
+  display: block;
+  height: 2em;
+  margin: 2rem;
+  border-radius: 10px;
+  outline: none;
+  border-style: solid;
+  font-size: 1.5rem;
+  padding: 0.25rem;
+}
+
+.shapedButton {
+  display: block;
+  height: 2.5em;
+  margin: 2rem;
+  border-radius: 10px;
+  font-size: 1.5rem;
+}
+
+.sidebarIcon {
+  padding: 2em 0;
+}
+
+.hidden {
+  display: none;
+}
+
+.success {
+  color: var(--dark-green);
+  font-size: 1.5rem;
+  margin: 1rem 0 1rem 0;
+  border-radius: 5px;
+}
+
+.error {
+  color: var(--orange-red);
+  font-size: 1.5rem;
+  margin: 1rem 2rem 1rem 2rem;
+  border-radius: 5px;
+ }

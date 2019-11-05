@@ -1,5 +1,6 @@
 package idealab.api.operations;
 
+import idealab.api.dto.request.EmployeeSignUpRequest;
 import idealab.api.dto.request.UserChangePasswordRequest;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.exception.IdeaLabApiException;
@@ -15,6 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -39,27 +42,61 @@ public class UserOperationsTest {
         Employee e = new Employee();
         e.setPassword("password");
 
+        EmployeeSignUpRequest request = new EmployeeSignUpRequest();
+        request.setUsername("username");
+        request.setPassword("password");
+        request.setRole("ADMIN");
+        request.setFirstName("test");
+        request.setLastName("lastTest");
+
         when(bCryptPasswordEncoder.encode(e.getPassword())).thenReturn("password");
         when(employeeRepo.save(e)).thenReturn(e);
 
-        GenericResponse response = operations.userSignUp(e);
+        GenericResponse response = operations.userSignUp(request);
 
         assertTrue(response.isSuccess() == true);
         assertTrue(response.getMessage().equalsIgnoreCase("User Sign Up Successful"));
 
     }
-
+    
     @Test
-    public void userSignUpFailNullPassword() {
-        Employee e = new Employee();
-        e.setPassword(null);
+    public void userSignUpWithAnExistingUser() {
+    	// given
+    	Employee e = new Employee();
+    	e.setUsername("username");
+        e.setPassword("password");
 
-        when(bCryptPasswordEncoder.encode(e.getPassword())).thenThrow(new NullPointerException());
+        EmployeeSignUpRequest request = new EmployeeSignUpRequest();
+        request.setUsername("username");
+        request.setPassword("password");
+        request.setRole("ADMIN");
+        request.setFirstName("test");
+        request.setLastName("lastTest");
 
-        GenericResponse response = operations.userSignUp(e);
+        when(bCryptPasswordEncoder.encode(e.getPassword())).thenReturn(e.getPassword());
+        when(employeeRepo.findEmployeeByUsername(anyString())).thenReturn(e);
+  
+        // act
+        GenericResponse response = operations.userSignUp(request);
+        
+        // assert
+        verify(employeeRepo, times(1)).findEmployeeByUsername(e.getUsername());
+        verify(employeeRepo, never()).save(e);
+        assertFalse(response.isSuccess());
+        assertEquals(response.getMessage(), "User already exists");
+        assertEquals(response.getHttpStatus(), HttpStatus.BAD_REQUEST);
+    }
 
-        assertTrue(response.isSuccess() == false);
-        assertTrue(response.getMessage().equalsIgnoreCase("User Sign Up Failed"));
+    @Test(expected = IdeaLabApiException.class) //ValidationException
+    public void userSignUpFailValidation() {
+        EmployeeSignUpRequest request = new EmployeeSignUpRequest();
+        request.setUsername("username");
+        request.setPassword(null);
+        request.setRole("ADMIN");
+        request.setFirstName("test");
+        request.setLastName("lastTest");
+
+        operations.userSignUp(request);
 
     }
 
@@ -68,10 +105,17 @@ public class UserOperationsTest {
         Employee e = new Employee();
         e.setPassword("password");
 
-        when(bCryptPasswordEncoder.encode(e.getPassword())).thenReturn("password");
-        when(employeeRepo.save(e)).thenThrow(new RuntimeException());
+        EmployeeSignUpRequest request = new EmployeeSignUpRequest();
+        request.setUsername("username");
+        request.setPassword("password");
+        request.setRole("ADMIN");
+        request.setFirstName("test");
+        request.setLastName("lastTest");
 
-        GenericResponse response = operations.userSignUp(e);
+        when(bCryptPasswordEncoder.encode(e.getPassword())).thenReturn("password");
+        when(employeeRepo.save(any())).thenThrow(new RuntimeException());
+
+        GenericResponse response = operations.userSignUp(request);
 
         assertTrue(response.isSuccess() == false);
         assertTrue(response.getMessage().equalsIgnoreCase("User Sign Up Failed"));

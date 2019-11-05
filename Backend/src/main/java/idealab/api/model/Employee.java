@@ -1,16 +1,14 @@
 package idealab.api.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
-import java.util.Set;
 
 
 @Entity
 @Table(name = "employee")
-public class Employee {
+public class Employee extends RecordTimestamp {
+	
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
@@ -85,6 +83,8 @@ public class Employee {
         this.username = username;
     }
 
+    //@JsonIgnore - annotation caused issues
+    //TODO W.E - Need to determine how to properly implement annotation or figure another strategy
     public String getPassword() {
         return password;
     }

@@ -1,37 +1,35 @@
 package idealab.api.operations;
 
-import idealab.api.dto.request.PrintJobDeleteRequest;
-import idealab.api.dto.request.PrintJobNewRequest;
-import idealab.api.dto.request.PrintJobUpdateRequest;
-import idealab.api.dto.request.PrintModelUpdateRequest;
+import idealab.api.dto.request.*;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.PrintJobResponse;
 import idealab.api.exception.IdeaLabApiException;
+import idealab.api.model.Queue;
 import idealab.api.model.*;
 import idealab.api.repositories.*;
+import idealab.api.service.FileService;
+import idealab.api.service.EmailHashUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.util.AssertionErrors.assertTrue;
+import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PrintJobOperationsTest {
@@ -41,13 +39,10 @@ public class PrintJobOperationsTest {
     PrintJobRepo printJobRepo;
 
     @Mock
-    private DropboxOperations dropboxOperations;
+    private FileService fileService;
 
     @Mock
     private ColorTypeRepo colorTypeRepo;
-
-    @Mock
-    private EmailHashRepo emailHashRepo;
 
     @Mock
     private CustomerInfoRepo customerInfoRepo;
@@ -55,15 +50,18 @@ public class PrintJobOperationsTest {
     @Mock
     private EmployeeRepo employeeRepo;
 
+    @Mock
+    private EmailHashUtil emailHashUtil;
+
     @Before
     public void setup() {
         operations = new PrintJobOperations(
-                dropboxOperations,
+                fileService,
                 printJobRepo,
                 colorTypeRepo,
-                emailHashRepo,
                 customerInfoRepo,
-                employeeRepo
+                employeeRepo,
+                emailHashUtil
         );
     }
 
@@ -188,7 +186,6 @@ public class PrintJobOperationsTest {
         printJob.setColorTypeId(new ColorType("Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setEmailHashId(new EmailHash());
         printJob.setQueueId(new Queue(1));
         printJob.setStatus(Status.ARCHIVED);
         printJob.setEmployeeId(new Employee());
@@ -200,10 +197,35 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findAll()).thenReturn(printJobs);
 
         // when
-        PrintJobResponse result = operations.getAllPrintJobs();
+        PrintJobResponse result = operations.getAllPrintJobs(null);
 
         // assert
         Assert.assertEquals(result.getData().get(0).getId(), printJob.getId());
+    }
+    
+    @Test
+    public void getAllPrintJobsByStatus() throws Exception {
+        // given
+        PrintJob printJob = new PrintJob();
+
+        printJob.setColorTypeId(new ColorType("Red"));
+        printJob.setComments("comments");
+        printJob.setCreatedAt(LocalDateTime.now());
+        printJob.setQueueId(new Queue(1));
+        printJob.setStatus(Status.ARCHIVED);
+        printJob.setEmployeeId(new Employee());
+        printJob.setId(1);
+
+        List<PrintJob> printJobList = Arrays.asList(printJob);
+
+        when(printJobRepo.findPrintJobByStatus(Status.ARCHIVED)).thenReturn(printJobList);
+        
+        // when
+        PrintJobResponse result = operations.getAllPrintJobs(Status.ARCHIVED.getName());
+        
+        // assert
+        verify(printJobRepo, times(1)).findPrintJobByStatus(Status.ARCHIVED);
+        assertEquals(result.getData().get(0).getId(), printJob.getId());
     }
 
     @Test(expected = IdeaLabApiException.class)
@@ -212,7 +234,7 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findAll()).thenReturn(null);
 
         // when
-        operations.getAllPrintJobs();
+        operations.getAllPrintJobs(null);
     }
 
     @Test(expected = IdeaLabApiException.class)
@@ -221,10 +243,10 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findAll()).thenReturn(new ArrayList<>());
 
         // when
-        operations.getAllPrintJobs();
+        operations.getAllPrintJobs(null);
 
         // when
-        operations.getAllPrintJobs();
+        operations.getAllPrintJobs(null);
     }
 
     @Test
@@ -235,7 +257,6 @@ public class PrintJobOperationsTest {
         printJob.setColorTypeId(new ColorType("Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setEmailHashId(new EmailHash());
         printJob.setQueueId(new Queue(1));
         printJob.setStatus(Status.PENDING_REVIEW);
         printJob.setEmployeeId(new Employee());
@@ -243,14 +264,12 @@ public class PrintJobOperationsTest {
 
         List<PrintJob> printJobs = new ArrayList<PrintJob>();
         printJobs.add(printJob);
-        List<Status> deletableStatuses = Arrays.asList(new Status[]{
-            Status.PENDING_REVIEW,
+        List<Status> deletableStatuses = Arrays.asList(Status.PENDING_REVIEW,
             Status.FAILED,
             Status.PENDING_CUSTOMER_RESPONSE,
             Status.REJECTED,
             Status.COMPLETED,
-            Status.ARCHIVED
-        });
+            Status.ARCHIVED);
         when(printJobRepo.findByStatusIn(deletableStatuses)).thenReturn(printJobs);
 
         // when
@@ -266,7 +285,7 @@ public class PrintJobOperationsTest {
         PrintJobResponse response = new PrintJobResponse();
 
         byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
-        MultipartFile file = new MockMultipartFile("Something", a);
+        MultipartFile file = new MockMultipartFile("something.stl", "something.stl", null ,a);
 
         PrintJobNewRequest request = new PrintJobNewRequest();
         request.setColor("RED");
@@ -283,11 +302,11 @@ public class PrintJobOperationsTest {
         color.setColor("RED");
         color.setAvailable(true);
 
+        //Principal is a place holder for the logged in user
+        Principal mockPrincipal = Mockito.mock(Principal.class);
+        Mockito.when(mockPrincipal.getName()).thenReturn("me");
         Employee e = new Employee();
         e.setId(999);
-
-        EmailHash emailHash = new EmailHash();
-        emailHash.setEmailHash("test@email.com");
 
         Queue queue = new Queue(1);
 
@@ -299,32 +318,34 @@ public class PrintJobOperationsTest {
         printJob.setColorTypeId(color);
         printJob.setComments("COMMENTS");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setDropboxPath("DROPBOX_PATH");
-        printJob.setDropboxSharableLink("http://testlink.com");
+        printJob.setFilePath("DROPBOX_PATH");
+        printJob.setFileSharableLink("http://testlink.com");
         printJob.setId(1);
         printJob.setUpdatedAt(LocalDateTime.now());
         printJob.setStatus(Status.PENDING_REVIEW);
         printJob.setEmployeeId(e);
-        printJob.setEmailHashId(emailHash);
         printJob.setQueueId(queue);
         printJob.setUpdatedAt(LocalDateTime.now());
 
-        List<PrintJob> printJobData = new ArrayList<>();
+        Set<PrintJob> printJobData = new HashSet<>();
         printJobData.add(printJob);
+
+        customerInfo.setPrintJobs(printJobData);
+        List<PrintJob> printJobs = new ArrayList<>();
+        printJobs.addAll(printJobData);
 
         response.setSuccess(true);
         response.setMessage("Successfully saved new file to database!");
-        response.setData(printJobData);
+        response.setData(printJobs);
         response.setHttpStatus(HttpStatus.ACCEPTED);
 
-        when(emailHashRepo.findByEmailHash(any())).thenReturn(emailHash);
-        when(customerInfoRepo.findByEmailHashId(any())).thenReturn(customerInfo);
+        when(customerInfoRepo.findByEmail(any())).thenReturn(customerInfo);
         when(colorTypeRepo.findByColor(any())).thenReturn(color);
         when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
         when(printJobRepo.save(any())).thenReturn(printJob);
-        when(dropboxOperations.uploadDropboxFile(printJob.getId(), file)).thenReturn(data);
+        when(fileService.uploadDropboxFile(anyLong(), any())).thenReturn(data);
 
-        PrintJobResponse opResponse = operations.newPrintJob(request);
+        PrintJobResponse opResponse = operations.newPrintJob(request, mockPrincipal);
         assert(opResponse.equals(response));
     }
 
@@ -333,7 +354,7 @@ public class PrintJobOperationsTest {
         PrintJobResponse response = new PrintJobResponse();
 
         byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
-        MultipartFile file = new MockMultipartFile("Something", a);
+        MultipartFile file = new MockMultipartFile("something.stl", "something.stl", null ,a);
 
         PrintJobNewRequest request = new PrintJobNewRequest();
         request.setColor("RED");
@@ -350,11 +371,10 @@ public class PrintJobOperationsTest {
         color.setColor("RED");
         color.setAvailable(true);
 
+        Principal mockPrincipal = Mockito.mock(Principal.class);
+        Mockito.when(mockPrincipal.getName()).thenReturn("me");
         Employee e = new Employee();
         e.setId(999);
-
-        EmailHash emailHash = new EmailHash();
-        emailHash.setEmailHash("test@email.com");
 
         Queue queue = new Queue(1);
 
@@ -366,49 +386,46 @@ public class PrintJobOperationsTest {
         printJob.setColorTypeId(color);
         printJob.setComments("COMMENTS");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setDropboxPath("DROPBOX_PATH");
-        printJob.setDropboxSharableLink("http://testlink.com");
+        printJob.setFilePath("DROPBOX_PATH");
+        printJob.setFileSharableLink("http://testlink.com");
         printJob.setId(1);
         printJob.setUpdatedAt(LocalDateTime.now());
         printJob.setStatus(Status.PENDING_REVIEW);
         printJob.setEmployeeId(e);
-        printJob.setEmailHashId(emailHash);
         printJob.setQueueId(queue);
         printJob.setUpdatedAt(LocalDateTime.now());
 
-        List<PrintJob> printJobData = new ArrayList<>();
+        Set<PrintJob> printJobData = new HashSet<>();
         printJobData.add(printJob);
 
+        customerInfo.setPrintJobs(printJobData);
+        List<PrintJob> printJobs = new ArrayList<>();
+        printJobs.addAll(printJobData);
 
         response.setSuccess(true);
         response.setMessage("Successfully saved new file to database!");
-        response.setData(printJobData);
+        response.setData(printJobs);
         response.setHttpStatus(HttpStatus.ACCEPTED);
 
-        when(emailHashRepo.findByEmailHash(any())).thenReturn(null);
-        when(emailHashRepo.save(any())).thenReturn(emailHash);
-        when(customerInfoRepo.findByEmailHashId(any())).thenReturn(null);
+        when(customerInfoRepo.findByEmail(any())).thenReturn(null);
         when(customerInfoRepo.save(any())).thenReturn(customerInfo);
-        when(colorTypeRepo.findByColor(any())).thenReturn(null);
-        when(colorTypeRepo.save(any())).thenReturn(color);
-        when(employeeRepo.findEmployeeByUsername(any())).thenReturn(null);
-        when(employeeRepo.save(any())).thenReturn(e);
+        when(colorTypeRepo.findByColor(any())).thenReturn(color);
+        when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
         when(printJobRepo.save(any())).thenReturn(printJob);
-        when(dropboxOperations.uploadDropboxFile(printJob.getId(), file)).thenReturn(data);
+        when(fileService.uploadDropboxFile(anyLong(), any())).thenReturn(data);
 
-        PrintJobResponse opResponse = operations.newPrintJob(request);
+        PrintJobResponse opResponse = operations.newPrintJob(request, mockPrincipal);
 
         assert(opResponse.equals(response));
     }
 
-    @Test
-    public void createNewPrintJobNullFile() {
-        PrintJobResponse response = new PrintJobResponse();
-        response.setHttpStatus(HttpStatus.BAD_REQUEST);
-        response.setMessage("No file was submitted.  Please attach a file to the request");
-        response.setSuccess(false);
+    @Test(expected = IdeaLabApiException.class)
+    public void createNewPrintJobWithNotFoundColor() {
+    	// given
+    	byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
+        MultipartFile file = new MockMultipartFile("Something.stl", a);
 
-        MultipartFile file = null;
+        Principal principal = null;
 
         PrintJobNewRequest request = new PrintJobNewRequest();
         request.setColor("RED");
@@ -418,15 +435,102 @@ public class PrintJobOperationsTest {
         request.setEmail("test@email.com");
         request.setFile(file);
 
-        PrintJobResponse opResponse = operations.newPrintJob(request);
+        when(colorTypeRepo.findByColor(any())).thenReturn(null);
 
-        assert(opResponse.equals(response));
+        // when
+        operations.newPrintJob(request, principal);
+        
+        // assert
+        verify(operations, times(1)).newPrintJob(request, principal);
+    }
+    
+    @Test(expected = IdeaLabApiException.class)
+    public void createNewPrintJobNullFile() {
+        PrintJobResponse response = new PrintJobResponse();
+        response.setHttpStatus(HttpStatus.BAD_REQUEST);
+        response.setMessage("No file was submitted.  Please attach a file to the request");
+        response.setSuccess(false);
+
+        Principal principal = null;
+
+        PrintJobNewRequest request = new PrintJobNewRequest();
+        request.setColor("RED");
+        request.setComments("COMMENTS");
+        request.setCustomerFirstName("test");
+        request.setCustomerLastName("testLast");
+        request.setEmail("test@email.com");
+        request.setFile(null);
+
+        operations.newPrintJob(request, principal);
+
+    }
+
+    @Test(expected = IdeaLabApiException.class)
+    public void createNewPrintJob5JobError() {
+        PrintJobResponse response = new PrintJobResponse();
+
+        byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
+        MultipartFile file = new MockMultipartFile("something.stl", "something.stl", null ,a);
+
+        PrintJobNewRequest request = new PrintJobNewRequest();
+        request.setColor("RED");
+        request.setComments("COMMENTS");
+        request.setCustomerFirstName("test");
+        request.setCustomerLastName("testLast");
+        request.setEmail("test@email.com");
+        request.setFile(file);
+
+        CustomerInfo customerInfo = new CustomerInfo();
+        customerInfo.setFirstName("test");
+
+        ColorType color = new ColorType();
+        color.setColor("RED");
+        color.setAvailable(true);
+
+        //Principal is a place holder for the logged in user
+        Principal mockPrincipal = Mockito.mock(Principal.class);
+        Mockito.when(mockPrincipal.getName()).thenReturn("me");
+        Employee e = new Employee();
+        e.setId(999);
+
+        Queue queue = new Queue(1);
+
+        Map<String, String> data = new HashMap<>();
+        data.put("filePath", "DROPBOX_PATH");
+        data.put("sharableLink", "http://testlink.com");
+
+        List<PrintJob> printJobs = new ArrayList<>();
+        for(int i = 0; i < 6; i++) {
+            PrintJob printJob = new PrintJob();
+            printJob.setCreatedAt(LocalDateTime.now());
+            printJob.setId(i + 1);
+            printJob.setEmployeeId(e);
+            printJob.setQueueId(queue);
+            printJob.setUpdatedAt(LocalDateTime.now());
+            printJobs.add(printJob);
+        }
+
+        Set<PrintJob> printJobSet = new HashSet<>();
+        printJobSet.addAll(printJobs);
+        customerInfo.setPrintJobs(printJobSet);
+
+        response.setSuccess(true);
+        response.setMessage("Successfully saved new file to database!");
+        response.setData(printJobs);
+        response.setHttpStatus(HttpStatus.ACCEPTED);
+
+        when(customerInfoRepo.findByEmail(any())).thenReturn(customerInfo);
+        when(colorTypeRepo.findByColor(any())).thenReturn(color);
+        when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
+        when(printJobRepo.save(any())).thenReturn(printJobs);
+
+        operations.newPrintJob(request, mockPrincipal);
     }
 
     @Test
     public void updateModelSuccess() {
         byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
-        MultipartFile file = new MockMultipartFile("Something", a);
+        MultipartFile file = new MockMultipartFile("something.stl", "something.stl", null ,a);
 
         PrintModelUpdateRequest request = new PrintModelUpdateRequest();
         request.setFile(file);
@@ -447,7 +551,7 @@ public class PrintJobOperationsTest {
         data.put("sharableLink", "http://testlink.com");
 
         when(printJobRepo.findPrintJobById(printJob.getId())).thenReturn(printJob);
-        when(dropboxOperations.updateDropboxFile(printJob, request.getFile())).thenReturn(data);
+        when(fileService.updateDropboxFile(printJob, request.getFile())).thenReturn(data);
         when(printJobRepo.save(printJob)).thenReturn(printJob);
 
         PrintJobResponse opResponse = operations.updateModel(printJob.getId(), request);
@@ -483,7 +587,7 @@ public class PrintJobOperationsTest {
         printJob.setId(999);
 
         when(printJobRepo.findPrintJobById(printJob.getId())).thenReturn(printJob);
-        when(dropboxOperations.updateDropboxFile(printJob, request.getFile())).thenReturn(null);
+        when(fileService.updateDropboxFile(printJob, request.getFile())).thenThrow(new IdeaLabApiException(DROPBOX_UPLOAD_FILE_ERROR));
 
         operations.updateModel(printJob.getId(), request);
     }
@@ -499,7 +603,7 @@ public class PrintJobOperationsTest {
         printJob.setId(999);
 
         when(printJobRepo.findPrintJobById(printJob.getId())).thenReturn(printJob);
-        doNothing().when(dropboxOperations).deleteDropboxFile(printJob);
+        doNothing().when(fileService).deleteDropboxFile(printJob.getFilePath());
         when(printJobRepo.save(printJob)).thenReturn(printJob);
 
         GenericResponse opResponse = operations.deleteModel(printJob.getId());
@@ -515,5 +619,163 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findPrintJobById(printJob.getId())).thenReturn(null);
 
         operations.deleteModel(printJob.getId());
+    }
+
+    @Test
+    public void updatePrintJobProps() {
+        UpdatePrintJobPropertiesRequest request = new UpdatePrintJobPropertiesRequest();
+        request.setColorType("red");
+        request.setComments("comments");
+        request.setStatus("REJECTED");
+        request.setEmployeeId(1);
+
+        PrintJob printJob = new PrintJob();
+        printJob.setComments("old comments");
+        printJob.setStatus(Status.valueOf("FAILED"));
+        ColorType colorType = new ColorType();
+        colorType.setColor("blue");
+        printJob.setColorTypeId(colorType);
+
+        Employee e = new Employee();
+        e.setId(1);
+
+        ColorType newColorType = new ColorType();
+        newColorType.setColor("red");
+        newColorType.setAvailable(true);
+
+
+        when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
+        when(employeeRepo.findEmployeeById(anyInt())).thenReturn(e);
+        when(colorTypeRepo.findByColor("red")).thenReturn(newColorType);
+        when(printJobRepo.save(printJob)).thenReturn(null);
+
+        PrintJobResponse response = operations.updatePrintJobProps(1, request);
+        assertTrue("response is null", response != null);
+        assertTrue("comments are not equal", response.getData().get(0).getComments().equals(request.getComments()));
+        assertTrue("status is not equal", response.getData().get(0).getStatus() == Status.fromValue(request.getStatus()));
+        assertTrue("color is not equal", response.getData().get(0).getColorTypeId().getColor().equals(request.getColorType()));
+    }
+
+    @Test
+    public void updatePrintJobColorProp() {
+        UpdatePrintJobPropertiesRequest request = new UpdatePrintJobPropertiesRequest();
+        request.setColorType("red");
+        request.setEmployeeId(1);
+
+        PrintJob printJob = new PrintJob();
+        printJob.setComments("old comments");
+        printJob.setStatus(Status.valueOf("FAILED"));
+        ColorType colorType = new ColorType();
+        colorType.setColor("blue");
+        printJob.setColorTypeId(colorType);
+
+        Employee e = new Employee();
+        e.setId(1);
+
+        ColorType newColorType = new ColorType();
+        newColorType.setColor("red");
+        newColorType.setAvailable(true);
+
+
+        when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
+        when(employeeRepo.findEmployeeById(anyInt())).thenReturn(e);
+        when(colorTypeRepo.findByColor("red")).thenReturn(newColorType);
+        when(printJobRepo.save(printJob)).thenReturn(null);
+
+        PrintJobResponse response = operations.updatePrintJobProps(1, request);
+        assertTrue("response is null", response != null);
+        assertTrue("comments are not equal", response.getData().get(0).getComments().equals(printJob.getComments()));
+        assertTrue("status is not equal", response.getData().get(0).getStatus() == printJob.getStatus());
+        assertTrue("color is not equal", response.getData().get(0).getColorTypeId().getColor().equals(request.getColorType()));
+    }
+
+    @Test
+    public void updatePrintJobStatusProp() {
+        UpdatePrintJobPropertiesRequest request = new UpdatePrintJobPropertiesRequest();
+        request.setStatus("REJECTED");
+        request.setEmployeeId(1);
+
+        PrintJob printJob = new PrintJob();
+        printJob.setComments("old comments");
+        printJob.setStatus(Status.valueOf("FAILED"));
+        ColorType colorType = new ColorType();
+        colorType.setColor("blue");
+        printJob.setColorTypeId(colorType);
+
+        Employee e = new Employee();
+        e.setId(1);
+
+        ColorType newColorType = new ColorType();
+        newColorType.setColor("red");
+        newColorType.setAvailable(true);
+
+
+        when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
+        when(employeeRepo.findEmployeeById(anyInt())).thenReturn(e);
+        when(colorTypeRepo.findByColor("red")).thenReturn(newColorType);
+        when(printJobRepo.save(printJob)).thenReturn(null);
+
+        PrintJobResponse response = operations.updatePrintJobProps(1, request);
+        assertTrue("response is null", response != null);
+        assertTrue("comments are not equal", response.getData().get(0).getComments().equals(printJob.getComments()));
+        assertTrue("status is not equal", response.getData().get(0).getStatus() == Status.fromValue(request.getStatus()));
+        assertTrue("color is not equal", response.getData().get(0).getColorTypeId().getColor().equals(printJob.getColorTypeId().getColor()));
+    }
+
+    @Test
+    public void updatePrintJobCommentsProp() {
+        UpdatePrintJobPropertiesRequest request = new UpdatePrintJobPropertiesRequest();
+        request.setComments("comments");
+        request.setEmployeeId(1);
+
+        PrintJob printJob = new PrintJob();
+        printJob.setComments("old comments");
+        printJob.setStatus(Status.valueOf("FAILED"));
+        ColorType colorType = new ColorType();
+        colorType.setColor("blue");
+        printJob.setColorTypeId(colorType);
+
+        Employee e = new Employee();
+        e.setId(1);
+
+        ColorType newColorType = new ColorType();
+        newColorType.setColor("red");
+        newColorType.setAvailable(true);
+
+
+        when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
+        when(employeeRepo.findEmployeeById(anyInt())).thenReturn(e);
+        when(colorTypeRepo.findByColor("red")).thenReturn(newColorType);
+        when(printJobRepo.save(printJob)).thenReturn(null);
+
+        PrintJobResponse response = operations.updatePrintJobProps(1, request);
+        assertTrue("response is null", response != null);
+        assertTrue("comments are not equal", response.getData().get(0).getComments().equals(request.getComments()));
+        assertTrue("status is not equal", response.getData().get(0).getStatus() == printJob.getStatus());
+        assertTrue("color is not equal", response.getData().get(0).getColorTypeId().getColor().equals(printJob.getColorTypeId().getColor()));
+    }
+
+    @Test
+    public void getPrintJobById_shouldReturnPrintJob() {
+        //Given
+        PrintJob printJob = new PrintJob();
+        printJob.setId(2);
+        printJob.setStatus(Status.COMPLETED);
+
+        //When
+        when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
+
+        PrintJobResponse printJobResponse = operations.getPrintJobById(2);
+
+        //Then
+        assertTrue("Print job is returned with id=2", printJobResponse.getData().get(0).getId() == 2);
+    }
+
+    @Test(expected = IdeaLabApiException.class)
+    public void getPrintJobById_shouldThrowException() {
+        //When
+        when(printJobRepo.findPrintJobById(anyInt())).thenReturn(null);
+
+        PrintJobResponse printJobResponse = operations.getPrintJobById(2);
     }
 }

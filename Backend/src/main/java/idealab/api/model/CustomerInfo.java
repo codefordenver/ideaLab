@@ -1,22 +1,22 @@
 package idealab.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
-import java.sql.Date;
-import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name ="customer_info")
-public class CustomerInfo {
+public class CustomerInfo extends RecordTimestamp {
+	
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne()
-    @JoinColumn(name="fk_email_hash_id", referencedColumnName = "id", nullable = false)    
-    private EmailHash emailHashId;
+    @OneToMany(mappedBy="customerInfo", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private Set<PrintJob> printJobs;
 
     @Column(name = "first_name", nullable = false)
     @Length(min = 1, max = 254)
@@ -30,29 +30,29 @@ public class CustomerInfo {
     @Length(min = 1,  max = 254)
     private String email;
 
-    @JsonIgnore
-    @Column(name = "created_date", nullable = false)
-    private Date createdDate;
+    public CustomerInfo() {}
 
-    public CustomerInfo() {
-        this.createdDate = Date.valueOf(LocalDate.now());
-    }
-
-    public CustomerInfo(EmailHash emailHashId, String firstName, String lastName, String email) {
-        this.emailHashId = emailHashId;
+    public CustomerInfo(Set<PrintJob> printJobs, String firstName, String lastName, String email) {
+        this.printJobs = printJobs;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.createdDate = Date.valueOf(LocalDate.now());
     }
 
-    //getters and setters
-    public EmailHash getEmailHashId() {
-        return emailHashId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setEmailHashId(EmailHash emailHashId) {
-        this.emailHashId = emailHashId;
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Set<PrintJob> getPrintJobs() {
+        return printJobs;
+    }
+
+    public void setPrintJobs(Set<PrintJob> printJobs) {
+        this.printJobs = printJobs;
     }
 
     public String getFirstName() {
@@ -79,12 +79,25 @@ public class CustomerInfo {
         this.email = email;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("printJobs=[");
+        if(printJobs != null && printJobs.size() > 0) {
+            printJobs.forEach(p -> {
+                sb.append(p.getId());
+                sb.append(", ");
+            });
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        sb.append("]");
+        return "CustomerInfo{" +
+                "id=" + id +
+                ", " + sb.toString() +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }
 

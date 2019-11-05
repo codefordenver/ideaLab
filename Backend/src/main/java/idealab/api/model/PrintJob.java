@@ -1,32 +1,39 @@
 package idealab.api.model;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Objects;
+
+import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
 
 /**
  * This class holds the model that represents the print job table. It is related to email hash, color type, queue, and employee ID. Additionally,
  * it has a spot for comments, dropbox link, and a way to state when it was created + last updated.
  */
 @Entity
+@Audited
 @Table(name = "print_job")
-public class PrintJob {
+public class PrintJob extends RecordTimestamp {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne()
-    @JoinColumn(name="fk_email_hash_id", referencedColumnName = "id", nullable = false)
-    private EmailHash emailHashId;
+    @Audited(targetAuditMode = NOT_AUDITED)
+    @JoinColumn(name="fk_customer_info_id", referencedColumnName = "id", nullable = false)
+    private CustomerInfo customerInfo;
 
     @ManyToOne()
+    @Audited(targetAuditMode = NOT_AUDITED)
     @JoinColumn(name="fk_color_type_id", referencedColumnName = "id", nullable = false)
     private ColorType colorTypeId;
 
     @ManyToOne()
+    @Audited(targetAuditMode = NOT_AUDITED)
     @JoinColumn(name="fk_employee_id", referencedColumnName = "id", nullable = false)
     private Employee employeeId;
 
@@ -34,6 +41,7 @@ public class PrintJob {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @NotAudited
     @OneToOne(targetEntity=Queue.class, mappedBy="printJobId")
     private Queue queueId;
 
@@ -42,30 +50,27 @@ public class PrintJob {
 
     @Column(name = "dropbox_sharable_link")
     @Length(min = 1, max = 254)
-    private String dropboxSharableLink;
+    private String fileSharableLink;
 
     @Column(name = "dropbox_path")
     @Length(min = 1, max = 254)
-    private String dropboxPath;
+    private String filePath;
 
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
+    @Column(name = "email_hash")
+    @Length(min = 1, max = 254)
+    private String emailHash;
 
-    @Column(name = "created_at",  nullable = false)
-    private LocalDateTime createdAt;
+    public PrintJob() {}
 
-    public PrintJob() {
-    }
-
-    public PrintJob(EmailHash emailHashId, ColorType colorTypeId, Employee employeeId, Status status,
-                    String comments, LocalDateTime updatedAt, LocalDateTime createdAt) {
-        this.emailHashId = emailHashId;
+    public PrintJob(CustomerInfo customerInfo, ColorType colorTypeId, Employee employeeId,
+    		Status status, String comments, String emailHash) {
+        this.customerInfo = customerInfo;
         this.colorTypeId = colorTypeId;
         this.employeeId = employeeId;
         this.status = status;
         this.comments = comments;
-        this.updatedAt = updatedAt;
-        this.createdAt = createdAt;
+        //Make the email hash directly on the record so it is added to the audit table
+        this.emailHash =  emailHash;
     }
 
     public Integer getId() {
@@ -76,12 +81,12 @@ public class PrintJob {
         this.id = id;
     }
 
-    public EmailHash getEmailHashId() {
-        return emailHashId;
+    public CustomerInfo getCustomerInfo() {
+        return customerInfo;
     }
 
-    public void setEmailHashId(EmailHash emailHashId) {
-        this.emailHashId = emailHashId;
+    public void setCustomerInfo(CustomerInfo customerInfo) {
+        this.customerInfo = customerInfo;
     }
 
     public ColorType getColorTypeId() {
@@ -124,36 +129,28 @@ public class PrintJob {
         this.comments = comments;
     }
 
-    public String getDropboxSharableLink() {
-        return dropboxSharableLink;
+    public String getFileSharableLink() {
+        return fileSharableLink;
     }
 
-    public void setDropboxSharableLink(String dropboxSharableLink) {
-        this.dropboxSharableLink = dropboxSharableLink;
+    public void setFileSharableLink(String fileSharableLink) {
+        this.fileSharableLink = fileSharableLink;
     }
 
-    public String getDropboxPath() {
-        return dropboxPath;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setDropboxPath(String dropboxPath) {
-        this.dropboxPath = dropboxPath;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+    public String getEmailHash() {
+        return emailHash;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setEmailHash(String emailHash) {
+        this.emailHash = emailHash;
     }
 
     @Override
@@ -162,32 +159,31 @@ public class PrintJob {
         if (o == null || getClass() != o.getClass()) return false;
         PrintJob printJob = (PrintJob) o;
         return Objects.equals(id, printJob.id) &&
-                Objects.equals(emailHashId, printJob.emailHashId) &&
+                Objects.equals(customerInfo, printJob.customerInfo) &&
                 Objects.equals(colorTypeId, printJob.colorTypeId) &&
                 Objects.equals(employeeId, printJob.employeeId) &&
                 status == printJob.status &&
                 Objects.equals(queueId, printJob.queueId) &&
                 Objects.equals(comments, printJob.comments) &&
-                Objects.equals(dropboxPath, printJob.dropboxPath) &&
-                Objects.equals(dropboxSharableLink, printJob.dropboxSharableLink) &&
-                Objects.equals(updatedAt, printJob.updatedAt) &&
-                Objects.equals(createdAt, printJob.createdAt);
+                Objects.equals(fileSharableLink, printJob.fileSharableLink) &&
+                Objects.equals(filePath, printJob.filePath) &&
+                Objects.equals(emailHash, printJob.emailHash);
     }
 
     @Override
     public String toString() {
+        String custId = customerInfo.getId() != null ? String.valueOf(customerInfo.getId()) : "";
         return "PrintJob{" +
                 "id=" + id +
-                ", emailHashId=" + emailHashId +
+                ", customerInfo=" + custId +
                 ", colorTypeId=" + colorTypeId +
                 ", employeeId=" + employeeId +
                 ", status=" + status +
                 ", queueId=" + queueId +
                 ", comments='" + comments + '\'' +
-                ", dropboxPath='" + dropboxPath + '\'' +
-                ", dropboxSharableLink='" + dropboxSharableLink + '\'' +
-                ", updatedAt=" + updatedAt +
-                ", createdAt=" + createdAt +
+                ", dropboxSharableLink='" + fileSharableLink + '\'' +
+                ", dropboxPath='" + filePath + '\'' +
+                ", emailHash='" + emailHash + '\'' +
                 '}';
     }
 }

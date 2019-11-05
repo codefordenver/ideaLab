@@ -1,0 +1,7 @@
+language: java
+
+before_script: cd Backend
+
+branches:
+  only:
+  - master

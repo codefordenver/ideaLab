@@ -3,6 +3,7 @@ package idealab.api.security;
 import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import idealab.api.model.Employee;
+import idealab.api.repositories.EmployeeRepo;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,10 +23,12 @@ import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 import static idealab.api.security.SecurityConstants.*;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+    private final EmployeeRepo employeeRepo;
     private AuthenticationManager authenticationManager;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, EmployeeRepo employeeRepo) {
         this.authenticationManager = authenticationManager;
+        this.employeeRepo = employeeRepo;
     }
 
     @Override
@@ -52,8 +55,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
 
+        User user = (User)auth.getPrincipal();
+        Employee e = employeeRepo.findEmployeeByUsernameEquals(user.getUsername());
+
         String token = JWT.create()
-                .withSubject(((User) auth.getPrincipal()).getUsername())
+                .withSubject(user.getUsername())
+                .withClaim("role", e.getRole().toString())
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(HMAC512(SECRET.getBytes()));
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);

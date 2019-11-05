@@ -1,26 +1,17 @@
 package idealab.api.dto.request;
 
-import javax.validation.constraints.NotBlank;
-
-import org.hibernate.validator.constraints.Length;
+import idealab.api.exception.IdeaLabApiException;
 import org.springframework.web.multipart.MultipartFile;
 
-public class PrintJobNewRequest {
+import static idealab.api.exception.ErrorType.VALIDATION_ERROR;
 
-    @NotBlank
+public class PrintJobNewRequest implements GenericRequest {
+
     private String customerFirstName;
-
-    @NotBlank
     private String customerLastName;
-
-    @NotBlank
     private String email;
-
-    @NotBlank
     private String color;
-
     private String comments;
-
     private MultipartFile file;
 
     public String getEmail() {
@@ -81,5 +72,21 @@ public class PrintJobNewRequest {
                 ", comments='" + comments + '\'' +
                 ", file=" + file.getOriginalFilename() +
                 '}';
+    }
+
+    @Override
+    public void validate() {
+        if(this.customerFirstName == null || this.customerFirstName.trim().isEmpty())
+            throw new IdeaLabApiException(VALIDATION_ERROR, "Customer first name is invalid");
+        if(this.customerLastName == null || this.customerLastName.trim().isEmpty())
+            throw new IdeaLabApiException(VALIDATION_ERROR, "Customer last name is invalid");
+        if(this.email == null || this.email.trim().isEmpty())
+            throw new IdeaLabApiException(VALIDATION_ERROR, "Email is invalid");
+        if(this.color == null || this.color.trim().isEmpty())
+            throw new IdeaLabApiException(VALIDATION_ERROR, "Color is invalid");
+        if(this.file == null || this.file.isEmpty())
+            throw new IdeaLabApiException(VALIDATION_ERROR, "File is invalid");
+        if(!this.file.getOriginalFilename().toLowerCase().endsWith(".stl"))
+            throw new IdeaLabApiException(VALIDATION_ERROR, "File must be .stl");
     }
 }
