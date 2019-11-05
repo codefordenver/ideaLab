@@ -245,11 +245,11 @@ public class PrintJobOperations {
         return response;
     }
 
-    public PrintJobResponse updatePrintJobProps(Integer printJobId, UpdatePrintJobPropertiesRequest request) {
+    public PrintJobResponse updatePrintJobProps(Integer printJobId, UpdatePrintJobPropertiesRequest request, Principal principal) {
         request.validate();
         boolean isChanged = false;
 
-        Employee employee = employeeRepo.findEmployeeById(request.getEmployeeId());
+        Employee employee = employeeRepo.findEmployeeByUsername(principal.getName());
         if(employee == null)
             throw new IdeaLabApiException(PRINT_JOB_UPDATE_FAILED, "Employee not found");
 
