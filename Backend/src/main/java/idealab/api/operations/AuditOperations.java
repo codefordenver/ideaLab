@@ -2,8 +2,6 @@ package idealab.api.operations;
 
 import idealab.api.dto.response.PrintJobAuditModel;
 import idealab.api.dto.response.PrintJobAuditResponse;
-import idealab.api.dto.response.PrintJobResponse;
-import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.ColorType;
 import idealab.api.model.PrintJob;
 import idealab.api.repositories.ColorTypeRepo;
@@ -14,7 +12,6 @@ import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -22,21 +19,12 @@ import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 
-import static idealab.api.exception.ErrorType.COLOR_CANT_FIND_BY_TYPE;
-import static idealab.api.exception.ErrorType.PRINT_JOB_CANT_FIND_BY_ID;
-
 @Service
 @PersistenceContext
 public class AuditOperations {
-    private final PrintJobRepo printJobRepo;
-    private final ColorTypeRepo colorTypeRepo;
     private final EntityManager entityManager;
 
-    public AuditOperations(PrintJobRepo printJobRepo,
-                              ColorTypeRepo colorTypeRepo, EntityManager entityManager) {
-
-        this.printJobRepo = printJobRepo;
-        this.colorTypeRepo = colorTypeRepo;
+    public AuditOperations(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
@@ -47,8 +35,7 @@ public class AuditOperations {
         query.addOrder(AuditEntity.revisionNumber().desc());
 
         List<PrintJobAuditModel> auditList = processPrintJobAuditQuery(query);
-        PrintJobAuditResponse response = new PrintJobAuditResponse(auditList);
-        return response;
+        return new PrintJobAuditResponse(auditList);
     }
 
     public PrintJobAuditResponse printJobAuditById(Integer printJobId){
@@ -61,8 +48,7 @@ public class AuditOperations {
         query.add(AuditEntity.property("id").eq(printJobId));
 
         List<PrintJobAuditModel> auditList = processPrintJobAuditQuery(query);
-        PrintJobAuditResponse response = new PrintJobAuditResponse(auditList);
-        return response;
+        return new PrintJobAuditResponse(auditList);
     }
 
     private List<PrintJobAuditModel> processPrintJobAuditQuery (AuditQuery query){
