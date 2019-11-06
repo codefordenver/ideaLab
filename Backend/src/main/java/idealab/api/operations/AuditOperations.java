@@ -4,8 +4,6 @@ import idealab.api.dto.response.PrintJobAuditModel;
 import idealab.api.dto.response.PrintJobAuditResponse;
 import idealab.api.model.ColorType;
 import idealab.api.model.PrintJob;
-import idealab.api.repositories.ColorTypeRepo;
-import idealab.api.repositories.PrintJobRepo;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.DefaultRevisionEntity;
@@ -52,7 +50,7 @@ public class AuditOperations {
     }
 
     private List<PrintJobAuditModel> processPrintJobAuditQuery (AuditQuery query){
-        List<Object[]> printJobList = (List<Object[]>)query.getResultList();
+        List<Object[]> printJobList = query.getResultList();
         List<PrintJobAuditModel> auditList = new ArrayList<>();
         for ( Object[] printJobObject : printJobList){
             //Index [0] - Returns items that are directly on the PrintJob model
