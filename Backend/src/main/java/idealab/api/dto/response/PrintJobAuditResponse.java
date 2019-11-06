@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class PrintJobAuditResponse extends GenericResponse {
-    private List<?> data;
+    private List<PrintJobAuditModel> data;
 
-    public List<?> getData() {
+    public List<PrintJobAuditModel> getData() {
         return data;
     }
 
-    public void setData(List<?> data) {
+    public void setData(List<PrintJobAuditModel> data) {
         this.data = data;
     }
 
@@ -26,13 +26,12 @@ public class PrintJobAuditResponse extends GenericResponse {
         this.setHttpStatus(HttpStatus.BAD_REQUEST);
     }
 
-    public PrintJobAuditResponse(PrintJob printJob) {
-        this.setMessage("Successfully returned print job");
+    public PrintJobAuditResponse(List<PrintJobAuditModel> printJobAuditModel) {
+        this.setMessage("Successfully returned print job audit");
         this.setSuccess(true);
         this.setHttpStatus(HttpStatus.ACCEPTED);
 
-        List<PrintJob> printJobData = Arrays.asList(printJob);
-        this.setData(printJobData);
+        this.setData(printJobAuditModel);
     }
 
     @Override
