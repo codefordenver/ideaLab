@@ -80,28 +80,30 @@ public class PrintJobAuditModel {
 
     public PrintJobAuditModel(){}
 
-//    public PrintJobAuditModel(String message) {
-//        this.setMessage(message);
-//        this.setSuccess(false);
-//        this.setHttpStatus(HttpStatus.BAD_REQUEST);
-//    }
-//
-//    public PrintJobAuditModel(PrintJob printJob) {
-//        this.setMessage("Successfully returned print job");
-//        this.setSuccess(true);
-//        this.setHttpStatus(HttpStatus.ACCEPTED);
-//
-//        List<PrintJob> printJobData = Arrays.asList(printJob);
-//        this.setData(printJobData);
-//    }
-//
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        if (!super.equals(o)) return false;
-//        PrintJobAuditModel response = (PrintJobAuditModel) o;
-//        return Objects.equals(data, response.data);
-//    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PrintJobAuditModel printJobAuditModel = (PrintJobAuditModel) o;
+        return Objects.equals(id, printJobAuditModel.id) &&
+                Objects.equals(revisionDate, printJobAuditModel.revisionDate) &&
+                Objects.equals(revisionType, printJobAuditModel.revisionType) &&
+                Objects.equals(status, printJobAuditModel.status) &&
+                Objects.equals(filePath, printJobAuditModel.filePath) &&
+                Objects.equals(emailHash, printJobAuditModel.emailHash);
+    }
+
+    @Override
+    public String toString() {
+        return "PrintJob{" +
+                "id=" + id +
+                ", customerInfo=" + revisionDate +
+                ", colorTypeId=" + revisionType +
+                ", status=" + status +
+                ", filePath='" + filePath + '\'' +
+                ", emailHash='" + emailHash + '\'' +
+                '}';
+    }
 
 }

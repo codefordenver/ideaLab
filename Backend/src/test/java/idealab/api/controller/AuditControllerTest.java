@@ -5,6 +5,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import idealab.api.dto.request.PrintJobDeleteRequest;
 import idealab.api.dto.request.PrintJobUpdateRequest;
 import idealab.api.dto.response.GenericResponse;
+import idealab.api.dto.response.PrintJobAuditModel;
 import idealab.api.dto.response.PrintJobAuditResponse;
 import idealab.api.dto.response.PrintJobResponse;
 import idealab.api.model.*;
@@ -22,20 +23,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static idealab.api.util.TestUtil.stringToGenericResponse;
+import static idealab.api.util.TestUtil.stringToPrintJobAuditResponse;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -60,18 +64,62 @@ public class AuditControllerTest {
     public void getAllPrintJobsAuditSuccess() throws Exception {
         String uri = "/api/audit/printjobs";
         // given
+        PrintJobAuditModel auditModel = new PrintJobAuditModel();
+        auditModel.setId(2);
+        auditModel.setColor("red");
+        auditModel.setEmailHash("no hash here");
+
+        List<PrintJobAuditModel> auditList = new ArrayList<>();
+        auditList.add(auditModel);
+
+        PrintJobAuditResponse auditResponse = new PrintJobAuditResponse(auditList);
+
         given(auditOperations.allPrintJobsAudit())
-                .willReturn(new PrintJobAuditResponse("Fail"));
+                .willReturn(auditResponse);
 
         // when
         MockHttpServletResponse response = mockMvc.perform(
                 get(uri)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                    .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isAccepted())
                 .andReturn().getResponse();
 
+
         // then
-        assertEquals(response.getStatus(), HttpStatus.OK.value());
-        assertEquals(response.getContentAsString(), new PrintJobAuditResponse());
+        PrintJobAuditResponse returnedResponse = stringToPrintJobAuditResponse(response.getContentAsString());
+        assertEquals(returnedResponse, auditResponse);
+        assertEquals(returnedResponse.getData(), auditList);
+    }
+
+    @Test
+    public void getPrintJobsAuditByIdSuccess() throws Exception {
+        String uri = "/api/audit/printjobs/3";
+        // given
+        PrintJobAuditModel auditModel = new PrintJobAuditModel();
+        auditModel.setId(3);
+        auditModel.setColor("red");
+        auditModel.setEmailHash("no hash here");
+
+        List<PrintJobAuditModel> auditList = new ArrayList<>();
+        auditList.add(auditModel);
+
+        PrintJobAuditResponse auditResponse = new PrintJobAuditResponse(auditList);
+
+        given(auditOperations.printJobAuditById(3))
+                .willReturn(auditResponse);
+
+        // when
+        MockHttpServletResponse response = mockMvc.perform(
+                get(uri)
+                        .param("print-id", "3")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isAccepted())
+                .andReturn().getResponse();
+
+
+        // then
+        PrintJobAuditResponse returnedResponse = stringToPrintJobAuditResponse(response.getContentAsString());
+        assertEquals(returnedResponse, auditResponse);
+        assertEquals(returnedResponse.getData(), auditList);
     }
 }
