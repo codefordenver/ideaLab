@@ -1,27 +1,19 @@
 # ideaLab
-This is a queuing app for 3D printing. It includes a user facing form that allows someone to request a print job. It also includes a employee facing app that allows them to change statuses of print jobs, view print jobs, and modify print jobs.
-
+ideaLab is a queuing app for 3D printing. It includes a user-facing form that allows the user to request a print job. It also consists of an employee-facing app that will enable them to change the statuses of print jobs, view print jobs, and modify print jobs.
 The web app is frontend React and backend Java Spring.
 
+
 # Getting up and running
-Install docker and docker-compose (should be bundled). 
-Clone the project. 
-
-navigate to the ideaLab directory. 
-
-Perform the actions described in "Setting up Resource File".
-
-Run the following command:
-`docker-compose up`
-
-The project will then build and launch itself. You can access the frontend by going to localhost:3000 in your browser. 
-
-For linux and mac people, this should work with live reloading out of the box. So say you edit a frontend file, it should update automatically as long as it's not a package.json file, same for the java backend. 
-
+Install docker and docker-compose (should be bundled). Clone the project.
+Navigate to the ideaLab directory.
+Perform the actions described in "Setting up Resource File."
+Run the following command: docker-compose up
+The project will then build and launch itself. You can access the frontend by going to localhost:3000 in your browser.
+For Linux and mac, live reloading should work out of the box. So say you edit a frontend file, it should update automatically as long as it's not a package.json file, same for the java backend.
 
 
 # Cloning
-To get started, clone our repo. Using cd and dir (or ls if not on Windows) in you command line, got to the folder you want to clone the repo into and start by typing:  
+To get started, clone our repo. Using cd and dir (or ls if not on Windows) in your command line, got to the folder you want to clone the repo into and start by typing:  
 ```git clone http://github.com/codefordenver/ideaLab```.
 
 # Code for Denver: Getting Started on Helping Project
