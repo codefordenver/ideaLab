@@ -14,10 +14,19 @@ import java.util.Objects;
 public class PrintJobAuditModel {
     private Integer id;
     private String filePath;
-    private ColorType colorTypeId;
+    private String color;
     private Status status;
     private String emailHash;
     private Date revisionDate;
+    private String revisionType;
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 
     public Date getRevisionDate() {
         return revisionDate;
@@ -43,14 +52,6 @@ public class PrintJobAuditModel {
         this.filePath = filePath;
     }
 
-    public ColorType getColorTypeId() {
-        return colorTypeId;
-    }
-
-    public void setColorTypeId(ColorType colorTypeId) {
-        this.colorTypeId = colorTypeId;
-    }
-
     public Status getStatus() {
         return status;
     }
@@ -65,6 +66,14 @@ public class PrintJobAuditModel {
 
     public void setEmailHash(String emailHash) {
         this.emailHash = emailHash;
+    }
+
+    public String getRevisionType() {
+        return revisionType;
+    }
+
+    public void setRevisionType(String revisionType) {
+        this.revisionType = revisionType;
     }
 
 

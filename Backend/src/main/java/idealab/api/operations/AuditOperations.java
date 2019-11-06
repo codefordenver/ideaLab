@@ -11,6 +11,7 @@ import idealab.api.repositories.PrintJobRepo;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.DefaultRevisionEntity;
+import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 
+import static idealab.api.exception.ErrorType.COLOR_CANT_FIND_BY_TYPE;
 import static idealab.api.exception.ErrorType.PRINT_JOB_CANT_FIND_BY_ID;
 
 @Service
@@ -40,16 +42,34 @@ public class AuditOperations {
 
     public PrintJobAuditResponse allPrintJobsAudit(){
         AuditReader reader = AuditReaderFactory.get( entityManager );
-
         AuditQuery query = reader.createQuery()
                 .forRevisionsOfEntity(PrintJob.class, false, true);
-
         query.addOrder(AuditEntity.revisionNumber().desc());
 
+        List<PrintJobAuditModel> auditList = processPrintJobAuditQuery(query);
+        PrintJobAuditResponse response = new PrintJobAuditResponse(auditList);
+        return response;
+    }
+
+    public PrintJobAuditResponse printJobAuditById(Integer printJobId){
+        AuditReader reader = AuditReaderFactory.get( entityManager );
+        AuditQuery query = reader.createQuery()
+                .forRevisionsOfEntity(PrintJob.class, false, true);
+        query.addOrder(AuditEntity.revisionNumber().desc());
+
+        //add method allows filtering, this is the only difference between getting all print jobs
+        query.add(AuditEntity.property("id").eq(printJobId));
+
+        List<PrintJobAuditModel> auditList = processPrintJobAuditQuery(query);
+        PrintJobAuditResponse response = new PrintJobAuditResponse(auditList);
+        return response;
+    }
+
+    private List<PrintJobAuditModel> processPrintJobAuditQuery (AuditQuery query){
         List<Object[]> printJobList = (List<Object[]>)query.getResultList();
         List<PrintJobAuditModel> auditList = new ArrayList<>();
         for ( Object[] printJobObject : printJobList){
-            //Returns items that are directly on the PrintJob model
+            //Index [0] - Returns items that are directly on the PrintJob model
             PrintJob printJob = (PrintJob) printJobObject[0];
             PrintJobAuditModel auditModel = new PrintJobAuditModel();
             auditModel.setId(printJob.getId());
@@ -57,22 +77,22 @@ public class AuditOperations {
             auditModel.setStatus(printJob.getStatus());
             auditModel.setEmailHash(printJob.getEmailHash());
 
-            //ColorTypeId can't be serialzed directly
-            //ColorType colorTypeId = printJob.getColorTypeId();
+            ColorType colorTypeId = printJob.getColorTypeId();
+            auditModel.setColor(colorTypeId.getColor());
 
-            //Revision date comes from the envers REV table
+            //Index [1] - Revision date comes from the Revision Entity Table
             DefaultRevisionEntity defaultRevisionEntity = (DefaultRevisionEntity) printJobObject[1];
             auditModel.setRevisionDate(defaultRevisionEntity.getRevisionDate());
 
+            //Index [2] - Returns the enum of the revision type
+            //ADD = Added (persisted) to the database
+            //DEL = Deleted (removed) from the database
+            //MOD = Modified (1 or more of its fields) in the database
+            RevisionType revisionType = (RevisionType) printJobObject[2];
+            auditModel.setRevisionType(revisionType.name());
             auditList.add(auditModel);
         }
 
-        PrintJobAuditResponse response = new PrintJobAuditResponse(auditList);
-        return response;
-    }
-
-    public PrintJobAuditResponse printJobAuditById(Integer printJobId){
-        PrintJobAuditResponse response = new PrintJobAuditResponse("Still working on this :)");
-        return response;
+        return auditList;
     }
 }
