@@ -3,6 +3,8 @@ package idealab.api.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.dto.response.PrintJobAuditResponse;
+import org.hibernate.envers.DefaultRevisionEntity;
+import org.hibernate.envers.RevisionType;
 
 public class TestUtil {
 
