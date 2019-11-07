@@ -249,10 +249,6 @@ public class PrintJobOperations {
         request.validate();
         boolean isChanged = false;
 
-        Employee employee = employeeRepo.findEmployeeById(request.getEmployeeId());
-        if(employee == null)
-            throw new IdeaLabApiException(PRINT_JOB_UPDATE_FAILED, "Employee not found");
-
         PrintJob printJob = printJobRepo.findPrintJobById(printJobId);
         if(printJob == null)
             throw new IdeaLabApiException(PRINT_JOB_CANT_FIND_BY_ID);
