@@ -54,11 +54,11 @@ public class PrintJob extends RecordTimestamp {
 
     @Column(name = "dropbox_sharable_link")
     @Length(min = 1, max = 254)
-    private String dropboxSharableLink;
+    private String fileSharableLink;
 
     @Column(name = "dropbox_path")
     @Length(min = 1, max = 254)
-    private String dropboxPath;
+    private String filePath;
 
     @Column(name = "email_hash")
     @Length(min = 1, max = 254)
@@ -133,20 +133,20 @@ public class PrintJob extends RecordTimestamp {
         this.comments = comments;
     }
 
-    public String getDropboxSharableLink() {
-        return dropboxSharableLink;
+    public String getFileSharableLink() {
+        return fileSharableLink;
     }
 
-    public void setDropboxSharableLink(String dropboxSharableLink) {
-        this.dropboxSharableLink = dropboxSharableLink;
+    public void setFileSharableLink(String fileSharableLink) {
+        this.fileSharableLink = fileSharableLink;
     }
 
-    public String getDropboxPath() {
-        return dropboxPath;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setDropboxPath(String dropboxPath) {
-        this.dropboxPath = dropboxPath;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public String getEmailHash() {
@@ -169,8 +169,8 @@ public class PrintJob extends RecordTimestamp {
                 status == printJob.status &&
                 Objects.equals(queueId, printJob.queueId) &&
                 Objects.equals(comments, printJob.comments) &&
-                Objects.equals(dropboxSharableLink, printJob.dropboxSharableLink) &&
-                Objects.equals(dropboxPath, printJob.dropboxPath) &&
+                Objects.equals(fileSharableLink, printJob.fileSharableLink) &&
+                Objects.equals(filePath, printJob.filePath) &&
                 Objects.equals(emailHash, printJob.emailHash);
     }
 
@@ -185,8 +185,8 @@ public class PrintJob extends RecordTimestamp {
                 ", status=" + status +
                 ", queueId=" + queueId +
                 ", comments='" + comments + '\'' +
-                ", dropboxSharableLink='" + dropboxSharableLink + '\'' +
-                ", dropboxPath='" + dropboxPath + '\'' +
+                ", dropboxSharableLink='" + fileSharableLink + '\'' +
+                ", dropboxPath='" + filePath + '\'' +
                 ", emailHash='" + emailHash + '\'' +
                 '}';
     }

@@ -41,21 +41,24 @@ import idealab.api.repositories.CustomerInfoRepo;
 import idealab.api.repositories.EmployeeRepo;
 import idealab.api.repositories.PrintJobRepo;
 import idealab.api.repositories.QueueRepo;
+import idealab.api.service.EmailHashUtil;
+import idealab.api.service.FileService;
 
 @Service
 public class PrintJobOperations {
-    private final DropboxOperations dropboxOperations;
+    private final FileService fileService;
     private final PrintJobRepo printJobRepo;
     private final ColorTypeRepo colorTypeRepo;
     private final CustomerInfoRepo customerInfoRepo;
+    private final QueueRepo queueRepo;
     private final EmployeeRepo employeeRepo;
     private final EmailHashUtil emailHashUtil;
 
-    public PrintJobOperations(DropboxOperations dropboxOperations, PrintJobRepo printJobRepo,
+    public PrintJobOperations(FileService fileService, PrintJobRepo printJobRepo,
                               ColorTypeRepo colorTypeRepo, CustomerInfoRepo customerInfoRepo,
                               EmployeeRepo employeeRepo, EmailHashUtil emailHashUtil, QueueRepo queueRepo) {
 
-        this.dropboxOperations = dropboxOperations; // service'lerin üstüne bir layer daha cekmek lazim aslında belki de ? cok fazla dependent burada cunku
+        this.fileService = fileService;
         this.printJobRepo = printJobRepo;
         this.colorTypeRepo = colorTypeRepo;
         this.customerInfoRepo = customerInfoRepo;
@@ -111,9 +114,9 @@ public class PrintJobOperations {
         PrintJob printJob = new PrintJob(customer, databaseColor, databaseEmployee, Status.PENDING_REVIEW, comments, emailHash);
 
         // Make a dropbox sharable link here using the time of the database record
-        Map<String, String> data = dropboxOperations.uploadDropboxFile(currentTime.toLocalTime().toNanoOfDay(), printJobNewRequest.getFile());
-        printJob.setDropboxPath(data.get("filePath"));
-        printJob.setDropboxSharableLink(data.get("sharableLink"));
+        Map<String, String> data = fileService.uploadDropboxFile(currentTime.toLocalTime().toNanoOfDay(), printJobNewRequest.getFile());
+        printJob.setFilePath(data.get("filePath"));
+        printJob.setFileSharableLink(data.get("sharableLink"));
 
         Set<PrintJob> printJobs;
 
@@ -145,10 +148,10 @@ public class PrintJobOperations {
         }
 
         Map<String, String> data;
-        data = dropboxOperations.updateDropboxFile(printJob, model.getFile());
+        data = fileService.updateDropboxFile(printJob, model.getFile());
 
-        printJob.setDropboxPath(data.get("filePath"));
-        printJob.setDropboxSharableLink(data.get("sharableLink"));
+        printJob.setFilePath(data.get("filePath"));
+        printJob.setFileSharableLink(data.get("sharableLink"));
         printJob = printJobRepo.save(printJob);
 
         return getPrintJobResponse(response, printJob, data, "Successfully updated file to database!");
@@ -177,10 +180,10 @@ public class PrintJobOperations {
             throw new IdeaLabApiException(PRINT_JOBS_NOT_EXIST);
         }
 
-        dropboxOperations.deleteDropboxFile(printJob.getDropboxPath());
-        printJob.setDropboxPath("Deleted");
+        fileService.deleteDropboxFile(printJob.getFilePath());
+        printJob.setFilePath("Deleted");
 
-        printJob.setDropboxSharableLink("Deleted");
+        printJob.setFileSharableLink("Deleted");
         printJob = printJobRepo.save(printJob);
 
         response.setSuccess(true);
@@ -304,10 +307,6 @@ public class PrintJobOperations {
     public PrintJobResponse updatePrintJobProps(Integer printJobId, UpdatePrintJobPropertiesRequest request) {
         request.validate();
         boolean isChanged = false;
-
-        Employee employee = employeeRepo.findEmployeeById(request.getEmployeeId());
-        if(employee == null)
-            throw new IdeaLabApiException(PRINT_JOB_UPDATE_FAILED, "Employee not found");
 
         PrintJob printJob = printJobRepo.findPrintJobById(printJobId);
         if(printJob == null)
