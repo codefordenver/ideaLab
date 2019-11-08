@@ -7,6 +7,7 @@ import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.Queue;
 import idealab.api.model.*;
 import idealab.api.repositories.*;
+import idealab.api.service.EmailHashUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,6 +49,9 @@ public class PrintJobOperationsTest {
     @Mock
     private EmployeeRepo employeeRepo;
 
+    @Mock
+    private EmailHashUtil emailHashUtil;
+
     @Before
     public void setup() {
         operations = new PrintJobOperations(
@@ -55,7 +59,8 @@ public class PrintJobOperationsTest {
                 printJobRepo,
                 colorTypeRepo,
                 customerInfoRepo,
-                employeeRepo
+                employeeRepo,
+                emailHashUtil
         );
     }
 
