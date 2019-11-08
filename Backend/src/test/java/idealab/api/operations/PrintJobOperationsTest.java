@@ -42,7 +42,7 @@ public class PrintJobOperationsTest {
     PrintJobRepo printJobRepo;
 
     @Mock
-    private FileService googleFileServiceImpl;
+    private FileService fileService;
 
     @Mock
     private ColorTypeRepo colorTypeRepo;
@@ -59,7 +59,7 @@ public class PrintJobOperationsTest {
     @Before
     public void setup() {
         operations = new PrintJobOperations(
-                googleFileServiceImpl,
+                fileService,
                 printJobRepo,
                 colorTypeRepo,
                 customerInfoRepo,
@@ -346,7 +346,7 @@ public class PrintJobOperationsTest {
         when(colorTypeRepo.findByColor(any())).thenReturn(color);
         when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
         when(printJobRepo.save(any())).thenReturn(printJob);
-        when(googleFileServiceImpl.uploadFile(anyLong(), any())).thenReturn(data);
+        when(fileService.uploadFile(anyLong(), any())).thenReturn(data);
 
         PrintJobResponse opResponse = operations.newPrintJob(request, mockPrincipal);
         assert(opResponse.equals(response));
@@ -415,7 +415,7 @@ public class PrintJobOperationsTest {
         when(colorTypeRepo.findByColor(any())).thenReturn(color);
         when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
         when(printJobRepo.save(any())).thenReturn(printJob);
-        when(googleFileServiceImpl.uploadFile(anyLong(), any())).thenReturn(data);
+        when(fileService.uploadFile(anyLong(), any())).thenReturn(data);
 
         PrintJobResponse opResponse = operations.newPrintJob(request, mockPrincipal);
 
@@ -554,7 +554,7 @@ public class PrintJobOperationsTest {
         data.put("sharableLink", "http://testlink.com");
 
         when(printJobRepo.findPrintJobById(printJob.getId())).thenReturn(printJob);
-        when(googleFileServiceImpl.updateFile(printJob, request.getFile())).thenReturn(data);
+        when(fileService.updateFile(printJob, request.getFile())).thenReturn(data);
         when(printJobRepo.save(printJob)).thenReturn(printJob);
 
         PrintJobResponse opResponse = operations.updateModel(printJob.getId(), request);
@@ -590,7 +590,7 @@ public class PrintJobOperationsTest {
         printJob.setId(999);
 
         when(printJobRepo.findPrintJobById(printJob.getId())).thenReturn(printJob);
-        when(googleFileServiceImpl.updateFile(printJob, request.getFile())).thenThrow(new IdeaLabApiException(DROPBOX_UPLOAD_FILE_ERROR));
+        when(fileService.updateFile(printJob, request.getFile())).thenThrow(new IdeaLabApiException(DROPBOX_UPLOAD_FILE_ERROR));
 
         operations.updateModel(printJob.getId(), request);
     }
@@ -606,7 +606,7 @@ public class PrintJobOperationsTest {
         printJob.setId(999);
 
         when(printJobRepo.findPrintJobById(printJob.getId())).thenReturn(printJob);
-        doNothing().when(googleFileServiceImpl).deleteFile(printJob.getFilePath());
+        doNothing().when(fileService).deleteFile(printJob.getFilePath());
         when(printJobRepo.save(printJob)).thenReturn(printJob);
 
         GenericResponse opResponse = operations.deleteModel(printJob.getId());

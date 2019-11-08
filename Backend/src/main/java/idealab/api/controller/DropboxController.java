@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/dropbox")
 public class DropboxController {
 
-    private final FileService googleFileServiceImpl;
+    private final FileService fileService;
 
-    public DropboxController(FileService googleFileServiceImpl) {
-        this.googleFileServiceImpl = googleFileServiceImpl;
+    public DropboxController(FileService fileService) {
+        this.fileService = fileService;
     }
 
     @PutMapping("/file-path")
     public PrintJobResponse updateFilePath(@RequestBody DropBoxFilePathRequest request) {
-        return googleFileServiceImpl.updateFilePath(request);
+        return fileService.updateFilePath(request);
     }
 
 }
