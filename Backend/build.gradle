@@ -39,8 +39,5 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('junit:junit')
     compile ('com.fasterxml.jackson.core:jackson-core:2.9.9')
-//    implementation('com.dropbox.core:dropbox-core-sdk:3.1.1')
-//    compile('com.google.api-client:google-api-client:1.23.0')
-//    compile('com.google.oauth-client:google-oauth-client-jetty:1.23.0')
-//    compile('com.google.apis:google-api-services-drive:v3-rev110-1.23.0')
+    implementation('com.dropbox.core:dropbox-core-sdk:3.1.1')
 }
