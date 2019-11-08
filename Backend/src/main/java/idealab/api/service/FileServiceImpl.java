@@ -8,7 +8,7 @@ import com.dropbox.core.v2.files.Metadata;
 import com.dropbox.core.v2.files.RelocationResult;
 import com.dropbox.core.v2.sharing.ListSharedLinksErrorException;
 import com.dropbox.core.v2.sharing.ListSharedLinksResult;
-import idealab.api.dto.request.DropBoxFilePathRequest;
+import idealab.api.dto.request.UpdateFilePathRequest;
 import idealab.api.dto.response.PrintJobResponse;
 import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.PrintJob;
@@ -116,7 +116,7 @@ public class FileServiceImpl implements FileService {
     return uploadFile(currentTime.toLocalTime().toNanoOfDay(), file);
   }
 
-  public PrintJobResponse updateFilePath(DropBoxFilePathRequest request) {
+  public PrintJobResponse updateFilePath(UpdateFilePathRequest request) {
     request.validate();
 
     PrintJob printJob = printJobRepo.findPrintJobById(request.getPrintJobId());
