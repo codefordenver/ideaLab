@@ -49,11 +49,11 @@ public class PrintJobOperations {
     private final ColorTypeRepo colorTypeRepo;
     private final CustomerInfoRepo customerInfoRepo;
     private final EmployeeRepo employeeRepo;
-    private final QueueRepo queueRepo;
+    private final EmailHashUtil emailHashUtil;
 
     public PrintJobOperations(DropboxOperations dropboxOperations, PrintJobRepo printJobRepo,
                               ColorTypeRepo colorTypeRepo, CustomerInfoRepo customerInfoRepo,
-                              EmployeeRepo employeeRepo, QueueRepo queueRepo) {
+                              EmployeeRepo employeeRepo, EmailHashUtil emailHashUtil, QueueRepo queueRepo) {
 
         this.dropboxOperations = dropboxOperations; // service'lerin üstüne bir layer daha cekmek lazim aslında belki de ? cok fazla dependent burada cunku
         this.printJobRepo = printJobRepo;
@@ -61,6 +61,7 @@ public class PrintJobOperations {
         this.customerInfoRepo = customerInfoRepo;
         this.employeeRepo = employeeRepo;
         this.queueRepo = queueRepo;
+        this.emailHashUtil = emailHashUtil;
     }
 
     public PrintJobResponse newPrintJob(PrintJobNewRequest printJobNewRequest, Principal principal) {
@@ -72,11 +73,12 @@ public class PrintJobOperations {
         }
 
         String email = printJobNewRequest.getEmail();
+        String emailHash = emailHashUtil.MD5Hash(email);
         String customerFirstName = printJobNewRequest.getCustomerFirstName();
         String customerLastName = printJobNewRequest.getCustomerLastName();
         String color = printJobNewRequest.getColor();
         String comments = printJobNewRequest.getComments();
-        //Integer employeeId = printJobNewRequest.getEmployeeId();
+
         LocalDateTime currentTime = LocalDateTime.now();
 
         CustomerInfo customer = customerInfoRepo.findByEmail(email);
@@ -85,8 +87,16 @@ public class PrintJobOperations {
             customer = customerInfoRepo.save(customer);
         }
 
-        if(customer.getPrintJobs() != null && customer.getPrintJobs().size() >= 5) {
-            throw new IdeaLabApiException(GENERAL_ERROR, "Customer already has 5 print jobs queued");
+        if(customer.getPrintJobs() != null && customer.getPrintJobs().size() > 5) {
+            int countForDay = 0;
+            for(PrintJob p : customer.getPrintJobs()) {
+                if(p.getCreatedAt().plusHours(24).isAfter(LocalDateTime.now())) {
+                    countForDay++;
+                }
+            }
+            if(countForDay > 5) {
+                throw new IdeaLabApiException(GENERAL_ERROR, "Customer has already created 5 print jobs in the last 24 hours");
+            }
         }
 
         ColorType databaseColor = colorTypeRepo.findByColor(color);
@@ -98,7 +108,7 @@ public class PrintJobOperations {
         // we shouldn't need error checking here because principal will never be null
         Employee databaseEmployee = employeeRepo.findEmployeeByUsername(principal.getName());
 
-        PrintJob printJob = new PrintJob(customer, databaseColor, databaseEmployee, Status.PENDING_REVIEW, comments);
+        PrintJob printJob = new PrintJob(customer, databaseColor, databaseEmployee, Status.PENDING_REVIEW, comments, emailHash);
 
         // Make a dropbox sharable link here using the time of the database record
         Map<String, String> data = dropboxOperations.uploadDropboxFile(currentTime.toLocalTime().toNanoOfDay(), printJobNewRequest.getFile());
