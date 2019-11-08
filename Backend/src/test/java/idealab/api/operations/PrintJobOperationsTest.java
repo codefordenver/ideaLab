@@ -7,6 +7,7 @@ import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.Queue;
 import idealab.api.model.*;
 import idealab.api.repositories.*;
+import idealab.api.service.FileService;
 import idealab.api.service.EmailHashUtil;
 import org.junit.Assert;
 import org.junit.Before;
@@ -38,7 +39,7 @@ public class PrintJobOperationsTest {
     PrintJobRepo printJobRepo;
 
     @Mock
-    private DropboxOperations dropboxOperations;
+    private FileService fileService;
 
     @Mock
     private ColorTypeRepo colorTypeRepo;
@@ -55,7 +56,7 @@ public class PrintJobOperationsTest {
     @Before
     public void setup() {
         operations = new PrintJobOperations(
-                dropboxOperations,
+                fileService,
                 printJobRepo,
                 colorTypeRepo,
                 customerInfoRepo,
@@ -317,8 +318,8 @@ public class PrintJobOperationsTest {
         printJob.setColorTypeId(color);
         printJob.setComments("COMMENTS");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setDropboxPath("DROPBOX_PATH");
-        printJob.setDropboxSharableLink("http://testlink.com");
+        printJob.setFilePath("DROPBOX_PATH");
+        printJob.setFileSharableLink("http://testlink.com");
         printJob.setId(1);
         printJob.setUpdatedAt(LocalDateTime.now());
         printJob.setStatus(Status.PENDING_REVIEW);
@@ -342,7 +343,7 @@ public class PrintJobOperationsTest {
         when(colorTypeRepo.findByColor(any())).thenReturn(color);
         when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
         when(printJobRepo.save(any())).thenReturn(printJob);
-        when(dropboxOperations.uploadDropboxFile(anyLong(), any())).thenReturn(data);
+        when(fileService.uploadDropboxFile(anyLong(), any())).thenReturn(data);
 
         PrintJobResponse opResponse = operations.newPrintJob(request, mockPrincipal);
         assert(opResponse.equals(response));
@@ -385,8 +386,8 @@ public class PrintJobOperationsTest {
         printJob.setColorTypeId(color);
         printJob.setComments("COMMENTS");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setDropboxPath("DROPBOX_PATH");
-        printJob.setDropboxSharableLink("http://testlink.com");
+        printJob.setFilePath("DROPBOX_PATH");
+        printJob.setFileSharableLink("http://testlink.com");
         printJob.setId(1);
         printJob.setUpdatedAt(LocalDateTime.now());
         printJob.setStatus(Status.PENDING_REVIEW);
@@ -411,7 +412,7 @@ public class PrintJobOperationsTest {
         when(colorTypeRepo.findByColor(any())).thenReturn(color);
         when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
         when(printJobRepo.save(any())).thenReturn(printJob);
-        when(dropboxOperations.uploadDropboxFile(anyLong(), any())).thenReturn(data);
+        when(fileService.uploadDropboxFile(anyLong(), any())).thenReturn(data);
 
         PrintJobResponse opResponse = operations.newPrintJob(request, mockPrincipal);
 
@@ -550,7 +551,7 @@ public class PrintJobOperationsTest {
         data.put("sharableLink", "http://testlink.com");
 
         when(printJobRepo.findPrintJobById(printJob.getId())).thenReturn(printJob);
-        when(dropboxOperations.updateDropboxFile(printJob, request.getFile())).thenReturn(data);
+        when(fileService.updateDropboxFile(printJob, request.getFile())).thenReturn(data);
         when(printJobRepo.save(printJob)).thenReturn(printJob);
 
         PrintJobResponse opResponse = operations.updateModel(printJob.getId(), request);
@@ -586,7 +587,7 @@ public class PrintJobOperationsTest {
         printJob.setId(999);
 
         when(printJobRepo.findPrintJobById(printJob.getId())).thenReturn(printJob);
-        when(dropboxOperations.updateDropboxFile(printJob, request.getFile())).thenThrow(new IdeaLabApiException(DROPBOX_UPLOAD_FILE_ERROR));
+        when(fileService.updateDropboxFile(printJob, request.getFile())).thenThrow(new IdeaLabApiException(DROPBOX_UPLOAD_FILE_ERROR));
 
         operations.updateModel(printJob.getId(), request);
     }
@@ -602,7 +603,7 @@ public class PrintJobOperationsTest {
         printJob.setId(999);
 
         when(printJobRepo.findPrintJobById(printJob.getId())).thenReturn(printJob);
-        doNothing().when(dropboxOperations).deleteDropboxFile(printJob.getDropboxPath());
+        doNothing().when(fileService).deleteDropboxFile(printJob.getFilePath());
         when(printJobRepo.save(printJob)).thenReturn(printJob);
 
         GenericResponse opResponse = operations.deleteModel(printJob.getId());
