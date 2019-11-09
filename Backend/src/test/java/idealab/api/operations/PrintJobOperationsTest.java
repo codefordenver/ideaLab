@@ -62,7 +62,7 @@ public class PrintJobOperationsTest {
                 colorTypeRepo,
                 customerInfoRepo,
                 employeeRepo,
-                queueRepo
+                queueRepo,
                 emailHashUtil
         );
     }
@@ -493,7 +493,7 @@ public class PrintJobOperationsTest {
         Employee e = new Employee();
         e.setId(999);
 
-        Queue queue = new Queue(1);
+        Queue queue = new Queue();
 
         Map<String, String> data = new HashMap<>();
         data.put("filePath", "DROPBOX_PATH");
