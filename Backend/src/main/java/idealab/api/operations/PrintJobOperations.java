@@ -129,9 +129,11 @@ public class PrintJobOperations {
         customer.setPrintJobs(printJobs);
         printJob = printJobRepo.save(printJob);
 
-        // If there is only one print job for the given customer (itself), add the rank to the bottom of the queue
+        // If there is only one print job for the given customer (itself), add the rank to the bottom of the queue.
+        // We only need to add it to the rank table if there is not currently a print job from this customer in the
+        // rank table. Otherwise, they will be added when the most recent print job has changed.
         if (printJobRepo.findByCustomerInfo(customer).size() == 1) {
-            Queue queue = new Queue(printJob, queueRepo.count()+1);
+            Queue queue = new Queue(printJob, queueRepo.getMaximumRank()+1);
             queue = queueRepo.save(queue);
         }
 
@@ -232,7 +234,7 @@ public class PrintJobOperations {
 
             // Add most recent one to Queue table
             if (printJobs.size() > 0) {
-                Queue newQueue = new Queue(printJobs.get(0), queueRepo.count()+1);
+                Queue newQueue = new Queue(printJobs.get(0), queueRepo.getMaximumRank()+1);
                 newQueue = queueRepo.save(newQueue);
             }
         }
