@@ -52,6 +52,8 @@ public class PrintJobOperationsTest {
 
     @Mock
     private QueueRepo queueRepo;
+
+    @Mock
     private EmailHashUtil emailHashUtil;
 
     @Before
@@ -62,8 +64,8 @@ public class PrintJobOperationsTest {
                 colorTypeRepo,
                 customerInfoRepo,
                 employeeRepo,
-                queueRepo,
-                emailHashUtil
+                emailHashUtil,
+                queueRepo
         );
     }
 
@@ -344,6 +346,7 @@ public class PrintJobOperationsTest {
         when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
         when(printJobRepo.save(any())).thenReturn(printJob);
         when(fileService.uploadDropboxFile(anyLong(), any())).thenReturn(data);
+        when(emailHashUtil.MD5Hash(any())).thenReturn("fdslakjfs232");
 
         PrintJobResponse opResponse = operations.newPrintJob(request, mockPrincipal);
         assert(opResponse.equals(response));
@@ -376,7 +379,7 @@ public class PrintJobOperationsTest {
         Employee e = new Employee();
         e.setId(999);
 
-        Queue queue = new Queue(1, new Lock(1));
+        Queue queue = new Queue();
 
         Map<String, String> data = new HashMap<>();
         data.put("filePath", "DROPBOX_PATH");
@@ -392,7 +395,7 @@ public class PrintJobOperationsTest {
         printJob.setUpdatedAt(LocalDateTime.now());
         printJob.setStatus(Status.PENDING_REVIEW);
         printJob.setEmployeeId(e);
-        printJob.setQueueId(new Queue(printJob, new Long(1));
+        printJob.setQueueId(new Queue(printJob, new Long(1)));
         printJob.setUpdatedAt(LocalDateTime.now());
 
         Set<PrintJob> printJobData = new HashSet<>();
