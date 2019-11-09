@@ -10,8 +10,8 @@ import idealab.api.repositories.ColorTypeRepo;
 import idealab.api.repositories.CustomerInfoRepo;
 import idealab.api.repositories.EmployeeRepo;
 import idealab.api.repositories.PrintJobRepo;
-import idealab.api.service.FileService;
 import idealab.api.service.EmailHashUtil;
+import idealab.api.service.FileService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -89,7 +89,7 @@ public class PrintJobOperations {
         PrintJob printJob = new PrintJob(customer, databaseColor, databaseEmployee, Status.PENDING_REVIEW, comments, emailHash);
 
         // Make a dropbox sharable link here using the time of the database record
-        Map<String, String> data = fileService.uploadDropboxFile(currentTime.toLocalTime().toNanoOfDay(), printJobNewRequest.getFile());
+        Map<String, String> data = fileService.uploadFile(currentTime.toLocalTime().toNanoOfDay(), printJobNewRequest.getFile());
         printJob.setFilePath(data.get("filePath"));
         printJob.setFileSharableLink(data.get("sharableLink"));
 
@@ -118,7 +118,7 @@ public class PrintJobOperations {
         }
 
         Map<String, String> data;
-        data = fileService.updateDropboxFile(printJob, model.getFile());
+        data = fileService.updateFile(printJob, model.getFile());
 
         printJob.setFilePath(data.get("filePath"));
         printJob.setFileSharableLink(data.get("sharableLink"));
@@ -150,7 +150,7 @@ public class PrintJobOperations {
             throw new IdeaLabApiException(PRINT_JOBS_NOT_EXIST);
         }
 
-        fileService.deleteDropboxFile(printJob.getFilePath());
+        fileService.deleteFile(printJob.getFilePath());
         printJob.setFilePath("Deleted");
 
         printJob.setFileSharableLink("Deleted");
