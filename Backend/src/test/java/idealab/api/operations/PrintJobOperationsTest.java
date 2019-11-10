@@ -1,14 +1,27 @@
 package idealab.api.operations;
 
-import idealab.api.dto.request.*;
-import idealab.api.dto.response.GenericResponse;
-import idealab.api.dto.response.PrintJobResponse;
-import idealab.api.exception.IdeaLabApiException;
-import idealab.api.model.Queue;
-import idealab.api.model.*;
-import idealab.api.repositories.*;
-import idealab.api.service.FileService;
-import idealab.api.service.EmailHashUtil;
+import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
+import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,16 +33,27 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.*;
-
-import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
-import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import idealab.api.dto.request.PrintJobDeleteRequest;
+import idealab.api.dto.request.PrintJobNewRequest;
+import idealab.api.dto.request.PrintJobUpdateRequest;
+import idealab.api.dto.request.PrintModelUpdateRequest;
+import idealab.api.dto.request.UpdatePrintJobPropertiesRequest;
+import idealab.api.dto.response.GenericResponse;
+import idealab.api.dto.response.PrintJobResponse;
+import idealab.api.exception.IdeaLabApiException;
+import idealab.api.model.ColorType;
+import idealab.api.model.CustomerInfo;
+import idealab.api.model.Employee;
+import idealab.api.model.PrintJob;
+import idealab.api.model.Queue;
+import idealab.api.model.Status;
+import idealab.api.repositories.ColorTypeRepo;
+import idealab.api.repositories.CustomerInfoRepo;
+import idealab.api.repositories.EmployeeRepo;
+import idealab.api.repositories.PrintJobRepo;
+import idealab.api.repositories.QueueRepo;
+import idealab.api.service.EmailHashUtil;
+import idealab.api.service.FileService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PrintJobOperationsTest {
@@ -345,7 +369,7 @@ public class PrintJobOperationsTest {
         when(colorTypeRepo.findByColor(any())).thenReturn(color);
         when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
         when(printJobRepo.save(any())).thenReturn(printJob);
-        when(fileService.uploadDropboxFile(anyLong(), any())).thenReturn(data);
+        when(fileService.uploadFile(anyLong(), any())).thenReturn(data);
         when(emailHashUtil.MD5Hash(any())).thenReturn("fdslakjfs232");
 
         PrintJobResponse opResponse = operations.newPrintJob(request, mockPrincipal);
@@ -378,8 +402,6 @@ public class PrintJobOperationsTest {
         Mockito.when(mockPrincipal.getName()).thenReturn("me");
         Employee e = new Employee();
         e.setId(999);
-
-        Queue queue = new Queue();
 
         Map<String, String> data = new HashMap<>();
         data.put("filePath", "DROPBOX_PATH");
@@ -415,7 +437,7 @@ public class PrintJobOperationsTest {
         when(colorTypeRepo.findByColor(any())).thenReturn(color);
         when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
         when(printJobRepo.save(any())).thenReturn(printJob);
-        when(fileService.uploadDropboxFile(anyLong(), any())).thenReturn(data);
+        when(fileService.uploadFile(anyLong(), any())).thenReturn(data);
 
         PrintJobResponse opResponse = operations.newPrintJob(request, mockPrincipal);
 
@@ -554,7 +576,7 @@ public class PrintJobOperationsTest {
         data.put("sharableLink", "http://testlink.com");
 
         when(printJobRepo.findPrintJobById(printJob.getId())).thenReturn(printJob);
-        when(fileService.updateDropboxFile(printJob, request.getFile())).thenReturn(data);
+        when(fileService.updateFile(printJob, request.getFile())).thenReturn(data);
         when(printJobRepo.save(printJob)).thenReturn(printJob);
 
         PrintJobResponse opResponse = operations.updateModel(printJob.getId(), request);
@@ -590,7 +612,7 @@ public class PrintJobOperationsTest {
         printJob.setId(999);
 
         when(printJobRepo.findPrintJobById(printJob.getId())).thenReturn(printJob);
-        when(fileService.updateDropboxFile(printJob, request.getFile())).thenThrow(new IdeaLabApiException(DROPBOX_UPLOAD_FILE_ERROR));
+        when(fileService.updateFile(printJob, request.getFile())).thenThrow(new IdeaLabApiException(DROPBOX_UPLOAD_FILE_ERROR));
 
         operations.updateModel(printJob.getId(), request);
     }
@@ -606,7 +628,7 @@ public class PrintJobOperationsTest {
         printJob.setId(999);
 
         when(printJobRepo.findPrintJobById(printJob.getId())).thenReturn(printJob);
-        doNothing().when(fileService).deleteDropboxFile(printJob.getFilePath());
+        doNothing().when(fileService).deleteFile(printJob.getFilePath());
         when(printJobRepo.save(printJob)).thenReturn(printJob);
 
         GenericResponse opResponse = operations.deleteModel(printJob.getId());

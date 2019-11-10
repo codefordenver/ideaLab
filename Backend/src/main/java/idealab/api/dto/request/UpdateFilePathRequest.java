@@ -4,7 +4,7 @@ import idealab.api.exception.IdeaLabApiException;
 
 import static idealab.api.exception.ErrorType.VALIDATION_ERROR;
 
-public class DropBoxFilePathRequest implements GenericRequest {
+public class UpdateFilePathRequest implements GenericRequest {
 
     private Integer printJobId;
     private String newPath;

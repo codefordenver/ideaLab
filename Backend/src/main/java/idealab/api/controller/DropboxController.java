@@ -1,6 +1,6 @@
 package idealab.api.controller;
 
-import idealab.api.dto.request.DropBoxFilePathRequest;
+import idealab.api.dto.request.UpdateFilePathRequest;
 import idealab.api.dto.response.PrintJobResponse;
 import idealab.api.service.FileService;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,8 +19,8 @@ public class DropboxController {
     }
 
     @PutMapping("/file-path")
-    public PrintJobResponse updateFilePath(@RequestBody DropBoxFilePathRequest request) {
-        return fileService.updateDropboxPath(request);
+    public PrintJobResponse updateFilePath(@RequestBody UpdateFilePathRequest request) {
+        return fileService.updateFilePath(request);
     }
 
 }
