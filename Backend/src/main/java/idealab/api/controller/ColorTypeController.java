@@ -40,7 +40,7 @@ public class ColorTypeController {
      * @return
      */
     @PutMapping("/{color-id}/availability")
-    public ResponseEntity<?> printJobUpdateModel(@PathVariable("color-id") Integer colorId,
+    public ResponseEntity<?> colorTypeUpdateAvailability(@PathVariable("color-id") Integer colorId,
                                                   @ModelAttribute ColorTypeUpdateRequest model) {
 
         GenericResponse response = colorOperations.updateColorAvailability(colorId, model);

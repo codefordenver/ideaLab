@@ -1,8 +1,12 @@
 package idealab.api.controller;
 
+import static idealab.api.util.TestUtil.requestAsJsonString;
+import static idealab.api.util.TestUtil.stringToGenericResponse;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Arrays;
@@ -26,7 +30,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import idealab.api.dto.request.ColorTypeUpdateRequest;
 import idealab.api.dto.response.DataResponse;
+import idealab.api.dto.response.GenericResponse;
 import idealab.api.model.ColorType;
 import idealab.api.model.Status;
 import idealab.api.operations.ColorTypeOperations;
@@ -80,5 +86,33 @@ public class ColorTypeControllerTest {
         // assert
         verify(operations, times(1)).getActiveColors();
         assertEquals(actualResponse.getMessage(), expectedResponse.getMessage());
+    }
+
+    @Test
+    public void updatePrintJobStatusSuccess() throws Exception {
+        ColorTypeUpdateRequest request = new ColorTypeUpdateRequest();
+        request.setEmployeeId(1);
+        request.setAvailability(true);
+
+        Integer colorId = 3;
+
+        GenericResponse genericResponse = new GenericResponse();
+        genericResponse.setSuccess(true);
+        genericResponse.setMessage("Print Job Updated");
+        genericResponse.setHttpStatus(HttpStatus.ACCEPTED);
+
+        String inputJson = requestAsJsonString(request);
+
+        when(operations.updateColorAvailability(colorId, request)).thenReturn(genericResponse);
+
+        String returnJson = mockMvc.perform(put("/colors/3/availability")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(inputJson)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isAccepted())
+                .andReturn().getResponse().getContentAsString();
+
+        GenericResponse returnedResponse = stringToGenericResponse(returnJson);
+        assert (returnedResponse.equals(genericResponse));
     }
 }

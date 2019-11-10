@@ -14,4 +14,13 @@ public class TestUtil {
             throw new RuntimeException(e);
         }
     }
+
+    public static String requestAsJsonString(Object obj) {
+        try {
+            final ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
