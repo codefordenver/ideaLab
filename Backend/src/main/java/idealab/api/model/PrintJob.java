@@ -42,7 +42,7 @@ public class PrintJob extends RecordTimestamp {
     private Status status;
 
     @NotAudited
-    @OneToOne(targetEntity=Queue.class, mappedBy="printJobId")
+    @OneToOne(targetEntity=Queue.class, mappedBy="printJob")
     private Queue queueId;
 
     @Column(name = "comments")
