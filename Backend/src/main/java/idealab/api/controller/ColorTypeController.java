@@ -2,10 +2,15 @@ package idealab.api.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import idealab.api.dto.request.ColorTypeUpdateRequest;
 import idealab.api.dto.response.DataResponse;
+import idealab.api.dto.response.GenericResponse;
 import idealab.api.model.ColorType;
 import idealab.api.operations.ColorTypeOperations;
 
@@ -22,6 +27,23 @@ public class ColorTypeController {
     @GetMapping
     public ResponseEntity<?> getActiveColors() {
         DataResponse<ColorType> response = colorOperations.getActiveColors();
+
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
+    /**
+     * This allows the user to change the availability status of the color.
+     * Requires input of the color that wants the availability changed + whether it should
+     * be available or not.
+     * @param printId
+     * @param model
+     * @return
+     */
+    @PutMapping("/{color-id}/availability")
+    public ResponseEntity<?> printJobUpdateModel(@PathVariable("color-id") Integer colorId,
+                                                  @ModelAttribute ColorTypeUpdateRequest model) {
+
+        GenericResponse response = colorOperations.updateColorAvailability(colorId, model);
 
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
