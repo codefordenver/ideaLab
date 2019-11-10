@@ -1,17 +1,27 @@
 package idealab.api.operations;
 
-import idealab.api.dto.request.*;
-import idealab.api.dto.response.GenericResponse;
-import idealab.api.dto.response.PrintJobResponse;
-import idealab.api.exception.IdeaLabApiException;
-import idealab.api.model.Queue;
-import idealab.api.model.*;
-import idealab.api.repositories.ColorTypeRepo;
-import idealab.api.repositories.CustomerInfoRepo;
-import idealab.api.repositories.EmployeeRepo;
-import idealab.api.repositories.PrintJobRepo;
-import idealab.api.service.EmailHashUtil;
-import idealab.api.service.FileService;
+import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
+import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,16 +33,26 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.*;
-
-import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
-import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import idealab.api.dto.request.PrintJobDeleteRequest;
+import idealab.api.dto.request.PrintJobNewRequest;
+import idealab.api.dto.request.PrintJobUpdateRequest;
+import idealab.api.dto.request.PrintModelUpdateRequest;
+import idealab.api.dto.request.UpdatePrintJobPropertiesRequest;
+import idealab.api.dto.response.DataResponse;
+import idealab.api.dto.response.GenericResponse;
+import idealab.api.exception.IdeaLabApiException;
+import idealab.api.model.ColorType;
+import idealab.api.model.CustomerInfo;
+import idealab.api.model.Employee;
+import idealab.api.model.PrintJob;
+import idealab.api.model.Queue;
+import idealab.api.model.Status;
+import idealab.api.repositories.ColorTypeRepo;
+import idealab.api.repositories.CustomerInfoRepo;
+import idealab.api.repositories.EmployeeRepo;
+import idealab.api.repositories.PrintJobRepo;
+import idealab.api.service.EmailHashUtil;
+import idealab.api.service.FileService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PrintJobOperationsTest {
@@ -200,7 +220,7 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findAll()).thenReturn(printJobs);
 
         // when
-        PrintJobResponse result = operations.getAllPrintJobs(null);
+        DataResponse<PrintJob> result = operations.getAllPrintJobs(null);
 
         // assert
         Assert.assertEquals(result.getData().get(0).getId(), printJob.getId());
@@ -224,7 +244,7 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findPrintJobByStatus(Status.ARCHIVED)).thenReturn(printJobList);
         
         // when
-        PrintJobResponse result = operations.getAllPrintJobs(Status.ARCHIVED.getName());
+        DataResponse<PrintJob> result = operations.getAllPrintJobs(Status.ARCHIVED.getName());
         
         // assert
         verify(printJobRepo, times(1)).findPrintJobByStatus(Status.ARCHIVED);
@@ -276,7 +296,7 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findByStatusIn(deletableStatuses)).thenReturn(printJobs);
 
         // when
-        PrintJobResponse result = operations.getDeletablePrintJobs();
+        DataResponse<PrintJob> result = operations.getDeletablePrintJobs();
 
         // assert
         Assert.assertEquals(result.getData().get(0).getId(), printJob.getId());
@@ -285,7 +305,7 @@ public class PrintJobOperationsTest {
 
     @Test
     public void createNewPrintJob() {
-        PrintJobResponse response = new PrintJobResponse();
+        DataResponse<PrintJob> response = new DataResponse<PrintJob>();
 
         byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
         MultipartFile file = new MockMultipartFile("something.stl", "something.stl", null ,a);
@@ -348,13 +368,13 @@ public class PrintJobOperationsTest {
         when(printJobRepo.save(any())).thenReturn(printJob);
         when(fileService.uploadFile(anyLong(), any())).thenReturn(data);
 
-        PrintJobResponse opResponse = operations.newPrintJob(request, mockPrincipal);
+        DataResponse<PrintJob> opResponse = operations.newPrintJob(request, mockPrincipal);
         assert(opResponse.equals(response));
     }
 
     @Test
     public void createNewPrintJobSaveAllNonExistentData() {
-        PrintJobResponse response = new PrintJobResponse();
+        DataResponse<PrintJob> response = new DataResponse<PrintJob>();
 
         byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
         MultipartFile file = new MockMultipartFile("something.stl", "something.stl", null ,a);
@@ -417,7 +437,7 @@ public class PrintJobOperationsTest {
         when(printJobRepo.save(any())).thenReturn(printJob);
         when(fileService.uploadFile(anyLong(), any())).thenReturn(data);
 
-        PrintJobResponse opResponse = operations.newPrintJob(request, mockPrincipal);
+        DataResponse<PrintJob> opResponse = operations.newPrintJob(request, mockPrincipal);
 
         assert(opResponse.equals(response));
     }
@@ -449,7 +469,7 @@ public class PrintJobOperationsTest {
     
     @Test(expected = IdeaLabApiException.class)
     public void createNewPrintJobNullFile() {
-        PrintJobResponse response = new PrintJobResponse();
+        DataResponse<PrintJob> response = new DataResponse<PrintJob>();
         response.setHttpStatus(HttpStatus.BAD_REQUEST);
         response.setMessage("No file was submitted.  Please attach a file to the request");
         response.setSuccess(false);
@@ -470,7 +490,7 @@ public class PrintJobOperationsTest {
 
     @Test(expected = IdeaLabApiException.class)
     public void createNewPrintJob5JobError() {
-        PrintJobResponse response = new PrintJobResponse();
+        DataResponse<PrintJob> response = new DataResponse<PrintJob>();
 
         byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
         MultipartFile file = new MockMultipartFile("something.stl", "something.stl", null ,a);
@@ -541,7 +561,7 @@ public class PrintJobOperationsTest {
         PrintJob printJob = new PrintJob();
         printJob.setId(999);
 
-        PrintJobResponse response = new PrintJobResponse();
+        DataResponse<PrintJob> response = new DataResponse<PrintJob>();
         response.setSuccess(true);
         response.setMessage("Successfully updated file to database!");
         response.setHttpStatus(HttpStatus.ACCEPTED);
@@ -557,7 +577,7 @@ public class PrintJobOperationsTest {
         when(fileService.updateFile(printJob, request.getFile())).thenReturn(data);
         when(printJobRepo.save(printJob)).thenReturn(printJob);
 
-        PrintJobResponse opResponse = operations.updateModel(printJob.getId(), request);
+        DataResponse<PrintJob> opResponse = operations.updateModel(printJob.getId(), request);
 
         assert(opResponse.equals(response));
     }
@@ -652,7 +672,7 @@ public class PrintJobOperationsTest {
         when(colorTypeRepo.findByColor("red")).thenReturn(newColorType);
         when(printJobRepo.save(printJob)).thenReturn(null);
 
-        PrintJobResponse response = operations.updatePrintJobProps(1, request);
+        DataResponse<PrintJob> response = operations.updatePrintJobProps(1, request);
         assertTrue("response is null", response != null);
         assertTrue("comments are not equal", response.getData().get(0).getComments().equals(request.getComments()));
         assertTrue("status is not equal", response.getData().get(0).getStatus() == Status.fromValue(request.getStatus()));
@@ -685,7 +705,7 @@ public class PrintJobOperationsTest {
         when(colorTypeRepo.findByColor("red")).thenReturn(newColorType);
         when(printJobRepo.save(printJob)).thenReturn(null);
 
-        PrintJobResponse response = operations.updatePrintJobProps(1, request);
+        DataResponse<PrintJob> response = operations.updatePrintJobProps(1, request);
         assertTrue("response is null", response != null);
         assertTrue("comments are not equal", response.getData().get(0).getComments().equals(printJob.getComments()));
         assertTrue("status is not equal", response.getData().get(0).getStatus() == printJob.getStatus());
@@ -718,7 +738,7 @@ public class PrintJobOperationsTest {
         when(colorTypeRepo.findByColor("red")).thenReturn(newColorType);
         when(printJobRepo.save(printJob)).thenReturn(null);
 
-        PrintJobResponse response = operations.updatePrintJobProps(1, request);
+        DataResponse<PrintJob> response = operations.updatePrintJobProps(1, request);
         assertTrue("response is null", response != null);
         assertTrue("comments are not equal", response.getData().get(0).getComments().equals(printJob.getComments()));
         assertTrue("status is not equal", response.getData().get(0).getStatus() == Status.fromValue(request.getStatus()));
@@ -751,7 +771,7 @@ public class PrintJobOperationsTest {
         when(colorTypeRepo.findByColor("red")).thenReturn(newColorType);
         when(printJobRepo.save(printJob)).thenReturn(null);
 
-        PrintJobResponse response = operations.updatePrintJobProps(1, request);
+        DataResponse<PrintJob> response = operations.updatePrintJobProps(1, request);
         assertTrue("response is null", response != null);
         assertTrue("comments are not equal", response.getData().get(0).getComments().equals(request.getComments()));
         assertTrue("status is not equal", response.getData().get(0).getStatus() == printJob.getStatus());
@@ -768,7 +788,7 @@ public class PrintJobOperationsTest {
         //When
         when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
 
-        PrintJobResponse printJobResponse = operations.getPrintJobById(2);
+        DataResponse<PrintJob> printJobResponse = operations.getPrintJobById(2);
 
         //Then
         assertTrue("Print job is returned with id=2", printJobResponse.getData().get(0).getId() == 2);
@@ -779,6 +799,6 @@ public class PrintJobOperationsTest {
         //When
         when(printJobRepo.findPrintJobById(anyInt())).thenReturn(null);
 
-        PrintJobResponse printJobResponse = operations.getPrintJobById(2);
+        DataResponse<PrintJob> printJobResponse = operations.getPrintJobById(2);
     }
 }
