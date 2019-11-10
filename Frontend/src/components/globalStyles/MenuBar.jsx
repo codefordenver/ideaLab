@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import styles from './MenuBar.css';
+import React from 'react';
+import './MenuBar.css';
 
 const MenuBar = ({ selectedTab, tabOptions, setView }) => {
   const tabDisplay = tabOptions.map((tab, index) => {
