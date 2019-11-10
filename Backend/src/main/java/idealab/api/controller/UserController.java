@@ -1,5 +1,8 @@
 package idealab.api.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,7 +49,7 @@ public class UserController {
     @GetMapping()
     public ResponseEntity<?> getUsers() {
         UserResponse response = userOperations.getAllUsers();
-
+        
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 

@@ -33,12 +33,13 @@ public class UserOperations {
     /**
      * Gets all users but only returns specific information that can be displayed to all
      * admins.
+     * This is to be used with the find all simple method in the employee repo.
      * @return
      */
     public UserResponse getAllUsers() {
         UserResponse response = new UserResponse("Could not get list of users");
 
-        List<Object> users = employeeRepo.findAllToDisplay();
+        List<Object[]> users = employeeRepo.findAllSimple();
 
         if (users == null || users.isEmpty()){
             ErrorType.USER_NOT_FOUND.throwException();
@@ -46,7 +47,7 @@ public class UserOperations {
 
         response.setSuccess(true);
         response.setMessage("Successfully returned users");
-        response.setData(users);
+        response.setSimpleData(users);
         response.setHttpStatus(HttpStatus.ACCEPTED);
 
         return response;

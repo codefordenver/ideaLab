@@ -16,6 +16,6 @@ public interface EmployeeRepo extends CrudRepository<Employee, Integer> {
      * Gets a list of all users but only returns name, username, and role.
      */
     @Query("select firstName, lastName, username, role from Employee")
-    List<Object> findAllToDisplay();
+    List<Object[]> findAllSimple();
     void deleteById(Integer id);
 }

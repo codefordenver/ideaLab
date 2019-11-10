@@ -49,8 +49,6 @@ public class Employee extends RecordTimestamp {
     }
 
     //getter & setter
-
-
     public Integer getId() {
         return id;
     }
