@@ -1,18 +1,23 @@
 package idealab.api.operations;
 
-import idealab.api.dto.request.EmployeeSignUpRequest;
-import idealab.api.dto.request.UserChangePasswordRequest;
-import idealab.api.dto.response.GenericResponse;
-import idealab.api.exception.IdeaLabApiException;
-import idealab.api.model.Employee;
-import idealab.api.model.EmployeeRole;
-import idealab.api.repositories.EmployeeRepo;
+import static idealab.api.exception.ErrorType.USER_NOT_FOUND;
+import static idealab.api.exception.ErrorType.VALIDATION_ERROR;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import static idealab.api.exception.ErrorType.USER_NOT_FOUND;
-import static idealab.api.exception.ErrorType.VALIDATION_ERROR;
+import idealab.api.dto.request.EmployeeSignUpRequest;
+import idealab.api.dto.request.UserChangePasswordRequest;
+import idealab.api.dto.response.GenericResponse;
+import idealab.api.dto.response.UserResponse;
+import idealab.api.exception.ErrorType;
+import idealab.api.exception.IdeaLabApiException;
+import idealab.api.model.Employee;
+import idealab.api.model.EmployeeRole;
+import idealab.api.repositories.EmployeeRepo;
 
 @Component
 public class UserOperations {
@@ -23,6 +28,28 @@ public class UserOperations {
     public UserOperations(EmployeeRepo employeeRepo, BCryptPasswordEncoder encoder) {
         this.employeeRepo = employeeRepo;
         this.encoder = encoder;
+    }
+
+    /**
+     * Gets all users but only returns specific information that can be displayed to all
+     * admins.
+     * @return
+     */
+    public UserResponse getAllUsers() {
+        UserResponse response = new UserResponse("Could not get list of users");
+
+        List<Object> users = employeeRepo.findAllToDisplay();
+
+        if (users == null || users.isEmpty()){
+            ErrorType.USER_NOT_FOUND.throwException();
+        }
+
+        response.setSuccess(true);
+        response.setMessage("Successfully returned users");
+        response.setData(users);
+        response.setHttpStatus(HttpStatus.ACCEPTED);
+
+        return response;
     }
 
     public GenericResponse userSignUp(EmployeeSignUpRequest request) {
