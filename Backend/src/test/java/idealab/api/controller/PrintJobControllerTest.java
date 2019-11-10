@@ -186,7 +186,7 @@ public class PrintJobControllerTest {
 
         PrintJob printJob = new PrintJob();
 
-        printJob.setColorTypeId(new ColorType("Red"));
+        printJob.setColorTypeId(new ColorType(1, "Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
         printJob.setQueueId(new Queue(1));
@@ -237,7 +237,7 @@ public class PrintJobControllerTest {
 
         PrintJob printJob = new PrintJob();
 
-        printJob.setColorTypeId(new ColorType("Red"));
+        printJob.setColorTypeId(new ColorType(1, "Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
         printJob.setQueueId(new Queue(1));
@@ -283,7 +283,7 @@ public class PrintJobControllerTest {
 
 		 PrintJob printJob = new PrintJob();
 		
-		 printJob.setColorTypeId(new ColorType("Red"));
+		 printJob.setColorTypeId(new ColorType(1, "Red"));
 		 printJob.setComments("comments");
 		 printJob.setCreatedAt(LocalDateTime.now());
 		 printJob.setQueueId(new Queue(1));

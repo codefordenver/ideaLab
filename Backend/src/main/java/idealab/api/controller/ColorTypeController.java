@@ -10,7 +10,7 @@ import idealab.api.model.ColorType;
 import idealab.api.operations.ColorTypeOperations;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/colors")
 public class ColorTypeController {
 
     private ColorTypeOperations colorOperations;

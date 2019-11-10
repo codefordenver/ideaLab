@@ -30,9 +30,14 @@ public class ColorType extends RecordTimestamp {
     public ColorType() {
     }
 
-    public ColorType(String color) {
+    public ColorType(Integer id, String color) {
+        this.id = id;
         this.color = color;
         this.available = true;
+    }
+
+    public int getId() {
+        return this.id;
     }
 
     public String getColor() {
