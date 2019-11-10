@@ -32,11 +32,9 @@
 
 .colorPickerContainer {
   background-color: white;
-  width: 5em;
+  width: 5.5em;
   border: solid 1px black;
   padding: 0.5em;
-  padding-left: 0.8em;
-  padding-right: 0.3em;
   align-items: center;
   justify-items: center;
 }
