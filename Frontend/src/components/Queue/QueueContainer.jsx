@@ -24,6 +24,13 @@ const QueueContainer = () => {
             status: printjob.status,
             filePath: printjob.filePath,
             fileSharableLink: printjob.fileSharableLink,
+            name:
+              printjob.customerInfo.firstName +
+              ' ' +
+              printjob.customerInfo.lastName +
+              ' (' +
+              printjob.customerInfo.email +
+              ')',
           };
         });
         setData(formattedData);
