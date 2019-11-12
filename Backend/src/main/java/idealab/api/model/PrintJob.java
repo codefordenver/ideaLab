@@ -177,9 +177,9 @@ public class PrintJob extends RecordTimestamp {
                 "id=" + id +
                 ", customerInfo=" + custId +
                 ", colorTypeId=" + colorType +
-                ", employeeId=" + employee +
+                ", employee=" + employee +
                 ", status=" + status +
-                ", queueId=" + queueId +
+                ", queue=" + queueId +
                 ", comments='" + comments + '\'' +
                 ", dropboxSharableLink='" + fileSharableLink + '\'' +
                 ", dropboxPath='" + filePath + '\'' +
