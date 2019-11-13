@@ -291,7 +291,7 @@ public class PrintJobOperations {
 
         if(colorType != null && colorType.getColor() != null && !colorType.getColor().trim().isEmpty()) {
             isChanged = true;
-            printJob.setColorTypeId(colorType);
+            printJob.setColorType(colorType);
         }
 
         // Dont save if nothing actually updated
