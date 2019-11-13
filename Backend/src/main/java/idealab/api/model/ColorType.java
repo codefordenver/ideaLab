@@ -18,7 +18,7 @@ public class ColorType extends RecordTimestamp {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToMany(targetEntity=PrintJob.class, mappedBy="colorTypeId")
+    @OneToMany(targetEntity=PrintJob.class, mappedBy="colorType")
     private Set<PrintJob> printJobs;
 
     @Column(name = "color", nullable = false)
@@ -30,9 +30,14 @@ public class ColorType extends RecordTimestamp {
     public ColorType() {
     }
 
-    public ColorType(String color) {
+    public ColorType(Integer id, String color) {
+        this.id = id;
         this.color = color;
         this.available = true;
+    }
+
+    public int getId() {
+        return this.id;
     }
 
     public String getColor() {

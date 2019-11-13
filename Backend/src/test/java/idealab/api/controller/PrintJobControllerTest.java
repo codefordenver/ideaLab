@@ -1,13 +1,22 @@
 package idealab.api.controller;
 
+import static idealab.api.util.TestUtil.stringToGenericResponse;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import idealab.api.dto.request.PrintJobDeleteRequest;
-import idealab.api.dto.request.PrintJobUpdateRequest;
-import idealab.api.dto.response.GenericResponse;
-import idealab.api.dto.response.PrintJobResponse;
-import idealab.api.model.*;
-import idealab.api.operations.PrintJobOperations;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,18 +31,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-
-import static idealab.api.util.TestUtil.stringToGenericResponse;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.times;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import idealab.api.dto.request.PrintJobDeleteRequest;
+import idealab.api.dto.request.PrintJobUpdateRequest;
+import idealab.api.dto.response.DataResponse;
+import idealab.api.dto.response.GenericResponse;
+import idealab.api.model.ColorType;
+import idealab.api.model.CustomerInfo;
+import idealab.api.model.Employee;
+import idealab.api.model.PrintJob;
+import idealab.api.model.Queue;
+import idealab.api.model.Status;
+import idealab.api.operations.PrintJobOperations;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -178,17 +186,17 @@ public class PrintJobControllerTest {
 
         PrintJob printJob = new PrintJob();
 
-        printJob.setColorTypeId(new ColorType("Red"));
+        printJob.setColorType(new ColorType(1, "Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
         printJob.setQueueId(new Queue());
         printJob.setStatus(Status.ARCHIVED);
-        printJob.setEmployeeId(new Employee());
+        printJob.setEmployee(new Employee());
         printJob.setId(1);
 
         List<PrintJob> printJobList = Arrays.asList(printJob);
 
-        PrintJobResponse expectedResponse = new PrintJobResponse();
+        DataResponse<PrintJob> expectedResponse = new DataResponse<PrintJob>();
         expectedResponse.setSuccess(true);
         expectedResponse.setMessage("Successfully returned all print jobs");
         expectedResponse.setData(printJobList);
@@ -207,7 +215,7 @@ public class PrintJobControllerTest {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
-        PrintJobResponse actualResponse = mapper.readValue(jsonString, PrintJobResponse.class);
+        DataResponse<PrintJob> actualResponse = mapper.readValue(jsonString, new TypeReference<DataResponse<PrintJob>>() {});
 
         int actualId = actualResponse.getData().get(0)
                 .getId();
@@ -229,18 +237,18 @@ public class PrintJobControllerTest {
 
         PrintJob printJob = new PrintJob();
 
-        printJob.setColorTypeId(new ColorType("Red"));
+        printJob.setColorType(new ColorType(1, "Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
         printJob.setQueueId(new Queue());
         printJob.setStatus(Status.ARCHIVED);
-        printJob.setEmployeeId(new Employee());
+        printJob.setEmployee(new Employee());
         printJob.setCustomerInfo(customerInfo);
         printJob.setId(1);
 
         List<PrintJob> printJobList = Arrays.asList(printJob);
 
-        PrintJobResponse expectedResponse = new PrintJobResponse();
+        DataResponse<PrintJob> expectedResponse = new DataResponse<PrintJob>();
         expectedResponse.setSuccess(true);
         expectedResponse.setMessage("Successfully returned print jobs by " + Status.ARCHIVED.getName() + " status");
         expectedResponse.setData(printJobList);
@@ -260,7 +268,7 @@ public class PrintJobControllerTest {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
-        PrintJobResponse actualResponse = mapper.readValue(jsonString, PrintJobResponse.class);
+        DataResponse<PrintJob> actualResponse = mapper.readValue(jsonString, new TypeReference<DataResponse<PrintJob>>() {});
 
         // assert
         verify(printJobOperations, times(1)).getAllPrintJobs(Status.ARCHIVED.getName());
@@ -275,15 +283,15 @@ public class PrintJobControllerTest {
 
 		 PrintJob printJob = new PrintJob();
 		
-		 printJob.setColorTypeId(new ColorType("Red"));
+		 printJob.setColorType(new ColorType(1, "Red"));
 		 printJob.setComments("comments");
 		 printJob.setCreatedAt(LocalDateTime.now());
 		 printJob.setQueueId(new Queue());
 		 printJob.setStatus(Status.PENDING_REVIEW);
-		 printJob.setEmployeeId(new Employee());
+		 printJob.setEmployee(new Employee());
 		 printJob.setId(1);
 		
-		 PrintJobResponse expectedResponse = new PrintJobResponse(printJob);
+		 DataResponse<PrintJob> expectedResponse = new DataResponse<PrintJob>(printJob);
 		
 		 Mockito.when(printJobOperations.getDeletablePrintJobs()).thenReturn(expectedResponse);
 		
@@ -298,7 +306,7 @@ public class PrintJobControllerTest {
 		 ObjectMapper mapper = new ObjectMapper();
 		 mapper.registerModule(new JavaTimeModule());
 		
-		 PrintJobResponse actualResponse = mapper.readValue(jsonString, PrintJobResponse.class);
+		 DataResponse<PrintJob> actualResponse = mapper.readValue(jsonString, new TypeReference<DataResponse<PrintJob>>() {});
 		
 		 int actualId = actualResponse.getData()
 		         .get(0)

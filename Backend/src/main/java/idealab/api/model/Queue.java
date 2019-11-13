@@ -19,7 +19,7 @@ public class Queue extends RecordTimestamp {
 
     @OneToOne()
     @JoinColumn(name="fk_print_job_id", referencedColumnName = "id", nullable = false, unique = true)
-    private PrintJob printJobId;
+    private PrintJob printJob;
     
     @Column(name = "rank", nullable = false)
     private Long rank;
@@ -27,7 +27,7 @@ public class Queue extends RecordTimestamp {
     public Queue() {}
 
     public Queue(PrintJob printJob, Long rank) {
-        this.printJobId = printJob;
+        this.printJob = printJob;
         this.rank = rank;
     }
 

@@ -1,24 +1,10 @@
 package idealab.api.service;
 
-import com.dropbox.core.DbxException;
-import com.dropbox.core.DbxRequestConfig;
-import com.dropbox.core.v2.DbxClientV2;
-import com.dropbox.core.v2.files.FileMetadata;
-import com.dropbox.core.v2.files.Metadata;
-import com.dropbox.core.v2.files.RelocationResult;
-import com.dropbox.core.v2.sharing.ListSharedLinksErrorException;
-import com.dropbox.core.v2.sharing.ListSharedLinksResult;
-import idealab.api.dto.request.UpdateFilePathRequest;
-import idealab.api.dto.response.PrintJobResponse;
-import idealab.api.exception.IdeaLabApiException;
-import idealab.api.model.PrintJob;
-import idealab.api.repositories.PrintJobRepo;
-import idealab.configurations.DropboxConfiguration;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import static idealab.api.exception.ErrorType.DROPBOX_DELETE_FILE_ERROR;
+import static idealab.api.exception.ErrorType.DROPBOX_UPDATE_FILE_ERROR;
+import static idealab.api.exception.ErrorType.DROPBOX_UPLOAD_FILE_ERROR;
+import static idealab.api.exception.ErrorType.PRINT_JOB_CANT_FIND_BY_ID;
 
-import javax.annotation.PostConstruct;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.time.LocalDateTime;
@@ -27,7 +13,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static idealab.api.exception.ErrorType.*;
+import javax.annotation.PostConstruct;
+
+import com.dropbox.core.DbxException;
+import com.dropbox.core.DbxRequestConfig;
+import com.dropbox.core.v2.DbxClientV2;
+import com.dropbox.core.v2.files.FileMetadata;
+import com.dropbox.core.v2.files.Metadata;
+import com.dropbox.core.v2.files.RelocationResult;
+import com.dropbox.core.v2.sharing.ListSharedLinksErrorException;
+import com.dropbox.core.v2.sharing.ListSharedLinksResult;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import idealab.api.dto.request.UpdateFilePathRequest;
+import idealab.api.dto.response.DataResponse;
+import idealab.api.exception.IdeaLabApiException;
+import idealab.api.model.PrintJob;
+import idealab.api.repositories.PrintJobRepo;
+import idealab.configurations.DropboxConfiguration;
 
 @Service
 public class FileServiceImpl implements FileService {
@@ -116,7 +122,7 @@ public class FileServiceImpl implements FileService {
     return uploadFile(currentTime.toLocalTime().toNanoOfDay(), file);
   }
 
-  public PrintJobResponse updateFilePath(UpdateFilePathRequest request) {
+  public DataResponse<PrintJob> updateFilePath(UpdateFilePathRequest request) {
     request.validate();
 
     PrintJob printJob = printJobRepo.findPrintJobById(request.getPrintJobId());
@@ -143,7 +149,7 @@ public class FileServiceImpl implements FileService {
       throw new IdeaLabApiException(DROPBOX_UPDATE_FILE_ERROR);
     }
 
-    PrintJobResponse response = new PrintJobResponse();
+    DataResponse<PrintJob> response = new DataResponse<PrintJob>();
     response.setMessage("Dropbox file path updated successfully");
     response.setSuccess(true);
     response.setHttpStatus(HttpStatus.ACCEPTED);

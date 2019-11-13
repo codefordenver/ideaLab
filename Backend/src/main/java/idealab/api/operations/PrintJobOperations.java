@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +25,8 @@ import idealab.api.dto.request.PrintJobNewRequest;
 import idealab.api.dto.request.PrintJobUpdateRequest;
 import idealab.api.dto.request.PrintModelUpdateRequest;
 import idealab.api.dto.request.UpdatePrintJobPropertiesRequest;
+import idealab.api.dto.response.DataResponse;
 import idealab.api.dto.response.GenericResponse;
-import idealab.api.dto.response.PrintJobResponse;
 import idealab.api.exception.ErrorType;
 import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.ColorType;
@@ -43,7 +42,6 @@ import idealab.api.repositories.PrintJobRepo;
 import idealab.api.repositories.QueueRepo;
 import idealab.api.service.EmailHashUtil;
 import idealab.api.service.FileService;
-
 
 @Service
 public class PrintJobOperations {
@@ -68,9 +66,9 @@ public class PrintJobOperations {
         this.emailHashUtil = emailHashUtil;
     }
 
-    public PrintJobResponse newPrintJob(PrintJobNewRequest printJobNewRequest, Principal principal) {
+    public DataResponse<PrintJob> newPrintJob(PrintJobNewRequest printJobNewRequest, Principal principal) {
         printJobNewRequest.validate();
-        PrintJobResponse response = new PrintJobResponse("File could not be uploaded");
+        DataResponse<PrintJob> response = new DataResponse<PrintJob>("File could not be uploaded");
 
         if (printJobNewRequest.getFile() == null) {
             throw new IdeaLabApiException(DROPBOX_UPLOAD_FILE_ERROR);
@@ -141,9 +139,9 @@ public class PrintJobOperations {
         return getPrintJobResponse(response, printJob, data, "Successfully saved new file to database!");
     }
 
-    public PrintJobResponse updateModel(Integer printId, PrintModelUpdateRequest model){
+    public DataResponse<PrintJob> updateModel(Integer printId, PrintModelUpdateRequest model){
         model.validate();
-        PrintJobResponse response = new PrintJobResponse("Model could not be updated");
+        DataResponse<PrintJob> response = new DataResponse<PrintJob>("Model could not be updated");
 
         PrintJob printJob = printJobRepo.findPrintJobById(printId);
         if(printJob == null) {
@@ -160,7 +158,7 @@ public class PrintJobOperations {
         return getPrintJobResponse(response, printJob, data, "Successfully updated file to database!");
     }
 
-    private PrintJobResponse getPrintJobResponse(PrintJobResponse response, PrintJob printJob, Map<String, String> data, String s) {
+    private DataResponse<PrintJob> getPrintJobResponse(DataResponse<PrintJob> response, PrintJob printJob, Map<String, String> data, String s) {
         List<PrintJob> printJobData = Arrays.asList(printJob);
 
         response.setSuccess(true);
@@ -267,8 +265,8 @@ public class PrintJobOperations {
         return response;
     }
 
-    public PrintJobResponse getAllPrintJobs(String status) {
-        PrintJobResponse response = new PrintJobResponse("Could not get all print jobs");
+    public DataResponse<PrintJob> getAllPrintJobs(String status) {
+        DataResponse<PrintJob> response = new DataResponse<PrintJob>("Could not get all print jobs");
 
         List<PrintJob> printJobs = status == null? printJobRepo.findAll() : printJobRepo.findPrintJobByStatus(Status.fromValue(status));
 
@@ -284,8 +282,8 @@ public class PrintJobOperations {
         return response;
     }
 
-    public PrintJobResponse getDeletablePrintJobs() {
-        PrintJobResponse response = new PrintJobResponse("Could not get deletable print jobs");
+    public DataResponse<PrintJob> getDeletablePrintJobs() {
+        DataResponse<PrintJob> response = new DataResponse<PrintJob>("Could not get deletable print jobs");
         List<Status> deletableStatuses = Arrays.asList(Status.PENDING_REVIEW,
             Status.FAILED,
             Status.PENDING_CUSTOMER_RESPONSE,
@@ -302,7 +300,7 @@ public class PrintJobOperations {
         return response;
     }
 
-    public PrintJobResponse updatePrintJobProps(Integer printJobId, UpdatePrintJobPropertiesRequest request) {
+    public DataResponse<PrintJob> updatePrintJobProps(Integer printJobId, UpdatePrintJobPropertiesRequest request) {
         request.validate();
         boolean isChanged = false;
 
@@ -329,7 +327,7 @@ public class PrintJobOperations {
 
         if(colorType != null && colorType.getColor() != null && !colorType.getColor().trim().isEmpty()) {
             isChanged = true;
-            printJob.setColorTypeId(colorType);
+            printJob.setColorType(colorType);
         }
 
         // Dont save if nothing actually updated
@@ -339,7 +337,7 @@ public class PrintJobOperations {
         List<PrintJob> printJobs = new ArrayList<>();
         printJobs.add(printJob);
 
-        PrintJobResponse response = new PrintJobResponse();
+        DataResponse<PrintJob> response = new DataResponse<PrintJob>();
         response.setSuccess(true);
         response.setMessage("Print job properties updated successfully");
         response.setHttpStatus(HttpStatus.ACCEPTED);
@@ -348,7 +346,7 @@ public class PrintJobOperations {
         return response;
     }
 
-    public PrintJobResponse getPrintJobById(Integer printJobId){
+    public DataResponse<PrintJob> getPrintJobById(Integer printJobId){
         PrintJob printJob = printJobRepo.findPrintJobById(printJobId);
         if(printJob == null)
             throw new IdeaLabApiException(PRINT_JOB_CANT_FIND_BY_ID);
@@ -356,7 +354,7 @@ public class PrintJobOperations {
         List<PrintJob> printJobs = new ArrayList<>();
         printJobs.add(printJob);
 
-        PrintJobResponse response = new PrintJobResponse();
+        DataResponse<PrintJob> response = new DataResponse<PrintJob>();
         response.setSuccess(true);
         response.setMessage("Print job returned successfully");
         response.setHttpStatus(HttpStatus.ACCEPTED);
