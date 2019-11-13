@@ -176,7 +176,7 @@ public class PrintJob extends RecordTimestamp {
         return "PrintJob{" +
                 "id=" + id +
                 ", customerInfo=" + custId +
-                ", colorTypeId=" + colorType +
+                ", colorType=" + colorType +
                 ", employee=" + employee +
                 ", status=" + status +
                 ", queue=" + queueId +
