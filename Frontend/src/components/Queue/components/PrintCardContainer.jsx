@@ -56,6 +56,7 @@ const PrintCardContainer = ({ data, saveCard }) => {
 
   const updatePrintingStatus = event => {
     event.persist();
+    console.log('VALUE??', event.target.value);
     updateCard(prevState => ({ ...prevState, status: event.target.value }));
     setSaveIconShowing(true);
   };
@@ -150,6 +151,7 @@ const PrintCardContainer = ({ data, saveCard }) => {
           <StatusDropdown
             currentStatus={data.status}
             statusChanged={updatePrintingStatus}
+            id={card.id}
           />
         </td>
         <td className="printAdditionalInfo">

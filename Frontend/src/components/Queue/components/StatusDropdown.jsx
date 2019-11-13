@@ -1,47 +1,19 @@
 import React from 'react';
-import './StatusDropdown.css';
+import Dropdown from 'react-bootstrap/Dropdown';
 
-const StatusDropdown = ({ currentStatus, statusChanged }) => {
+const StatusDropdown = ({ currentStatus, statusChanged, id }) => {
   return (
-    <div className="statusDropdown">
-      <select
-        className="statusDropdownSelect"
-        name="status"
-        defaultValue={currentStatus}
-        onChange={statusChanged}
-      >
-        <option
-          value="QUEUEING"
-          selected={currentStatus === 'QUEUEING' ? 'selected' : ''}
-        >
-          QUEUEING
-        </option>
-        <option
-          value="PRINTING"
-          selected={currentStatus === 'PRINTING' ? 'selected' : ''}
-        >
-          PRINTING
-        </option>
-        <option
-          value="SUCCESS"
-          selected={currentStatus === 'SUCCESS' ? 'selected' : ''}
-        >
-          SUCCESS
-        </option>
-        <option
-          value="FAILED"
-          selected={currentStatus === 'FAILED' ? 'selected' : ''}
-        >
-          FAILED
-        </option>
-        <option
-          value="FAILED_AGAIN"
-          selected={currentStatus === 'FAILED_AGAIN' ? 'selected' : ''}
-        >
-          FAILED AGAIN
-        </option>
-      </select>
-    </div>
+    <Dropdown title={currentStatus}>
+      <Dropdown.Toggle variant="secondary" id={id}>
+        {currentStatus}
+      </Dropdown.Toggle>
+      <Dropdown.Menu>
+                <Dropdown.Item>Queueing</Dropdown.Item>
+                <Dropdown.Item>Printing</Dropdown.Item>
+                <Dropdown.Item>Failed</Dropdown.Item>
+      </Dropdown.Menu>
+          
+    </Dropdown>
   );
 };
 

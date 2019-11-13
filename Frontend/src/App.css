@@ -60,7 +60,8 @@ body {
   text-align: left;
 }
 
-a {
+.navList a,
+.printCardContainer a {
   color: black;
   font-weight: bolder;
   text-decoration: none;
