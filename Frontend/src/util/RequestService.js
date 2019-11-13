@@ -47,6 +47,10 @@ const RequestService = {
       return { form: 'Please try logging out and logging in.' };
     }
 
+    if (axiosError.response.status < 499 && axiosError.response.data) {
+      return { form: axiosError.response.data.errorDescription };
+    }
+
     const errors = axiosError.response.data.errors;
     if (!errors) {
       return { form: 'There was a problem with what you were trying to do.' };
