@@ -1,17 +1,24 @@
 package idealab.api.model;
 
-import org.hibernate.validator.constraints.Length;
+import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
+
+import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.validator.constraints.Length;
-
-import javax.persistence.*;
-import java.util.Objects;
-
-import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
-
-import javax.persistence.*;
-import java.util.Objects;
 
 /**
  * This class holds the model that represents the print job table. It is related to email hash, color type, queue, and employee ID. Additionally,
@@ -20,7 +27,7 @@ import java.util.Objects;
 @Entity
 @Audited
 @Table(name = "print_job")
-public class PrintJob extends RecordTimestamp {
+public class PrintJob extends RecordTimestamp implements Comparable<PrintJob> {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -189,5 +196,10 @@ public class PrintJob extends RecordTimestamp {
                 ", dropboxPath='" + filePath + '\'' +
                 ", emailHash='" + emailHash + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(PrintJob o) {
+        return this.getCreatedAt().compareTo(o.getCreatedAt());
     }
 }

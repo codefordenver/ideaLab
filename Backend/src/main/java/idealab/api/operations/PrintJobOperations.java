@@ -225,12 +225,7 @@ public class PrintJobOperations {
             printJobs.removeIf(job -> (job.getStatus() == Status.REJECTED || job.getStatus() == Status.COMPLETED));
 
             if (printJobs.size() > 1) {
-                Collections.sort(printJobs, new Comparator<PrintJob>() {
-                    @Override
-                    public int compare(PrintJob one, PrintJob two) {
-                        return one.getCreatedAt().compareTo(two.getCreatedAt());
-                    }
-                });
+                Collections.sort(printJobs);
             }
 
             // Add most recent one to Queue table
