@@ -19,7 +19,7 @@ public class Queue extends RecordTimestamp {
 
     @OneToOne()
     @JoinColumn(name="fk_print_job_id", referencedColumnName = "id", nullable = false)
-    private PrintJob printJobId;
+    private PrintJob printJob;
     
     @Column(name = "rank", nullable = false)
     private Integer rank;
