@@ -17,6 +17,7 @@ import idealab.api.exception.ErrorType;
 import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.Employee;
 import idealab.api.model.EmployeeRole;
+import idealab.api.model.submodel.EmployeeBasic;
 import idealab.api.repositories.EmployeeRepo;
 
 @Component
@@ -39,7 +40,7 @@ public class UserOperations {
     public UserResponse getAllUsers() {
         UserResponse response = new UserResponse("Could not get list of users");
 
-        List<Object[]> users = employeeRepo.findAllSimple();
+        List<EmployeeBasic> users = employeeRepo.findAllSimple();
 
         if (users == null || users.isEmpty()){
             ErrorType.USER_NOT_FOUND.throwException();
