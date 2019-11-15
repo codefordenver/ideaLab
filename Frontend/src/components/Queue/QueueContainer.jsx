@@ -9,6 +9,24 @@ const QueueContainer = () => {
   const [filteredData, setFilteredData] = useState(data);
   const [stringedValues, setStringedValues] = useState([]);
   const [statusView, setStatusView] = useState('PENDING_REVIEW');
+  const [colors, setColors] = useState();
+
+  useEffect(() => {
+    setLoading(true);
+    RequestService.getActiveColors(
+      response => {
+        const data = response.data.data;
+        setLoading(false);
+        var colorList = [];
+        // eslint-disable-next-line array-callback-return
+        data.map(color => {
+          colorList.push(color.color);
+        });
+        setColors(colorList);
+      },
+      error => console.error(error),
+    );
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -79,6 +97,7 @@ const QueueContainer = () => {
       setStatus={setStatus}
       filterByTerm={filterByTerm}
       filteredData={filteredData}
+      colors={colors}
     />
   );
 };
