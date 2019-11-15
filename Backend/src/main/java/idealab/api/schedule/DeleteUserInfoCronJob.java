@@ -34,7 +34,7 @@ public class DeleteUserInfoCronJob {
     // if yes, delete the user and associated print jobs
 
     //Run everyday at 6am - Delete users older than 30 days
-    @Scheduled(cron = "0 0 6 * * * * *")
+    @Scheduled(cron = "0 0 6 * * *")
     public void deleteUserInfo() {
         LOGGER.info("Running cron job to delete users");
         Iterable<CustomerInfo> customerInfoList = customerInfoRepo.findAll();
