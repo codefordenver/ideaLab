@@ -51,6 +51,7 @@ import idealab.api.repositories.ColorTypeRepo;
 import idealab.api.repositories.CustomerInfoRepo;
 import idealab.api.repositories.EmployeeRepo;
 import idealab.api.repositories.PrintJobRepo;
+import idealab.api.repositories.QueueRepo;
 import idealab.api.service.EmailHashUtil;
 import idealab.api.service.FileService;
 
@@ -74,6 +75,9 @@ public class PrintJobOperationsTest {
     private EmployeeRepo employeeRepo;
 
     @Mock
+    private QueueRepo queueRepo;
+
+    @Mock
     private EmailHashUtil emailHashUtil;
 
     @Before
@@ -84,7 +88,8 @@ public class PrintJobOperationsTest {
                 colorTypeRepo,
                 customerInfoRepo,
                 employeeRepo,
-                emailHashUtil
+                emailHashUtil,
+                queueRepo
         );
     }
 
@@ -209,7 +214,7 @@ public class PrintJobOperationsTest {
         printJob.setColorType(new ColorType(1, "Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setQueueId(new Queue(1));
+        printJob.setQueueId(new Queue(printJob, new Long(1)));
         printJob.setStatus(Status.ARCHIVED);
         printJob.setEmployee(new Employee());
         printJob.setId(1);
@@ -234,7 +239,7 @@ public class PrintJobOperationsTest {
         printJob.setColorType(new ColorType(1, "Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setQueueId(new Queue(1));
+        printJob.setQueueId(new Queue(printJob, new Long(1)));
         printJob.setStatus(Status.ARCHIVED);
         printJob.setEmployee(new Employee());
         printJob.setId(1);
@@ -280,7 +285,7 @@ public class PrintJobOperationsTest {
         printJob.setColorType(new ColorType(1, "Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setQueueId(new Queue(1));
+        printJob.setQueueId(new Queue(printJob, new Long(1)));
         printJob.setStatus(Status.PENDING_REVIEW);
         printJob.setEmployee(new Employee());
         printJob.setId(1);
@@ -331,8 +336,6 @@ public class PrintJobOperationsTest {
         Employee e = new Employee();
         e.setId(999);
 
-        Queue queue = new Queue(1);
-
         Map<String, String> data = new HashMap<>();
         data.put("filePath", "DROPBOX_PATH");
         data.put("sharableLink", "http://testlink.com");
@@ -347,7 +350,7 @@ public class PrintJobOperationsTest {
         printJob.setUpdatedAt(LocalDateTime.now());
         printJob.setStatus(Status.PENDING_REVIEW);
         printJob.setEmployee(e);
-        printJob.setQueueId(queue);
+        printJob.setQueueId(new Queue(printJob, new Long(1)));
         printJob.setUpdatedAt(LocalDateTime.now());
 
         Set<PrintJob> printJobData = new HashSet<>();
@@ -367,6 +370,7 @@ public class PrintJobOperationsTest {
         when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
         when(printJobRepo.save(any())).thenReturn(printJob);
         when(fileService.uploadFile(anyLong(), any())).thenReturn(data);
+        when(emailHashUtil.MD5Hash(any())).thenReturn("fdslakjfs232");
 
         DataResponse<PrintJob> opResponse = operations.newPrintJob(request, mockPrincipal);
         assert(opResponse.equals(response));
@@ -399,8 +403,6 @@ public class PrintJobOperationsTest {
         Employee e = new Employee();
         e.setId(999);
 
-        Queue queue = new Queue(1);
-
         Map<String, String> data = new HashMap<>();
         data.put("filePath", "DROPBOX_PATH");
         data.put("sharableLink", "http://testlink.com");
@@ -415,7 +417,7 @@ public class PrintJobOperationsTest {
         printJob.setUpdatedAt(LocalDateTime.now());
         printJob.setStatus(Status.PENDING_REVIEW);
         printJob.setEmployee(e);
-        printJob.setQueueId(queue);
+        printJob.setQueueId(new Queue(printJob, new Long(1)));
         printJob.setUpdatedAt(LocalDateTime.now());
 
         Set<PrintJob> printJobData = new HashSet<>();
@@ -516,7 +518,7 @@ public class PrintJobOperationsTest {
         Employee e = new Employee();
         e.setId(999);
 
-        Queue queue = new Queue(1);
+        Queue queue = new Queue();
 
         Map<String, String> data = new HashMap<>();
         data.put("filePath", "DROPBOX_PATH");

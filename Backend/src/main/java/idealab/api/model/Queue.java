@@ -18,24 +18,25 @@ public class Queue extends RecordTimestamp {
     private Integer id;
 
     @OneToOne()
-    @JoinColumn(name="fk_print_job_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name="fk_print_job_id", referencedColumnName = "id", nullable = false, unique = true)
     private PrintJob printJob;
     
     @Column(name = "rank", nullable = false)
-    private Integer rank;
+    private Long rank;
 
     public Queue() {}
 
-    public Queue(Integer rank) {
+    public Queue(PrintJob printJob, Long rank) {
+        this.printJob = printJob;
         this.rank = rank;
     }
 
     //getters and setters
-    public Integer getRank() {
+    public Long getRank() {
         return rank;
     }
 
-    public void setEmailHash(Integer rank) {
+    public void setEmailHash(Long rank) {
         this.rank = rank;
     }
 
