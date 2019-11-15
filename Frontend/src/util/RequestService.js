@@ -96,7 +96,10 @@ const RequestService = {
   getUsers(thenCallback, catchCallback) {
     const backendInstance = generateApiInstance();
     backendInstance
-      .get(backendUrl + '/users'),
+      .get(backendUrl + '/users')
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
 
   getActiveColors(thenCallback, catchCallback) {
     const backendInstance = generateApiInstance();
