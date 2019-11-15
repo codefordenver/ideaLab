@@ -53,7 +53,7 @@ public class PrintJob extends RecordTimestamp implements Comparable<PrintJob> {
     private Status status;
 
     @NotAudited
-    @OneToOne(targetEntity=Queue.class, mappedBy="printJob")
+    @OneToOne(targetEntity=Queue.class, mappedBy="printJob", cascade = CascadeType.REMOVE)
     private Queue queueId;
 
     @Column(name = "comments")
