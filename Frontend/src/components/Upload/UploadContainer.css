@@ -9,7 +9,7 @@
   margin-top: 2rem;
 }
 
-.uploadContainer div {
+.uploadContainer .input-container div {
   display: flex;
   flex-direction: column;
   align-items: center;
