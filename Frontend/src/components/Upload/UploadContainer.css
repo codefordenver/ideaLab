@@ -4,6 +4,10 @@
   justify-content: center;
 }
 
+.uploadContainer img {
+  width: 100%;
+}
+
 .uploadContainer div {
   display: flex;
   flex-direction: column;
