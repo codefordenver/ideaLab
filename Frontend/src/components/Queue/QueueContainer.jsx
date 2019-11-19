@@ -36,7 +36,7 @@ const QueueContainer = () => {
         setLoading(false);
         const formattedData = data.map(printjob => {
           return {
-            color: printjob.colorTypeId.color,
+            color: printjob.colorType.color,
             submitted: printjob.createdAt,
             comments: printjob.comments,
             status: printjob.status,
