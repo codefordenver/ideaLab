@@ -6,11 +6,14 @@
 
 .uploadContainer img {
   width: 100%;
+  margin-top: 2rem;
 }
 
 .uploadContainer div {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .uploadContainer .upload {
@@ -18,6 +21,10 @@
   border-width: 2px;
   border-color: var(--light-blue);
   height: 7.5em;
+  background-color: var(--misc-gray);
+}
+.uploadContainer .upload p {
+  color: var(--other-dark-blue);
 }
 
 .uploadContainer > form {
@@ -26,19 +33,28 @@
   flex-direction: column;
 }
 .uploadContainer input {
-  background-color: var(--dark-blue);
-  color: var(--white-text);
+  border: 1px solid black;
   padding: 0.5rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
+  margin-left: 0;
+  margin-right: 0;
+  width: 95%;
 }
 
 .uploadContainer input::placeholder {
-  color: var(--white-text);
   text-align: left;
   margin-left: 0.5em;
 }
 .uploadContainer button.shapedButton {
-  background-color: #1f9385;
+  background-color: var(--other-dark-blue);
   color: var(--white-text);
+  width: 70%;
+  align-self: center;
+}
+
+.uploadContainer .input-container {
+  display: flex;
+  flex-direction: row;
+
 }

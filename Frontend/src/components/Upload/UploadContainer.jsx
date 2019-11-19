@@ -50,7 +50,14 @@ function UploadContainer() {
 
   return (
     <div className={'uploadContainer'}>
-      {loading ? <div className={'loader-container'}>Uploading File...<Loader/></div> : false}
+      {loading ? (
+        <div className={'loader-container'}>
+          Uploading File...
+          <Loader />
+        </div>
+      ) : (
+        false
+      )}
       <form
         onSubmit={e => {
           e.preventDefault();
@@ -67,8 +74,8 @@ function UploadContainer() {
           RequestService.newPrintJob(formData, onSuccess, onFailure);
         }}
       >
-        <img src={ideaLABlogo} alt={"ideaLab logo"}></img>
-        <div className={"success"}>{success}</div>
+        <img src={ideaLABlogo} alt={'ideaLab logo'}></img>
+        <div className={'success'}>{success}</div>
         <Upload
           className={'upload'}
           filename={filename}
@@ -76,43 +83,50 @@ function UploadContainer() {
           callback={files => setFile(files[0])}
         ></Upload>
         <p>{errors.file ? errors.file : null}</p>
-        <BasicInput
-          className={'upload'}
-          value={customerFirstName}
-          placeHolder={'First Name'}
-          changeHandler={setCustomerFirstName}
-          error={errors.customerFirstName}
-        />
-        <BasicInput
-          className={'upload'}
-          value={customerLastName}
-          placeHolder={'Last Name'}
-          changeHandler={setCustomerLastName}
-          error={errors.customerLastName}
-        />
-        <BasicInput
-          className={'upload'}
-          value={email}
-          placeHolder={'Email'}
-          changeHandler={setEmail}
-          error={errors.email}
-        />
-        <BasicInput
-          className={'upload'}
-          value={color}
-          placeHolder={'Color'}
-          changeHandler={setColor}
-          error={errors.color}
-        />
-        <BasicInput
-          className={'upload'}
-          value={comments}
-          placeHolder={'Comments'}
-          changeHandler={setComments}
-          error={errors.comments}
-        />
+        <div className={"input-container"}>
+          <div>
+            {' '}
+            <BasicInput
+              className={'upload'}
+              value={customerFirstName}
+              placeHolder={'First Name'}
+              changeHandler={setCustomerFirstName}
+              error={errors.customerFirstName}
+            />
+            <BasicInput
+              className={'upload'}
+              value={customerLastName}
+              placeHolder={'Last Name'}
+              changeHandler={setCustomerLastName}
+              error={errors.customerLastName}
+            />
+            <BasicInput
+              className={'upload'}
+              value={email}
+              placeHolder={'Email'}
+              changeHandler={setEmail}
+              error={errors.email}
+            />
+            <BasicInput
+              className={'upload'}
+              value={comments}
+              placeHolder={'Comments'}
+              changeHandler={setComments}
+              error={errors.comments}
+            />
+          </div>
+          <div>
+            <BasicInput
+              className={'upload'}
+              value={color}
+              placeHolder={'Color'}
+              changeHandler={setColor}
+              error={errors.color}
+            />
+          </div>
+        </div>
         <div>
-          <div className={"error"}>{errors.form ? errors.form : null}</div>
+          <div className={'error'}>{errors.form ? errors.form : null}</div>
         </div>
         <button className={'shapedButton'} type="submit">
           SUMBIT
