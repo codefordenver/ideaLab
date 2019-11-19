@@ -17,6 +17,10 @@
 }
 
 .uploadContainer .upload {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
   border-style: dashed;
   border-width: 2px;
   border-color: var(--light-blue);
