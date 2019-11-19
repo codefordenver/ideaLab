@@ -83,7 +83,7 @@ function UploadContainer() {
           callback={files => setFile(files[0])}
         ></Upload>
         <p>{errors.file ? errors.file : null}</p>
-        <div className={"input-container"}>
+        <div className={'input-container'}>
           <div>
             {' '}
             <BasicInput
@@ -107,13 +107,16 @@ function UploadContainer() {
               changeHandler={setEmail}
               error={errors.email}
             />
-            <BasicInput
-              className={'upload'}
-              value={comments}
-              placeHolder={'Comments'}
-              changeHandler={setComments}
-              error={errors.comments}
-            />
+            <div>
+              <textarea
+                onChange={e => setComments(e.target.value)}
+                name="comments"
+                rows="3"
+                value={comments}
+                placeholder={'Comments'}
+              />
+              <span>{errors.comments ? errors.comments : null}</span>
+            </div>
           </div>
           <div>
             <BasicInput
@@ -125,9 +128,11 @@ function UploadContainer() {
             />
           </div>
         </div>
-        <div>
-          <div className={'error'}>{errors.form ? errors.form : null}</div>
-        </div>
+        {errors.form ? (
+          <div>
+            <div className={'error'}>{errors.form ? errors.form : null}</div>
+          </div>
+        ) : null}
         <button className={'shapedButton'} type="submit">
           SUMBIT
         </button>
