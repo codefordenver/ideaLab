@@ -44,7 +44,7 @@
 }
 
 .uploadContainer input, .uploadContainer textarea {
-  border: 1px solid black;
+  border: 2px solid black;
   padding: 0.5rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
