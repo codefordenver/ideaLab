@@ -1,8 +1,5 @@
 package idealab.api.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import idealab.api.dto.request.EmployeeSignUpRequest;
 import idealab.api.dto.request.UserChangePasswordRequest;
+import idealab.api.dto.response.BasicEmployeeResponse;
 import idealab.api.dto.response.GenericResponse;
-import idealab.api.dto.response.UserResponse;
 import idealab.api.operations.UserOperations;
 
 @RestController
@@ -48,7 +45,7 @@ public class UserController {
 
     @GetMapping()
     public ResponseEntity<?> getUsers() {
-        UserResponse response = userOperations.getAllUsers();
+        BasicEmployeeResponse response = userOperations.getAllUsers();
         
         return new ResponseEntity<>(response, response.getHttpStatus());
     }

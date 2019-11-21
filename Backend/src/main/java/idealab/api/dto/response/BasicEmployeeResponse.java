@@ -5,9 +5,9 @@ import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
 
-import idealab.api.model.submodel.EmployeeBasic;
+import idealab.api.model.EmployeeRole;
 
-public class UserResponse extends GenericResponse {
+public class BasicEmployeeResponse extends GenericResponse {
     private List<EmployeeBasic> data;
 
     public List<EmployeeBasic> getData() {
@@ -18,9 +18,9 @@ public class UserResponse extends GenericResponse {
         this.data = data;
     }
 
-    public UserResponse(){}
+    public BasicEmployeeResponse(){}
 
-    public UserResponse(String message) {
+    public BasicEmployeeResponse(String message) {
         this.setMessage(message);
         this.setSuccess(false);
         this.setHttpStatus(HttpStatus.BAD_REQUEST);
@@ -31,8 +31,18 @@ public class UserResponse extends GenericResponse {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        UserResponse response = (UserResponse) o;
+        BasicEmployeeResponse response = (BasicEmployeeResponse) o;
         return Objects.equals(data, response.data);
+    }
+
+    /**
+     * Subset of the Employee model. Only contains id, username, role, first name, and last name.
+     */
+    public interface EmployeeBasic { 
+        String getFirstName();
+        String getLastName();
+        String getUsername();
+        EmployeeRole getRole();
     }
 
 }
