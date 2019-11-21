@@ -1,0 +1,62 @@
+.adminSettingsContainer {
+    margin: 80px;
+}
+
+.headerContainer {
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.colorPickerContainer {
+    padding: 5px;
+    margin-left: 0;
+    margin-bottom: 10px;
+    display: block;
+    width: auto;
+    min-width: 100%;
+    height: auto;
+    min-height: 100%;
+}
+
+.sectionContainer {
+    font-size: 0.9em;
+    display: block;
+    text-align: left;
+}
+
+hr {
+    border: 2px solid black;
+    width: 180px;
+    margin-left: 0;
+}
+
+.adminSettingsSectionHeader {
+    font-size: 1em;
+}
+
+.listContainer {
+    margin-left: 15px;
+}
+
+.adminSettingsInput {
+    background-color: #577BA1;
+    color: white;
+    border: 1px solid black;
+    padding: 5px;
+    height: 1.2em;
+    width: 250px;
+    display: inline-block;
+}
+
+.input::placeholder {
+    color: white;
+}
+
+.adminSettingsButton {
+    background-color: #658B5A;
+    border-radius: 3px;
+    color: white;
+    padding: 5px;
+    max-width: 75px;
+}
