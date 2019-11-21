@@ -97,7 +97,7 @@ const RequestService = {
     const backendInstance = generateApiInstance();
     const cardId = payload.id;
     backendInstance
-      .put(backendUrl + `/api/print-jobs/${cardId}/model`, payload)
+      .put(backendUrl + `/api/print-jobs/${cardId}`, payload)
       .then(thenCallback)
       .catch(catchCallback);
   },

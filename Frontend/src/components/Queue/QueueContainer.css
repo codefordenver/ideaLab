@@ -29,17 +29,18 @@ tbody {
 
 td,
 th {
-  padding: 0.5rem 4em;
+  padding: 0.5rem;
 }
 
 thead tr {
   display: flex;
   text-align: left;
+  margin-left: 20px;
 }
 
 tbody tr {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .printFileName {
@@ -48,18 +49,21 @@ tbody tr {
 
 tr td:nth-child(1),
 tr th:nth-child(1) {
-  width: 22%;
+  width: 21%;
 }
 
 tr td:nth-child(2),
 tr th:nth-child(2) {
-  width: 54%;
+  width: 33%;
 }
 
 tr td:nth-child(3),
 tr th:nth-child(3),
 tr td:nth-child(4),
-tr th:nth-child(4),
+tr th:nth-child(4) {
+  width: 21%;
+}
+
 tr td:nth-child(5),
 tr th:nth-child(5) {
   width: 8%;

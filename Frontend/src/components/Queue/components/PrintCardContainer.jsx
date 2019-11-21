@@ -66,6 +66,7 @@ const PrintCardContainer = ({ data, saveCard }) => {
   };
 
   const saveChanges = () => {
+    console.log('SAVING CARD:', card);
     saveCard(card);
     setSaveIconShowing(false);
   };
