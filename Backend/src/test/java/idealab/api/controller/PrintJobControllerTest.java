@@ -178,12 +178,12 @@ public class PrintJobControllerTest {
 
         PrintJob printJob = new PrintJob();
 
-        printJob.setColorTypeId(new ColorType(1, "Red"));
+        printJob.setColorType(new ColorType(1, "Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setQueueId(new Queue(1));
+        printJob.setQueueId(new Queue());
         printJob.setStatus(Status.ARCHIVED);
-        printJob.setEmployeeId(new Employee());
+        printJob.setEmployee(new Employee());
         printJob.setId(1);
 
         List<PrintJob> printJobList = Arrays.asList(printJob);
@@ -229,12 +229,12 @@ public class PrintJobControllerTest {
 
         PrintJob printJob = new PrintJob();
 
-        printJob.setColorTypeId(new ColorType(1, "Red"));
+        printJob.setColorType(new ColorType(1, "Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setQueueId(new Queue(1));
+        printJob.setQueueId(new Queue());
         printJob.setStatus(Status.ARCHIVED);
-        printJob.setEmployeeId(new Employee());
+        printJob.setEmployee(new Employee());
         printJob.setCustomerInfo(customerInfo);
         printJob.setId(1);
 
@@ -267,49 +267,49 @@ public class PrintJobControllerTest {
         assertEquals(actualResponse.getMessage(), expectedResponse.getMessage());
     }
 
-     @Test
-     public void getDeletablePrintJobs() throws Exception {
-        // given
-        CustomerInfo customerInfo = new CustomerInfo();
-        customerInfo.setId(1);
+	 @Test
+	 public void getDeletablePrintJobs() throws Exception {
+	     // given
+         CustomerInfo customerInfo = new CustomerInfo();
+         customerInfo.setId(1);
 
-                PrintJob printJob = new PrintJob();
-        
-                printJob.setColorTypeId(new ColorType(1, "Red"));
-                printJob.setComments("comments");
-                printJob.setCreatedAt(LocalDateTime.now());
-                printJob.setQueueId(new Queue(1));
-                printJob.setStatus(Status.PENDING_REVIEW);
-                printJob.setEmployeeId(new Employee());
-                printJob.setId(1);
-        
-                DataResponse<PrintJob> expectedResponse = new DataResponse<PrintJob>(printJob);
-        
-                Mockito.when(printJobOperations.getDeletablePrintJobs()).thenReturn(expectedResponse);
-        
-                // act
-                String jsonString = mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/print-jobs/deletable")
-                                .accept(MediaType.APPLICATION_JSON)
-                )
-                .andExpect(status().isAccepted())
-                .andReturn().getResponse().getContentAsString();
-        
-                ObjectMapper mapper = new ObjectMapper();
-                mapper.registerModule(new JavaTimeModule());
-        
-                DataResponse<PrintJob> actualResponse = mapper.readValue(jsonString, new TypeReference<DataResponse<PrintJob>>() {});
-        
-                int actualId = actualResponse.getData()
-                        .get(0)
-                        .getId();
-        
-                int expectedId = expectedResponse
-                        .getData()
-                        .get(0)
-                        .getId();
-        
-                // assert
-                assertEquals(expectedId, actualId);
-        }
+		 PrintJob printJob = new PrintJob();
+		
+		 printJob.setColorType(new ColorType(1, "Red"));
+		 printJob.setComments("comments");
+		 printJob.setCreatedAt(LocalDateTime.now());
+		 printJob.setQueueId(new Queue());
+		 printJob.setStatus(Status.PENDING_REVIEW);
+		 printJob.setEmployee(new Employee());
+		 printJob.setId(1);
+		
+		 DataResponse<PrintJob> expectedResponse = new DataResponse<PrintJob>(printJob);
+		
+		 Mockito.when(printJobOperations.getDeletablePrintJobs()).thenReturn(expectedResponse);
+		
+		 // act
+		 String jsonString = mockMvc.perform(
+		         MockMvcRequestBuilders.get("/api/print-jobs/deletable")
+		                 .accept(MediaType.APPLICATION_JSON)
+		 )
+		 .andExpect(status().isAccepted())
+		 .andReturn().getResponse().getContentAsString();
+		
+		 ObjectMapper mapper = new ObjectMapper();
+		 mapper.registerModule(new JavaTimeModule());
+		
+		 DataResponse<PrintJob> actualResponse = mapper.readValue(jsonString, new TypeReference<DataResponse<PrintJob>>() {});
+		
+		 int actualId = actualResponse.getData()
+		         .get(0)
+		         .getId();
+		
+		 int expectedId = expectedResponse
+		         .getData()
+		         .get(0)
+		         .getId();
+		
+		 // assert
+		 assertEquals(expectedId, actualId);
+	 }
 }

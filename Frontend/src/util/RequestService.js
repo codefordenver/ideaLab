@@ -92,6 +92,22 @@ const RequestService = {
       .then(thenCallback)
       .catch(catchCallback);
   },
+
+  getUsers(thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .get(backendUrl + '/users')
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
+  getActiveColors(thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .get(backendUrl + '/colors')
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
 };
 
 export default RequestService;

@@ -11,6 +11,7 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -32,11 +33,13 @@ import idealab.api.model.ColorType;
 import idealab.api.model.CustomerInfo;
 import idealab.api.model.Employee;
 import idealab.api.model.PrintJob;
+import idealab.api.model.Queue;
 import idealab.api.model.Status;
 import idealab.api.repositories.ColorTypeRepo;
 import idealab.api.repositories.CustomerInfoRepo;
 import idealab.api.repositories.EmployeeRepo;
 import idealab.api.repositories.PrintJobRepo;
+import idealab.api.repositories.QueueRepo;
 import idealab.api.service.EmailHashUtil;
 import idealab.api.service.FileService;
 
@@ -46,18 +49,20 @@ public class PrintJobOperations {
     private final PrintJobRepo printJobRepo;
     private final ColorTypeRepo colorTypeRepo;
     private final CustomerInfoRepo customerInfoRepo;
+    private final QueueRepo queueRepo;
     private final EmployeeRepo employeeRepo;
     private final EmailHashUtil emailHashUtil;
 
     public PrintJobOperations(FileService fileService, PrintJobRepo printJobRepo,
                               ColorTypeRepo colorTypeRepo, CustomerInfoRepo customerInfoRepo,
-                              EmployeeRepo employeeRepo, EmailHashUtil emailHashUtil) {
+                              EmployeeRepo employeeRepo, EmailHashUtil emailHashUtil, QueueRepo queueRepo) {
 
         this.fileService = fileService;
         this.printJobRepo = printJobRepo;
         this.colorTypeRepo = colorTypeRepo;
         this.customerInfoRepo = customerInfoRepo;
         this.employeeRepo = employeeRepo;
+        this.queueRepo = queueRepo;
         this.emailHashUtil = emailHashUtil;
     }
 
@@ -112,7 +117,6 @@ public class PrintJobOperations {
         printJob.setFilePath(data.get("filePath"));
         printJob.setFileSharableLink(data.get("sharableLink"));
 
-        // TODO: set the queue position of the new job to be at the end of the list.
         Set<PrintJob> printJobs;
 
         if(customer.getPrintJobs() == null) {
@@ -123,6 +127,14 @@ public class PrintJobOperations {
         printJobs.add(printJob);
         customer.setPrintJobs(printJobs);
         printJob = printJobRepo.save(printJob);
+
+        // If there is only one print job for the given customer (itself), add the rank to the bottom of the queue.
+        // We only need to add it to the rank table if there is not currently a print job from this customer in the
+        // rank table. Otherwise, they will be added when the most recent print job has changed.
+        if (printJobRepo.findByCustomerInfo(customer).size() == 1) {
+            Queue queue = new Queue(printJob, queueRepo.getMaximumRank()+1);
+            queue = queueRepo.save(queue);
+        }
 
         return getPrintJobResponse(response, printJob, data, "Successfully saved new file to database!");
     }
@@ -195,6 +207,30 @@ public class PrintJobOperations {
 
         if(employee == null || printJob == null){
             ErrorType.PRINT_JOB_UPDATE_FAILED.throwException();
+        } 
+
+        // If the status is changed to final, delete the print job rank from the rank table
+        // and check if another one needs to be added
+        if (requestStatus == Status.REJECTED || requestStatus == Status.COMPLETED) {
+            // Delete rank from queue table
+            Queue deleteQueue = queueRepo.findByPrintJobId(printJob);
+            queueRepo.delete(deleteQueue);
+
+            // Get list of print jobs for customer + remove any completed/rejected
+            // + get oldest date in list
+            CustomerInfo customer = printJob.getCustomerInfo();
+            List<PrintJob> printJobs = printJobRepo.findByCustomerInfo(customer);
+            printJobs.removeIf(job -> (job.getStatus() == Status.REJECTED || job.getStatus() == Status.COMPLETED));
+
+            if (printJobs.size() > 1) {
+                Collections.sort(printJobs);
+            }
+
+            // Add most recent one to Queue table
+            if (printJobs.size() > 0) {
+                Queue newQueue = new Queue(printJobs.get(0), queueRepo.getMaximumRank()+1);
+                newQueue = queueRepo.save(newQueue);
+            }
         }
 
         GenericResponse response = new GenericResponse();
@@ -291,7 +327,7 @@ public class PrintJobOperations {
 
         if(colorType != null && colorType.getColor() != null && !colorType.getColor().trim().isEmpty()) {
             isChanged = true;
-            printJob.setColorTypeId(colorType);
+            printJob.setColorType(colorType);
         }
 
         // Dont save if nothing actually updated

@@ -51,6 +51,7 @@ import idealab.api.repositories.ColorTypeRepo;
 import idealab.api.repositories.CustomerInfoRepo;
 import idealab.api.repositories.EmployeeRepo;
 import idealab.api.repositories.PrintJobRepo;
+import idealab.api.repositories.QueueRepo;
 import idealab.api.service.EmailHashUtil;
 import idealab.api.service.FileService;
 
@@ -74,6 +75,9 @@ public class PrintJobOperationsTest {
     private EmployeeRepo employeeRepo;
 
     @Mock
+    private QueueRepo queueRepo;
+
+    @Mock
     private EmailHashUtil emailHashUtil;
 
     @Before
@@ -84,7 +88,8 @@ public class PrintJobOperationsTest {
                 colorTypeRepo,
                 customerInfoRepo,
                 employeeRepo,
-                emailHashUtil
+                emailHashUtil,
+                queueRepo
         );
     }
 
@@ -99,7 +104,7 @@ public class PrintJobOperationsTest {
         employee.setId(1);
 
         PrintJob printJob = new PrintJob();
-        printJob.setEmployeeId(employee);
+        printJob.setEmployee(employee);
         printJob.setId(2);
         printJob.setStatus(Status.COMPLETED);
 
@@ -127,7 +132,7 @@ public class PrintJobOperationsTest {
         employee.setId(1);
 
         PrintJob printJob = new PrintJob();
-        printJob.setEmployeeId(employee);
+        printJob.setEmployee(employee);
         printJob.setId(2);
         printJob.setStatus(Status.COMPLETED);
 
@@ -148,7 +153,7 @@ public class PrintJobOperationsTest {
         employee.setId(1);
 
         PrintJob printJob = new PrintJob();
-        printJob.setEmployeeId(employee);
+        printJob.setEmployee(employee);
         printJob.setId(2);
 
         when(employeeRepo.findEmployeeById(anyInt())).thenReturn(employee);
@@ -172,7 +177,7 @@ public class PrintJobOperationsTest {
         employee.setId(1);
 
         PrintJob printJob = new PrintJob();
-        printJob.setEmployeeId(employee);
+        printJob.setEmployee(employee);
         printJob.setId(2);
 
         when(employeeRepo.findEmployeeById(anyInt())).thenReturn(null);
@@ -206,12 +211,12 @@ public class PrintJobOperationsTest {
         // given
         PrintJob printJob = new PrintJob();
 
-        printJob.setColorTypeId(new ColorType(1, "Red"));
+        printJob.setColorType(new ColorType(1, "Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setQueueId(new Queue(1));
+        printJob.setQueueId(new Queue(printJob, new Long(1)));
         printJob.setStatus(Status.ARCHIVED);
-        printJob.setEmployeeId(new Employee());
+        printJob.setEmployee(new Employee());
         printJob.setId(1);
 
         List<PrintJob> printJobs = new ArrayList<PrintJob>();
@@ -231,12 +236,12 @@ public class PrintJobOperationsTest {
         // given
         PrintJob printJob = new PrintJob();
 
-        printJob.setColorTypeId(new ColorType(1, "Red"));
+        printJob.setColorType(new ColorType(1, "Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setQueueId(new Queue(1));
+        printJob.setQueueId(new Queue(printJob, new Long(1)));
         printJob.setStatus(Status.ARCHIVED);
-        printJob.setEmployeeId(new Employee());
+        printJob.setEmployee(new Employee());
         printJob.setId(1);
 
         List<PrintJob> printJobList = Arrays.asList(printJob);
@@ -277,12 +282,12 @@ public class PrintJobOperationsTest {
         // given
         PrintJob printJob = new PrintJob();
 
-        printJob.setColorTypeId(new ColorType(1, "Red"));
+        printJob.setColorType(new ColorType(1, "Red"));
         printJob.setComments("comments");
         printJob.setCreatedAt(LocalDateTime.now());
-        printJob.setQueueId(new Queue(1));
+        printJob.setQueueId(new Queue(printJob, new Long(1)));
         printJob.setStatus(Status.PENDING_REVIEW);
-        printJob.setEmployeeId(new Employee());
+        printJob.setEmployee(new Employee());
         printJob.setId(1);
 
         List<PrintJob> printJobs = new ArrayList<PrintJob>();
@@ -331,14 +336,12 @@ public class PrintJobOperationsTest {
         Employee e = new Employee();
         e.setId(999);
 
-        Queue queue = new Queue(1);
-
         Map<String, String> data = new HashMap<>();
         data.put("filePath", "DROPBOX_PATH");
         data.put("sharableLink", "http://testlink.com");
 
         PrintJob printJob = new PrintJob();
-        printJob.setColorTypeId(color);
+        printJob.setColorType(color);
         printJob.setComments("COMMENTS");
         printJob.setCreatedAt(LocalDateTime.now());
         printJob.setFilePath("DROPBOX_PATH");
@@ -346,8 +349,8 @@ public class PrintJobOperationsTest {
         printJob.setId(1);
         printJob.setUpdatedAt(LocalDateTime.now());
         printJob.setStatus(Status.PENDING_REVIEW);
-        printJob.setEmployeeId(e);
-        printJob.setQueueId(queue);
+        printJob.setEmployee(e);
+        printJob.setQueueId(new Queue(printJob, new Long(1)));
         printJob.setUpdatedAt(LocalDateTime.now());
 
         Set<PrintJob> printJobData = new HashSet<>();
@@ -367,6 +370,7 @@ public class PrintJobOperationsTest {
         when(employeeRepo.findEmployeeByUsername(any())).thenReturn(e);
         when(printJobRepo.save(any())).thenReturn(printJob);
         when(fileService.uploadFile(anyLong(), any())).thenReturn(data);
+        when(emailHashUtil.MD5Hash(any())).thenReturn("fdslakjfs232");
 
         DataResponse<PrintJob> opResponse = operations.newPrintJob(request, mockPrincipal);
         assert(opResponse.equals(response));
@@ -399,14 +403,12 @@ public class PrintJobOperationsTest {
         Employee e = new Employee();
         e.setId(999);
 
-        Queue queue = new Queue(1);
-
         Map<String, String> data = new HashMap<>();
         data.put("filePath", "DROPBOX_PATH");
         data.put("sharableLink", "http://testlink.com");
 
         PrintJob printJob = new PrintJob();
-        printJob.setColorTypeId(color);
+        printJob.setColorType(color);
         printJob.setComments("COMMENTS");
         printJob.setCreatedAt(LocalDateTime.now());
         printJob.setFilePath("DROPBOX_PATH");
@@ -414,8 +416,8 @@ public class PrintJobOperationsTest {
         printJob.setId(1);
         printJob.setUpdatedAt(LocalDateTime.now());
         printJob.setStatus(Status.PENDING_REVIEW);
-        printJob.setEmployeeId(e);
-        printJob.setQueueId(queue);
+        printJob.setEmployee(e);
+        printJob.setQueueId(new Queue(printJob, new Long(1)));
         printJob.setUpdatedAt(LocalDateTime.now());
 
         Set<PrintJob> printJobData = new HashSet<>();
@@ -516,7 +518,7 @@ public class PrintJobOperationsTest {
         Employee e = new Employee();
         e.setId(999);
 
-        Queue queue = new Queue(1);
+        Queue queue = new Queue();
 
         Map<String, String> data = new HashMap<>();
         data.put("filePath", "DROPBOX_PATH");
@@ -527,7 +529,7 @@ public class PrintJobOperationsTest {
             PrintJob printJob = new PrintJob();
             printJob.setCreatedAt(LocalDateTime.now());
             printJob.setId(i + 1);
-            printJob.setEmployeeId(e);
+            printJob.setEmployee(e);
             printJob.setQueueId(queue);
             printJob.setUpdatedAt(LocalDateTime.now());
             printJobs.add(printJob);
@@ -657,7 +659,7 @@ public class PrintJobOperationsTest {
         printJob.setStatus(Status.valueOf("FAILED"));
         ColorType colorType = new ColorType();
         colorType.setColor("blue");
-        printJob.setColorTypeId(colorType);
+        printJob.setColorType(colorType);
 
         Employee e = new Employee();
         e.setId(1);
@@ -676,7 +678,7 @@ public class PrintJobOperationsTest {
         assertTrue("response is null", response != null);
         assertTrue("comments are not equal", response.getData().get(0).getComments().equals(request.getComments()));
         assertTrue("status is not equal", response.getData().get(0).getStatus() == Status.fromValue(request.getStatus()));
-        assertTrue("color is not equal", response.getData().get(0).getColorTypeId().getColor().equals(request.getColorType()));
+        assertTrue("color is not equal", response.getData().get(0).getColorType().getColor().equals(request.getColorType()));
     }
 
     @Test
@@ -690,7 +692,7 @@ public class PrintJobOperationsTest {
         printJob.setStatus(Status.valueOf("FAILED"));
         ColorType colorType = new ColorType();
         colorType.setColor("blue");
-        printJob.setColorTypeId(colorType);
+        printJob.setColorType(colorType);
 
         Employee e = new Employee();
         e.setId(1);
@@ -709,7 +711,7 @@ public class PrintJobOperationsTest {
         assertTrue("response is null", response != null);
         assertTrue("comments are not equal", response.getData().get(0).getComments().equals(printJob.getComments()));
         assertTrue("status is not equal", response.getData().get(0).getStatus() == printJob.getStatus());
-        assertTrue("color is not equal", response.getData().get(0).getColorTypeId().getColor().equals(request.getColorType()));
+        assertTrue("color is not equal", response.getData().get(0).getColorType().getColor().equals(request.getColorType()));
     }
 
     @Test
@@ -723,7 +725,7 @@ public class PrintJobOperationsTest {
         printJob.setStatus(Status.valueOf("FAILED"));
         ColorType colorType = new ColorType();
         colorType.setColor("blue");
-        printJob.setColorTypeId(colorType);
+        printJob.setColorType(colorType);
 
         Employee e = new Employee();
         e.setId(1);
@@ -742,7 +744,7 @@ public class PrintJobOperationsTest {
         assertTrue("response is null", response != null);
         assertTrue("comments are not equal", response.getData().get(0).getComments().equals(printJob.getComments()));
         assertTrue("status is not equal", response.getData().get(0).getStatus() == Status.fromValue(request.getStatus()));
-        assertTrue("color is not equal", response.getData().get(0).getColorTypeId().getColor().equals(printJob.getColorTypeId().getColor()));
+        assertTrue("color is not equal", response.getData().get(0).getColorType().getColor().equals(printJob.getColorType().getColor()));
     }
 
     @Test
@@ -756,7 +758,7 @@ public class PrintJobOperationsTest {
         printJob.setStatus(Status.valueOf("FAILED"));
         ColorType colorType = new ColorType();
         colorType.setColor("blue");
-        printJob.setColorTypeId(colorType);
+        printJob.setColorType(colorType);
 
         Employee e = new Employee();
         e.setId(1);
@@ -775,7 +777,7 @@ public class PrintJobOperationsTest {
         assertTrue("response is null", response != null);
         assertTrue("comments are not equal", response.getData().get(0).getComments().equals(request.getComments()));
         assertTrue("status is not equal", response.getData().get(0).getStatus() == printJob.getStatus());
-        assertTrue("color is not equal", response.getData().get(0).getColorTypeId().getColor().equals(printJob.getColorTypeId().getColor()));
+        assertTrue("color is not equal", response.getData().get(0).getColorType().getColor().equals(printJob.getColorType().getColor()));
     }
 
     @Test

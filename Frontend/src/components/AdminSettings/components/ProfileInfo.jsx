@@ -5,7 +5,7 @@ import StyledDropdown from '../../globalStyles/StyledDropdown';
 const UserProfilesContainer = props => {
   const { name, role } = props.userData;
 
-  const titleOptions = ['Admin', 'Staff'];
+  const titleOptions = ['ADMIN', 'STAFF'];
 
   const triggerDelete = () => {
     alert(`Are you sure you want to delete this profile? ${name}`);
