@@ -36,6 +36,10 @@
   font-size: 0.8rem;
 }
 
+.employeeNameDisplay {
+  text-transform: capitalize;
+}
+
 .dropdownContainer {
   display: inherit;
 }

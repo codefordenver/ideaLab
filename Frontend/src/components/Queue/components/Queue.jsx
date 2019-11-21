@@ -7,7 +7,7 @@ import PrintCardContainer from '../components/PrintCardContainer';
 
 const Queue = props => {
   const renderPrintCards = props.filteredData.map((el, i) => (
-    <PrintCardContainer data={el} key={i} />
+    <PrintCardContainer data={el} key={i} colors={props.colors} />
   ));
   return (
     <div>
