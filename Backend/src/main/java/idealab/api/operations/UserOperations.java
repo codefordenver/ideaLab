@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 import idealab.api.dto.request.EmployeeSignUpRequest;
 import idealab.api.dto.request.UserChangePasswordRequest;
-import idealab.api.dto.response.BasicEmployeeResponse;
-import idealab.api.dto.response.BasicEmployeeResponse.EmployeeBasic;
+import idealab.api.dto.response.BasicEmployee;
+import idealab.api.dto.response.DataResponse;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.exception.ErrorType;
 import idealab.api.exception.IdeaLabApiException;
@@ -37,10 +37,10 @@ public class UserOperations {
      * This is to be used with the find all simple method in the employee repo.
      * @return
      */
-    public BasicEmployeeResponse getAllUsers() {
-        BasicEmployeeResponse response = new BasicEmployeeResponse("Could not get list of users");
+    public DataResponse<BasicEmployee> getAllUsers() {
+        DataResponse<BasicEmployee> response = new DataResponse<BasicEmployee>("Could not get list of users");
 
-        List<EmployeeBasic> users = employeeRepo.findAllEmployeeBasics();
+        List<BasicEmployee> users = employeeRepo.findAllEmployeeBasics();
 
         if (users == null || users.isEmpty()){
             ErrorType.USER_NOT_FOUND.throwException();
@@ -48,7 +48,7 @@ public class UserOperations {
 
         response.setSuccess(true);
         response.setMessage("Successfully returned users");
-        response.setSimpleData(users);
+        response.setData(users);
         response.setHttpStatus(HttpStatus.ACCEPTED);
 
         return response;

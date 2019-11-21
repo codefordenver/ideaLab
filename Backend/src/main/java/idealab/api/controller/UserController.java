@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import idealab.api.dto.request.EmployeeSignUpRequest;
 import idealab.api.dto.request.UserChangePasswordRequest;
-import idealab.api.dto.response.BasicEmployeeResponse;
+import idealab.api.dto.response.BasicEmployee;
+import idealab.api.dto.response.DataResponse;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.operations.UserOperations;
 
@@ -45,7 +46,7 @@ public class UserController {
 
     @GetMapping()
     public ResponseEntity<?> getUsers() {
-        BasicEmployeeResponse response = userOperations.getAllUsers();
+        DataResponse<BasicEmployee> response = userOperations.getAllUsers();
         
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
