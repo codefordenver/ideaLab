@@ -89,7 +89,7 @@ public class ColorTypeControllerTest {
     }
 
     @Test
-    public void updatePrintJobStatusSuccess() throws Exception {
+    public void updateColorTypeStatusSuccess() throws Exception {
         ColorTypeUpdateRequest request = new ColorTypeUpdateRequest();
         request.setEmployeeId(1);
         request.setAvailability(true);
@@ -113,6 +113,6 @@ public class ColorTypeControllerTest {
                 .andReturn().getResponse().getContentAsString();
 
         GenericResponse returnedResponse = stringToGenericResponse(returnJson);
-        assert (returnedResponse.equals(genericResponse));
+        assert(returnedResponse.equals(genericResponse));
     }
 }

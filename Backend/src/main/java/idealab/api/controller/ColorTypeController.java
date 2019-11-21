@@ -2,9 +2,9 @@ package idealab.api.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,9 +41,9 @@ public class ColorTypeController {
      */
     @PutMapping("/{color-id}/availability")
     public ResponseEntity<?> colorTypeUpdateAvailability(@PathVariable("color-id") Integer colorId,
-                                                  @ModelAttribute ColorTypeUpdateRequest model) {
+                                                  @RequestBody ColorTypeUpdateRequest dto) {
 
-        GenericResponse response = colorOperations.updateColorAvailability(colorId, model);
+        GenericResponse response = colorOperations.updateColorAvailability(colorId, dto);
 
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
