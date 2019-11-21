@@ -2,23 +2,21 @@
 :root {
   --light-blue: #00aeef;
   --dark-blue: #1f4393;
-  --cream: #F0E3C4;
-  --yellow: #FFD401;
+  --cream: #f0e3c4;
+  --yellow: #ffd401;
   --white-text: #ffffff;
-  --mint: #A4C14E;
-  --light-green: #658B5A;
+  --mint: #a4c14e;
+  --light-green: #658b5a;
   --dark-green: #415835;
   --egg-plant: #543269;
-  --amber: #FBB116;
-  --dark-brown: #3B2314;
-  --light-brown: #826A5C;
-  --lime: #E5E216;
-  --sage: #C0C382;
-  --orange-red: #D93F24;
-
-}
+  --amber: #fbb116;
+  --dark-brown: #3b2314;
+  --light-brown: #826a5c;
+  --lime: #e5e216;
+  --sage: #c0c382;
+  --orange-red: #d93f24;
   --error-color: red;
-
+}
 
 html {
   height: 100%;
@@ -26,12 +24,10 @@ html {
 
 body {
   height: 100%;
-  background-image: url("images/background.png");
-  background-repeat: no-repeat; 
+  background-image: url('images/idealabBackground.svg');
+  background-repeat: no-repeat;
+  background-size: 125%;
 }
-
-
-
 
 #root {
   height: 100%;
@@ -138,4 +134,4 @@ input {
   font-size: 1.5rem;
   margin: 1rem 2rem 1rem 2rem;
   border-radius: 5px;
- }
+}
