@@ -67,7 +67,7 @@ public enum ErrorType {
     ),
     COLOR_CANT_FIND_BY_TYPE(
     		12,
-    		"Color not found. Check the sent color!",
+    		"The Color Could Not Be Found or No Colors Exist.",
     		HttpStatus.NOT_FOUND
     );
 
