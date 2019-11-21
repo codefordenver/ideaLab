@@ -3,27 +3,23 @@ package idealab.api.dto.response;
 import java.util.List;
 import java.util.Objects;
 
-import org.springframework.http.HttpStatus;
-
-import idealab.api.model.EmployeeRole;
-
 public class BasicEmployeeResponse extends GenericResponse {
-    private List<EmployeeBasic> data;
 
-    public List<EmployeeBasic> getData() {
-        return data;
+    private List<BasicEmployee> basicEmployeeList;
+
+    public BasicEmployeeResponse() {
     }
 
-    public void setSimpleData(List<EmployeeBasic> data) {
-        this.data = data;
+    public BasicEmployeeResponse(List<BasicEmployee> basicEmployeeList) {
+        this.basicEmployeeList = basicEmployeeList;
     }
 
-    public BasicEmployeeResponse(){}
+    public List<BasicEmployee> getBasicEmployeeList() {
+        return basicEmployeeList;
+    }
 
-    public BasicEmployeeResponse(String message) {
-        this.setMessage(message);
-        this.setSuccess(false);
-        this.setHttpStatus(HttpStatus.BAD_REQUEST);
+    public void setBasicEmployeeList(List<BasicEmployee> basicEmployeeList) {
+        this.basicEmployeeList = basicEmployeeList;
     }
 
     @Override
@@ -31,18 +27,19 @@ public class BasicEmployeeResponse extends GenericResponse {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        BasicEmployeeResponse response = (BasicEmployeeResponse) o;
-        return Objects.equals(data, response.data);
+        BasicEmployeeResponse that = (BasicEmployeeResponse) o;
+        return Objects.equals(basicEmployeeList, that.basicEmployeeList);
     }
 
-    /**
-     * Subset of the Employee model. Only contains id, username, role, first name, and last name.
-     */
-    public interface EmployeeBasic { 
-        String getFirstName();
-        String getLastName();
-        String getUsername();
-        EmployeeRole getRole();
+    @Override
+    public int hashCode() {
+        return Objects.hash(basicEmployeeList);
     }
 
+    @Override
+    public String toString() {
+        return "BasicEmployeeResponse{" +
+                "basicEmployeeList=" + basicEmployeeList +
+                '}';
+    }
 }

@@ -1,24 +1,23 @@
 package idealab.api.operations;
 
-import static idealab.api.exception.ErrorType.USER_NOT_FOUND;
-import static idealab.api.exception.ErrorType.VALIDATION_ERROR;
-
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
-
 import idealab.api.dto.request.EmployeeSignUpRequest;
 import idealab.api.dto.request.UserChangePasswordRequest;
+import idealab.api.dto.response.BasicEmployee;
 import idealab.api.dto.response.BasicEmployeeResponse;
-import idealab.api.dto.response.BasicEmployeeResponse.EmployeeBasic;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.exception.ErrorType;
 import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.Employee;
 import idealab.api.model.EmployeeRole;
 import idealab.api.repositories.EmployeeRepo;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+import static idealab.api.exception.ErrorType.USER_NOT_FOUND;
+import static idealab.api.exception.ErrorType.VALIDATION_ERROR;
 
 @Component
 public class UserOperations {
@@ -38,9 +37,9 @@ public class UserOperations {
      * @return
      */
     public BasicEmployeeResponse getAllUsers() {
-        BasicEmployeeResponse response = new BasicEmployeeResponse("Could not get list of users");
+        BasicEmployeeResponse response = new BasicEmployeeResponse();
 
-        List<EmployeeBasic> users = employeeRepo.findAllEmployeeBasics();
+        List<BasicEmployee> users = employeeRepo.findAllEmployeeBasics();
 
         if (users == null || users.isEmpty()){
             ErrorType.USER_NOT_FOUND.throwException();
@@ -48,7 +47,7 @@ public class UserOperations {
 
         response.setSuccess(true);
         response.setMessage("Successfully returned users");
-        response.setSimpleData(users);
+        response.setBasicEmployeeList(users);
         response.setHttpStatus(HttpStatus.ACCEPTED);
 
         return response;

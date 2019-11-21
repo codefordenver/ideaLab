@@ -1,12 +1,11 @@
 package idealab.api.repositories;
 
-import java.util.List;
-
+import idealab.api.dto.response.BasicEmployee;
+import idealab.api.model.Employee;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import idealab.api.dto.response.BasicEmployeeResponse.EmployeeBasic;
-import idealab.api.model.Employee;
+import java.util.List;
 
 public interface EmployeeRepo extends CrudRepository<Employee, Integer> {
     Employee findEmployeeById(Integer id);
@@ -16,7 +15,9 @@ public interface EmployeeRepo extends CrudRepository<Employee, Integer> {
     /**
      * Gets a list of all employees with first name, last name, username, and role.
      */
-    @Query(value = "SELECT first_name as firstName, last_name as lastName, username, role from Employee", nativeQuery = true)
-    List<EmployeeBasic> findAllEmployeeBasics();
+    @Query(value = "SELECT new idealab.api.dto.response.BasicEmployee(e.firstName, e.lastName, e.username, e.role) " +
+            "from Employee e")
+    List<BasicEmployee> findAllEmployeeBasics();
+
     void deleteById(Integer id);
 }
