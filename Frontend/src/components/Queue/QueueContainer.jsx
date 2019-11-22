@@ -9,6 +9,7 @@ const QueueContainer = () => {
   const [filteredData, setFilteredData] = useState(data);
   const [stringedValues, setStringedValues] = useState({});
   const [statusView, setStatusView] = useState('');
+  const [colors, setColors] = useState();
 
   const setSearchValues = printjob => {
     const formattedData = {
@@ -37,12 +38,40 @@ const QueueContainer = () => {
 
   useEffect(() => {
     setLoading(true);
+    RequestService.getActiveColors(
+      response => {
+        const data = response.data.data;
+        setLoading(false);
+        var colorList = [];
+        // eslint-disable-next-line array-callback-return
+        data.map(color => {
+          colorList.push(color.color);
+        });
+        setColors(colorList);
+      },
+      error => console.error(error),
+    );
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
     RequestService.getPrintJobs(
       response => {
         const data = response.data.data;
         setData(data);
         setStatus('PENDING_REVIEW');
         setLoading(false);
+        const formattedData = data.map(printjob => {
+          return {
+            color: printjob.colorType.color,
+            submitted: printjob.createdAt,
+            comments: printjob.comments,
+            status: printjob.status,
+            filePath: printjob.filePath,
+            fileSharableLink: printjob.fileSharableLink,
+          };
+        });
+        setData(formattedData);
       },
       error => console.error(error),
     );
@@ -89,8 +118,10 @@ const QueueContainer = () => {
       statusView={statusView}
       setStatus={setStatus}
       filterByTerm={filterByTerm}
-      data={filteredData}
+      filteredData={filteredData}
+      colors={colors}
       saveCard={saveCard}
+      data={data}
     />
   );
 };

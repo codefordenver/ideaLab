@@ -6,31 +6,17 @@ import { CirclePicker } from 'react-color';
 import { IoIosArrowDown, IoIosArrowBack } from 'react-icons/io';
 import { FiSave, FiMail } from 'react-icons/fi';
 
-const PrintCardContainer = ({ data, saveCard }) => {
+const PrintCardContainer = props => {
+  const [data] = useState(props.data);
   const [isToggled, setIsToggled] = useState(false);
   const [card, updateCard] = useState(data);
   const [hoverState, setHoverState] = useState(false);
+  const [colors] = useState(props.colors);
   const [isSaveIconShowing, setSaveIconShowing] = useState(false);
-
-  const dummyColors = [
-    'red',
-    'orange',
-    'yellow',
-    'lightgreen',
-    'darkgreen',
-    'lightblue',
-    'darkblue',
-    'black',
-    'grey',
-    'white',
-    'pink',
-    'purple',
-    'gold',
-    'silver',
-  ];
+  const { saveCard } = props;
 
   const colorCircleStyle = {
-    backgroundColor: `${card.colorTypeId.color}`,
+    backgroundColor: `${card.colorType.color}`,
   };
 
   const handleColorChange = hue => {
@@ -135,8 +121,9 @@ const PrintCardContainer = ({ data, saveCard }) => {
             <div className="colorPickerContainer">
               <CirclePicker
                 onChangeComplete={handleColorChange}
-                color={data.colorTypeId.color}
-                colors={dummyColors}
+                color={card.color}
+                colors={colors}
+                width="100px"
                 circleSize={18}
                 circleSpacing={8}
               />
