@@ -19,10 +19,14 @@
   min-height: 100%;
 }
 
+.circle-picker > span > div:hover {
+}
+
 .sectionContainer {
   font-size: 0.9em;
   display: block;
   text-align: left;
+  margin-bottom: 2em;
 }
 
 .adminSettingsSectionHeader {
@@ -37,26 +41,39 @@
   margin-left: 15px;
 }
 
+.emailSettingsInputDisplay {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
 .adminSettingsInput {
   background-color: #577ba1;
   color: white;
   border: 1px solid black;
-  padding: 5px;
-  height: 1.2em;
-  width: 250px;
-  display: inline-block;
+  border-radius: 3px;
+  padding: 1em 10px;
+  width: 200px;
+  margin-right: 1em;
 }
 
-.input::placeholder {
+input::placeholder {
   color: white;
+  font-size: 14px;
+  text-align: left;
 }
 
 .adminSettingsButton {
   background-color: #658b5a;
+  width: fit-content;
   border-radius: 3px;
   color: white;
   padding: 5px;
-  max-width: 75px;
+  box-shadow: 4px 3px rgba(0, 0, 0, 0.5);
+}
+
+.emailSettingsButton {
+  align-self: flex-end;
 }
 
 .adminSettingsButton:hover {
