@@ -72,7 +72,7 @@ function App() {
                 state.authenticated ? (
                   <Redirect
                     to={{
-                      pathname: '/queue',
+                      pathname: '/manageaccounts',
                       state: { from: props.location },
                     }}
                   />
