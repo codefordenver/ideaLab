@@ -7,9 +7,34 @@ const QueueContainer = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filteredData, setFilteredData] = useState(data);
-  const [stringedValues, setStringedValues] = useState([]);
-  const [statusView, setStatusView] = useState('PENDING_REVIEW');
+  const [stringedValues, setStringedValues] = useState({});
+  const [statusView, setStatusView] = useState('');
   const [colors, setColors] = useState();
+
+  const setSearchValues = printjob => {
+    const formattedData = {
+      id: printjob.id,
+      submitted: printjob.createdAt,
+      comments: printjob.comments,
+      status: printjob.status,
+      filePath: printjob.filePath,
+      fileSharableLink: printjob.fileSharableLink,
+    };
+
+    let valueString = '';
+    for (var key in printjob) {
+      if (key === 'colorTypeId') {
+        valueString = valueString + ' ' + printjob.colorTypeId.color;
+      }
+      if (key === 'customerInfo') {
+        valueString = valueString + ' ' + printjob.customerInfo.firstName;
+      }
+      if (formattedData[key]) {
+        valueString = valueString + ' ' + printjob[key];
+      }
+    }
+    setStringedValues({ ...stringedValues, printjob: { id: valueString } });
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -33,6 +58,8 @@ const QueueContainer = () => {
     RequestService.getPrintJobs(
       response => {
         const data = response.data.data;
+        setData(data);
+        setStatus('PENDING_REVIEW');
         setLoading(false);
         const formattedData = data.map(printjob => {
           return {
@@ -50,40 +77,35 @@ const QueueContainer = () => {
     );
   }, []);
 
+  const saveCard = updatedCard => {
+    RequestService.saveCard(updatedCard);
+    setSearchValues(updatedCard);
+  };
+
   useEffect(() => {
-    const filteredKeys = [
-      'name',
-      'email',
-      'color',
-      'status',
-      'fileName',
-      'comments',
-    ];
-    const searchValues = data.map((printJob, index) => {
-      let valueString = '';
-      for (var key in printJob) {
-        if (filteredKeys.indexOf(key) !== -1) {
-          valueString = valueString + ' ' + printJob[key];
-        }
+    const activeCards = data.filter(card => {
+      if (card.status === 'FAILED' && statusView === 'DONE') {
+        setSearchValues(card);
+        return card;
       }
-      return (printJob[index] = valueString.toLowerCase());
+      if (card.status === statusView) {
+        setSearchValues(card);
+        return card;
+      }
     });
-    const queuedCards = data.filter(card => {
-      var sameStatus = card.status === statusView;
-      var doneAndFailed =
-        statusView === 'DONE' &&
-        (card.status === 'DONE' || card.status === 'FAILED');
-      return sameStatus || doneAndFailed;
-    });
-    setFilteredData(queuedCards);
-    setStringedValues(searchValues);
-  }, [data, statusView]);
+    setFilteredData(activeCards);
+  }, [statusView]);
 
   const filterByTerm = searchTerm => {
-    const filteredSearch = data.filter((printJob, i) => {
-      return stringedValues[i].indexOf(searchTerm.toLowerCase()) !== -1;
+    setLoading(true);
+    const filteredSearch = filteredData.filter((printJob, i) => {
+      if (stringedValues.length > 0) {
+        let stringSearch = stringedValues[i];
+        return stringSearch.indexOf(searchTerm.toLowerCase()) !== -1;
+      }
     });
     setFilteredData(filteredSearch);
+    setLoading(false);
   };
 
   const setStatus = view => {
@@ -98,6 +120,8 @@ const QueueContainer = () => {
       filterByTerm={filterByTerm}
       filteredData={filteredData}
       colors={colors}
+      saveCard={saveCard}
+      data={data}
     />
   );
 };

@@ -6,8 +6,11 @@ import SearchBar from './SearchBar';
 import PrintCardContainer from '../components/PrintCardContainer';
 
 const Queue = props => {
-  const renderPrintCards = props.filteredData.map((el, i) => (
-    <PrintCardContainer data={el} key={i} colors={props.colors} />
+  const saveCard = updatedInfo => {
+    props.saveCard(updatedInfo);
+  };
+  const renderPrintCards = props.data.map((card, i) => (
+    <PrintCardContainer data={card} key={i} colors={props.colors} saveCard={props.saveCard} />
   ));
   return (
     <div>
@@ -28,16 +31,29 @@ const Queue = props => {
 
         <SearchBar filterByTerm={props.filterByTerm} />
       </div>
-      <ul className="queueBanner">
-        <li className="col10"></li>
-        <li className="col20">File Name</li>
-        <li className="col20">Color</li>
-        <li className="col20">Submitted</li>
-        <li className="col20">Status</li>
-      </ul>
-      {renderPrintCards.length > 0
-        ? renderPrintCards
-        : `No items are currently ${props.statusView.toLowerCase()}`}
+      <table id="queueTable">
+        <thead>
+          <tr>
+            <th className="fileNameHeader">File Name</th>
+            <th className="colorHeader" colSpan="4">
+              Color
+            </th>
+            <th className="submittedHeader">Submitted</th>
+            <th className="statusHeader">Status</th>
+            <th></th>
+            {/* <--- dropdown arrow column */}
+          </tr>
+        </thead>
+        <tbody>
+          {renderPrintCards.length > 0 ? (
+            renderPrintCards
+          ) : (
+            <tr>
+              <td>No cards fit this criteria</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
     </div>
   );
 };
