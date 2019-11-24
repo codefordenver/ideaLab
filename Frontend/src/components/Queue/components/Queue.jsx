@@ -6,11 +6,14 @@ import SearchBar from './SearchBar';
 import PrintCardContainer from '../components/PrintCardContainer';
 
 const Queue = props => {
-  const saveCard = updatedInfo => {
-    props.saveCard(updatedInfo);
-  };
   const renderPrintCards = props.data.map((card, i) => (
-    <PrintCardContainer data={card} key={i} colors={props.colors} saveCard={props.saveCard} />
+    <PrintCardContainer
+      data={card}
+      key={i}
+      employeeId={props.employeeId}
+      colors={props.colors}
+      saveCard={props.saveCard}
+    />
   ));
   return (
     <div>

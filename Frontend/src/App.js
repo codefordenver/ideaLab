@@ -18,6 +18,7 @@ function App() {
     authenticated: false,
     token: null,
     role: 'STAFF',
+    employeeId: null,
   };
 
   const [state, setState] = useState(initialState);
@@ -28,12 +29,14 @@ function App() {
     if (storedToken) {
       RequestService.requestState.token = storedToken;
       const decoded = TokenParser(storedToken);
+      console.log(decoded);
       const now = Date.now() / 1000;
       if (now < decoded.exp) {
         setState({
           authenticated: true,
           token: storedToken,
           role: decoded.role,
+          employeeId: decoded.employeeId,
         });
       } else {
         localStorage.removeItem('ideaLab');
@@ -48,6 +51,7 @@ function App() {
           authenticated: state.authenticated,
           token: state.token,
           role: state.role,
+          employeeId: state.employeeId,
           setState: setState,
         }}
       >

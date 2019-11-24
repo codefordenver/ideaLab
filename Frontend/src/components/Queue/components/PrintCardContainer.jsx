@@ -9,7 +9,12 @@ import { FiSave, FiMail } from 'react-icons/fi';
 const PrintCardContainer = props => {
   const [data] = useState(props.data);
   const [isToggled, setIsToggled] = useState(false);
-  const [card, updateCard] = useState(data);
+  const [card] = useState(data);
+  const [updatedData, updateData] = useState({
+    comments: card.comments,
+    colorType: card.colorType.color,
+    status: card.status,
+  });
   const [hoverState, setHoverState] = useState(false);
   const [colors] = useState(props.colors);
   const [isSaveIconShowing, setSaveIconShowing] = useState(false);
@@ -20,9 +25,9 @@ const PrintCardContainer = props => {
   };
 
   const handleColorChange = hue => {
-    updateCard(prevState => ({
+    updateData(prevState => ({
       ...prevState,
-      colorTypeId: { ...prevState.colorTypeId, color: hue.hex },
+      colorType: hue.hex,
     }));
     setSaveIconShowing(true);
   };
@@ -36,14 +41,19 @@ const PrintCardContainer = props => {
 
   const updateComment = event => {
     event.persist();
-    updateCard(prevState => ({ ...prevState, comments: event.target.value }));
+    updateData(prevState => ({
+      ...prevState,
+      comments: event.target.value,
+    }));
     setSaveIconShowing(true);
   };
 
   const updatePrintingStatus = event => {
     event.persist();
-    console.log('VALUE??', event.target.value);
-    updateCard(prevState => ({ ...prevState, status: event.target.value }));
+    updateData(prevState => ({
+      ...prevState,
+      status: event.target.value,
+    }));
     setSaveIconShowing(true);
   };
 
@@ -52,8 +62,23 @@ const PrintCardContainer = props => {
   };
 
   const saveChanges = () => {
-    console.log('SAVING CARD:', card);
-    saveCard(card);
+    let updatedSavedCard = { id: card.id, employeeId: props.employeeId };
+
+    for (var key in updatedData) {
+      if (
+        key === 'colorType' &&
+        card.colorType.color !== updatedData.colorType
+      ) {
+        updatedSavedCard.colorType = card.colorType[key];
+      } else if (
+        key !== 'colorType' &&
+        (card[key] && card[key] !== updatedData[key])
+      ) {
+        updatedSavedCard[key] = updatedData[key];
+      }
+    }
+    console.log('???', updatedSavedCard);
+    saveCard(updatedSavedCard);
     setSaveIconShowing(false);
   };
 
@@ -78,7 +103,7 @@ const PrintCardContainer = props => {
       <textarea
         onChange={updateComment}
         name="comments"
-        value={card.comments}
+        value={updatedData.comments}
         className="commentSection"
       />
     </td>
