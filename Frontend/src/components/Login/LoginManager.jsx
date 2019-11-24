@@ -17,12 +17,14 @@ const LoginManager = props => {
       const token = response.headers ? response.headers.authorization : '';
       if (token) {
         const decoded = TokenParser(token);
+        console.log('where is it:', decoded);
         RequestService.requestState.token = token;
         localStorage.setItem('ideaLab', token);
         callbacks.setState({
           token: token,
           authenticated: true,
           role: decoded.role,
+          employeeId: decoded.employeeId,
         });
       } else {
         callbacks.setState({ authenticated: false });

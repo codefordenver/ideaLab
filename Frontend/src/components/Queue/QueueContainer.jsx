@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import RequestService from '../../util/RequestService';
+import AuthContext from '../../AuthContext';
 import './QueueContainer.css';
 import Queue from './components/Queue';
 
@@ -43,7 +44,6 @@ const QueueContainer = () => {
         const data = response.data.data;
         setLoading(false);
         var colorList = [];
-        // eslint-disable-next-line array-callback-return
         data.map(color => {
           colorList.push(color.color);
         });
@@ -78,8 +78,9 @@ const QueueContainer = () => {
   }, []);
 
   const saveCard = updatedCard => {
+    console.log('QC updated card:', updatedCard);
     RequestService.saveCard(updatedCard);
-    setSearchValues(updatedCard);
+    // setSearchValues(updatedCard);
   };
 
   useEffect(() => {
@@ -113,16 +114,23 @@ const QueueContainer = () => {
   };
 
   return (
-    <Queue
-      loading={loading}
-      statusView={statusView}
-      setStatus={setStatus}
-      filterByTerm={filterByTerm}
-      filteredData={filteredData}
-      colors={colors}
-      saveCard={saveCard}
-      data={data}
-    />
+    <AuthContext.Consumer>
+      {context => {
+        return (
+          <Queue
+            loading={loading}
+            statusView={statusView}
+            setStatus={setStatus}
+            filterByTerm={filterByTerm}
+            filteredData={filteredData}
+            colors={colors}
+            saveCard={saveCard}
+            data={data}
+            employeeId={context.employeeId}
+          />
+        );
+      }}
+    </AuthContext.Consumer>
   );
 };
 

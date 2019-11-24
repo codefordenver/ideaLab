@@ -96,9 +96,9 @@ const RequestService = {
   saveCard(payload, thenCallback, catchCallback) {
     const backendInstance = generateApiInstance();
     const cardId = payload.id;
-    backendInstance
-      .put(backendUrl + `/api/print-jobs/${cardId}`, payload)
-    },
+    console.log('RS', payload);
+    backendInstance.put(backendUrl + `/api/print-jobs/${cardId}`, payload);
+  },
 
   getUsers(thenCallback, catchCallback) {
     const backendInstance = generateApiInstance();
@@ -113,7 +113,7 @@ const RequestService = {
     backendInstance
       .get(backendUrl + '/colors')
       .then(thenCallback)
-      .catch(catchCallback);  
+      .catch(catchCallback);
   },
 };
 
