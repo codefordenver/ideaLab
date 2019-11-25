@@ -47,6 +47,10 @@ const RequestService = {
       return { form: 'Please try logging out and logging in.' };
     }
 
+    if (axiosError.response.status < 499 && axiosError.response.data) {
+      return { form: axiosError.response.data.errorDescription };
+    }
+
     const errors = axiosError.response.data.errors;
     if (!errors) {
       return { form: 'There was a problem with what you were trying to do.' };
@@ -85,6 +89,20 @@ const RequestService = {
     const backendInstance = generateApiInstance();
     backendInstance
       .get(backendUrl + '/api/print-jobs')
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
+  saveCard(payload, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    const cardId = payload.id;
+    backendInstance.put(backendUrl + `/api/print-jobs/${cardId}`, payload);
+  },
+
+  getUsers(thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .get(backendUrl + '/users')
       .then(thenCallback)
       .catch(catchCallback);
   },

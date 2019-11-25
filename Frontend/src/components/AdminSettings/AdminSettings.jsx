@@ -7,15 +7,16 @@ const deleteColorFromDatabase = color => {
   window.alert('POST here. deleted ', color);
 };
 
-const onColorClick = event => {
-  const confirmedClicked = window.confirm('Are you sure you want to delete?');
-  if (confirmedClicked) {
-    deleteColorFromDatabase(event.hex);
-  }
-};
-
 const AdminSettings = () => {
-  const [availableColors, setAvailableColors] = useState();
+  const [availableColors, setAvailableColors] = useState([]);
+
+  const testClick = event => {
+    console.log(event);
+    const confirmedClicked = window.confirm('Are you sure you want to delete?');
+    if (confirmedClicked) {
+      deleteColorFromDatabase(event.hex);
+    }
+  };
 
   useEffect(() => {
     RequestService.getActiveColors(
@@ -29,56 +30,57 @@ const AdminSettings = () => {
       },
       error => console.error('GET COLORS ERR: ', error),
     );
-  }, [availableColors]);
+  }, []);
 
   useEffect(() => {
     const colorCircles = document.getElementsByClassName('circle-picker ')[0];
-    Array.from(colorCircles.children).forEach(function(circle) {
+    Array.from(colorCircles.children).forEach((circle, i) => {
       const testText = document.createElement('div');
+      testText.setAttribute('class', 'color-ex');
+      testText.setAttribute('id', availableColors[i].substr(1));
       const text = document.createTextNode('X');
       testText.appendChild(text);
       circle.appendChild(testText);
     });
-  }, []);
+  }, [availableColors]);
+
   return (
     <div className="adminSettingsContainer">
-      <body>
-        <div className="sectionContainer">
-          <div className="adminSettingsSectionHeader">Current Colors</div>
-          <div className="colorPickerContainer">
-            <CirclePicker
-              onChangeComplete={onColorClick}
-              circleSpacing={20}
-              colors={availableColors}
+      <div className="sectionContainer">
+        <div className="adminSettingsSectionHeader">Current Colors</div>
+        <div className="colorPickerContainer">
+          <CirclePicker
+            circleSpacing={20}
+            circleSize={48}
+            colors={availableColors}
+          />
+        </div>
+        <div className="adminSettingsButton">Add Color</div>
+      </div>
+      <div className="sectionContainer">
+        <div className="adminSettingsSectionHeader">Current Locations</div>
+        <div className="currentLocationsContainer">
+          <div className="adminSettingsButton">Add Location</div>
+        </div>
+      </div>
+      <div className="sectionContainer">
+        <div className="adminSettingsSectionHeader">Email Settings</div>
+        <div className="emailSettingsContainer">
+          <div className="emailSettingsInputDisplay">
+            <input
+              className="adminSettingsInput"
+              placeholder="username"
+              label="Input"
+            />
+            <input
+              className="adminSettingsInput"
+              placeholder="password"
+              label="Input"
             />
           </div>
-          <div className="adminSettingsButton">Add Color</div>
+          <div className="adminSettingsButton emailSettingsButton">Save</div>
         </div>
-        <div className="sectionContainer">
-          <div className="adminSettingsSectionHeader">Current Locations</div>
-          <div className="currentLocationsContainer">
-            <div className="adminSettingsButton">Add Location</div>
-          </div>
-        </div>
-        <div className="sectionContainer">
-          <div className="adminSettingsSectionHeader">Email Settings</div>
-          <div className="emailSettingsContainer">
-            <div className="emailSettingsInputDisplay">
-              <input
-                className="adminSettingsInput"
-                placeholder="username"
-                label="Input"
-              />
-              <input
-                className="adminSettingsInput"
-                placeholder="password"
-                label="Input"
-              />
-            </div>
-            <div className="adminSettingsButton emailSettingsButton">Save</div>
-          </div>
-        </div>
-      </body>
+      </div>
     </div>
   );
 };

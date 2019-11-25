@@ -8,6 +8,74 @@ body {
   margin: 0px 50px;
 }
 
+table {
+  width: 100%;
+  margin: 10px 2em;
+  table-layout: fixed;
+}
+
+.submittedHeader,
+.statusHeader {
+  padding-left: 0;
+  padding-right: 8em;
+}
+
+tbody {
+  display: block;
+  overflow: auto;
+  height: 1000px;
+  width: 100%;
+}
+
+td,
+th {
+  padding: 0.5rem;
+}
+
+thead tr {
+  display: flex;
+  text-align: left;
+  margin-left: 20px;
+}
+
+tbody tr {
+  display: flex;
+  align-items: center;
+}
+
+.printFileName {
+  overflow: hidden;
+}
+
+tr td:nth-child(1),
+tr th:nth-child(1) {
+  width: 21%;
+}
+
+tr td:nth-child(2),
+tr th:nth-child(2) {
+  width: 33%;
+}
+
+tr td:nth-child(3),
+tr th:nth-child(3),
+tr td:nth-child(4),
+tr th:nth-child(4) {
+  width: 21%;
+}
+
+tr td:nth-child(5),
+tr th:nth-child(5) {
+  width: 8%;
+}
+
+#secondRowContent {
+  width: 85%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
 .queueFilterInfo {
   display: flex;
   justify-content: space-between;

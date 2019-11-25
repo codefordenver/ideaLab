@@ -1,12 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Loader from '../globalStyles/Loader';
+import RequestService from '../../util/RequestService';
+import ProfileInfo from './components/ProfileInfo';
 import './UserProfileContainer.css';
 
-import ProfileInfo from './components/ProfileInfo';
-import UserDummyData from './UserDummyData';
-
 const UserProfilesContainer = () => {
-  const [data, setData] = useState(UserDummyData);
+  const [data, setData] = useState();
+  const [loading, setLoading] = useState(true);
   const colors = ['#81B7E3', '#C4C4C4'];
+
+  useEffect(() => {
+    setLoading(true);
+    RequestService.getUsers(
+      response => {
+        if (response.data.data) {
+          const data = response.data.data;
+          console.log(data);
+          const formattedData = data.map(user => {
+            return {
+              name: user.name,
+              role: user.role,
+            };
+          });
+          setData(formattedData);
+        }
+        setLoading(false);
+      },
+      error => console.error(error),
+    );
+  }, []);
 
   return (
     <div className="profilesStyles">
@@ -15,15 +37,25 @@ const UserProfilesContainer = () => {
           <button>CREATE ACCOUNT</button>
         </a>
       </div>
+      {loading ? (
+        <div className={'loader-container'}>
+          Loading Fresh Data...
+          <Loader />
+        </div>
+      ) : (
+        false
+      )}
       <div className="userProfileContainer">
         <div className="profilesContainer">
-          {data.map((userData, index) => (
-            <ProfileInfo
-              color={colors[index % colors.length]}
-              userData={userData}
-              key={index}
-            />
-          ))}
+          {data
+            ? data.map((userData, index) => (
+                <ProfileInfo
+                  color={colors[index % colors.length]}
+                  userData={userData}
+                  key={index}
+                />
+              ))
+            : null}
         </div>
       </div>
     </div>

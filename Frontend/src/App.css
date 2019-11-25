@@ -2,8 +2,19 @@
 :root {
   --light-blue: #00aeef;
   --dark-blue: #1f4393;
+  --cream: #f0e3c4;
+  --yellow: #ffd401;
   --white-text: #ffffff;
-  --default-background: white;
+  --mint: #a4c14e;
+  --light-green: #658b5a;
+  --dark-green: #415835;
+  --egg-plant: #543269;
+  --amber: #fbb116;
+  --dark-brown: #3b2314;
+  --light-brown: #826a5c;
+  --lime: #e5e216;
+  --sage: #c0c382;
+  --orange-red: #d93f24;
   --error-color: red;
 }
 
@@ -13,6 +24,9 @@ html {
 
 body {
   height: 100%;
+  background-image: url('images/idealabBackground.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 #root {
@@ -60,7 +74,8 @@ body {
   text-align: left;
 }
 
-a {
+.navList a,
+.printCardContainer a {
   color: black;
   font-weight: bolder;
   text-decoration: none;
@@ -109,6 +124,16 @@ a {
   display: none;
 }
 
+.success {
+  color: var(--dark-green);
+  font-size: 1.5rem;
+  margin: 1rem 0 1rem 0;
+  border-radius: 5px;
+}
+
 .error {
-  color: var(--error-color);
+  color: var(--orange-red);
+  font-size: 1.5rem;
+  margin: 1rem 2rem 1rem 2rem;
+  border-radius: 5px;
 }
