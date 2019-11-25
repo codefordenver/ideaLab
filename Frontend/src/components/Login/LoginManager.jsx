@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import BasicInput from '../BasicInput';
 import RequestService from '../../util/RequestService';
 import AuthContext from '../../AuthContext';
-import TokenParser from '../../util/TokenParser';
+import { parseJwt } from '../../util/HelperFormatFunctions';
 import './LoginManager.css';
 
 import ideaLABlogo from '../globalStyles/img/ideaLabLogo.png';
@@ -16,7 +16,7 @@ const LoginManager = props => {
     return function actualCallback(response) {
       const token = response.headers ? response.headers.authorization : '';
       if (token) {
-        const decoded = TokenParser(token);
+        const decoded = parseJwt(token);
         console.log('where is it:', decoded);
         RequestService.requestState.token = token;
         localStorage.setItem('ideaLab', token);

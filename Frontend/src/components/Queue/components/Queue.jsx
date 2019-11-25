@@ -6,7 +6,7 @@ import SearchBar from './SearchBar';
 import PrintCardContainer from '../components/PrintCardContainer';
 
 const Queue = props => {
-  const renderPrintCards = props.filteredData.map(card => (
+  const sortedCards = props.filteredData.map(card => (
     <PrintCardContainer
       data={card}
       key={card.id}
@@ -15,6 +15,7 @@ const Queue = props => {
       saveCard={props.saveCard}
     />
   ));
+
   return (
     <div>
       <div className="queueFilterInfo">
@@ -47,15 +48,15 @@ const Queue = props => {
             {/* <--- dropdown arrow column */}
           </tr>
         </thead>
-        <tbody>
-          {renderPrintCards.length > 0 ? (
-            renderPrintCards
-          ) : (
+        {sortedCards.length > 0 ? (
+          sortedCards
+        ) : (
+          <tbody>
             <tr>
               <td>No cards fit this criteria</td>
             </tr>
-          )}
-        </tbody>
+          </tbody>
+        )}
       </table>
     </div>
   );

@@ -121,7 +121,7 @@ const PrintCardContainer = props => {
   };
 
   return (
-    <div className="printCardContainer">
+    <tbody className="printCardContainer">
       <tr>
         <td className="printFileName">
           <a href={updateFileUrlParams(card.fileSharableLink)}>
@@ -172,7 +172,7 @@ const PrintCardContainer = props => {
         </td>
       </tr>
       <tr>{secondRowContent}</tr>
-    </div>
+    </tbody>
   );
 };
 

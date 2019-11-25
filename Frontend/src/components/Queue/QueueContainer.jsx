@@ -59,7 +59,6 @@ const QueueContainer = () => {
         return card;
       }
     });
-    console.log('RETURNING CARDS:', activeCards);
     setFilteredData(activeCards);
   }, [statusView]);
 

@@ -11,7 +11,7 @@ import PrivateRoute from './components/Routing/PrivateRoute';
 
 import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 import RequestService from './util/RequestService';
-import TokenParser from './util/TokenParser';
+import { parseJwt } from './util/HelperFormatFunctions';
 
 function App() {
   const initialState = {
@@ -28,8 +28,7 @@ function App() {
 
     if (storedToken) {
       RequestService.requestState.token = storedToken;
-      const decoded = TokenParser(storedToken);
-      console.log(decoded);
+      const decoded = parseJwt(storedToken);
       const now = Date.now() / 1000;
       if (now < decoded.exp) {
         setState({
