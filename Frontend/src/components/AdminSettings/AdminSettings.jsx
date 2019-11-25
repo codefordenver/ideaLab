@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import RequestService from '../../util/RequestService';
 import { CirclePicker } from 'react-color';
 import './AdminSettings.css';
 
@@ -14,19 +15,30 @@ const onColorClick = event => {
 };
 
 const AdminSettings = () => {
+  const [availableColors, setAvailableColors] = useState();
+
+  useEffect(() => {
+    RequestService.getActiveColors(
+      response => {
+        const data = response.data.data;
+        var colorList = [];
+        data.map(color => {
+          colorList.push(color.color);
+        });
+        setAvailableColors(colorList);
+      },
+      error => console.error('GET COLORS ERR: ', error),
+    );
+  }, [availableColors]);
+
   useEffect(() => {
     const colorCircles = document.getElementsByClassName('circle-picker ')[0];
-    const testText = document.createElement('span');
-    const text = document.createTextNode('X');
-    testText.appendChild(text);
-    console.log(colorCircles.children);
     Array.from(colorCircles.children).forEach(function(circle) {
-      console.log('cir', circle);
+      const testText = document.createElement('div');
+      const text = document.createTextNode('X');
+      testText.appendChild(text);
       circle.appendChild(testText);
     });
-    // colorCircles.children.filter((circle) => {
-    //   circle.appendChild(testText);
-    // })
   }, []);
   return (
     <div className="adminSettingsContainer">
@@ -34,7 +46,11 @@ const AdminSettings = () => {
         <div className="sectionContainer">
           <div className="adminSettingsSectionHeader">Current Colors</div>
           <div className="colorPickerContainer">
-            <CirclePicker onChangeComplete={onColorClick} circleSpacing={20} />
+            <CirclePicker
+              onChangeComplete={onColorClick}
+              circleSpacing={20}
+              colors={availableColors}
+            />
           </div>
           <div className="adminSettingsButton">Add Color</div>
         </div>

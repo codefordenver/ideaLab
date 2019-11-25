@@ -88,6 +88,14 @@ const RequestService = {
       .then(thenCallback)
       .catch(catchCallback);
   },
+
+  getActiveColors(thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .get(backendUrl + '/colors')
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
 };
 
 export default RequestService;
