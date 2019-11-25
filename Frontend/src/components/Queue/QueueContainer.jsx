@@ -5,10 +5,9 @@ import './QueueContainer.css';
 import Queue from './components/Queue';
 
 const QueueContainer = () => {
-  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [filteredData, setFilteredData] = useState(data);
-  const [statusView, setStatusView] = useState('');
+  const [filteredData, setFilteredData] = useState([]);
+  const [statusView, setStatusView] = useState('PENDING_REVIEW');
   const [colors, setColors] = useState();
 
   useEffect(() => {
@@ -27,39 +26,49 @@ const QueueContainer = () => {
     );
   }, []);
 
-  useEffect(() => {
-    setLoading(true);
-    RequestService.getPrintJobs(
-      response => {
-        const data = response.data.data;
-        setData(data);
-        setStatus('PENDING_REVIEW');
-        setLoading(false);
-      },
-      error => console.error(error),
-    );
-  }, []);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   RequestService.getPrintJobs(
+  //     response => {
+  //       const data = response.data.data;
+  //       setData(data);
+  //       setLoading(false);
+  //     },
+  //     error => console.error(error),
+  //   );
+  // }, []);
 
   const saveCard = updatedCard => {
     RequestService.saveCard(updatedCard);
   };
 
   useEffect(() => {
+    setLoading(true);
     const failedStatuses = ['FAILED', 'REJECTED', 'COMPLETED', 'ARCHIVED'];
     const waitingStatuses = ['PENDING_CUSTOMER_RESPONSE', 'PENDING_REVIEW'];
-    const activeCards = data.filter(card => {
-      if (failedStatuses.indexOf(card.status) !== -1 && statusView === 'DONE') {
-        return card;
-      } else if (
-        waitingStatuses.indexOf(card.status) !== -1 &&
-        statusView === 'PENDING_REVIEW'
-      ) {
-        return card;
-      } else if (statusView === 'PRINTING' && card.status === 'PRINTING') {
-        return card;
-      }
-    });
-    setFilteredData(activeCards);
+    //TO DO: GET PRINT JOBS BASED ON STATUS
+    RequestService.getPrintJobs(
+      response => {
+        const activeCards = response.data.data.filter(card => {
+          if (
+            failedStatuses.indexOf(card.status) !== -1 &&
+            statusView === 'DONE'
+          ) {
+            return card;
+          } else if (
+            waitingStatuses.indexOf(card.status) !== -1 &&
+            statusView === 'PENDING_REVIEW'
+          ) {
+            return card;
+          } else if (statusView === 'PRINTING' && card.status === 'PRINTING') {
+            return card;
+          }
+        });
+        setFilteredData(activeCards);
+        setLoading(false);
+      },
+      error => console.error(error),
+    );
   }, [statusView]);
 
   const setStatus = view => {

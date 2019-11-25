@@ -7,11 +7,14 @@ import { IoIosArrowDown, IoIosArrowBack } from 'react-icons/io';
 import { FiSave, FiMail } from 'react-icons/fi';
 
 const PrintCardContainer = props => {
+  const color = props.data.colorType.color
+    ? props.data.colorType.color
+    : props.data.colorType;
   const [isToggled, setIsToggled] = useState(false);
   const [card] = useState(props.data);
   const [updatedData, updateData] = useState({
     comments: card.comments,
-    colorType: card.colorType.color,
+    colorType: color,
     status: card.status,
   });
   const [hoverState, setHoverState] = useState(false);
@@ -21,8 +24,6 @@ const PrintCardContainer = props => {
 
   const colorCircleStyle = {
     backgroundColor: `${updatedData.colorType}`,
-    height: '25px',
-    width: '25px',
   };
 
   const handleColorChange = hue => {
@@ -66,7 +67,10 @@ const PrintCardContainer = props => {
   const saveChanges = () => {
     let updatedSavedCard = { id: card.id, employeeId: props.employeeId };
     for (var key in updatedData) {
-      if (key === 'colorType' && card.colorType.color !== updatedData[key]) {
+      if (
+        key === 'colorType' &&
+        card.colorType.color !== updatedData.colorType.color
+      ) {
         updatedSavedCard[key] = updatedData[key];
       } else if (
         key !== 'colorType' &&
