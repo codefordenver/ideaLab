@@ -1,12 +1,12 @@
 package idealab.api.service;
 
-import java.util.Map;
-
-import org.springframework.web.multipart.MultipartFile;
-
 import idealab.api.dto.request.UpdateFilePathRequest;
 import idealab.api.dto.response.DataResponse;
+import idealab.api.dto.response.GenericResponse;
 import idealab.api.model.PrintJob;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 public interface FileService {
 
@@ -14,5 +14,5 @@ public interface FileService {
     void deleteFile(String path);
     Map<String, String> updateFile(PrintJob printJob, MultipartFile file);
     DataResponse<PrintJob> updateFilePath(UpdateFilePathRequest request);
-
+    GenericResponse updateToken(String token);
 }

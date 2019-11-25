@@ -38,3 +38,7 @@ INSERT INTO queue ("rank", fk_print_job_id, created_at, updated_at) VALUES
 (1,1, current_timestamp, current_timestamp),
 (2,3, current_timestamp, current_timestamp),
 (3,2, current_timestamp, current_timestamp);
+
+-- TODO In your DB, need to change the value of <TOKEN>. DO NOT PUT THE TOKEN IN HERE AND PUSH TO GITHUB!!!
+INSERT INTO property(name, value, created_at, updated_at) VALUES
+('dropbox_access_token', '<TOKEN>', current_timestamp, current_timestamp);

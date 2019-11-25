@@ -1,14 +1,13 @@
 package idealab.api.controller;
 
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import idealab.api.dto.request.UpdateFilePathRequest;
 import idealab.api.dto.response.DataResponse;
+import idealab.api.dto.response.GenericResponse;
 import idealab.api.model.PrintJob;
 import idealab.api.service.FileService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/dropbox")
@@ -23,6 +22,12 @@ public class DropboxController {
     @PutMapping("/file-path")
     public DataResponse<PrintJob> updateFilePath(@RequestBody UpdateFilePathRequest request) {
         return fileService.updateFilePath(request);
+    }
+
+    @PostMapping("/token")
+    public GenericResponse updateToken(@RequestBody Map<String, String> mapParam) {
+        String token = mapParam.get("token");
+        return fileService.updateToken(token);
     }
 
 }
