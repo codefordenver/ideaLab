@@ -309,7 +309,7 @@ public class PrintJobOperations {
 
         ColorType colorType = null;
         if(request.getColorType() != null && !request.getColorType().trim().isEmpty()) {
-            colorType = colorTypeRepo.findByColor(request.getColorType().toLowerCase());
+            colorType = colorTypeRepo.findByColor(request.getColorType());
             if (colorType == null)
                 throw new IdeaLabApiException(PRINT_JOB_UPDATE_FAILED, "Color type is invalid");
         }

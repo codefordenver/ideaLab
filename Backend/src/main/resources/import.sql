@@ -6,7 +6,7 @@ INSERT INTO color_type (color, available, created_at, updated_at) VALUES
 ('#00008B', true, current_timestamp, current_timestamp),
 ('#FF0000', true, current_timestamp, current_timestamp),
 ('#FF681F', true, current_timestamp, current_timestamp),
-('#FFFF00', true, current_timestamp, current_timestamp),
+('#808080', true, current_timestamp, current_timestamp),
 ('#90EE90', true, current_timestamp, current_timestamp),
 ('#006400', true, current_timestamp, current_timestamp),
 ('#800080', true, current_timestamp, current_timestamp),

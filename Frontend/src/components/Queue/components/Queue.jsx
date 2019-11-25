@@ -2,7 +2,6 @@ import React from 'react';
 import MenuBar from '../../globalStyles/MenuBar';
 import { MenuTabs } from '../../globalStyles/MenuTabs';
 import Loader from '../../globalStyles/Loader';
-import SearchBar from './SearchBar';
 import PrintCardContainer from '../components/PrintCardContainer';
 
 const Queue = props => {
@@ -32,8 +31,6 @@ const Queue = props => {
         ) : (
           false
         )}
-
-        {/* <SearchBar filterByTerm={props.filterByTerm} /> */}
       </div>
       <table id="queueTable">
         <thead>

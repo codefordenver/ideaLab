@@ -26,18 +26,6 @@ const QueueContainer = () => {
     );
   }, []);
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   RequestService.getPrintJobs(
-  //     response => {
-  //       const data = response.data.data;
-  //       setData(data);
-  //       setLoading(false);
-  //     },
-  //     error => console.error(error),
-  //   );
-  // }, []);
-
   const saveCard = updatedCard => {
     RequestService.saveCard(updatedCard);
   };
