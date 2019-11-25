@@ -5,12 +5,10 @@ import PrintDateAdded from './PrintDateAdded';
 import { CirclePicker } from 'react-color';
 import { IoIosArrowDown, IoIosArrowBack } from 'react-icons/io';
 import { FiSave, FiMail } from 'react-icons/fi';
-const ntc = require('ntcjs');
 
 const PrintCardContainer = props => {
-  const [data] = useState(props.data);
   const [isToggled, setIsToggled] = useState(false);
-  const [card] = useState(data);
+  const [card] = useState(props.data);
   const [updatedData, updateData] = useState({
     comments: card.comments,
     colorType: card.colorType.color,
@@ -23,13 +21,14 @@ const PrintCardContainer = props => {
 
   const colorCircleStyle = {
     backgroundColor: `${updatedData.colorType}`,
+    height: '25px',
+    width: '25px',
   };
 
   const handleColorChange = hue => {
-    const colorName = ntc.name(hue.hex)[1];
     updateData(prevState => ({
       ...prevState,
-      colorType: colorName,
+      colorType: hue.hex,
     }));
     setSaveIconShowing(true);
   };
@@ -146,7 +145,7 @@ const PrintCardContainer = props => {
                 onChangeComplete={handleColorChange}
                 color={card.color}
                 colors={colors}
-                width="100px"
+                width="250px"
                 circleSize={18}
                 circleSpacing={8}
               />
@@ -156,11 +155,11 @@ const PrintCardContainer = props => {
           )}
         </td>
         <td className="submitDate">
-          <PrintDateAdded submitted={data.createdAt} />
+          <PrintDateAdded submitted={card.createdAt} />
         </td>
         <td>
           <StatusDropdown
-            currentStatus={data.status}
+            currentStatus={card.status}
             statusChanged={updatePrintingStatus}
             id={card.id}
           />

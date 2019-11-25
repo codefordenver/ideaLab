@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +52,6 @@ public class PrintJobOperations {
     private final QueueRepo queueRepo;
     private final EmployeeRepo employeeRepo;
     private final EmailHashUtil emailHashUtil;
-    private static final Logger LOGGER = LoggerFactory.getLogger(PrintJobOperations.class);
 
     public PrintJobOperations(FileService fileService, PrintJobRepo printJobRepo,
                               ColorTypeRepo colorTypeRepo, CustomerInfoRepo customerInfoRepo,
@@ -311,10 +308,8 @@ public class PrintJobOperations {
             throw new IdeaLabApiException(PRINT_JOB_CANT_FIND_BY_ID);
 
         ColorType colorType = null;
-        LOGGER.info("COLOR INFO: " + request.getColorType());
         if(request.getColorType() != null && !request.getColorType().trim().isEmpty()) {
             colorType = colorTypeRepo.findByColor(request.getColorType().toLowerCase());
-            LOGGER.info("color type? " + colorType);
             if (colorType == null)
                 throw new IdeaLabApiException(PRINT_JOB_UPDATE_FAILED, "Color type is invalid");
         }

@@ -1,17 +1,17 @@
 
 INSERT INTO color_type (color, available, created_at, updated_at) VALUES 
-('white', true, current_timestamp, current_timestamp),
-('lightBlue', true, current_timestamp, current_timestamp),
-('blue', true, current_timestamp, current_timestamp),
-('darkBlue', true, current_timestamp, current_timestamp),
-('red', true, current_timestamp, current_timestamp),
-('orange', true, current_timestamp, current_timestamp),
-('yellow', true, current_timestamp, current_timestamp),
-('lightGreen', true, current_timestamp, current_timestamp),
-('darkGreen', true, current_timestamp, current_timestamp),
-('purple', true, current_timestamp, current_timestamp),
-('pink', true, current_timestamp, current_timestamp),
-('black', true, current_timestamp, current_timestamp);
+('#FFFFFF', true, current_timestamp, current_timestamp),
+('#AAD6E6', true, current_timestamp, current_timestamp),
+('#0000FF', true, current_timestamp, current_timestamp),
+('#00008B', true, current_timestamp, current_timestamp),
+('#FF0000', true, current_timestamp, current_timestamp),
+('#FF681F', true, current_timestamp, current_timestamp),
+('#FFFF00', true, current_timestamp, current_timestamp),
+('#90EE90', true, current_timestamp, current_timestamp),
+('#006400', true, current_timestamp, current_timestamp),
+('#800080', true, current_timestamp, current_timestamp),
+('#FFC0CB', true, current_timestamp, current_timestamp),
+('#000000', true, current_timestamp, current_timestamp);
 
 INSERT INTO customer_info (first_name, last_name, email, created_at, updated_at) VALUES
 ('hannah', 'amundson', 'fake@gmail.com', current_timestamp, current_timestamp),
