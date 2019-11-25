@@ -1,17 +1,17 @@
 
 INSERT INTO color_type (color, available, created_at, updated_at) VALUES 
-('blue', true, current_timestamp, current_timestamp),
-('green', true, current_timestamp, current_timestamp),
-('purple', true, current_timestamp, current_timestamp),
+('white', true, current_timestamp, current_timestamp),
 ('lightBlue', true, current_timestamp, current_timestamp),
+('blue', true, current_timestamp, current_timestamp),
 ('darkBlue', true, current_timestamp, current_timestamp),
-('pink', true, current_timestamp, current_timestamp),
+('red', true, current_timestamp, current_timestamp),
 ('orange', true, current_timestamp, current_timestamp),
 ('yellow', true, current_timestamp, current_timestamp),
-('black', true, current_timestamp, current_timestamp),
-('white', true, current_timestamp, current_timestamp),
-('grey', true, current_timestamp, current_timestamp),
-('red', true, current_timestamp, current_timestamp);
+('lightGreen', true, current_timestamp, current_timestamp),
+('darkGreen', true, current_timestamp, current_timestamp),
+('purple', true, current_timestamp, current_timestamp),
+('pink', true, current_timestamp, current_timestamp),
+('black', true, current_timestamp, current_timestamp);
 
 INSERT INTO customer_info (first_name, last_name, email, created_at, updated_at) VALUES
 ('hannah', 'amundson', 'fake@gmail.com', current_timestamp, current_timestamp),

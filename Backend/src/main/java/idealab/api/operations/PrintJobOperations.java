@@ -306,14 +306,15 @@ public class PrintJobOperations {
     public DataResponse<PrintJob> updatePrintJobProps(Integer printJobId, UpdatePrintJobPropertiesRequest request) {
         request.validate();
         boolean isChanged = false;
-        LOGGER.info("PJO:" + printJobId + " " + request);
         PrintJob printJob = printJobRepo.findPrintJobById(printJobId);
         if(printJob == null)
             throw new IdeaLabApiException(PRINT_JOB_CANT_FIND_BY_ID);
 
         ColorType colorType = null;
+        LOGGER.info("COLOR INFO: " + request.getColorType());
         if(request.getColorType() != null && !request.getColorType().trim().isEmpty()) {
-            colorType = colorTypeRepo.findByColor(request.getColorType());
+            colorType = colorTypeRepo.findByColor(request.getColorType().toLowerCase());
+            LOGGER.info("color type? " + colorType);
             if (colorType == null)
                 throw new IdeaLabApiException(PRINT_JOB_UPDATE_FAILED, "Color type is invalid");
         }

@@ -5,6 +5,7 @@ import PrintDateAdded from './PrintDateAdded';
 import { CirclePicker } from 'react-color';
 import { IoIosArrowDown, IoIosArrowBack } from 'react-icons/io';
 import { FiSave, FiMail } from 'react-icons/fi';
+const ntc = require('ntcjs');
 
 const PrintCardContainer = props => {
   const [data] = useState(props.data);
@@ -21,16 +22,18 @@ const PrintCardContainer = props => {
   const { saveCard } = props;
 
   const colorCircleStyle = {
-    backgroundColor: `${card.colorType.color}`,
+    backgroundColor: `${updatedData.colorType}`,
   };
 
   const handleColorChange = hue => {
+    const colorName = ntc.name(hue.hex)[1];
     updateData(prevState => ({
       ...prevState,
-      colorType: hue.hex,
+      colorType: colorName,
     }));
     setSaveIconShowing(true);
   };
+
   const handleMouseEnter = () => {
     setHoverState(true);
   };
@@ -63,13 +66,9 @@ const PrintCardContainer = props => {
 
   const saveChanges = () => {
     let updatedSavedCard = { id: card.id, employeeId: props.employeeId };
-
     for (var key in updatedData) {
-      if (
-        key === 'colorType' &&
-        card.colorType.color !== updatedData.colorType
-      ) {
-        updatedSavedCard.colorType = card.colorType[key];
+      if (key === 'colorType' && card.colorType.color !== updatedData[key]) {
+        updatedSavedCard[key] = updatedData[key];
       } else if (
         key !== 'colorType' &&
         (card[key] && card[key] !== updatedData[key])
@@ -77,7 +76,6 @@ const PrintCardContainer = props => {
         updatedSavedCard[key] = updatedData[key];
       }
     }
-    console.log('???', updatedSavedCard);
     saveCard(updatedSavedCard);
     setSaveIconShowing(false);
   };

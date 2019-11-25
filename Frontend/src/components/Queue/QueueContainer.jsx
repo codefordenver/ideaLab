@@ -63,7 +63,7 @@ const QueueContainer = () => {
         setLoading(false);
         const formattedData = data.map(printjob => {
           return {
-            color: printjob.colorType.color,
+            colorType: printjob.colorType.color,
             submitted: printjob.createdAt,
             comments: printjob.comments,
             status: printjob.status,
@@ -78,7 +78,6 @@ const QueueContainer = () => {
   }, []);
 
   const saveCard = updatedCard => {
-    console.log('QC updated card:', updatedCard);
     RequestService.saveCard(updatedCard);
     // setSearchValues(updatedCard);
   };
