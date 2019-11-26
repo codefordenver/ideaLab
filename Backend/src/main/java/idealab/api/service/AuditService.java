@@ -44,7 +44,7 @@ public class AuditService {
             auditModel.setStatus(printJob.getStatus());
             auditModel.setEmailHash(printJob.getEmailHash());
 
-            ColorType colorTypeId = printJob.getColorTypeId();
+            ColorType colorTypeId = printJob.getColorType();
             auditModel.setColor(colorTypeId.getColor());
 
             //Index [1] - Revision date comes from the Revision Entity Table
