@@ -59,11 +59,11 @@ public class PrintJob extends RecordTimestamp implements Comparable<PrintJob> {
     @Column(name = "comments")
     private String comments;
 
-    @Column(name = "dropbox_sharable_link")
+    @Column(name = "file_sharable_link")
     @Length(min = 1, max = 254)
     private String fileSharableLink;
 
-    @Column(name = "dropbox_path")
+    @Column(name = "file_path")
     @Length(min = 1, max = 254)
     private String filePath;
 

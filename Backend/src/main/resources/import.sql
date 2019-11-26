@@ -18,7 +18,7 @@ INSERT INTO employee (first_name, last_name, "password", "role", username, creat
 ('megan','forgey','$2a$10$riZO8iqbcCR1X/4fEgh0Au/VBNqgTOjVhZu9ZdlaMxztQEPYF2o8i','STAFF','mforgey', current_timestamp, current_timestamp),
 ('carol','hadley','$2a$10$riZO8iqbcCR1X/4fEgh0Au/VBNqgTOjVhZu9ZdlaMxztQEPYF2o8i','ADMIN','carolhadley', current_timestamp, current_timestamp);
 
-INSERT INTO print_job (status, comments, dropbox_sharable_link, dropbox_path, fk_color_type_id, fk_employee_id, created_at, updated_at, fk_customer_info_id) VALUES
+INSERT INTO print_job (status, comments, file_sharable_link, file_path, fk_color_type_id, fk_employee_id, created_at, updated_at, fk_customer_info_id) VALUES
 ('PENDING_REVIEW', 'user comment', 'http://fakelink.com', '/fakepath', 1,1, current_timestamp, current_timestamp, 1),
 ('PRINTING', 'user comment 2', 'http://what.com', '/whatpath',2,2, current_timestamp, current_timestamp, 2),
 ('PRINTING', 'user comment 3', 'http://fake.com', '/fakepath',2,3, current_timestamp, current_timestamp, 3),
