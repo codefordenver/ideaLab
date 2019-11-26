@@ -4,15 +4,11 @@
   QueueTabs = [
     {
       name: 'PENDING_REVIEW',
-      label: 'Pending Review',
+      label: 'Waiting',
     },
     {
       name: 'PRINTING',
       label: 'In Progress',
-    },
-    {
-      name: 'PENDING_CUSTOMER_REVIEW',
-      label: 'Pending Customer Review',
     },
     {
       name: 'DONE',

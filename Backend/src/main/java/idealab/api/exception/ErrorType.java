@@ -57,7 +57,7 @@ public enum ErrorType {
     ),
     USER_NOT_FOUND(
             10,
-            "User Not Found",
+            "User Not Found or There Are Not Any Users",
             HttpStatus.BAD_REQUEST
     ),
     VALIDATION_ERROR(
@@ -67,7 +67,7 @@ public enum ErrorType {
     ),
     COLOR_CANT_FIND_BY_TYPE(
     		12,
-    		"Color not found. Check the sent color!",
+    		"The Color Could Not Be Found or No Colors Exist.",
     		HttpStatus.NOT_FOUND
     );
 

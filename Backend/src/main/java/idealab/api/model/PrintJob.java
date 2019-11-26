@@ -1,13 +1,24 @@
 package idealab.api.model;
 
+import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
+
+import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.validator.constraints.Length;
-
-import javax.persistence.*;
-import java.util.Objects;
-
-import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
 
 /**
  * This class holds the model that represents the print job table. It is related to email hash, color type, queue, and employee ID. Additionally,
@@ -16,7 +27,7 @@ import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
 @Entity
 @Audited
 @Table(name = "print_job")
-public class PrintJob extends RecordTimestamp {
+public class PrintJob extends RecordTimestamp implements Comparable<PrintJob> {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -30,19 +41,19 @@ public class PrintJob extends RecordTimestamp {
     @ManyToOne()
     @Audited(targetAuditMode = NOT_AUDITED)
     @JoinColumn(name="fk_color_type_id", referencedColumnName = "id", nullable = false)
-    private ColorType colorTypeId;
+    private ColorType colorType;
 
     @ManyToOne()
     @Audited(targetAuditMode = NOT_AUDITED)
     @JoinColumn(name="fk_employee_id", referencedColumnName = "id", nullable = false)
-    private Employee employeeId;
+    private Employee employee;
 
     @Column(name = "status",  nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
 
     @NotAudited
-    @OneToOne(targetEntity=Queue.class, mappedBy="printJobId")
+    @OneToOne(targetEntity=Queue.class, mappedBy="printJob")
     private Queue queueId;
 
     @Column(name = "comments")
@@ -62,11 +73,11 @@ public class PrintJob extends RecordTimestamp {
 
     public PrintJob() {}
 
-    public PrintJob(CustomerInfo customerInfo, ColorType colorTypeId, Employee employeeId,
+    public PrintJob(CustomerInfo customerInfo, ColorType colorType, Employee employee,
     		Status status, String comments, String emailHash) {
         this.customerInfo = customerInfo;
-        this.colorTypeId = colorTypeId;
-        this.employeeId = employeeId;
+        this.colorType = colorType;
+        this.employee = employee;
         this.status = status;
         this.comments = comments;
         //Make the email hash directly on the record so it is added to the audit table
@@ -89,20 +100,20 @@ public class PrintJob extends RecordTimestamp {
         this.customerInfo = customerInfo;
     }
 
-    public ColorType getColorTypeId() {
-        return colorTypeId;
+    public ColorType getColorType() {
+        return colorType;
     }
 
-    public void setColorTypeId(ColorType colorTypeId) {
-        this.colorTypeId = colorTypeId;
+    public void setColorType(ColorType colorType) {
+        this.colorType = colorType;
     }
 
-    public Employee getEmployeeId() {
-        return employeeId;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setEmployeeId(Employee employeeId) {
-        this.employeeId = employeeId;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public Status getStatus() {
@@ -160,8 +171,8 @@ public class PrintJob extends RecordTimestamp {
         PrintJob printJob = (PrintJob) o;
         return Objects.equals(id, printJob.id) &&
                 Objects.equals(customerInfo, printJob.customerInfo) &&
-                Objects.equals(colorTypeId, printJob.colorTypeId) &&
-                Objects.equals(employeeId, printJob.employeeId) &&
+                Objects.equals(colorType, printJob.colorType) &&
+                Objects.equals(employee, printJob.employee) &&
                 status == printJob.status &&
                 Objects.equals(queueId, printJob.queueId) &&
                 Objects.equals(comments, printJob.comments) &&
@@ -176,14 +187,19 @@ public class PrintJob extends RecordTimestamp {
         return "PrintJob{" +
                 "id=" + id +
                 ", customerInfo=" + custId +
-                ", colorTypeId=" + colorTypeId +
-                ", employeeId=" + employeeId +
+                ", colorType=" + colorType +
+                ", employee=" + employee +
                 ", status=" + status +
-                ", queueId=" + queueId +
+                ", queue=" + queueId +
                 ", comments='" + comments + '\'' +
                 ", fileSharableLink='" + fileSharableLink + '\'' +
                 ", filePath='" + filePath + '\'' +
                 ", emailHash='" + emailHash + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(PrintJob o) {
+        return this.getCreatedAt().compareTo(o.getCreatedAt());
     }
 }

@@ -92,6 +92,29 @@ const RequestService = {
       .then(thenCallback)
       .catch(catchCallback);
   },
+
+  saveCard(payload, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    const cardId = payload.id;
+    backendInstance
+      .put(backendUrl + `/api/print-jobs/${cardId}`, payload)
+    },
+
+  getUsers(thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .get(backendUrl + '/users')
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
+  getActiveColors(thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .get(backendUrl + '/colors')
+      .then(thenCallback)
+      .catch(catchCallback);  
+  },
 };
 
 export default RequestService;
