@@ -1,90 +1,37 @@
 .printCardContainer {
   padding: 10px;
-  margin: 5px;
+  margin: 10px auto;
   border: solid 1px black;
   border-radius: 4px;
   text-align: left;
-  width: 100%;
-  justify-content: center;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-}
-
-.printCardContainer > div {
-  padding: 10px;
-  margin: 5px;
-  text-align: left;
-  width: 100%;
-  height: fit-content;
-  display: flex;
+  width: 97%;
 }
 
 .colorContainer {
-  width: 10em;
-  height: 2em;
-  padding: 0.5em 0;
-  justify-content: space-between;
-  align-items: center;
   display: flex;
-  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+  margin-left: 1em;
 }
 
 .colorPickerContainer {
-  background-color: white;
-  width: 5.5em;
-  border: solid 1px black;
-  padding: 0.5em;
-  align-items: center;
-  justify-items: center;
+  margin-left: 20px;
+  height: 100%;
+  width: 100%;
 }
 
-.colorCircle {
-  width: 25px;
-  height: 25px;
-  background-color: black;
-  border: solid 1px black;
+.colorPickerContainer > * > * > * {
   border-radius: 50%;
-  position: relative;
-}
-
-.circle-picker {
-  margin: 0;
-}
-
-.submitDate {
-  margin-right: 5em;
-  text-align: center;
-}
-
-.printCardContainerTop {
-  justify-content: center;
-}
-
-.printCardContainerBottom {
-  position: relative;
-  justify-content: space-between;
-}
-
-.printCardContainer .col10 {
-  width: 10%;
-}
-.printCardContainer .col20 {
-  width: 20%;
+  border: solid 1px black;
 }
 
 .printCardContainer .colorCircle {
   width: 25px;
   height: 25px;
-  background-color: black;
   border: solid 1px black;
   border-radius: 50%;
-  display: inline-block;
-  margin: 0;
-  position: relative;
-  top: 50%;
-  left: 0%;
-  transform: translate(75%, -50%);
+  margin-bottom: 5px;
 }
 
 .toggleArrow:hover,
@@ -93,27 +40,29 @@
   cursor: pointer;
 }
 
-.printAdditionalInfo {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-}
-
 .toggleArrow,
 .saveIcon {
   transform: scale(1.5);
-  padding-right: 3em;
-}
-
-.emailRecipient {
-  text-decoration: underline;
-  margin-left: 4em;
+  padding-right: 2em;
 }
 
 .commentSection {
-  margin-right: 18em;
-  width: 38%;
+  width: 42%;
   height: 100%;
   border-radius: 5px;
+}
+
+.printAdditionalInfo {
+  display: flex;
+  overflow: overlay;
+}
+
+.emailRecipient {
+  display: flex;
+  align-items: flex-end;
+  margin-right: 2em;
+}
+
+.emailRecipient > svg {
+  margin-left: 5px;
 }
