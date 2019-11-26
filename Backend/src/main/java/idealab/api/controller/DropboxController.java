@@ -5,6 +5,7 @@ import idealab.api.dto.response.DataResponse;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.model.PrintJob;
 import idealab.api.service.FileService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -25,6 +26,7 @@ public class DropboxController {
     }
 
     @PostMapping("/token")
+    @PreAuthorize("hasRole('ADMIN')")
     public GenericResponse updateToken(@RequestBody Map<String, String> mapParam) {
         String token = mapParam.get("token");
         return fileService.updateToken(token);
