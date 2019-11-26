@@ -17,10 +17,10 @@ import java.util.List;
 
 @Service
 @PersistenceContext
-public class AuditUtil {
+public class AuditService {
     private final EntityManager entityManager;
 
-    public AuditUtil(EntityManager entityManager) {
+    public AuditService(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
