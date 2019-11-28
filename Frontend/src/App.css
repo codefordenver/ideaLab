@@ -41,6 +41,7 @@ body {
 
 .grid-item-nav {
   border-right: solid;
+  background: white;
 }
 
 .navList li {
