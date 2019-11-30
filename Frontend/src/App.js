@@ -29,7 +29,6 @@ function App() {
     if (storedToken) {
       RequestService.requestState.token = storedToken;
       const decoded = TokenParser(storedToken);
-      console.log(decoded);
       const now = Date.now() / 1000;
       if (now < decoded.exp) {
         setState({

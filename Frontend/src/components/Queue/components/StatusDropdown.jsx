@@ -7,7 +7,7 @@ const StatusDropdown = ({ currentStatus, statusChanged, id }) => {
         <option value="PENDING_REVIEW">Queueing</option>
         <option value="PRINTING">Printing</option>
         <option value="FAILED">Failed</option>
-        <option value="COMPLETE">Complete</option>
+        <option value="COMPLETED">Complete</option>
       </select>
     </form>
   );

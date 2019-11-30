@@ -97,7 +97,10 @@ const RequestService = {
     const backendInstance = generateApiInstance();
     const cardId = payload.id;
     console.log('RS', payload);
-    backendInstance.put(backendUrl + `/api/print-jobs/${cardId}`, payload);
+    backendInstance
+      .put(backendUrl + `/api/print-jobs/${cardId}`, payload)
+      .then(thenCallback)
+      .catch(catchCallback);
   },
 
   getUsers(thenCallback, catchCallback) {

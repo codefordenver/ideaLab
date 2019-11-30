@@ -7,11 +7,14 @@ import { IoIosArrowDown, IoIosArrowBack } from 'react-icons/io';
 import { FiSave, FiMail } from 'react-icons/fi';
 
 const PrintCardContainer = props => {
+  const color = props.data.colorType.color
+    ? props.data.colorType.color
+    : props.data.colorType;
   const [isToggled, setIsToggled] = useState(false);
   const [card] = useState(props.data);
   const [updatedData, updateData] = useState({
     comments: card.comments,
-    colorType: card.colorType.color,
+    colorType: color,
     status: card.status,
   });
   const [hoverState, setHoverState] = useState(false);
@@ -20,7 +23,7 @@ const PrintCardContainer = props => {
   const { saveCard } = props;
 
   const colorCircleStyle = {
-    backgroundColor: `${card.colorType.color}`,
+    backgroundColor: `${updatedData.colorType}`,
   };
 
   const handleColorChange = hue => {
@@ -62,13 +65,12 @@ const PrintCardContainer = props => {
 
   const saveChanges = () => {
     let updatedSavedCard = { id: card.id, employeeId: props.employeeId };
-
     for (var key in updatedData) {
       if (
         key === 'colorType' &&
-        card.colorType.color !== updatedData.colorType
+        card.colorType.color !== updatedData.colorType.color
       ) {
-        updatedSavedCard.colorType = card.colorType[key];
+        updatedSavedCard[key] = updatedData[key];
       } else if (
         key !== 'colorType' &&
         (card[key] && card[key] !== updatedData[key])
@@ -76,7 +78,6 @@ const PrintCardContainer = props => {
         updatedSavedCard[key] = updatedData[key];
       }
     }
-    console.log('???', updatedSavedCard);
     saveCard(updatedSavedCard);
     setSaveIconShowing(false);
   };
@@ -123,7 +124,7 @@ const PrintCardContainer = props => {
   };
 
   return (
-    <div className="printCardContainer">
+    <tbody className="printCardContainer">
       <tr>
         <td className="printFileName">
           <a href={updateFileUrlParams(card.fileSharableLink)}>
@@ -174,7 +175,7 @@ const PrintCardContainer = props => {
         </td>
       </tr>
       <tr>{secondRowContent}</tr>
-    </div>
+    </tbody>
   );
 };
 
