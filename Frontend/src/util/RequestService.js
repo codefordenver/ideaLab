@@ -96,7 +96,6 @@ const RequestService = {
   saveCard(payload, thenCallback, catchCallback) {
     const backendInstance = generateApiInstance();
     const cardId = payload.id;
-    console.log('RS', payload);
     backendInstance
       .put(backendUrl + `/api/print-jobs/${cardId}`, payload)
       .then(thenCallback)

@@ -40,7 +40,6 @@ const QueueContainer = () => {
 
   const onSaveCardSuccess = response => {
     const cardStatus = response.data.data[0].status;
-    console.log(cardStatus, statusView);
     if (cardStatus !== statusView) {
       setStatusView(returnCardStatus(cardStatus));
     }
