@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +52,6 @@ public class PrintJobOperations {
     private final QueueRepo queueRepo;
     private final EmployeeRepo employeeRepo;
     private final EmailHashUtil emailHashUtil;
-    private static final Logger LOGGER = LoggerFactory.getLogger(PrintJobOperations.class);
 
     public PrintJobOperations(FileService fileService, PrintJobRepo printJobRepo,
                               ColorTypeRepo colorTypeRepo, CustomerInfoRepo customerInfoRepo,

@@ -6,10 +6,10 @@ import SearchBar from './SearchBar';
 import PrintCardContainer from '../components/PrintCardContainer';
 
 const Queue = props => {
-  const renderPrintCards = props.data.map((card, i) => (
+  const renderPrintCards = props.filteredData.map(card => (
     <PrintCardContainer
       data={card}
-      key={i}
+      key={card.id}
       employeeId={props.employeeId}
       colors={props.colors}
       saveCard={props.saveCard}
@@ -32,7 +32,7 @@ const Queue = props => {
           false
         )}
 
-        <SearchBar filterByTerm={props.filterByTerm} />
+        {/* <SearchBar filterByTerm={props.filterByTerm} /> */}
       </div>
       <table id="queueTable">
         <thead>
