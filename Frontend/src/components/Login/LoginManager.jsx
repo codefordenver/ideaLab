@@ -17,7 +17,6 @@ const LoginManager = props => {
       const token = response.headers ? response.headers.authorization : '';
       if (token) {
         const decoded = TokenParser(token);
-        console.log('where is it:', decoded);
         RequestService.requestState.token = token;
         localStorage.setItem('ideaLab', token);
         callbacks.setState({

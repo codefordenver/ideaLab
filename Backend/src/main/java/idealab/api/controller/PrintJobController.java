@@ -110,7 +110,6 @@ public class PrintJobController {
     @PutMapping("/{print-id}")
     public ResponseEntity<?> updatePrintJobProperties(@PathVariable("print-id") Integer printId, @RequestBody UpdatePrintJobPropertiesRequest request, Principal principal) {
         DataResponse<PrintJob> response = printJobOperations.updatePrintJobProps(printId, request);
-        LOGGER.info("'PJC printid'" + printId + " request " + request);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 }
