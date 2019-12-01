@@ -23,7 +23,6 @@ table {
 tbody {
   display: block;
   overflow: auto;
-  height: 1000px;
   width: 100%;
 }
 
