@@ -59,11 +59,12 @@
 }
 
 .adminSettingsSectionHeader {
-  font-size: 1em;
+  font-size: 20px;
   border-bottom: 2px solid black;
-  padding-bottom: 1em;
+  padding-bottom: 0.75em;
   margin-bottom: 1.5em;
   width: fit-content;
+  font-weight: bold;
 }
 
 .listContainer {

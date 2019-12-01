@@ -42,7 +42,6 @@ const PrintCardContainer = props => {
 
   const updatePrintingStatus = event => {
     event.persist();
-    console.log('VALUE??', event.target.value);
     updateCard(prevState => ({ ...prevState, status: event.target.value }));
     setSaveIconShowing(true);
   };
@@ -52,7 +51,6 @@ const PrintCardContainer = props => {
   };
 
   const saveChanges = () => {
-    console.log('SAVING CARD:', card);
     saveCard(card);
     setSaveIconShowing(false);
   };

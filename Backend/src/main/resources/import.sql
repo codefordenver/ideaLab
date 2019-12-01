@@ -8,10 +8,10 @@ INSERT INTO color_type (color, available, created_at, updated_at) VALUES
 ('#FF681F', true, current_timestamp, current_timestamp),
 ('#808080', true, current_timestamp, current_timestamp),
 ('#90EE90', true, current_timestamp, current_timestamp),
-('#006400', true, current_timestamp, current_timestamp),
-('#800080', true, current_timestamp, current_timestamp),
-('#FFC0CB', true, current_timestamp, current_timestamp),
-('#000000', true, current_timestamp, current_timestamp);
+('#006400', false, current_timestamp, current_timestamp),
+('#800080', false, current_timestamp, current_timestamp),
+('#FFC0CB', false, current_timestamp, current_timestamp),
+('#000000', false, current_timestamp, current_timestamp);
 
 INSERT INTO customer_info (first_name, last_name, email, created_at, updated_at) VALUES
 ('hannah', 'amundson', 'fake@gmail.com', current_timestamp, current_timestamp),

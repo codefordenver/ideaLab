@@ -72,7 +72,6 @@ function App() {
                 state.authenticated ? (
                   <Redirect
                     to={{
-                      pathname: '/queue',
                       state: { from: props.location },
                     }}
                   />
@@ -84,7 +83,7 @@ function App() {
 
             <PrivateRoute path="/account" component={AdminContainer} />
             <PrivateRoute path="/create" component={CreateAccountManager} />
-            <PrivateRoute path="/" component={LoginManager} />
+            <PrivateRoute path="/" component={AdminContainer} />
           </Switch>
         </HashRouter>
       </AuthContext.Provider>
