@@ -29,7 +29,7 @@ const PrintCardContainer = props => {
   const handleColorChange = hue => {
     updateData(prevState => ({
       ...prevState,
-      colorType: hue.hex,
+      colorType: hue.hex.toUpperCase(),
     }));
     setSaveIconShowing(true);
   };
