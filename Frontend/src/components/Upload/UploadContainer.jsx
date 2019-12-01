@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import RequestService from '../../util/RequestService';
 import Loader from '../globalStyles/Loader';
-import {createBrowserHistory} from 'history';
+import { createBrowserHistory } from 'history';
 import Upload from './components/Upload';
 import BasicInput from '../BasicInput';
 import './UploadContainer.css';
@@ -10,7 +10,7 @@ import ideaLABlogo from '../globalStyles/img/ideaLabLogo.png';
 const history = createBrowserHistory();
 function UploadContainer() {
   useEffect(() => {
-  const unblock = history.block('Are you sure you want to navigate away?');
+    const unblock = history.block('Are you sure you want to navigate away?');
     return () => {
       unblock();
     };
@@ -44,7 +44,7 @@ function UploadContainer() {
       setCustomerFirstName('');
       setCustomerLastName('');
       setColor('');
-      setComments('')
+      setComments('');
     }
   }
 
@@ -85,7 +85,6 @@ function UploadContainer() {
         <p>{errors.file ? errors.file : null}</p>
         <div className={'input-container'}>
           <div>
-            {' '}
             <BasicInput
               className={'upload'}
               value={customerFirstName}
@@ -117,15 +116,6 @@ function UploadContainer() {
               />
               <span>{errors.comments ? errors.comments : null}</span>
             </div>
-          </div>
-          <div>
-            <BasicInput
-              className={'upload'}
-              value={color}
-              placeHolder={'Color'}
-              changeHandler={setColor}
-              error={errors.color}
-            />
           </div>
         </div>
         {errors.form ? (
