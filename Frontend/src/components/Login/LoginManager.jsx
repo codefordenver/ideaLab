@@ -23,6 +23,7 @@ const LoginManager = props => {
           token: token,
           authenticated: true,
           role: decoded.role,
+          employeeId: decoded.employeeId,
         });
       } else {
         callbacks.setState({ authenticated: false });

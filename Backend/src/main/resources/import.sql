@@ -29,12 +29,12 @@ INSERT INTO employee (first_name, last_name, "password", "role", username, creat
 INSERT INTO print_job (status, comments, dropbox_sharable_link, dropbox_path, fk_color_type_id, fk_employee_id, created_at, updated_at, fk_customer_info_id) VALUES
 ('PENDING_REVIEW', 'user comment', 'http://fakelink.com', '/fakepath', 1,1, current_timestamp, current_timestamp, 1),
 ('PRINTING', 'user comment 2', 'http://what.com', '/whatpath',2,2, current_timestamp, current_timestamp, 2),
-('PRINTING', 'user comment 3', 'http://fake.com', '/fakepath',2,3, current_timestamp, current_timestamp, 3),
+('PRINTING', 'user comment 3', 'http://fake.com', '/fakepath',3,3, current_timestamp, current_timestamp, 3),
 ('PENDING_REVIEW', 'user comment 4', 'http://hi.com', '/hipath',4,4, current_timestamp, current_timestamp, 4),
-('PENDING_REVIEW', 'user comment 6', 'http://dotcom.com', '/dotpath',2,2, current_timestamp, current_timestamp, 5),
-('PENDING_REVIEW', 'user comment 7', 'http://website.com', '/websitepath', 3,2, current_timestamp, current_timestamp, 1),
-('PENDING_REVIEW', 'user comment 8', 'http://site.com', '/sitepath',3,3, current_timestamp, current_timestamp, 2),
-('FAILED', 'user comment 9', 'http://web.com', '/webpath',4,1, current_timestamp, current_timestamp, 3);
+('PENDING_REVIEW', 'user comment 6', 'http://dotcom.com', '/dotpath',5,2, current_timestamp, current_timestamp, 5),
+('PENDING_REVIEW', 'user comment 7', 'http://website.com', '/websitepath', 6,2, current_timestamp, current_timestamp, 1),
+('PENDING_REVIEW', 'user comment 8', 'http://site.com', '/sitepath',7,3, current_timestamp, current_timestamp, 2),
+('FAILED', 'user comment 9', 'http://web.com', '/webpath',8,1, current_timestamp, current_timestamp, 3);
 
 INSERT INTO print_status_audit (status_after, status_before, fk_employee_id, fk_print_model_id, created_at, updated_at) VALUES 
 ('Waiting', 'PENDING_REVIEW', 1, 1, current_timestamp, current_timestamp), 

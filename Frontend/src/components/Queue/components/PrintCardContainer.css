@@ -5,6 +5,7 @@
   border-radius: 4px;
   text-align: left;
   width: 97%;
+  height: fit-content;
 }
 
 .colorContainer {
