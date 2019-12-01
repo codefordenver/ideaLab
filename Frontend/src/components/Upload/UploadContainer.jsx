@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import RequestService from '../../util/RequestService';
 import Loader from '../globalStyles/Loader';
-import {createBrowserHistory} from 'history';
+import { createBrowserHistory } from 'history';
 import Upload from './components/Upload';
 import BasicInput from '../BasicInput';
 import './UploadContainer.css';
@@ -9,7 +9,7 @@ import './UploadContainer.css';
 const history = createBrowserHistory();
 function UploadContainer() {
   useEffect(() => {
-  const unblock = history.block('Are you sure you want to navigate away?');
+    const unblock = history.block('Are you sure you want to navigate away?');
     return () => {
       unblock();
     };
@@ -43,13 +43,20 @@ function UploadContainer() {
       setCustomerFirstName('');
       setCustomerLastName('');
       setColor('');
-      setComments('')
+      setComments('');
     }
   }
 
   return (
     <div className={'uploadContainer'}>
-      {loading ? <div className={'loader-container'}>Uploading File...<Loader/></div> : false}
+      {loading ? (
+        <div className={'loader-container'}>
+          Uploading File...
+          <Loader />
+        </div>
+      ) : (
+        false
+      )}
       <form
         onSubmit={e => {
           e.preventDefault();
@@ -66,7 +73,7 @@ function UploadContainer() {
           RequestService.newPrintJob(formData, onSuccess, onFailure);
         }}
       >
-        <div className={"success"}>{success}</div>
+        <div className={'success'}>{success}</div>
         <Upload
           className={'upload'}
           filename={filename}
@@ -110,7 +117,7 @@ function UploadContainer() {
           error={errors.comments}
         />
         <div>
-          <div className={"error"}>{errors.form ? errors.form : null}</div>
+          <div className={'error'}>{errors.form ? errors.form : null}</div>
         </div>
         <button className={'shapedButton'} type="submit">
           SUMBIT

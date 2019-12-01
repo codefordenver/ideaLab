@@ -10,7 +10,12 @@ const Queue = props => {
     props.saveCard(updatedInfo);
   };
   const renderPrintCards = props.data.map((card, i) => (
-    <PrintCardContainer data={card} key={i} colors={props.colors} saveCard={props.saveCard} />
+    <PrintCardContainer
+      data={card}
+      key={i}
+      colors={props.colors}
+      saveCard={props.saveCard}
+    />
   ));
   return (
     <div>
