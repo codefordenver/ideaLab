@@ -109,3 +109,13 @@ input::placeholder {
 .adminSettingsButton:hover {
   cursor: pointer;
 }
+
+.ideaLabLogo {
+  width: 600px;
+  margin-top: 25px;
+}
+
+.statusMenu {
+  margin-top: 20px;
+  margin-left: 40px;
+}
