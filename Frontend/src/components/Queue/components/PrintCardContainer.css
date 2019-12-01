@@ -30,7 +30,10 @@
 .printCardContainer .colorCircle {
   width: 25px;
   height: 25px;
-  border: solid 1px black;
+  /* 
+  displays as a single black line
+  border: solid 1px black; 
+  */
   border-radius: 50%;
   margin-bottom: 5px;
 }
