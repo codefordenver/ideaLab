@@ -2,8 +2,8 @@
 :root {
   --light-blue: #00aeef;
   --dark-blue: #1f4393;
-  --other-dark-blue: #577CA2;
-  --misc-gray: #F6F6F6;
+  --other-dark-blue: #577ca2;
+  --misc-gray: #f6f6f6;
   --cream: #f0e3c4;
   --yellow: #ffd401;
   --white-text: #ffffff;
@@ -27,7 +27,6 @@ html {
 body {
   height: 100%;
   background-image: url('images/idealabBackground.svg');
-  background-repeat: no-repeat;
   background-size: cover;
 }
 
@@ -41,8 +40,13 @@ body {
   grid-template-columns: 1fr 8fr;
 }
 
+.grid-container:nth-child(2) {
+  margin: 0 50px;
+}
+
 .grid-item-nav {
   border-right: solid;
+  background-color: #fff;
 }
 
 .navList li {
@@ -98,7 +102,8 @@ body {
   color: white;
 }
 
-input {
+.uploadContainer input,
+.loginContainer input {
   display: block;
   height: 2em;
   margin: 2rem;

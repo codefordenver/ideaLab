@@ -25,4 +25,10 @@ public class ColorTypeController {
 
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
+
+    @GetMapping("/inactive")
+    public ResponseEntity<?> getInactiveColors() {
+        DataResponse<ColorType> response = colorOperations.getInactiveColors();
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
 }

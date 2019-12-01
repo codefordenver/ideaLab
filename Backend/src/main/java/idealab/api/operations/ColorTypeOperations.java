@@ -43,4 +43,21 @@ public class ColorTypeOperations {
 
         return response;
     }
+
+        public DataResponse<ColorType> getInactiveColors() {
+        DataResponse<ColorType> response = new DataResponse<ColorType>("Could not get inactive color list");
+
+        List<ColorType> colors = colorTypeRepo.findByAvailable(false);
+
+        if (colors == null || colors.isEmpty()){
+            ErrorType.COLOR_CANT_FIND_BY_TYPE.throwException();
+        }
+
+        response.setSuccess(true);
+        response.setMessage("Succesfully returned all unavailable colors");
+        response.setData(colors);
+        response.setHttpStatus(HttpStatus.ACCEPTED);
+
+        return response;
+    }
 }

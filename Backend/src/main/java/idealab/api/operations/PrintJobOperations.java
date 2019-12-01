@@ -303,7 +303,6 @@ public class PrintJobOperations {
     public DataResponse<PrintJob> updatePrintJobProps(Integer printJobId, UpdatePrintJobPropertiesRequest request) {
         request.validate();
         boolean isChanged = false;
-
         PrintJob printJob = printJobRepo.findPrintJobById(printJobId);
         if(printJob == null)
             throw new IdeaLabApiException(PRINT_JOB_CANT_FIND_BY_ID);
