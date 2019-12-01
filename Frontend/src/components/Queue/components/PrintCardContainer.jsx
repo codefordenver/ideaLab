@@ -7,14 +7,11 @@ import { IoIosArrowDown, IoIosArrowBack } from 'react-icons/io';
 import { FiSave, FiMail } from 'react-icons/fi';
 
 const PrintCardContainer = props => {
-  const color = props.data.colorType.color
-    ? props.data.colorType.color
-    : props.data.colorType;
   const [isToggled, setIsToggled] = useState(false);
   const [card] = useState(props.data);
   const [updatedData, updateData] = useState({
     comments: card.comments,
-    colorType: color,
+    colorType: props.data.colorType.color,
     status: card.status,
   });
   const [hoverState, setHoverState] = useState(false);
