@@ -96,7 +96,8 @@ body {
   color: white;
 }
 
-input {
+.uploadContainer input,
+.loginContainer input {
   display: block;
   height: 2em;
   margin: 2rem;

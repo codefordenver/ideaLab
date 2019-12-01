@@ -117,6 +117,14 @@ const RequestService = {
       .then(thenCallback)
       .catch(catchCallback);
   },
+
+  getInactiveColors(thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .get(backendUrl + '/colors/inactive')
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
 };
 
 export default RequestService;
