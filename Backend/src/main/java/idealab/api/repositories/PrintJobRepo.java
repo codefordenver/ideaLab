@@ -2,6 +2,7 @@ package idealab.api.repositories;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import idealab.api.model.CustomerInfo;
@@ -15,5 +16,13 @@ public interface PrintJobRepo extends CrudRepository<PrintJob, Integer> {
     List<PrintJob> findPrintJobByStatus(Status s);
     List<PrintJob> findAll();
     List<PrintJob> findByCustomerInfo(CustomerInfo customerInfoId);
-    
+
+    /**
+     * This finds a list of all "active" print jobs. Active print jobs are any print job in 
+     * the queue or any print job that does not have a status "waiting", "printing", or
+     * "pending customer review"
+     */
+    @Query("FROM PrintJob p LEFT JOIN p.queueId q WHERE q.id is not null or (p.status != 'PENDING_REVIEW' "
+        + "and p.status != 'PRINTING' and p.status != 'PENDING_CUSTOMER_RESPONSE')")
+    List<PrintJob> findActive();
 }
