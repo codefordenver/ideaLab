@@ -9,7 +9,7 @@ const StyledDropdown = props => {
   };
   return (
     <div className="styledDropdown">
-      <select value={value} onChange={dropdownUpdated} value={currentVal}>
+      <select onChange={dropdownUpdated} value={currentVal}>
         {dropdownOptions.map((dropdownOption, index) => (
           <option value={dropdownOption} key={index}>
             {dropdownOption}

@@ -93,6 +93,15 @@ const RequestService = {
       .catch(catchCallback);
   },
 
+  saveCard(payload, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    const cardId = payload.id;
+    backendInstance
+      .put(backendUrl + `/api/print-jobs/${cardId}`, payload)
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
   getUsers(thenCallback, catchCallback) {
     const backendInstance = generateApiInstance();
     backendInstance
@@ -105,6 +114,14 @@ const RequestService = {
     const backendInstance = generateApiInstance();
     backendInstance
       .get(backendUrl + '/colors')
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
+  getInactiveColors(thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .get(backendUrl + '/colors/inactive')
       .then(thenCallback)
       .catch(catchCallback);
   },

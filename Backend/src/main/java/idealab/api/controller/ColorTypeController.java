@@ -44,7 +44,11 @@ public class ColorTypeController {
                                                   @RequestBody ColorTypeUpdateRequest dto) {
 
         GenericResponse response = colorOperations.updateColorAvailability(colorId, dto);
+    }
 
+    @GetMapping("/inactive")
+    public ResponseEntity<?> getInactiveColors() {
+        DataResponse<ColorType> response = colorOperations.getInactiveColors();
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 }

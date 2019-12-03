@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import RequestService from '../../util/RequestService';
+import AuthContext from '../../AuthContext';
 import './QueueContainer.css';
 import Queue from './components/Queue';
 
 const QueueContainer = () => {
-  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [filteredData, setFilteredData] = useState(data);
-  const [stringedValues, setStringedValues] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [statusView, setStatusView] = useState('PENDING_REVIEW');
   const [colors, setColors] = useState();
 
@@ -18,7 +17,6 @@ const QueueContainer = () => {
         const data = response.data.data;
         setLoading(false);
         var colorList = [];
-        // eslint-disable-next-line array-callback-return
         data.map(color => {
           colorList.push(color.color);
         });
@@ -28,77 +26,80 @@ const QueueContainer = () => {
     );
   }, []);
 
+  const returnCardStatus = cardStatus => {
+    const failedStatuses = ['FAILED', 'REJECTED', 'COMPLETED', 'ARCHIVED'];
+    const waitingStatuses = ['PENDING_CUSTOMER_RESPONSE', 'PENDING_REVIEW'];
+    if (failedStatuses.indexOf(cardStatus) !== -1) {
+      return 'DONE';
+    } else if (waitingStatuses.indexOf(cardStatus) !== -1) {
+      return 'PENDING_REVIEW';
+    } else {
+      return 'PRINTING';
+    }
+  };
+
+  const onSaveCardSuccess = response => {
+    const cardStatus = response.data.data[0].status;
+    if (cardStatus !== statusView) {
+      setStatusView(returnCardStatus(cardStatus));
+    }
+  };
+
+  const onFailure = error => {
+    console.log('ERROR SAVING CARD:', error);
+  };
+
+  const saveCard = updatedCard => {
+    RequestService.saveCard(updatedCard, onSaveCardSuccess, onFailure);
+  };
+
   useEffect(() => {
     setLoading(true);
+    //TO DO: GET PRINT JOBS BASED ON STATUS, NOT ALL AT ONCE
     RequestService.getPrintJobs(
       response => {
-        const data = response.data.data;
-        setLoading(false);
-        const formattedData = data.map(printjob => {
-          return {
-            color: printjob.colorType.color,
-            submitted: printjob.createdAt,
-            comments: printjob.comments,
-            status: printjob.status,
-            filePath: printjob.filePath,
-            fileSharableLink: printjob.fileSharableLink,
-          };
+        const activeCards = response.data.data.filter(card => {
+          if (
+            statusView === 'DONE' &&
+            returnCardStatus(card.status) === 'DONE'
+          ) {
+            return card;
+          } else if (
+            statusView === 'PENDING_REVIEW' &&
+            returnCardStatus(card.status) === 'PENDING_REVIEW'
+          ) {
+            return card;
+          } else if (statusView === 'PRINTING' && card.status === 'PRINTING') {
+            return card;
+          }
         });
-        setData(formattedData);
+        setFilteredData(activeCards);
+        setLoading(false);
       },
       error => console.error(error),
     );
-  }, []);
-
-  useEffect(() => {
-    const filteredKeys = [
-      'name',
-      'email',
-      'color',
-      'status',
-      'fileName',
-      'comments',
-    ];
-    const searchValues = data.map((printJob, index) => {
-      let valueString = '';
-      for (var key in printJob) {
-        if (filteredKeys.indexOf(key) !== -1) {
-          valueString = valueString + ' ' + printJob[key];
-        }
-      }
-      return (printJob[index] = valueString.toLowerCase());
-    });
-    const queuedCards = data.filter(card => {
-      var sameStatus = card.status === statusView;
-      var doneAndFailed =
-        statusView === 'DONE' &&
-        (card.status === 'DONE' || card.status === 'FAILED');
-      return sameStatus || doneAndFailed;
-    });
-    setFilteredData(queuedCards);
-    setStringedValues(searchValues);
-  }, [data, statusView]);
-
-  const filterByTerm = searchTerm => {
-    const filteredSearch = data.filter((printJob, i) => {
-      return stringedValues[i].indexOf(searchTerm.toLowerCase()) !== -1;
-    });
-    setFilteredData(filteredSearch);
-  };
+  }, [statusView]);
 
   const setStatus = view => {
     setStatusView(view);
   };
 
   return (
-    <Queue
-      loading={loading}
-      statusView={statusView}
-      setStatus={setStatus}
-      filterByTerm={filterByTerm}
-      filteredData={filteredData}
-      colors={colors}
-    />
+    <AuthContext.Consumer>
+      {context => {
+        return (
+          <Queue
+            loading={loading}
+            statusView={statusView}
+            setStatus={setStatus}
+            filteredData={filteredData}
+            colors={colors}
+            saveCard={saveCard}
+            employeeId={context.employeeId}
+          />
+        );
+      }}
+    </AuthContext.Consumer>
   );
 };
 
