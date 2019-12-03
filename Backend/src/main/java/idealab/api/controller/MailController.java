@@ -10,13 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
-/*
-*   THIS IS A TEST API ENDPOINT. THIS IS NOT TO GO OUT TO THE END USER/CUSTOMER
-*   TODO: DELETE THIS NONSENSE WHEN WE GO TO PRODUCTION
-* */
-
-
 @RestController
 @RequestMapping("/api/mail")
 public class MailController {
