@@ -115,6 +115,11 @@ body {
   padding: 0.25rem;
 }
 
+.uploadContainer input::placeholder,
+.loginContainer input::placeholder {
+  color: gray;
+}
+
 .shapedButton {
   display: block;
   height: 2.5em;
