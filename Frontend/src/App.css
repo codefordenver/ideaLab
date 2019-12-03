@@ -46,7 +46,8 @@ body {
 
 .grid-item-nav {
   border-right: solid;
-  background-color: #fff;
+  background-color: white;
+  opacity: 60%;
 }
 
 .navList li {
