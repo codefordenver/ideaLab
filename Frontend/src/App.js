@@ -86,7 +86,7 @@ function App() {
 
             <PrivateRoute path="/account" component={AdminContainer} />
             <PrivateRoute path="/create" component={CreateAccountManager} />
-            <PrivateRoute path="/" component={LoginManager} />
+            <PrivateRoute path="/" component={QueueContainer} />
           </Switch>
         </HashRouter>
       </AuthContext.Provider>

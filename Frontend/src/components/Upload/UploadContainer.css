@@ -1,19 +1,40 @@
 .uploadContainer {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 2fr 1fr;
   justify-content: center;
 }
 
-.uploadContainer div {
+.uploadContainer img {
+  width: 50%;
+  margin: auto;
+  margin-top: 2rem;
+
+}
+
+.uploadContainer .input-container div {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .uploadContainer .upload {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
   border-style: dashed;
   border-width: 2px;
   border-color: var(--light-blue);
   height: 7.5em;
+  background-color: var(--misc-gray);
+}
+.uploadContainer .upload:hover {
+  cursor: pointer;
+  background-color: #e4e4e4;
+}
+.uploadContainer .upload p {
+  color: var(--other-dark-blue);
 }
 
 .uploadContainer > form {
@@ -21,20 +42,40 @@
   display: flex;
   flex-direction: column;
 }
-.uploadContainer input {
-  background-color: var(--dark-blue);
-  color: var(--white-text);
+
+.uploadContainer textarea {
+  display: block;
+  border-radius: 10px;
+  outline: none;
+  border-style: solid;
+  font-size: 1.5rem;
+  padding: 0.25rem;
+}
+
+.uploadContainer input,
+.uploadContainer textarea {
+  border: 2px solid black;
   padding: 0.5rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
+  margin-left: 0;
+  margin-right: 0;
 }
 
-.uploadContainer input::placeholder {
-  color: var(--white-text);
+.uploadContainer input::placeholder,
+.uploadContainer textarea::placeholder {
   text-align: left;
   margin-left: 0.5em;
 }
 .uploadContainer button.shapedButton {
-  background-color: #1f9385;
+  background-color: var(--other-dark-blue);
   color: var(--white-text);
+  width: 50%;
+  margin: 1rem;
+  align-self: center;
+}
+
+.uploadContainer .input-container {
+  display: flex;
+  flex-direction: row;
 }

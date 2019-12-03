@@ -1,3 +1,7 @@
+.queueContainer {
+  margin: 0px 50px;
+}
+
 .queueBanner {
   list-style-type: none;
   text-align: left;

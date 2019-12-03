@@ -11,12 +11,11 @@ const AdminContainer = () => {
   let currentView =
     adminView === 'settings' ? <AdminSettings /> : <UserProfilesContainer />;
   return (
-
     <AuthContext.Consumer>
       {context => {
         return context.role === 'ADMIN' ? (
           <div className="adminContainer">
-            <img src={ideaLABlogo} alt="ideaLABLogo" className="ideaLabLogo"/>
+            <img src={ideaLABlogo} alt="ideaLABLogo" className="ideaLabLogo" />
             <MenuBar
               selectedTab={adminView}
               tabOptions={MenuTabs.ManageAccountTabs}
