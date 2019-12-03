@@ -1,17 +1,18 @@
 package idealab.api.dto.response;
 
+import idealab.api.model.Message;
 import org.springframework.http.HttpStatus;
 
 import java.util.*;
 
 public class MessageResponse extends GenericResponse {
-    private String data;
+    private Message data;
 
-    public String getData() {
+    public Message getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(Message data) {
         this.data = data;
     }
 
