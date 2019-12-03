@@ -59,6 +59,9 @@ public class ColorTypeOperations {
 
         response.setSuccess(true);
         response.setMessage("Color availability updated");
+
+        return response;
+    }
         
     public DataResponse<ColorType> getInactiveColors() {
         DataResponse<ColorType> response = new DataResponse<ColorType>("Could not get inactive color list");
