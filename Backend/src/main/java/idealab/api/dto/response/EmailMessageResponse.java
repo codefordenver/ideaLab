@@ -26,7 +26,7 @@ public class EmailMessageResponse extends GenericResponse {
     }
 
     public EmailMessageResponse(EmailMessage emailMessage) {
-        this.setMessage("Successfully returned the emailMessage");
+        this.setMessage("Successfully returned the email message for requested status");
         this.setSuccess(true);
         this.setHttpStatus(HttpStatus.ACCEPTED);
 
