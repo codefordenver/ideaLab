@@ -24,6 +24,14 @@ public class MessageResponse extends GenericResponse {
         this.setHttpStatus(HttpStatus.BAD_REQUEST);
     }
 
+    public MessageResponse(Message message) {
+        this.setMessage("Successfully returned print job");
+        this.setSuccess(true);
+        this.setHttpStatus(HttpStatus.ACCEPTED);
+
+        this.setData(message);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

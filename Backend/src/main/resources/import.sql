@@ -54,3 +54,8 @@ INSERT INTO print_job_aud (id, rev, revtype, comments, email_hash, file_path, fi
 (1, 3, 1, 'Updated Print Job Color', 'e20a0a24179358c62654610000ca2b76', '/fake_audit_path_1', 'http://fake_audit_link.com', 'PENDING_REVIEW', 4, 6, 3),
 (1, 4, 1, 'Completed Print Job Example', 'e20a0a24179358c62654610000ca2b76', '/fake_audit_path_1', 'http://fake_audit_link.com', 'COMPLETED', 4, 6, 3),
 (2, 5, 2, 'Deleted Print Job Example', 'e20a0a24179358c62654610000ca2b76', '/fake_audit_path_1', 'http://fake_audit_link.com', 'PENDING_REVIEW', 1, 4, 4);
+
+INSERT INTO message (id, status, message, created_at, updated_at) VALUES
+(1, 'PENDING_REVIEW', 'Your print job has been submitted and is pending a review', current_timestamp, current_timestamp),
+(2, 'FAILED', 'Your print job failed. :(', current_timestamp, current_timestamp),
+(3, 'COMPLETED', 'Your print job is finished!  Stop by to pick up your new print! :)', current_timestamp, current_timestamp);
