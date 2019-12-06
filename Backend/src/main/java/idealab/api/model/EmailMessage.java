@@ -1,7 +1,6 @@
 package idealab.api.model;
 
 import javax.persistence.*;
-import java.util.Set;
 
 
 @Entity
@@ -12,19 +11,19 @@ public class EmailMessage extends RecordTimestamp {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "status",  nullable = false)
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
 
     @Column(name = "email_message")
-    private String message;
+    private String emailMessage;
 
     public EmailMessage() {
     }
 
-    public EmailMessage(Status status, String message) {
+    public EmailMessage(Status status, String emailMessage) {
         this.status = status;
-        this.message = message;
+        this.emailMessage = emailMessage;
     }
 
     public Integer getId() {
@@ -43,12 +42,12 @@ public class EmailMessage extends RecordTimestamp {
         this.status = status;
     }
 
-    public String getMessage() {
-        return message;
+    public String getEmailMessage() {
+        return emailMessage;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setEmailMessage(String emailMessage) {
+        this.emailMessage = emailMessage;
     }
 }
 

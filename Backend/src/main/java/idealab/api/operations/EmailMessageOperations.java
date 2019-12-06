@@ -26,7 +26,7 @@ public class EmailMessageOperations {
 
         EmailMessage emailMessage = emailMessageRepo.findEmailMessageByStatus(requestStatus);
 
-        if(emailMessage == null || emailMessage.getMessage() == null){
+        if(emailMessage == null || emailMessage.getEmailMessage() == null){
             ErrorType.MESSAGE_NOT_FOUND.throwException();
         }
 
@@ -40,11 +40,11 @@ public class EmailMessageOperations {
         Status requestStatus = Status.fromValue(req.getStatus());
         EmailMessage emailMessage = emailMessageRepo.findEmailMessageByStatus(requestStatus);
 
-        if(emailMessage == null || emailMessage.getMessage() == null){
+        if(emailMessage == null){
             ErrorType.MESSAGE_NOT_FOUND.throwException();
         }
 
-        emailMessage.setMessage(req.getEmailMessage());
+        emailMessage.setEmailMessage(req.getEmailMessage());
         emailMessageRepo.save(emailMessage);
 
         EmailMessageResponse response = new EmailMessageResponse(emailMessage);

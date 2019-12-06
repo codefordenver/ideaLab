@@ -16,7 +16,8 @@ public class EmailMessageResponse extends GenericResponse {
         this.data = data;
     }
 
-    public EmailMessageResponse(){}
+    public EmailMessageResponse() {
+    }
 
     public EmailMessageResponse(String message) {
         this.setMessage(message);
@@ -38,7 +39,9 @@ public class EmailMessageResponse extends GenericResponse {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         EmailMessageResponse response = (EmailMessageResponse) o;
-        return Objects.equals(data, response.data);
+        return Objects.equals(data.getId(), response.data.getId()) &&
+                Objects.equals(data.getEmailMessage(), response.data.getEmailMessage()) &&
+                Objects.equals(data.getStatus(), response.data.getStatus());
     }
 
 }

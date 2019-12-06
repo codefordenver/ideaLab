@@ -47,13 +47,13 @@ public class EmailMessageUpdateRequest implements GenericRequest {
 
     @Override
     public void validate() {
-        if(this.getStatus() != null && !this.getStatus().trim().isEmpty()) {
+        if (this.getStatus() != null && !this.getStatus().trim().isEmpty()) {
             Status requestStatus = Status.fromValue(this.getStatus());
             if (requestStatus == null || !requestStatus.isValid()) {
                 throw new IdeaLabApiException(VALIDATION_ERROR, "Status is invalid");
             }
         }
-        if(this.getEmailMessage() == null || this.getEmailMessage() == "")
+        if (this.getEmailMessage() == null || this.getEmailMessage() == "")
             throw new IdeaLabApiException(VALIDATION_ERROR, "Email message cannot be empty");
     }
 }
