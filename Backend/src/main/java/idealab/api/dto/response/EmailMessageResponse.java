@@ -1,35 +1,35 @@
 package idealab.api.dto.response;
 
-import idealab.api.model.Message;
+import idealab.api.model.EmailMessage;
 import org.springframework.http.HttpStatus;
 
 import java.util.*;
 
-public class MessageResponse extends GenericResponse {
-    private Message data;
+public class EmailMessageResponse extends GenericResponse {
+    private EmailMessage data;
 
-    public Message getData() {
+    public EmailMessage getData() {
         return data;
     }
 
-    public void setData(Message data) {
+    public void setData(EmailMessage data) {
         this.data = data;
     }
 
-    public MessageResponse(){}
+    public EmailMessageResponse(){}
 
-    public MessageResponse(String message) {
+    public EmailMessageResponse(String message) {
         this.setMessage(message);
         this.setSuccess(false);
         this.setHttpStatus(HttpStatus.BAD_REQUEST);
     }
 
-    public MessageResponse(Message message) {
-        this.setMessage("Successfully returned print job");
+    public EmailMessageResponse(EmailMessage emailMessage) {
+        this.setMessage("Successfully returned the emailMessage");
         this.setSuccess(true);
         this.setHttpStatus(HttpStatus.ACCEPTED);
 
-        this.setData(message);
+        this.setData(emailMessage);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class MessageResponse extends GenericResponse {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        MessageResponse response = (MessageResponse) o;
+        EmailMessageResponse response = (EmailMessageResponse) o;
         return Objects.equals(data, response.data);
     }
 

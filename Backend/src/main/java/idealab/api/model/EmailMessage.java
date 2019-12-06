@@ -5,8 +5,8 @@ import java.util.Set;
 
 
 @Entity
-@Table(name = "message")
-public class Message extends RecordTimestamp {
+@Table(name = "email_message")
+public class EmailMessage extends RecordTimestamp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,13 +16,13 @@ public class Message extends RecordTimestamp {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Column(name = "message")
+    @Column(name = "email_message")
     private String message;
 
-    public Message() {
+    public EmailMessage() {
     }
 
-    public Message(Status status, String message) {
+    public EmailMessage(Status status, String message) {
         this.status = status;
         this.message = message;
     }
