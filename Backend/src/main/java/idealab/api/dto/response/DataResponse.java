@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 
 import idealab.api.model.RecordTimestamp;
 
-public class DataResponse<T extends RecordTimestamp> extends GenericResponse {
+public class DataResponse<T> extends GenericResponse {
     private List<T> data;
 
     public List<T> getData() {
