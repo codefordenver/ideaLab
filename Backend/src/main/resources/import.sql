@@ -41,16 +41,18 @@ INSERT INTO queue ("rank", fk_print_job_id, created_at, updated_at) VALUES
 (2,3, current_timestamp, current_timestamp),
 (3,2, current_timestamp, current_timestamp);
 
--- INSERT INTO revinfo (rev, revtstmp) VALUES
--- (1, 1574735497536),
--- (2, 1574735497536 + 1000*60),
--- (3, 1574735497536 + 1000*60*2),
--- (4, 1574735497536 + 1000*60*3),
--- (5, 1574735497536 + 1000*60*4);
+/*
+ INSERT INTO revinfo (rev, revtstmp) VALUES
+ (1, 1574735497536),
+ (2, 1574735497536 + 1000*60),
+ (3, 1574735497536 + 1000*60*2),
+ (4, 1574735497536 + 1000*60*3),
+ (5, 1574735497536 + 1000*60*4);
 
--- INSERT INTO print_job_aud (id, rev, revtype, comments, email_hash, file_path, file_sharable_link, status, fk_color_type_id, fk_customer_info_id, fk_employee_id) VALUES
--- (1, 1, 0, 'Initial Comment', 'e20a0a24179358c62654610000ca2b76', '/fake_audit_path_1', 'http://fake_audit_link.com', 'PENDING_REVIEW', 1, 6, 3),
--- (2, 2, 1, 'Initial Comment', 'e20a0a24179358c62654610000ca2b76', '/fake_audit_path_1', 'http://fake_audit_link.com', 'PENDING_REVIEW', 1, 4, 4),
--- (1, 3, 1, 'Updated Print Job Color', 'e20a0a24179358c62654610000ca2b76', '/fake_audit_path_1', 'http://fake_audit_link.com', 'PENDING_REVIEW', 4, 6, 3),
--- (1, 4, 1, 'Completed Print Job Example', 'e20a0a24179358c62654610000ca2b76', '/fake_audit_path_1', 'http://fake_audit_link.com', 'COMPLETED', 4, 6, 3),
--- (2, 5, 2, 'Deleted Print Job Example', 'e20a0a24179358c62654610000ca2b76', '/fake_audit_path_1', 'http://fake_audit_link.com', 'PENDING_REVIEW', 1, 4, 4);
+ INSERT INTO print_job_aud (id, rev, revtype, comments, email_hash, file_path, file_sharable_link, status, fk_color_type_id, fk_customer_info_id, fk_employee_id) VALUES
+ (1, 1, 0, 'Initial Comment', 'e20a0a24179358c62654610000ca2b76', '/fake_audit_path_1', 'http://fake_audit_link.com', 'PENDING_REVIEW', 1, 6, 3),
+ (2, 2, 1, 'Initial Comment', 'e20a0a24179358c62654610000ca2b76', '/fake_audit_path_1', 'http://fake_audit_link.com', 'PENDING_REVIEW', 1, 4, 4),
+ (1, 3, 1, 'Updated Print Job Color', 'e20a0a24179358c62654610000ca2b76', '/fake_audit_path_1', 'http://fake_audit_link.com', 'PENDING_REVIEW', 4, 6, 3),
+ (1, 4, 1, 'Completed Print Job Example', 'e20a0a24179358c62654610000ca2b76', '/fake_audit_path_1', 'http://fake_audit_link.com', 'COMPLETED', 4, 6, 3),
+ (2, 5, 2, 'Deleted Print Job Example', 'e20a0a24179358c62654610000ca2b76', '/fake_audit_path_1', 'http://fake_audit_link.com', 'PENDING_REVIEW', 1, 4, 4);
+ */
