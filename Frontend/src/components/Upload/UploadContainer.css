@@ -8,14 +8,6 @@
   width: 50%;
   margin: auto;
   margin-top: 2rem;
-
-}
-
-.uploadContainer .input-container div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
 .uploadContainer .upload {
@@ -75,7 +67,6 @@
   align-self: center;
 }
 
-.uploadContainer .input-container {
-  display: flex;
-  flex-direction: row;
+.colorTitle {
+  text-align: left;
 }

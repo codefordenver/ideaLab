@@ -22,12 +22,51 @@ function UploadContainer() {
   const [email, setEmail] = useState('');
   const [customerFirstName, setCustomerFirstName] = useState('');
   const [customerLastName, setCustomerLastName] = useState('');
-  const [color, setColor] = useState('');
+  const [color, setColor] = useState('#FFFFFF'); //Set initial color to white
   const [comments, setComments] = useState('');
 
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState();
+
+  /*
+  This section provides all the logic for the color picker.
+  */
+  const [loadingColor, setLoadingColor] = useState(false);
+  const [colors, setColors] = useState('');
+  const [hoverState, setHoverState] = useState(false);
+
+  const colorCircleStyle = {
+    backgroundColor: `${color}`,
+  };
+
+  useEffect(() => {
+    setLoadingColor(true);
+    RequestService.getActiveColors(
+      response => {
+        const data = response.data.data;
+        setLoadingColor(false);
+        var colorList = [];
+        data.map(color => {
+          colorList.push(color.color);
+        });
+        setColors(colorList);
+      },
+      error => console.error(error),
+    );
+  }, []);
+
+  const handleColorChange = hue => {
+    setColor(hue.hex.toUpperCase());
+  };
+
+  const handleMouseEnter = () => {
+    setHoverState(true);
+  };
+
+  const handleMouseLeave = () => {
+    setHoverState(false);
+  };
 
   function onFailure(error) {
     setLoading(false);
@@ -59,6 +98,7 @@ function UploadContainer() {
       ) : (
         false
       )}
+
       <form
         onSubmit={e => {
           e.preventDefault();
@@ -107,7 +147,21 @@ function UploadContainer() {
               changeHandler={setEmail}
               error={errors.email}
             />
-            <ColorPickerContainer />
+
+            <div
+              className="colorContainerUpload"
+              onMouseLeave={handleMouseLeave}
+            >
+              <p className="colorTitle">Color:</p>
+              <ColorPickerContainer
+                handleColorChange={handleColorChange}
+                color={color}
+                colors={colors}
+                hoverState={hoverState}
+                handleMouseEnter={handleMouseEnter}
+                colorCircleStyle={colorCircleStyle}
+              />
+            </div>
             <div>
               <textarea
                 onChange={e => setComments(e.target.value)}
