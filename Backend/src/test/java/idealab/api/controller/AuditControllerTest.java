@@ -44,7 +44,7 @@ public class AuditControllerTest {
 
     @Test
     public void getAllPrintJobsAuditSuccess() throws Exception {
-        String uri = "/api/audit/printjobs";
+        String uri = "/api/audit/print-jobs";
         // given
         PrintJobAuditModel auditModel = new PrintJobAuditModel();
         auditModel.setId(2);
@@ -75,7 +75,7 @@ public class AuditControllerTest {
 
     @Test
     public void getPrintJobsAuditByIdSuccess() throws Exception {
-        String uri = "/api/audit/printjobs/3";
+        String uri = "/api/audit/print-jobs/3";
         // given
         PrintJobAuditModel auditModel = new PrintJobAuditModel();
         auditModel.setId(3);
