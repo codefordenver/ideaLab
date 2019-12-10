@@ -8,11 +8,11 @@ const UserProfilesContainer = props => {
   const titleOptions = ['ADMIN', 'STAFF'];
 
   const triggerDelete = () => {
-    alert(`Are you sure you want to delete this profile? ${name}`);
+    window.confirm(`Are you sure you want to delete this profile? ${name}`);
   };
 
   const triggerPasswordChange = () => {
-    alert(`Are you sure you want to change your password? ${name}`);
+    window.confirm(`Are you sure you want to change your password? ${name}`);
   };
 
   const updateUserRole = newRole => {
