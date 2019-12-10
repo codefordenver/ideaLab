@@ -2,7 +2,7 @@ import React, { useState, Fragment } from 'react';
 import './PrintCardContainer.css';
 import StatusDropdown from './StatusDropdown';
 import PrintDateAdded from './PrintDateAdded';
-import { CirclePicker } from 'react-color';
+import ColorPickerContainer from './ColorPickerContainer';
 import { IoIosArrowDown, IoIosArrowBack } from 'react-icons/io';
 import { FiSave, FiMail } from 'react-icons/fi';
 
@@ -30,6 +30,7 @@ const PrintCardContainer = props => {
     }));
     setSaveIconShowing(true);
   };
+
   const handleMouseEnter = () => {
     setHoverState(true);
   };
@@ -133,26 +134,14 @@ const PrintCardContainer = props => {
           colSpan="3"
           onMouseLeave={handleMouseLeave}
         >
-          <div
-            className="colorCircle"
-            style={colorCircleStyle}
-            onMouseEnter={handleMouseEnter}
-          ></div>
-
-          {hoverState ? (
-            <div className="colorPickerContainer">
-              <CirclePicker
-                onChangeComplete={handleColorChange}
-                color={card.color}
-                colors={colors}
-                width="250px"
-                circleSize={18}
-                circleSpacing={8}
-              />
-            </div>
-          ) : (
-            <Fragment />
-          )}
+          <ColorPickerContainer
+            handleColorChange={handleColorChange}
+            color={card.color}
+            colors={colors}
+            hoverState={hoverState}
+            handleMouseEnter={handleMouseEnter}
+            colorCircleStyle={colorCircleStyle}
+          />
         </td>
         <td className="submitDate">
           <PrintDateAdded submitted={card.createdAt} />

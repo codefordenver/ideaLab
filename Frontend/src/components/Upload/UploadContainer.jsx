@@ -6,6 +6,7 @@ import Upload from './components/Upload';
 import BasicInput from '../BasicInput';
 import './UploadContainer.css';
 import ideaLABlogo from '../globalStyles/img/ideaLabLogo.png';
+import ColorPickerContainer from '../Queue/components/ColorPickerContainer';
 
 const history = createBrowserHistory();
 function UploadContainer() {
@@ -106,6 +107,7 @@ function UploadContainer() {
               changeHandler={setEmail}
               error={errors.email}
             />
+            <ColorPickerContainer />
             <div>
               <textarea
                 onChange={e => setComments(e.target.value)}
