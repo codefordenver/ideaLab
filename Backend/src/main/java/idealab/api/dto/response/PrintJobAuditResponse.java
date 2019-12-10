@@ -1,48 +1,45 @@
 package idealab.api.dto.response;
 
+import idealab.api.model.PrintJob;
+import org.springframework.http.HttpStatus;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import org.springframework.http.HttpStatus;
+public class PrintJobAuditResponse extends GenericResponse {
+    private List<PrintJobAuditModel> data;
 
-import idealab.api.model.RecordTimestamp;
-
-public class DataResponse<T> extends GenericResponse {
-    private List<T> data;
-
-    public List<T> getData() {
+    public List<PrintJobAuditModel> getData() {
         return data;
     }
 
-    public void setData(List<T> data) {
+    public void setData(List<PrintJobAuditModel> data) {
         this.data = data;
     }
 
-    public DataResponse(){}
+    public PrintJobAuditResponse(){}
 
-    public DataResponse(String message) {
+    public PrintJobAuditResponse(String message) {
         this.setMessage(message);
         this.setSuccess(false);
         this.setHttpStatus(HttpStatus.BAD_REQUEST);
     }
 
-    public DataResponse(T setData) {
-        this.setMessage("Successfully returned print job");
+    public PrintJobAuditResponse(List<PrintJobAuditModel> printJobAuditModel) {
+        this.setMessage("Successfully returned print job audit");
         this.setSuccess(true);
         this.setHttpStatus(HttpStatus.ACCEPTED);
 
-        List<T> data = Arrays.asList(setData);
-        this.setData(data);
+        this.setData(printJobAuditModel);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        DataResponse<T> response = (DataResponse<T>) o;
+        PrintJobAuditResponse response = (PrintJobAuditResponse) o;
         return Objects.equals(data, response.data);
     }
 

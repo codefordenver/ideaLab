@@ -13,7 +13,7 @@ function Upload(props) {
     <div className={'upload'} {...getRootProps()}>
       <input {...getInputProps()} />
       {isDragActive ? <p>upload or drag STL files</p> : <p>upload STL files</p>}
-      {props.filename}
+      {props.filename ? <p>Filename: {props.filename}</p> : null}
     </div>
   );
 }

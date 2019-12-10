@@ -7,22 +7,26 @@ import { IoIosArrowDown, IoIosArrowBack } from 'react-icons/io';
 import { FiSave, FiMail } from 'react-icons/fi';
 
 const PrintCardContainer = props => {
-  const [data] = useState(props.data);
   const [isToggled, setIsToggled] = useState(false);
-  const [card, updateCard] = useState(data);
+  const [card] = useState(props.data);
+  const [updatedData, updateData] = useState({
+    comments: card.comments,
+    colorType: props.data.colorType.color,
+    status: card.status,
+  });
   const [hoverState, setHoverState] = useState(false);
   const [colors] = useState(props.colors);
   const [isSaveIconShowing, setSaveIconShowing] = useState(false);
   const { saveCard } = props;
 
   const colorCircleStyle = {
-    backgroundColor: `${card.colorType.color}`,
+    backgroundColor: `${updatedData.colorType}`,
   };
 
   const handleColorChange = hue => {
-    updateCard(prevState => ({
+    updateData(prevState => ({
       ...prevState,
-      colorTypeId: { ...prevState.colorTypeId, color: hue.hex },
+      colorType: hue.hex.toUpperCase(),
     }));
     setSaveIconShowing(true);
   };
@@ -36,14 +40,19 @@ const PrintCardContainer = props => {
 
   const updateComment = event => {
     event.persist();
-    updateCard(prevState => ({ ...prevState, comments: event.target.value }));
+    updateData(prevState => ({
+      ...prevState,
+      comments: event.target.value,
+    }));
     setSaveIconShowing(true);
   };
 
   const updatePrintingStatus = event => {
     event.persist();
-    console.log('VALUE??', event.target.value);
-    updateCard(prevState => ({ ...prevState, status: event.target.value }));
+    updateData(prevState => ({
+      ...prevState,
+      status: event.target.value,
+    }));
     setSaveIconShowing(true);
   };
 
@@ -52,8 +61,21 @@ const PrintCardContainer = props => {
   };
 
   const saveChanges = () => {
-    console.log('SAVING CARD:', card);
-    saveCard(card);
+    let updatedSavedCard = { id: card.id, employeeId: props.employeeId };
+    for (var key in updatedData) {
+      if (
+        key === 'colorType' &&
+        card.colorType.color !== updatedData.colorType.color
+      ) {
+        updatedSavedCard[key] = updatedData[key];
+      } else if (
+        key !== 'colorType' &&
+        (card[key] && card[key] !== updatedData[key])
+      ) {
+        updatedSavedCard[key] = updatedData[key];
+      }
+    }
+    saveCard(updatedSavedCard);
     setSaveIconShowing(false);
   };
 
@@ -78,7 +100,7 @@ const PrintCardContainer = props => {
       <textarea
         onChange={updateComment}
         name="comments"
-        value={card.comments}
+        value={updatedData.comments}
         className="commentSection"
       />
     </td>
@@ -99,7 +121,7 @@ const PrintCardContainer = props => {
   };
 
   return (
-    <div className="printCardContainer">
+    <tbody className="printCardContainer">
       <tr>
         <td className="printFileName">
           <a href={updateFileUrlParams(card.fileSharableLink)}>
@@ -123,7 +145,7 @@ const PrintCardContainer = props => {
                 onChangeComplete={handleColorChange}
                 color={card.color}
                 colors={colors}
-                width="100px"
+                width="250px"
                 circleSize={18}
                 circleSpacing={8}
               />
@@ -133,11 +155,11 @@ const PrintCardContainer = props => {
           )}
         </td>
         <td className="submitDate">
-          <PrintDateAdded submitted={data.createdAt} />
+          <PrintDateAdded submitted={card.createdAt} />
         </td>
         <td>
           <StatusDropdown
-            currentStatus={data.status}
+            currentStatus={card.status}
             statusChanged={updatePrintingStatus}
             id={card.id}
           />
@@ -150,7 +172,7 @@ const PrintCardContainer = props => {
         </td>
       </tr>
       <tr>{secondRowContent}</tr>
-    </div>
+    </tbody>
   );
 };
 

@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import RequestService from '../../util/RequestService';
 import Loader from '../globalStyles/Loader';
-import {createBrowserHistory} from 'history';
+import { createBrowserHistory } from 'history';
 import Upload from './components/Upload';
 import BasicInput from '../BasicInput';
 import './UploadContainer.css';
+import ideaLABlogo from '../globalStyles/img/ideaLabLogo.png';
 
 const history = createBrowserHistory();
 function UploadContainer() {
   useEffect(() => {
-  const unblock = history.block('Are you sure you want to navigate away?');
+    const unblock = history.block('Are you sure you want to navigate away?');
     return () => {
       unblock();
     };
@@ -43,13 +44,20 @@ function UploadContainer() {
       setCustomerFirstName('');
       setCustomerLastName('');
       setColor('');
-      setComments('')
+      setComments('');
     }
   }
 
   return (
     <div className={'uploadContainer'}>
-      {loading ? <div className={'loader-container'}>Uploading File...<Loader/></div> : false}
+      {loading ? (
+        <div className={'loader-container'}>
+          Uploading File...
+          <Loader />
+        </div>
+      ) : (
+        false
+      )}
       <form
         onSubmit={e => {
           e.preventDefault();
@@ -66,7 +74,8 @@ function UploadContainer() {
           RequestService.newPrintJob(formData, onSuccess, onFailure);
         }}
       >
-        <div className={"success"}>{success}</div>
+        <img src={ideaLABlogo} alt={'ideaLab logo'}></img>
+        <div className={'success'}>{success}</div>
         <Upload
           className={'upload'}
           filename={filename}
@@ -74,44 +83,46 @@ function UploadContainer() {
           callback={files => setFile(files[0])}
         ></Upload>
         <p>{errors.file ? errors.file : null}</p>
-        <BasicInput
-          className={'upload'}
-          value={customerFirstName}
-          placeHolder={'First Name'}
-          changeHandler={setCustomerFirstName}
-          error={errors.customerFirstName}
-        />
-        <BasicInput
-          className={'upload'}
-          value={customerLastName}
-          placeHolder={'Last Name'}
-          changeHandler={setCustomerLastName}
-          error={errors.customerLastName}
-        />
-        <BasicInput
-          className={'upload'}
-          value={email}
-          placeHolder={'Email'}
-          changeHandler={setEmail}
-          error={errors.email}
-        />
-        <BasicInput
-          className={'upload'}
-          value={color}
-          placeHolder={'Color'}
-          changeHandler={setColor}
-          error={errors.color}
-        />
-        <BasicInput
-          className={'upload'}
-          value={comments}
-          placeHolder={'Comments'}
-          changeHandler={setComments}
-          error={errors.comments}
-        />
-        <div>
-          <div className={"error"}>{errors.form ? errors.form : null}</div>
+        <div className={'input-container'}>
+          <div>
+            <BasicInput
+              className={'upload'}
+              value={customerFirstName}
+              placeHolder={'First Name'}
+              changeHandler={setCustomerFirstName}
+              error={errors.customerFirstName}
+            />
+            <BasicInput
+              className={'upload'}
+              value={customerLastName}
+              placeHolder={'Last Name'}
+              changeHandler={setCustomerLastName}
+              error={errors.customerLastName}
+            />
+            <BasicInput
+              className={'upload'}
+              value={email}
+              placeHolder={'Email'}
+              changeHandler={setEmail}
+              error={errors.email}
+            />
+            <div>
+              <textarea
+                onChange={e => setComments(e.target.value)}
+                name="comments"
+                rows="3"
+                value={comments}
+                placeholder={'Comments'}
+              />
+              <span>{errors.comments ? errors.comments : null}</span>
+            </div>
+          </div>
         </div>
+        {errors.form ? (
+          <div>
+            <div className={'error'}>{errors.form ? errors.form : null}</div>
+          </div>
+        ) : null}
         <button className={'shapedButton'} type="submit">
           SUMBIT
         </button>

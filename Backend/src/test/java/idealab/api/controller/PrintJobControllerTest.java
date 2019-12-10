@@ -1,5 +1,6 @@
 package idealab.api.controller;
 
+import static idealab.api.util.TestUtil.requestAsJsonString;
 import static idealab.api.util.TestUtil.stringToGenericResponse;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
@@ -74,7 +75,7 @@ public class PrintJobControllerTest {
         genericResponse.setMessage("Print Job Updated");
         genericResponse.setHttpStatus(HttpStatus.ACCEPTED);
 
-        String inputJson = printJobRequestAsJsonString(printJobUpdateRequest);
+        String inputJson = requestAsJsonString(printJobUpdateRequest);
 
         when(printJobOperations.updatePrintJobStatus(printJobId, printJobUpdateRequest)).thenReturn(genericResponse);
 
@@ -102,7 +103,7 @@ public class PrintJobControllerTest {
         genericResponse.setMessage("Invalid Status");
         genericResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
 
-        String inputJson = printJobRequestAsJsonString(printJobUpdateRequest);
+        String inputJson = requestAsJsonString(printJobUpdateRequest);
 
         when(printJobOperations.updatePrintJobStatus(printJobId, printJobUpdateRequest)).thenReturn(genericResponse);
 
@@ -128,7 +129,7 @@ public class PrintJobControllerTest {
         genericResponse.setMessage("Print Job Deleted");
         genericResponse.setHttpStatus(HttpStatus.ACCEPTED);
 
-        String inputJson = printJobRequestAsJsonString(printJobDeleteRequest);
+        String inputJson = requestAsJsonString(printJobDeleteRequest);
 
         when(printJobOperations.deletePrintJob(printJobDeleteRequest)).thenReturn(genericResponse);
 
@@ -154,7 +155,7 @@ public class PrintJobControllerTest {
         genericResponse.setMessage("Print Job Delete Failed");
         genericResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
 
-        String inputJson = printJobRequestAsJsonString(printJobDeleteRequest);
+        String inputJson = requestAsJsonString(printJobDeleteRequest);
 
         when(printJobOperations.deletePrintJob(printJobDeleteRequest)).thenReturn(genericResponse);
 
@@ -167,15 +168,6 @@ public class PrintJobControllerTest {
 
         GenericResponse returnedResponse = stringToGenericResponse(returnJson);
         assert (returnedResponse.equals(genericResponse));
-    }
-
-    private String printJobRequestAsJsonString(Object obj) {
-        try {
-            final ObjectMapper mapper = new ObjectMapper();
-            return mapper.writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Test
