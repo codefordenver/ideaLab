@@ -20,7 +20,7 @@ public class AuditController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
-    @GetMapping("/printjobs/{print-id}")
+    @GetMapping("/print-jobs/{print-id}")
     public ResponseEntity<?> getPrintJobAuditTableGetById(@PathVariable("print-id") Integer printId) {
         PrintJobAuditResponse response = auditOperations.printJobAuditById(printId);
         return new ResponseEntity<>(response, response.getHttpStatus());
