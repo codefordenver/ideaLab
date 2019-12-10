@@ -72,7 +72,7 @@ public enum ErrorType {
     ),
     MESSAGE_NOT_FOUND(
             13,
-            "The requested message does not exist exist",
+            "The requested message does not exist",
             HttpStatus.NOT_FOUND
     );
 
