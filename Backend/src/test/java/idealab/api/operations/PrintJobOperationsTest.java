@@ -222,7 +222,7 @@ public class PrintJobOperationsTest {
         List<PrintJob> printJobs = new ArrayList<PrintJob>();
         printJobs.add(printJob);
 
-        when(printJobRepo.findAll()).thenReturn(printJobs);
+        when(printJobRepo.findActive()).thenReturn(printJobs);
 
         // when
         DataResponse<PrintJob> result = operations.getAllPrintJobs(null);
@@ -259,7 +259,7 @@ public class PrintJobOperationsTest {
     @Test(expected = IdeaLabApiException.class)
     public void getAllPrintJobs_shouldThrow_IdeaLabApiException_when_printJob_is_not_exist(){
         // given
-        when(printJobRepo.findAll()).thenReturn(null);
+        when(printJobRepo.findActive()).thenReturn(null);
 
         // when
         operations.getAllPrintJobs(null);
@@ -268,7 +268,7 @@ public class PrintJobOperationsTest {
     @Test(expected = IdeaLabApiException.class)
     public void getAllPrintJobs_shouldThrow_IdeaLabApiException_when_empty_printJobs_returned(){
         // given
-        when(printJobRepo.findAll()).thenReturn(new ArrayList<>());
+        when(printJobRepo.findActive()).thenReturn(new ArrayList<>());
 
         // when
         operations.getAllPrintJobs(null);
