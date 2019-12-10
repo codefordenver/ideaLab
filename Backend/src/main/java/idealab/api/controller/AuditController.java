@@ -14,7 +14,7 @@ public class AuditController {
         this.auditOperations = auditOperations;
     }
 
-    @GetMapping("/printjobs")
+    @GetMapping("/print-jobs")
     public ResponseEntity<?> getAllPrintJobsAuditTable() {
         PrintJobAuditResponse response = auditOperations.allPrintJobsAudit();
         return new ResponseEntity<>(response, response.getHttpStatus());
