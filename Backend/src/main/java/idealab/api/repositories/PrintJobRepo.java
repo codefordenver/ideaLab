@@ -11,7 +11,7 @@ import idealab.api.model.Status;
 
 public interface PrintJobRepo extends CrudRepository<PrintJob, Integer> {
     
-	PrintJob findPrintJobById(Integer id);
+	  PrintJob findPrintJobById(Integer id);
     List<PrintJob> findByStatusIn(List<Status> statuses);
     List<PrintJob> findPrintJobByStatus(Status s);
     List<PrintJob> findAll();
@@ -25,4 +25,9 @@ public interface PrintJobRepo extends CrudRepository<PrintJob, Integer> {
     @Query("FROM PrintJob p LEFT JOIN p.queueId q WHERE q.id is not null or (p.status != 'PENDING_REVIEW' "
         + "and p.status != 'PRINTING' and p.status != 'PENDING_CUSTOMER_RESPONSE')")
     List<PrintJob> findActive();
+  
+    @Query(value = "SELECT p.* FROM print_job p " +
+                    "where p.fk_customer_info_id = ?1 " +
+                    "order by p.created_at DESC", nativeQuery = true)
+    List<PrintJob> findPrintJobsByCustomerIdNewestFirst(Integer id);
 }

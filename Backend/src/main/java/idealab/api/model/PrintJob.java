@@ -1,24 +1,13 @@
 package idealab.api.model;
 
-import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
-
-import java.util.Objects;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.validator.constraints.Length;
+
+import javax.persistence.*;
+import java.util.Objects;
+
+import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
 
 /**
  * This class holds the model that represents the print job table. It is related to email hash, color type, queue, and employee ID. Additionally,
@@ -53,17 +42,17 @@ public class PrintJob extends RecordTimestamp implements Comparable<PrintJob> {
     private Status status;
 
     @NotAudited
-    @OneToOne(targetEntity=Queue.class, mappedBy="printJob")
+    @OneToOne(targetEntity=Queue.class, mappedBy="printJob", cascade = CascadeType.REMOVE)
     private Queue queueId;
 
     @Column(name = "comments")
     private String comments;
 
-    @Column(name = "dropbox_sharable_link")
+    @Column(name = "file_sharable_link")
     @Length(min = 1, max = 254)
     private String fileSharableLink;
 
-    @Column(name = "dropbox_path")
+    @Column(name = "file_path")
     @Length(min = 1, max = 254)
     private String filePath;
 
@@ -192,8 +181,8 @@ public class PrintJob extends RecordTimestamp implements Comparable<PrintJob> {
                 ", status=" + status +
                 ", queue=" + queueId +
                 ", comments='" + comments + '\'' +
-                ", dropboxSharableLink='" + fileSharableLink + '\'' +
-                ", dropboxPath='" + filePath + '\'' +
+                ", fileSharableLink='" + fileSharableLink + '\'' +
+                ", filePath='" + filePath + '\'' +
                 ", emailHash='" + emailHash + '\'' +
                 '}';
     }

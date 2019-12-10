@@ -71,22 +71,18 @@ function App() {
             <PrivateRoute exact path="/upload" component={UploadContainer} />
             <Route
               path="/login"
-              render={props =>
-                state.authenticated ? (
-                  <Redirect
-                    to={{
-                      state: { from: props.location },
-                    }}
-                  />
+              render={props => {
+                return state.authenticated ? (
+                  <Redirect to={'/queue'} />
                 ) : (
                   <LoginManager {...props} />
-                )
-              }
+                );
+              }}
             />
 
             <PrivateRoute path="/account" component={AdminContainer} />
             <PrivateRoute path="/create" component={CreateAccountManager} />
-            <PrivateRoute path="/" component={LoginManager} />
+            <PrivateRoute path="/" component={QueueContainer} />
           </Switch>
         </HashRouter>
       </AuthContext.Provider>

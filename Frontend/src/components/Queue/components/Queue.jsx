@@ -15,7 +15,7 @@ const Queue = props => {
     />
   ));
   return (
-    <div>
+    <div className="queueContainer">
       <div className="queueFilterInfo">
         <MenuBar
           selectedTab={props.statusView}
