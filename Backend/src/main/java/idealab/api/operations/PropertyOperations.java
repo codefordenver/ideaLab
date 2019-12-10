@@ -52,8 +52,7 @@ public class PropertyOperations {
             config.setProperty(propertyName, token);
             config.save();
         } catch (ConfigurationException e) {
-            e.printStackTrace();
-            throw new IdeaLabApiException(ErrorType.GENERAL_ERROR, "Dropbox token not updated");
+            throw new IdeaLabApiException(ErrorType.GENERAL_ERROR, "Dropbox token not updated: " + e.getMessage());
         }
 
         return new GenericResponse(true, "Token updated successfully", HttpStatus.ACCEPTED);
