@@ -57,7 +57,7 @@ public enum ErrorType {
     ),
     USER_NOT_FOUND(
             10,
-            "User Not Found or There Are Not Any Users",
+            "User Not Found or There Are No Users",
             HttpStatus.BAD_REQUEST
     ),
     VALIDATION_ERROR(

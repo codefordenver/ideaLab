@@ -1,8 +1,17 @@
 package idealab.api.model;
 
-import org.hibernate.validator.constraints.Length;
+import java.util.Objects;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.validator.constraints.Length;
 
 
 @Entity
@@ -97,5 +106,18 @@ public class Employee extends RecordTimestamp {
 
     public void setRole(EmployeeRole role) {
         this.role = role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return Objects.equals(id, employee.id) &&
+                Objects.equals(username, employee.username) &&
+                Objects.equals(password, employee.password) &&
+                Objects.equals(role, employee.role) &&
+                Objects.equals(firstName, employee.firstName) &&
+                Objects.equals(lastName, employee.lastName);
     }
 }
