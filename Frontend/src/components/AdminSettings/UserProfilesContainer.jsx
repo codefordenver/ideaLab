@@ -15,11 +15,11 @@ const UserProfilesContainer = () => {
       response => {
         if (response.data.data) {
           const data = response.data.data;
+          console.log(data);
           const formattedData = data.map(user => {
-            const { firstName, lastName, username, role } = user;
             return {
-              name: `${firstName} ${lastName} (${username})`,
-              role: role,
+              name: user.name,
+              role: user.role,
             };
           });
           setData(formattedData);
