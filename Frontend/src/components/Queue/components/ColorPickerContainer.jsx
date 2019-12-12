@@ -1,22 +1,17 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { CirclePicker } from 'react-color';
 
 const ColorPickerContainer = props => {
-  const {
-    handleColorChange,
-    color,
-    colors,
-    hoverState,
-    handleMouseEnter,
-    colorCircleStyle,
-  } = props;
+  const { handleColorChange, color, colors, colorCircleStyle } = props;
+
+  const [hoverState, setHoverState] = useState(false);
 
   return (
-    <div>
+    <div onMouseLeave={() => setHoverState(false)}>
       <div
         className="colorCircle"
         style={colorCircleStyle}
-        onMouseEnter={handleMouseEnter}
+        onMouseEnter={() => setHoverState(true)}
       />
 
       {hoverState ? (

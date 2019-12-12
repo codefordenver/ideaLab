@@ -14,7 +14,6 @@ const PrintCardContainer = props => {
     colorType: props.data.colorType.color,
     status: card.status,
   });
-  const [hoverState, setHoverState] = useState(false);
   const [colors] = useState(props.colors);
   const [isSaveIconShowing, setSaveIconShowing] = useState(false);
   const { saveCard } = props;
@@ -29,14 +28,6 @@ const PrintCardContainer = props => {
       colorType: hue.hex.toUpperCase(),
     }));
     setSaveIconShowing(true);
-  };
-
-  const handleMouseEnter = () => {
-    setHoverState(true);
-  };
-
-  const handleMouseLeave = () => {
-    setHoverState(false);
   };
 
   const updateComment = event => {
@@ -129,17 +120,11 @@ const PrintCardContainer = props => {
             {card.filePath}
           </a>
         </td>
-        <td
-          className="colorContainer"
-          colSpan="3"
-          onMouseLeave={handleMouseLeave}
-        >
+        <td className="colorContainer" colSpan="3">
           <ColorPickerContainer
             handleColorChange={handleColorChange}
             color={card.color}
             colors={colors}
-            hoverState={hoverState}
-            handleMouseEnter={handleMouseEnter}
             colorCircleStyle={colorCircleStyle}
           />
         </td>

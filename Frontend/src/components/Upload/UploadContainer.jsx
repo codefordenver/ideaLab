@@ -54,7 +54,6 @@ function UploadContainer() {
   This section provides all the logic for the color picker.
   */
   const [colors, setColors] = useState('');
-  const [hoverState, setHoverState] = useState(false);
 
   const colorCircleStyle = {
     backgroundColor: `${color}`,
@@ -68,14 +67,6 @@ function UploadContainer() {
 
   const handleColorChange = hue => {
     setColor(hue.hex.toUpperCase());
-  };
-
-  const handleMouseEnter = () => {
-    setHoverState(true);
-  };
-
-  const handleMouseLeave = () => {
-    setHoverState(false);
   };
 
   return (
@@ -138,17 +129,12 @@ function UploadContainer() {
               error={errors.email}
             />
 
-            <div
-              className="colorContainerUpload"
-              onMouseLeave={handleMouseLeave}
-            >
+            <div className="colorContainerUpload">
               <p className="colorTitle">Color:</p>
               <ColorPickerContainer
                 handleColorChange={handleColorChange}
                 color={color}
                 colors={colors}
-                hoverState={hoverState}
-                handleMouseEnter={handleMouseEnter}
                 colorCircleStyle={colorCircleStyle}
               />
             </div>
