@@ -10,7 +10,6 @@ const ColorPickerContainer = props => {
     handleMouseEnter,
     colorCircleStyle,
   } = props;
-  console.log(colors);
 
   return (
     <div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import RequestService from '../../util/RequestService';
+import { processActiveColors } from '../../util/ColorUtils';
 import Loader from '../globalStyles/Loader';
 import { createBrowserHistory } from 'history';
 import Upload from './components/Upload';
@@ -29,45 +30,6 @@ function UploadContainer() {
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState();
 
-  /*
-  This section provides all the logic for the color picker.
-  */
-  const [loadingColor, setLoadingColor] = useState(false);
-  const [colors, setColors] = useState('');
-  const [hoverState, setHoverState] = useState(false);
-
-  const colorCircleStyle = {
-    backgroundColor: `${color}`,
-  };
-
-  useEffect(() => {
-    setLoadingColor(true);
-    RequestService.getActiveColors(
-      response => {
-        const data = response.data.data;
-        setLoadingColor(false);
-        var colorList = [];
-        data.map(color => {
-          colorList.push(color.color);
-        });
-        setColors(colorList);
-      },
-      error => console.error(error),
-    );
-  }, []);
-
-  const handleColorChange = hue => {
-    setColor(hue.hex.toUpperCase());
-  };
-
-  const handleMouseEnter = () => {
-    setHoverState(true);
-  };
-
-  const handleMouseLeave = () => {
-    setHoverState(false);
-  };
-
   function onFailure(error) {
     setLoading(false);
     const validationErrors = RequestService.validationErrorGetter(error);
@@ -87,6 +49,34 @@ function UploadContainer() {
       setComments('');
     }
   }
+
+  /*
+  This section provides all the logic for the color picker.
+  */
+  const [colors, setColors] = useState('');
+  const [hoverState, setHoverState] = useState(false);
+
+  const colorCircleStyle = {
+    backgroundColor: `${color}`,
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    setColors(processActiveColors());
+    setLoading(false);
+  }, []);
+
+  const handleColorChange = hue => {
+    setColor(hue.hex.toUpperCase());
+  };
+
+  const handleMouseEnter = () => {
+    setHoverState(true);
+  };
+
+  const handleMouseLeave = () => {
+    setHoverState(false);
+  };
 
   return (
     <div className={'uploadContainer'}>
