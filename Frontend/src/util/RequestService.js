@@ -110,6 +110,14 @@ const RequestService = {
       .catch(catchCallback);
   },
 
+  updateUsers(payload, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .put(backendUrl + '/users/update', payload)
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
   getActiveColors(thenCallback, catchCallback) {
     const backendInstance = generateApiInstance();
     backendInstance

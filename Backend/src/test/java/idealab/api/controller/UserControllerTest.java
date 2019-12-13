@@ -1,8 +1,10 @@
 package idealab.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import idealab.api.dto.request.EmployeeUpdateRequest;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.model.Employee;
+import idealab.api.model.EmployeeRole;
 import idealab.api.operations.UserOperations;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,9 +21,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static idealab.api.util.TestUtil.stringToGenericResponse;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -191,4 +192,60 @@ public class UserControllerTest {
         }
     }
 
+    @Test
+    public void employeeUpdate() throws Exception {
+        GenericResponse genericResponse = new GenericResponse();
+        genericResponse.setSuccess(true);
+        genericResponse.setMessage("Employee Updated Successful");
+        genericResponse.setHttpStatus(HttpStatus.ACCEPTED);
+
+        EmployeeUpdateRequest e = new EmployeeUpdateRequest();
+        e.setUsername("test");
+        e.setRole("ADMIN");
+
+        String inputJson = employeeAsJsonString(e);
+
+        when(operations.updateUser(e)).thenReturn(genericResponse);
+
+        String returnJson = mockMvc.perform(put("/users/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(inputJson)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andReturn().getResponse().getContentAsString();
+
+        GenericResponse returnedResponse = stringToGenericResponse(returnJson);
+
+        verify(operations, times(1)).updateUser(e);
+        assert (returnedResponse.equals(genericResponse));
+    }
+
+    @Test
+    public void employeeUpdate_UpdateFailed() throws Exception {
+        GenericResponse genericResponse = new GenericResponse();
+        genericResponse.setSuccess(false);
+        genericResponse.setMessage("Employee  Successful");
+        genericResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
+
+        EmployeeUpdateRequest e = new EmployeeUpdateRequest();
+        e.setUsername("test");
+        e.setRole("ADMIN");
+
+        String inputJson = employeeAsJsonString(e);
+
+        when(operations.updateUser(e)).thenReturn(genericResponse);
+
+        String returnJson = mockMvc.perform(put("/users/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(inputJson)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError())
+                .andReturn().getResponse().getContentAsString();
+
+        GenericResponse returnedResponse = stringToGenericResponse(returnJson);
+
+        // assert
+        verify(operations, times(1)).updateUser(e);
+        assert (returnedResponse.equals(genericResponse));
+    }
 }
