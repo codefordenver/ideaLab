@@ -18,7 +18,7 @@ const UserProfilesContainer = () => {
           console.log(data);
           const formattedData = data.map(user => {
             return {
-              name: user.name,
+              name: user.username,
               role: user.role,
             };
           });

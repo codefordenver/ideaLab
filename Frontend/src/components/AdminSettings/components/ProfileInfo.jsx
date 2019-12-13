@@ -16,7 +16,6 @@ const UserProfilesContainer = props => {
   };
 
   const triggerPasswordChange = () => {
-    console.log(props.userData);
     setPasswordChange(!passwordChange);
   };
 
