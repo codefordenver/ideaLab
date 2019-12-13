@@ -77,7 +77,7 @@ const RequestService = {
       .catch(catchCallback);
   },
 
-  changePassword: function(payload, thenCallback, catchCallback) {
+  changePassword(payload, thenCallback, catchCallback) {
     const backendInstance = generateApiInstance();
     backendInstance
       .post(backendUrl + '/users/password', payload)

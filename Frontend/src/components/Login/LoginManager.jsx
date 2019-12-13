@@ -25,6 +25,8 @@ const LoginManager = props => {
           role: decoded.role,
           employeeId: decoded.employeeId,
         });
+        loginUsername = username;
+        loginPassword = password;
       } else {
         callbacks.setState({ authenticated: false });
         setErrors({
@@ -93,3 +95,5 @@ const LoginManager = props => {
 };
 
 export default LoginManager;
+export let loginUsername;
+export let loginPassword;
