@@ -31,7 +31,6 @@ const CreateAccountManager = () => {
     };
     function onSuccess(response) {
       // Maybe display the modal or some kind of redirect?
-      console.log(response.data.message);
       addToast('Saved Successfully', {
         appearance: 'success',
         autoDismiss: true,
