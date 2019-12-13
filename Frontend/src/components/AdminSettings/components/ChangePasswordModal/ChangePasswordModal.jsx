@@ -6,7 +6,6 @@ import RequestService from '../../../../util/RequestService';
 import { loginUsername, loginPassword } from '../../../Login/LoginManager';
 
 const ChangePasswordModal = props => {
-  // const [body, setBody] = useState(formBody)
   const [confirmNewPassword, setConfirmNewPassword] = useState();
   const [error, setError] = useState();
   const [newPassword, setNewPassword] = useState();
@@ -43,7 +42,6 @@ const ChangePasswordModal = props => {
   }
 
   const onSubmit = e => {
-    console.log(loginUsername, loginPassword)
     e.preventDefault();
     const payload = {
       username: username,
@@ -85,7 +83,10 @@ const ChangePasswordModal = props => {
     resetError();
   };
 
-  const formBody = (
+
+  let successMessage;
+  let errorMessage;
+  let formBody = (
     <form 
       className="form"
       onSubmit={onSubmit}
@@ -141,10 +142,6 @@ const ChangePasswordModal = props => {
       <br/>
     </form>
   )
-
-  // let changePasswordBody;
-  let successMessage;
-  let errorMessage;
 
   if (error) {
     errorMessage = (<span>{error}</span>)

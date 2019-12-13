@@ -16,6 +16,7 @@ const UserProfilesContainer = props => {
   };
 
   const triggerPasswordChange = () => {
+    console.log(props.userData);
     setPasswordChange(!passwordChange);
   };
 
@@ -27,6 +28,7 @@ const UserProfilesContainer = props => {
   const changeModal = (
     <Backdrop passwordChange={ passwordChange }>
       <ChangePasswordModal 
+        name={ name }
         passwordChange={ passwordChange }
         triggerPasswordChange={ triggerPasswordChange }
       />
