@@ -74,7 +74,7 @@ tr th:nth-child(5) {
 }
 
 #secondRowContent {
-  width: 85%;
+  width: 90%;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
