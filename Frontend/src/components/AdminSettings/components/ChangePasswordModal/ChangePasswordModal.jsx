@@ -26,13 +26,13 @@ const ChangePasswordModal = props => {
 
   const onSubmit = e => {
     e.preventDefault();
-    setLoading(true)
+    setLoading(true);
     const payload = {
       username: username,
       oldPassword: oldPassword,
       newPassword: newPassword,
       confirmNewPassword: confirmNewPassword
-    }
+    };
 
     if (
       username === props.name &&
@@ -126,18 +126,18 @@ const ChangePasswordModal = props => {
     props.triggerPasswordChange();
   };
 
-  const onAcceptErr = () => {
-    setResponse(false);
-    setFail(false);
-  }
-
   const successBody = (
     <div className="success">
       <h6>Password changed succesfully</h6>
       <br/>
       <button onClick={onAccept}>Ok</button>
     </div>
-  )
+  );
+
+  const onAcceptErr = () => {
+    setResponse(false);
+    setFail(false);
+  };
 
   const failBody = (
     <div className="fail">
@@ -145,13 +145,13 @@ const ChangePasswordModal = props => {
       <br/>
       <button onClick={onAcceptErr}>Ok</button>
     </div>
-  )
+  );
 
   const loadingBody = (
     <div className="loading">
       <Loader />
     </div> 
-  )
+  );
 
   const onSuccess = response => {
     setResponse(true);
@@ -163,7 +163,7 @@ const ChangePasswordModal = props => {
     setResponse(true);
     setFail(true);
     setLoading(false);
-  }
+  };
 
   let errorMessage;
   error ? errorMessage = (<span>{ error }</span>) : errorMessage = null;
@@ -173,7 +173,7 @@ const ChangePasswordModal = props => {
       wait(8000).then(() => {
         setError('');
       });
-  }
+  };
 
   let divBody;
   if (loading) {
@@ -184,7 +184,7 @@ const ChangePasswordModal = props => {
     divBody = successBody
   } else if (response && fail) {
     divBody = failBody
-  }
+  };
 
   return (
     <div 
@@ -199,7 +199,7 @@ const ChangePasswordModal = props => {
       {divBody}
       {errorMessage}
     </div>
-  )
-}
+  );
+};
 
 export default ChangePasswordModal;
