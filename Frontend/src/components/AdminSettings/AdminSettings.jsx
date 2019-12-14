@@ -2,6 +2,7 @@ import React from 'react';
 import './AdminSettings.css';
 import ColorAvailability from './components/ColorAvailability';
 
+const AdminSettings = () => {
 
 
   return (
@@ -9,7 +10,7 @@ import ColorAvailability from './components/ColorAvailability';
       <div className="sectionContainer">
         <div className="adminSettingsSectionHeader">Color Availability</div>
         <div className="colorPickerContainer">
-          <ColorAvailability/>
+          <ColorAvailability />
         </div>
       </div>
       <div className="sectionContainer">
