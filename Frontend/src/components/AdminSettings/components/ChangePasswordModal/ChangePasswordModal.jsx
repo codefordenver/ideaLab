@@ -36,7 +36,6 @@ const ChangePasswordModal = props => {
 
     if (
       username === props.name &&
-      oldPassword !== '' &&
       newPassword === confirmNewPassword &&
       oldPassword !== newPassword
     ) {
