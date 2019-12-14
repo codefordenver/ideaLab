@@ -50,8 +50,9 @@ const ChangePasswordModal = props => {
       setError(
         'The new password you entered is the same as the old password.  Please choose a different password.'
       )
-      e.target.elements.newPassword = '';
-      e.target.elements.confirmNewPassword = '';
+      e.target.elements.oldPassword.value = '';
+      e.target.elements.newPassword.value = '';
+      e.target.elements.confirmNewPassword.value = '';
     } else if (newPassword !== confirmNewPassword) {
       setError(
         'The new password and confirm new password do not match.  Please re-enter these values.'
