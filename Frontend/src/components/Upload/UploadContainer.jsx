@@ -23,7 +23,7 @@ function UploadContainer() {
   const [email, setEmail] = useState('');
   const [customerFirstName, setCustomerFirstName] = useState('');
   const [customerLastName, setCustomerLastName] = useState('');
-  const [color, setColor] = useState('#FFFFFF'); //Set initial color to white
+  const [color, setColor] = useState('');
   const [comments, setComments] = useState('');
 
   const [loading, setLoading] = useState(false);
@@ -53,7 +53,7 @@ function UploadContainer() {
   /*
   This section provides all the logic for the color picker.
   */
-  const [colors, setColors] = useState('');
+  const [colors, setColors] = useState([]);
 
   const colorCircleStyle = {
     backgroundColor: `${color}`,
@@ -61,7 +61,8 @@ function UploadContainer() {
 
   useEffect(() => {
     setLoading(true);
-    setColors(processActiveColors());
+    const colorList = processActiveColors();
+    setColors(colorList);
     setLoading(false);
   }, []);
 
@@ -156,7 +157,7 @@ function UploadContainer() {
           </div>
         ) : null}
         <button className={'shapedButton'} type="submit">
-          SUMBIT
+          SUBMIT
         </button>
       </form>
     </div>

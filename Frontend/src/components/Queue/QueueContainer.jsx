@@ -13,7 +13,8 @@ const QueueContainer = () => {
 
   useEffect(() => {
     setLoading(true);
-    setColors(processActiveColors());
+    const colorList = processActiveColors();
+    setColors(colorList);
     setLoading(false);
   }, []);
 

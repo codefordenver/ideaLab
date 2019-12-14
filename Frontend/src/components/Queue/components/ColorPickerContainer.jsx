@@ -14,6 +14,10 @@ const ColorPickerContainer = props => {
         onMouseEnter={() => setHoverState(true)}
       />
 
+      <div className="colorSelectionStatus">
+        {color ? null : 'No Color Selected'}
+      </div>
+
       {hoverState ? (
         <div className="colorPickerContainer">
           <CirclePicker

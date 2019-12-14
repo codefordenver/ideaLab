@@ -123,7 +123,7 @@ const PrintCardContainer = props => {
         <td className="colorContainer" colSpan="3">
           <ColorPickerContainer
             handleColorChange={handleColorChange}
-            color={card.color}
+            color={card.colorType.color}
             colors={colors}
             colorCircleStyle={colorCircleStyle}
           />

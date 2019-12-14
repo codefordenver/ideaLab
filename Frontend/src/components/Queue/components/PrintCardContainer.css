@@ -27,6 +27,11 @@
   border: solid 1px black;
 }
 
+.colorSelectionStatus {
+  text-align: left;
+  color: red;
+}
+
 .colorCircle {
   width: 25px;
   height: 25px;
