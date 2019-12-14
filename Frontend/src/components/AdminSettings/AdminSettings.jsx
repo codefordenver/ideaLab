@@ -3,81 +3,120 @@ import RequestService from '../../util/RequestService';
 import { CirclePicker } from 'react-color';
 import './AdminSettings.css';
 
-const moveColorToUnavailable = color => {
-  window.alert(color + ' is no longer available.');
-};
+const onFailure = () => {
+  console.log("The color availability status did not change succesfully.");
+}
 
-const deleteClicked = hue => {
-  const confirmedClicked = window.confirm(
-    'Please confirm this color is no longer available',
-  );
-  if (confirmedClicked) {
-    moveColorToUnavailable(hue.hex);
-  }
-};
+
 
 const AdminSettings = () => {
-  const [availableColors, setAvailableColors] = useState([]);
-  const [unavailableColors, setUnavailableColors] = useState([]);
+  const [allColors, setAllColors] = useState([]);
+  const [allColorsAvailable, setAllColorsAvailable] = useState([]);
+  const [allColorsId, setAllColorsId] = useState([]);
+
+  const onSuccess = index => {
+    console.log("This color availability status was succesfully changed.");
+    const element = document.getElementsByClassName('color-availability-mark')[allColors[index].toUpperCase()];
+
+    var updatedColors = allColorsAvailable;
+    updatedColors[index] = !updatedColors[index];
+    setAllColorsAvailable(updatedColors);
+    console.log("Check ");
+    console.log(element);
+    console.log(allColorsAvailable[index]);
+    console.log(allColorsAvailable[index] === false);
+    console.log(allColorsAvailable[index] === true);
+    console.log(allColors);
+    console.log(allColorsAvailable);
+
+    if (allColors[index] === false) {
+      element.innerHTML = 'X';
+    } else {
+      element.innerHTML = '';
+    }
+
+    /*var updatedColors = allColorsAvailable;
+    updatedColors[index] = !updatedColors[index];
+    setAllColorsAvailable(updatedColors);*/
+
+
+  }
+
+  const changeClicked = hue => {
+    
+    let index = allColors.findIndex(x => {
+      return x.substring(1).toUpperCase() === hue.hex.substring(1).toUpperCase()
+    });
+
+    var avail = allColorsAvailable[index];
+    var id = allColorsId[index];
+
+    const confirmedClicked = window.confirm('Please confirm you want to change the availability status of this color',);
+    if (confirmedClicked) {
+
+      var data = {
+        color: id,
+        body: {availability: !avail}
+      }
+      RequestService.putColorAvailability(data, onSuccess(index), onFailure);
+    }
+  };
 
   useEffect(() => {
-    RequestService.getActiveColors(
+    RequestService.getAllColors(
       response => {
         const data = response.data.data;
-        let availableColorList = [];
+        let colorList = [];
+        let available = [];
+        let idList = [];
         data.map(color => {
-          availableColorList.push(color.color);
+          idList.push(color.id);
+          colorList.push(color.color);
+          available.push(color.available);
         });
-        setAvailableColors(availableColorList);
+        setAllColors(colorList);
+        setAllColorsAvailable(available);
+        setAllColorsId(idList);
       },
       error => console.error('GET COLORS ERR: ', error),
-    );
-    RequestService.getInactiveColors(
-      response => {
-        const data = response.data.data;
-        let unavailableColorList = [];
-        data.map(color => {
-          unavailableColorList.push(color.color);
-        });
-        setUnavailableColors(unavailableColorList);
-      },
-      error => console.error('GET UNUSED COLORS ERR: ', error),
     );
   }, []);
 
   useEffect(() => {
-    const colorCircles = document.getElementsByClassName('circle-picker ')[0];
-    Array.from(colorCircles.children).forEach((circle, i) => {
-      const testText = document.createElement('div');
-      testText.setAttribute('class', 'color-ex');
-      testText.setAttribute('id', availableColors[i].substr(1));
-      const text = document.createTextNode('X');
-      testText.appendChild(text);
-      circle.appendChild(testText);
-    });
-  }, [availableColors]);
+    console.log("Using the effect");
+    const availabilityMark = document.getElementsByClassName('color-availability-mark');
+    if (! (availabilityMark && availabilityMark.length)) {
+      if (allColors && allColorsAvailable && allColors.length && allColorsAvailable.length) {
+        const colorCircles = document.getElementsByClassName('circle-picker ')[0];
+        Array.from(colorCircles.children).forEach((circle, i) => {
+          const testText = document.createElement('div');
+          testText.setAttribute('class', 'color-availability-mark');
+          testText.setAttribute('id', allColors[i]);
+          let textVariable;
+          if (allColorsAvailable[i] === false) {
+            textVariable = 'X';
+          } else {
+            textVariable = '';
+          }
+          const text = document.createTextNode(textVariable);
+          testText.appendChild(text);
+          circle.appendChild(testText);
+        });
+    }
+  }
+  }, [allColors, allColorsAvailable, allColorsId]);
 
   return (
     <div className="adminSettingsContainer">
       <div className="sectionContainer">
-        <div className="adminSettingsSectionHeader">Available Colors</div>
+        <div className="adminSettingsSectionHeader">Color Availability</div>
         <div className="colorPickerContainer">
           <CirclePicker
             circleSpacing={20}
             circleSize={48}
-            colors={availableColors}
-            onChangeComplete={deleteClicked}
+            colors={allColors}
+            onChangeComplete={changeClicked}
           />
-        </div>
-        <div className="sectionContainer">
-          <div className="adminSettingsSectionHeader">Unavailable Colors</div>
-          <div className="colorPickerContainer">
-            <CirclePicker
-              circleSpacing={5}
-              circleSize={24}
-              colors={unavailableColors}
-            />
-          </div>
         </div>
       </div>
       <div className="sectionContainer">

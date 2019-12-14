@@ -33,10 +33,10 @@
   margin: 0 2em 1em 0;
 }
 
-.color-ex {
+.color-availability-mark {
   border: none;
   position: absolute;
-  color: white;
+  color: gray;
   align-self: baseline;
   padding-top: 0.1em;
   font-size: 2em;
