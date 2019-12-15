@@ -11,14 +11,10 @@ const ChangePasswordModal = props => {
   const [fail, setFail] = useState(false);
   const [loading, setLoading] = useState(false);
   const [newPassword, setNewPassword] = useState();
-  const [oldPassword, setOldPassword] = useState();
   const [response, setResponse] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [username, setUsername] = useState();
 
   const onCancel = e => {
-    e.target.parentElement.parentElement.elements.username.value = '';
-    e.target.parentElement.parentElement.elements.oldPassword.value = '';
     e.target.parentElement.parentElement.elements.newPassword.value = '';
     e.target.parentElement.parentElement.elements.confirmNewPassword.value = '';
     props.triggerPasswordChange();
@@ -28,31 +24,14 @@ const ChangePasswordModal = props => {
     e.preventDefault();
     setLoading(true);
     const payload = {
-      username: username,
-      oldPassword: oldPassword,
+      username: props.username,
       newPassword: newPassword,
       confirmNewPassword: confirmNewPassword
     };
 
-    if (
-      username === props.name &&
-      newPassword === confirmNewPassword &&
-      oldPassword !== newPassword
-    ) {
+    if (newPassword === confirmNewPassword) {
       return RequestService.changePassword(payload, onSuccess, onFailure)
-    } else if (username !== props.name) {
-      setError(
-        'The username you entered is incorrect.  Please re-enter the username.'
-      )
-      e.target.elements.username.value = '';
-    } else if (oldPassword === newPassword) {
-      setError(
-        'The new password you entered is the same as the old password.  Please choose a different password.'
-      )
-      e.target.elements.oldPassword.value = '';
-      e.target.elements.newPassword.value = '';
-      e.target.elements.confirmNewPassword.value = '';
-    } else if (newPassword !== confirmNewPassword) {
+    } else {
       setError(
         'The new password and confirm new password do not match.  Please re-enter these values.'
       );
@@ -69,33 +48,11 @@ const ChangePasswordModal = props => {
       onSubmit={onSubmit}
     >
       <div className="form__item">
-        <label htmlFor="username">Username:</label>
-        <input
-          autoComplete="off"
-          name="username"
-          onChange={e => setUsername(e.target.value)}
-          placeholder="username"
-          required
-        />
-      </div>
-      <div className="form__item">
-        <label htmlFor="oldPassword">Old Password:</label>
-        <input
-          autoComplete="off"
-          name="oldPassword"
-          onChange={e => setOldPassword(e.target.value)}
-          placeholder="old password"
-          required
-          type="password"
-        />
-      </div>
-      <div className="form__item">
         <label htmlFor="newPassword">New Password:</label>
         <input
           autoComplete="off"
           name="newPassword"
           onChange={e => setNewPassword(e.target.value)}
-          placeholder="new password"
           required
           type="password"
         />
@@ -106,7 +63,6 @@ const ChangePasswordModal = props => {
           autoComplete="off"
           name="confirmNewPassword"
           onChange={e => setConfirmNewPassword(e.target.value)}
-          placeholder="new password"
           required
           type="password"
         />
@@ -141,7 +97,7 @@ const ChangePasswordModal = props => {
 
   const failBody = (
     <div className="fail">
-      <h6>An error has occurred. Your password may have been typed incorrectly. Please try again.</h6>
+      <h6>An error has occurred. Please try again.</h6>
       <br/>
       <button onClick={onAcceptErr}>Ok</button>
     </div>
