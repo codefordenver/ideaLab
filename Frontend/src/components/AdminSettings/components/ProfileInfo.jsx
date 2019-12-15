@@ -27,7 +27,7 @@ const UserProfilesContainer = props => {
   const changeModal = (
     <Backdrop passwordChange={ passwordChange }>
       <ChangePasswordModal 
-        name={ name }
+        username={ name }
         passwordChange={ passwordChange }
         triggerPasswordChange={ triggerPasswordChange }
       />
