@@ -164,7 +164,6 @@ public class UserOperationsTest {
     public void changePasswordSuccess() {
         UserChangePasswordRequest request = new UserChangePasswordRequest();
         request.setUsername("testuser");
-        request.setOldPassword("testpassword");
         request.setNewPassword("New1");
         request.setConfirmNewPassword("New1");
 
@@ -173,7 +172,6 @@ public class UserOperationsTest {
         e.setPassword("testpassword");
 
         when(employeeRepo.findEmployeeByUsername(e.getUsername())).thenReturn(e);
-        when(bCryptPasswordEncoder.matches(request.getOldPassword(), e.getPassword())).thenReturn(true);
         when(employeeRepo.save(e)).thenReturn(e);
 
         GenericResponse response = new GenericResponse();
@@ -190,7 +188,6 @@ public class UserOperationsTest {
     public void changePasswordInvalidEmployee() {
         UserChangePasswordRequest request = new UserChangePasswordRequest();
         request.setUsername("testuser");
-        request.setOldPassword("testpassword");
         request.setNewPassword("New1");
         request.setConfirmNewPassword("New1");
 
@@ -201,28 +198,9 @@ public class UserOperationsTest {
     }
 
     @Test(expected = IdeaLabApiException.class)
-    public void changePasswordOldPasswordNoMatch() {
-        UserChangePasswordRequest request = new UserChangePasswordRequest();
-        request.setUsername("testuser");
-        request.setOldPassword("testpassword");
-        request.setNewPassword("New1");
-        request.setConfirmNewPassword("New1");
-
-        Employee e = new Employee();
-        e.setUsername("testuser");
-        e.setPassword("nonmatch");
-
-        when(employeeRepo.findEmployeeByUsername(e.getUsername())).thenReturn(e);
-        when(bCryptPasswordEncoder.matches(request.getOldPassword(), e.getPassword())).thenReturn(false);
-
-        operations.changePassword(request);
-    }
-
-    @Test(expected = IdeaLabApiException.class)
     public void changePasswordNewPasswordNoMatch() {
         UserChangePasswordRequest request = new UserChangePasswordRequest();
         request.setUsername("testuser");
-        request.setOldPassword("testpassword");
         request.setNewPassword("New1");
         request.setConfirmNewPassword("New2");
 
@@ -231,7 +209,6 @@ public class UserOperationsTest {
         e.setPassword("nonmatch");
 
         when(employeeRepo.findEmployeeByUsername(e.getUsername())).thenReturn(e);
-        when(bCryptPasswordEncoder.matches(request.getOldPassword(), e.getPassword())).thenReturn(true);
 
         operations.changePassword(request);
     }
