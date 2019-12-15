@@ -19,6 +19,7 @@ const UserProfilesContainer = () => {
             const { firstName, lastName, username, role } = user;
             return {
               name: `${firstName} ${lastName} (${username})`,
+              username: username,
               role: role,
             };
           });

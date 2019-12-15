@@ -43,3 +43,7 @@
 .dropdownContainer {
   display: inherit;
 }
+
+.roleUpdateStatus {
+  margin-left: 1rem;
+}

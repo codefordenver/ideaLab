@@ -72,10 +72,10 @@ public class EmployeeSignUpRequest implements GenericRequest {
         if(username == null || username.trim().isEmpty()) {
             throw new IdeaLabApiException(VALIDATION_ERROR, "username is invalid");
         }
-        if(password == null || username.trim().isEmpty()) {
+        if(password == null || password.trim().isEmpty()) {
             throw new IdeaLabApiException(VALIDATION_ERROR, "password is invalid");
         }
-        if(role == null || EmployeeRole.fromString(role) == null) {
+        if(role == null || EmployeeRole.fromValue(role) == null) {
             throw new IdeaLabApiException(VALIDATION_ERROR, "role is invalid");
         }
         if(firstName == null || firstName.trim().isEmpty()) {

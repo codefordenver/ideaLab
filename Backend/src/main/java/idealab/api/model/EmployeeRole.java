@@ -14,7 +14,7 @@ public enum EmployeeRole {
         return this.name;
     }
 
-    public static EmployeeRole fromString(String text) {
+    public static EmployeeRole fromValue(String text) {
         for (EmployeeRole e : EmployeeRole.values()) {
             if (e.name.equalsIgnoreCase(text)) {
                 return e;
