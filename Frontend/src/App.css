@@ -105,6 +105,7 @@ body {
 
 .uploadContainer input,
 .loginContainer input {
+  width: 100%;
   display: block;
   height: 2em;
   margin: 2rem;

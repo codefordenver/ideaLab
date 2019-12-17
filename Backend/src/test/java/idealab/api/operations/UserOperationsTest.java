@@ -1,10 +1,12 @@
 package idealab.api.operations;
 
 import idealab.api.dto.request.EmployeeSignUpRequest;
+import idealab.api.dto.request.EmployeeUpdateRequest;
 import idealab.api.dto.request.UserChangePasswordRequest;
 import idealab.api.dto.response.GenericResponse;
 import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.Employee;
+import idealab.api.model.EmployeeRole;
 import idealab.api.repositories.EmployeeRepo;
 import org.junit.Before;
 import org.junit.Test;
@@ -236,5 +238,70 @@ public class UserOperationsTest {
         operations.changePassword(request);
     }
 
+    @Test
+    public void userUpdate() {
+        EmployeeUpdateRequest request = new EmployeeUpdateRequest();
+        request.setUsername("username");
+        request.setRole("ADMIN");
 
+        Employee e = new Employee();
+        e.setUsername("username");
+        e.setRole(EmployeeRole.STAFF);
+
+        when(employeeRepo.findEmployeeByUsername(request.getUsername())).thenReturn(e);
+
+        e.setRole(EmployeeRole.ADMIN);
+
+        when(employeeRepo.save(e)).thenReturn(e);
+
+        GenericResponse response = operations.updateUser(request);
+
+        verify(employeeRepo, times(1)).findEmployeeByUsername(request.getUsername());
+        verify(employeeRepo, times(1)).save(e);
+        assertTrue(response.isSuccess() == true);
+        assertTrue(response.getMessage().equalsIgnoreCase("Employee role updated successfully"));
+    }
+
+    @Test(expected = IdeaLabApiException.class)
+    public void userUpdate_NoRole() {
+        EmployeeUpdateRequest request = new EmployeeUpdateRequest();
+        request.setUsername("username");
+
+        GenericResponse response = operations.updateUser(request);
+
+    }
+
+    @Test(expected = IdeaLabApiException.class)
+    public void userUpdate_NotValidRole() {
+        EmployeeUpdateRequest request = new EmployeeUpdateRequest();
+        request.setUsername("username");
+        request.setRole("NOT_VALID");
+
+        GenericResponse response = operations.updateUser(request);
+
+    }
+
+    @Test(expected = IdeaLabApiException.class)
+    public void userUpdate_NoUsername() {
+        EmployeeUpdateRequest request = new EmployeeUpdateRequest();
+        request.setRole("ADMIN");
+
+        GenericResponse response = operations.updateUser(request);
+
+    }
+
+    @Test(expected = IdeaLabApiException.class)
+    public void userUpdate_NotValidUsername() {
+        EmployeeUpdateRequest request = new EmployeeUpdateRequest();
+        request.setUsername("username");
+        request.setRole("ADMIN");
+
+        Employee e = new Employee();
+        e.setUsername("username");
+        e.setRole(EmployeeRole.STAFF);
+
+        when(employeeRepo.findEmployeeByUsername(request.getUsername())).thenReturn(null);
+
+        GenericResponse response = operations.updateUser(request);
+    }
 }

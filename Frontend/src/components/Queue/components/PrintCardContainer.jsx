@@ -2,7 +2,7 @@ import React, { useState, Fragment } from 'react';
 import './PrintCardContainer.css';
 import StatusDropdown from './StatusDropdown';
 import PrintDateAdded from './PrintDateAdded';
-import { CirclePicker } from 'react-color';
+import ColorPickerContainer from './ColorPickerContainer';
 import { IoIosArrowDown, IoIosArrowBack } from 'react-icons/io';
 import { FiSave, FiMail } from 'react-icons/fi';
 
@@ -14,7 +14,6 @@ const PrintCardContainer = props => {
     colorType: props.data.colorType.color,
     status: card.status,
   });
-  const [hoverState, setHoverState] = useState(false);
   const [colors] = useState(props.colors);
   const [isSaveIconShowing, setSaveIconShowing] = useState(false);
   const { saveCard } = props;
@@ -29,13 +28,6 @@ const PrintCardContainer = props => {
       colorType: hue.hex.toUpperCase(),
     }));
     setSaveIconShowing(true);
-  };
-  const handleMouseEnter = () => {
-    setHoverState(true);
-  };
-
-  const handleMouseLeave = () => {
-    setHoverState(false);
   };
 
   const updateComment = event => {
@@ -128,31 +120,13 @@ const PrintCardContainer = props => {
             {card.filePath}
           </a>
         </td>
-        <td
-          className="colorContainer"
-          colSpan="3"
-          onMouseLeave={handleMouseLeave}
-        >
-          <div
-            className="colorCircle"
-            style={colorCircleStyle}
-            onMouseEnter={handleMouseEnter}
-          ></div>
-
-          {hoverState ? (
-            <div className="colorPickerContainer">
-              <CirclePicker
-                onChangeComplete={handleColorChange}
-                color={card.color}
-                colors={colors}
-                width="250px"
-                circleSize={18}
-                circleSpacing={8}
-              />
-            </div>
-          ) : (
-            <Fragment />
-          )}
+        <td className="colorContainer" colSpan="3">
+          <ColorPickerContainer
+            handleColorChange={handleColorChange}
+            color={card.colorType.color}
+            colors={colors}
+            colorCircleStyle={colorCircleStyle}
+          />
         </td>
         <td className="submitDate">
           <PrintDateAdded submitted={card.createdAt} />
