@@ -26,4 +26,10 @@ public class AuditController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
+    @GetMapping("/print-jobs/year-colors")
+    public ResponseEntity<?> getPrintJobAuditGroupedByColorForPassedYear() {
+        PrintJobAuditResponse response = auditOperations.printJobAuditColorsYearly();
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
 }
