@@ -1,21 +1,14 @@
 package idealab.api.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import idealab.api.dto.request.EmployeeUpdateRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import idealab.api.dto.request.EmployeeSignUpRequest;
 import idealab.api.dto.request.UserChangePasswordRequest;
+import idealab.api.dto.response.BasicEmployee;
+import idealab.api.dto.response.DataResponse;
 import idealab.api.dto.response.GenericResponse;
-import idealab.api.dto.response.UserResponse;
 import idealab.api.operations.UserOperations;
 
 @RestController
@@ -34,6 +27,12 @@ public class UserController {
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<?> updateUser(@RequestBody EmployeeUpdateRequest request) {
+        GenericResponse response = userOperations.updateUser(request);
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Integer id) {
         GenericResponse response = userOperations.deleteUser(id);
@@ -48,7 +47,7 @@ public class UserController {
 
     @GetMapping()
     public ResponseEntity<?> getUsers() {
-        UserResponse response = userOperations.getAllUsers();
+        DataResponse<BasicEmployee> response = userOperations.getAllUsers();
         
         return new ResponseEntity<>(response, response.getHttpStatus());
     }

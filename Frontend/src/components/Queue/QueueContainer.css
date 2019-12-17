@@ -1,3 +1,7 @@
+.queueContainer {
+  margin: 0px 50px;
+}
+
 .queueBanner {
   list-style-type: none;
   text-align: left;
@@ -5,7 +9,7 @@
 }
 
 body {
-  margin: 0px 50px;
+  margin-right: 50px;
 }
 
 table {
@@ -70,7 +74,7 @@ tr th:nth-child(5) {
 }
 
 #secondRowContent {
-  width: 85%;
+  width: 90%;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;

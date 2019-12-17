@@ -5,6 +5,7 @@
   border-radius: 4px;
   text-align: left;
   width: 97%;
+  height: fit-content;
 }
 
 .colorContainer {
@@ -26,7 +27,12 @@
   border: solid 1px black;
 }
 
-.printCardContainer .colorCircle {
+.colorSelectionStatus {
+  text-align: left;
+  color: red;
+}
+
+.colorCircle {
   width: 25px;
   height: 25px;
   border: solid 1px black;
@@ -47,7 +53,7 @@
 }
 
 .commentSection {
-  width: 42%;
+  width: 41%;
   height: 100%;
   border-radius: 5px;
 }

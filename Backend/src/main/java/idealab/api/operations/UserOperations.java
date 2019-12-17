@@ -5,14 +5,16 @@ import static idealab.api.exception.ErrorType.VALIDATION_ERROR;
 
 import java.util.List;
 
+import idealab.api.dto.request.EmployeeUpdateRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import idealab.api.dto.request.EmployeeSignUpRequest;
 import idealab.api.dto.request.UserChangePasswordRequest;
+import idealab.api.dto.response.BasicEmployee;
+import idealab.api.dto.response.DataResponse;
 import idealab.api.dto.response.GenericResponse;
-import idealab.api.dto.response.UserResponse;
 import idealab.api.exception.ErrorType;
 import idealab.api.exception.IdeaLabApiException;
 import idealab.api.model.Employee;
@@ -36,10 +38,10 @@ public class UserOperations {
      * This is to be used with the find all simple method in the employee repo.
      * @return
      */
-    public UserResponse getAllUsers() {
-        UserResponse response = new UserResponse("Could not get list of users");
+    public DataResponse<BasicEmployee> getAllUsers() {
+        DataResponse<BasicEmployee> response = new DataResponse<BasicEmployee>("Could not get list of users");
 
-        List<Object[]> users = employeeRepo.findAllSimple();
+        List<BasicEmployee> users = employeeRepo.findAllEmployeeBasics();
 
         if (users == null || users.isEmpty()){
             ErrorType.USER_NOT_FOUND.throwException();
@@ -47,7 +49,7 @@ public class UserOperations {
 
         response.setSuccess(true);
         response.setMessage("Successfully returned users");
-        response.setSimpleData(users);
+        response.setData(users);
         response.setHttpStatus(HttpStatus.ACCEPTED);
 
         return response;
@@ -140,7 +142,29 @@ public class UserOperations {
         e.setPassword(request.getPassword());
         e.setFirstName(request.getFirstName());
         e.setLastName(request.getLastName());
-        e.setRole(EmployeeRole.fromString(request.getRole()));
+        e.setRole(EmployeeRole.fromValue(request.getRole()));
         return e;
+    }
+
+    public GenericResponse updateUser(EmployeeUpdateRequest request) {
+        request.validate();
+        GenericResponse response = new GenericResponse();
+
+        Employee e = employeeRepo.findEmployeeByUsername(request.getUsername());
+
+        if(e == null){
+            throw new IdeaLabApiException(USER_NOT_FOUND);
+        }
+
+        String requestRole = request.getRole();
+        e.setRole(EmployeeRole.fromValue(requestRole));
+
+        employeeRepo.save(e);
+
+        response.setSuccess(true);
+        response.setMessage("Employee role updated successfully");
+        response.setHttpStatus(HttpStatus.ACCEPTED);
+
+        return response;
     }
 }

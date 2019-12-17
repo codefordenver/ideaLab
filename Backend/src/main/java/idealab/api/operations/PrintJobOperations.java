@@ -265,10 +265,16 @@ public class PrintJobOperations {
         return response;
     }
 
+    /**
+     * This gets a list of all print jobs. However, it only outputs print jobs that are in the queue or 
+     * have a status that isn't "pending", "printing", or "pending customer review"
+     * @param status
+     * @return
+     */
     public DataResponse<PrintJob> getAllPrintJobs(String status) {
         DataResponse<PrintJob> response = new DataResponse<PrintJob>("Could not get all print jobs");
 
-        List<PrintJob> printJobs = status == null? printJobRepo.findAll() : printJobRepo.findPrintJobByStatus(Status.fromValue(status));
+        List<PrintJob> printJobs = status == null? printJobRepo.findActive() : printJobRepo.findPrintJobByStatus(Status.fromValue(status));
 
         if (printJobs == null || printJobs.isEmpty()){
             ErrorType.PRINT_JOBS_NOT_EXIST.throwException();
@@ -303,7 +309,6 @@ public class PrintJobOperations {
     public DataResponse<PrintJob> updatePrintJobProps(Integer printJobId, UpdatePrintJobPropertiesRequest request) {
         request.validate();
         boolean isChanged = false;
-
         PrintJob printJob = printJobRepo.findPrintJobById(printJobId);
         if(printJob == null)
             throw new IdeaLabApiException(PRINT_JOB_CANT_FIND_BY_ID);
