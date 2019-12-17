@@ -1,0 +1,16 @@
+.colWrapper {
+  height: 200px;
+  width: 100px;
+  position: relative;
+  border: 1px solid #ccc;
+}
+.barContainer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+.bar {
+  width: 100%;
+  height: 20px;
+  background-color: black;
+}
