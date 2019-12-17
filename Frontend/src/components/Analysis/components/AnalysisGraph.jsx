@@ -1,10 +1,5 @@
 import React from 'react';
-import './AnalysisGraph.css';
 import { Bar } from 'react-chartjs-2';
-import Loader from '../../globalStyles/Loader';
-// import MenuBar from '../../globalStyles/MenuBar';
-// import { MenuTabs } from '../../globalStyles/MenuTabs';
-// import Loader from '../../globalStyles/Loader';
 
 const AnalysisGraph = props => {
   console.log(props.graphData);
