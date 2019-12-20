@@ -8,14 +8,6 @@
   width: 50%;
   margin: auto;
   margin-top: 2rem;
-
-}
-
-.uploadContainer .input-container div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
 .uploadContainer .upload {
@@ -41,9 +33,11 @@
   grid-column-start: 2;
   display: flex;
   flex-direction: column;
+  max-width: 600px;
 }
 
 .uploadContainer textarea {
+  width: 100%;
   display: block;
   border-radius: 10px;
   outline: none;
@@ -75,7 +69,19 @@
   align-self: center;
 }
 
-.uploadContainer .input-container {
-  display: flex;
-  flex-direction: row;
+.colorTitle {
+  text-align: left;
+}
+
+.colorContainerUpload {
+  border-radius: 10px;
+  outline: none;
+  border-style: solid;
+  border: 2px solid black;
+  padding: 0.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-left: 0;
+  margin-right: 0;
+  background-color: white;
 }

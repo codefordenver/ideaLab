@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import RequestService from '../../util/RequestService';
+import { processActiveColors } from '../../util/ColorUtils';
 import Loader from '../globalStyles/Loader';
 import { createBrowserHistory } from 'history';
 import Upload from './components/Upload';
 import BasicInput from '../BasicInput';
 import './UploadContainer.css';
 import ideaLABlogo from '../globalStyles/img/ideaLabLogo.png';
+import ColorPickerContainer from '../Queue/components/ColorPickerContainer';
 
 const history = createBrowserHistory();
 function UploadContainer() {
@@ -48,6 +50,26 @@ function UploadContainer() {
     }
   }
 
+  /*
+  This section provides all the logic for the color picker.
+  */
+  const [colors, setColors] = useState([]);
+
+  const colorCircleStyle = {
+    backgroundColor: `${color}`,
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    const colorList = processActiveColors();
+    setColors(colorList);
+    setLoading(false);
+  }, []);
+
+  const handleColorChange = hue => {
+    setColor(hue.hex.toUpperCase());
+  };
+
   return (
     <div className={'uploadContainer'}>
       {loading ? (
@@ -58,6 +80,7 @@ function UploadContainer() {
       ) : (
         false
       )}
+
       <form
         onSubmit={e => {
           e.preventDefault();
@@ -106,6 +129,16 @@ function UploadContainer() {
               changeHandler={setEmail}
               error={errors.email}
             />
+
+            <div className="colorContainerUpload">
+              <p className="colorTitle">Color:</p>
+              <ColorPickerContainer
+                handleColorChange={handleColorChange}
+                color={color}
+                colors={colors}
+                colorCircleStyle={colorCircleStyle}
+              />
+            </div>
             <div>
               <textarea
                 onChange={e => setComments(e.target.value)}
@@ -124,7 +157,7 @@ function UploadContainer() {
           </div>
         ) : null}
         <button className={'shapedButton'} type="submit">
-          SUMBIT
+          SUBMIT
         </button>
       </form>
     </div>

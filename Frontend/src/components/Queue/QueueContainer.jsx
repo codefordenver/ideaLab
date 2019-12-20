@@ -3,6 +3,7 @@ import RequestService from '../../util/RequestService';
 import AuthContext from '../../AuthContext';
 import './QueueContainer.css';
 import Queue from './components/Queue';
+import { processActiveColors } from '../../util/ColorUtils';
 
 const QueueContainer = () => {
   const [loading, setLoading] = useState(false);
@@ -12,18 +13,9 @@ const QueueContainer = () => {
 
   useEffect(() => {
     setLoading(true);
-    RequestService.getActiveColors(
-      response => {
-        const data = response.data.data;
-        setLoading(false);
-        var colorList = [];
-        data.map(color => {
-          colorList.push(color.color);
-        });
-        setColors(colorList);
-      },
-      error => console.error(error),
-    );
+    const colorList = processActiveColors();
+    setColors(colorList);
+    setLoading(false);
   }, []);
 
   const returnCardStatus = cardStatus => {
