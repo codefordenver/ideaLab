@@ -1,0 +1,9 @@
+.color-availability-mark {
+    border: none;
+    position: absolute;
+    color: gray;
+    align-self: baseline;
+    padding-top: 0.1em;
+    font-size: 2em;
+    padding-left: 0.5em;
+  }
