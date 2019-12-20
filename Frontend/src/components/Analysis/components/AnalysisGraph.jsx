@@ -2,42 +2,35 @@ import React from 'react';
 import { Bar } from 'react-chartjs-2';
 
 const AnalysisGraph = props => {
-  console.log(props.graphData);
   let labels = [];
-  let datasets = {
-    red: [],
-    blue: [],
-    green: [],
-  };
+  let datasets = {};
+  let colors = [];
+  let finalData = [];
   for (var key in props.graphData) {
     if (props.graphData.hasOwnProperty(key)) {
       labels.push(key);
-      datasets['red'].push(props.graphData[key]['red']);
-      datasets['blue'].push(props.graphData[key]['blue']);
-      datasets['green'].push(props.graphData[key]['green']);
+      for (var colorKey in props.graphData[key]) {
+        if (props.graphData[key].hasOwnProperty(colorKey)) {
+          if (datasets[colorKey] != undefined) {
+            datasets[colorKey].push(props.graphData[key][colorKey]);
+          } else {
+            datasets[colorKey] = [props.graphData[key][colorKey]];
+            colors.push(colorKey);
+          }
+        }
+      }
     }
   }
-  console.log(labels);
-  console.log(datasets);
+  for (let i = 0; i < colors.length; i++) {
+    finalData.push({
+      label: colors[i],
+      backgroundColor: colors[i],
+      data: datasets[colors[i]],
+    });
+  }
   const allData = {
     labels: labels,
-    datasets: [
-      {
-        label: 'Red',
-        backgroundColor: 'rgb(240, 52, 52)',
-        data: datasets['red'],
-      },
-      {
-        label: 'Blue',
-        backgroundColor: 'rgb(92, 151, 191)',
-        data: datasets['blue'],
-      },
-      {
-        label: 'Green',
-        backgroundColor: 'rgb(35, 203, 167)',
-        data: datasets['green'],
-      },
-    ],
+    datasets: finalData,
   };
   const options = {
     scales: {
