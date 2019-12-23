@@ -21,7 +21,9 @@ const QueueContainer = () => {
   const returnCardStatus = cardStatus => {
     const failedStatuses = ['FAILED', 'REJECTED', 'COMPLETED', 'ARCHIVED'];
     const waitingStatuses = ['PENDING_CUSTOMER_RESPONSE', 'PENDING_REVIEW'];
-    if (failedStatuses.indexOf(cardStatus) !== -1) {
+    if (cardStatus === 'FAILED') {
+      return 'FAILED';
+    } else if (failedStatuses.indexOf(cardStatus) !== -1) {
       return 'DONE';
     } else if (waitingStatuses.indexOf(cardStatus) !== -1) {
       return 'PENDING_REVIEW';
@@ -32,6 +34,11 @@ const QueueContainer = () => {
 
   const onSaveCardSuccess = response => {
     const cardStatus = response.data.data[0].status;
+
+    // MY CONSOLE LOGS
+    console.log('statusView: ', statusView);
+    console.log('cardStatus: ', cardStatus);
+
     if (cardStatus !== statusView) {
       setStatusView(returnCardStatus(cardStatus));
     }
@@ -61,7 +68,15 @@ const QueueContainer = () => {
             returnCardStatus(card.status) === 'PENDING_REVIEW'
           ) {
             return card;
-          } else if (statusView === 'PRINTING' && card.status === 'PRINTING') {
+          } else if (
+            statusView === 'PRINTING' &&
+            returnCardStatus(card.status) === 'PRINTING'
+          ) {
+            return card;
+          } else if (
+            statusView === 'FAILED' &&
+            returnCardStatus(card.status) === 'FAILED'
+          ) {
             return card;
           }
         });
