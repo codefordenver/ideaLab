@@ -9,7 +9,6 @@ import static idealab.api.exception.ErrorType.VALIDATION_ERROR;
 public class UserChangePasswordRequest implements GenericRequest {
 
     private String username;
-    private String oldPassword;
     private String newPassword;
     private String confirmNewPassword;
 
@@ -21,14 +20,6 @@ public class UserChangePasswordRequest implements GenericRequest {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getOldPassword() {
-        return oldPassword;
-    }
-
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
     }
 
     public String getNewPassword() {
@@ -51,7 +42,6 @@ public class UserChangePasswordRequest implements GenericRequest {
     public String toString() {
         return "UserChangePasswordRequest{" +
                 "username='" + username + '\'' +
-                ", oldPassword='" + oldPassword + '\'' +
                 ", newPassword='" + newPassword + '\'' +
                 ", confirmNewPassword='" + confirmNewPassword + '\'' +
                 '}';
@@ -63,7 +53,6 @@ public class UserChangePasswordRequest implements GenericRequest {
         if (o == null || getClass() != o.getClass()) return false;
         UserChangePasswordRequest that = (UserChangePasswordRequest) o;
         return Objects.equals(username, that.username) &&
-                Objects.equals(oldPassword, that.oldPassword) &&
                 Objects.equals(newPassword, that.newPassword) &&
                 Objects.equals(confirmNewPassword, that.confirmNewPassword);
     }
@@ -72,8 +61,6 @@ public class UserChangePasswordRequest implements GenericRequest {
     public void validate() {
         if(this.username == null || this.username.trim().isEmpty())
             throw new IdeaLabApiException(VALIDATION_ERROR, "Username is not valid");
-        if(this.oldPassword == null || this.oldPassword.trim().isEmpty())
-            throw new IdeaLabApiException(VALIDATION_ERROR, "Current password is not valid");
         if(this.newPassword == null || this.newPassword.trim().isEmpty())
             throw new IdeaLabApiException(VALIDATION_ERROR, "New password is not valid");
         if(this.confirmNewPassword == null || this.confirmNewPassword.trim().isEmpty())

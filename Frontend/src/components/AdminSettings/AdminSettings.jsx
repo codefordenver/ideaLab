@@ -3,8 +3,6 @@ import './AdminSettings.css';
 import ColorAvailability from './components/ColorAvailability';
 
 const AdminSettings = () => {
-
-
   return (
     <div className="adminSettingsContainer">
       <div className="sectionContainer">

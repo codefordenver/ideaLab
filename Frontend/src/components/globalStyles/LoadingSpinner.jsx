@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import './LoadingSpinner.css';
+import './LoadingSpinner.scss';
 
 const LoadingSpinner = props => {
   return (

@@ -77,6 +77,14 @@ const RequestService = {
       .catch(catchCallback);
   },
 
+  changePassword(payload, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .post(backendUrl + '/users/password', payload)
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
   newPrintJob(payload, thenCallback, catchCallback) {
     const backendInstance = generateApiInstance();
     backendInstance
