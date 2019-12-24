@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import RequestService from '../../util/RequestService';
 import './CreateAccountManager.css';
-
+import { ToastProvider, useToasts } from 'react-toast-notifications';
 import ideaLABlogo from '../globalStyles/img/ideaLabLogo.png';
 
 const CreateAccountManager = () => {
@@ -13,28 +13,37 @@ const CreateAccountManager = () => {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
 
-  function onSuccess(response) {
-    // Maybe display the modal or some kind of redirect?
-    console.log(response.data.message);
-  }
+  const ButtonWithToasts = () => {
+    const { addToast } = useToasts();
 
-  function onFailure(error) {
-    const newErrorState = RequestService.validationErrorGetter(error);
-    setErrors(newErrorState);
-  }
+    const onClick = e => {
+      e.preventDefault();
+      const payload = {
+        email: email,
+        password: password,
+        firstName: firstName,
+        lastName: lastName,
+        role: role,
+        username: username,
+      };
 
-  const onSubmit = e => {
-    e.preventDefault();
-    const payload = {
-      email: email,
-      password: password,
-      firstName: firstName,
-      lastName: lastName,
-      role: role,
-      username: username,
+      RequestService.signUp(payload, onSuccess, onFailure);
     };
+    function onSuccess(response) {
+      // Maybe display the modal or some kind of redirect?
+      addToast('Saved Successfully', {
+        appearance: 'success',
+        autoDismiss: true,
+      });
+    }
 
-    RequestService.signUp(payload, onSuccess, onFailure);
+    function onFailure(error) {
+      const newErrorState = RequestService.validationErrorGetter(error);
+      setErrors(newErrorState);
+      addToast('Fail', { appearance: 'warning', autoDismiss: true });
+    }
+
+    return <button onClick={onClick}>Create Account</button>;
   };
 
   function renderErrors() {
@@ -61,7 +70,7 @@ const CreateAccountManager = () => {
         <img className="ideaLabLogo" src={ideaLABlogo} alt="ideaLABLogo" />
         <h1>3D Printing and Upload Queue</h1>
         <h2>Create an Account</h2>
-        <form onSubmit={e => onSubmit(e)}>
+        <form>
           <input
             name="email"
             placeholder="email"
@@ -124,7 +133,9 @@ const CreateAccountManager = () => {
             </label>
           </div>
           {renderErrors()}
-          <button type="submit">Create Account</button>
+          <ToastProvider>
+            <ButtonWithToasts />
+          </ToastProvider>
         </form>
       </div>
     </div>

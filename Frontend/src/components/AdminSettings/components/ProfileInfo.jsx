@@ -3,11 +3,15 @@ import './ProfileInfo.css';
 import Backdrop from '../../globalStyles/Backdrop/Backdrop';
 import ChangePasswordModal from './ChangePasswordModal/ChangePasswordModal';
 import StyledDropdown from '../../globalStyles/StyledDropdown';
+import RequestService from '../../../util/RequestService';
 
 const UserProfilesContainer = props => {
-  const [ passwordChange, setPasswordChange ] = useState(false); 
+  const [passwordChange, setPasswordChange] = useState(false);
 
   const { name, role } = props.userData;
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const titleOptions = ['ADMIN', 'STAFF'];
 
@@ -20,19 +24,35 @@ const UserProfilesContainer = props => {
   };
 
   const updateUserRole = newRole => {
-    console.log('new role:', newRole);
-    //TODO: get request, all employees at admin's current location
+    setLoading(true);
+    setError(false);
+    setSuccess(false);
+    RequestService.updateUsers(
+      {
+        username: props.userData.username,
+        role: newRole,
+      },
+
+      response => {
+        response.data.success ? setSuccess(true) : setError(true);
+      },
+      error => {
+        console.log(error);
+        setError(true);
+      },
+    );
+    setLoading(false);
   };
 
   const changeModal = (
-    <Backdrop passwordChange={ passwordChange }>
-      <ChangePasswordModal 
-        username={ name }
-        passwordChange={ passwordChange }
-        triggerPasswordChange={ triggerPasswordChange }
+    <Backdrop passwordChange={passwordChange}>
+      <ChangePasswordModal
+        username={name}
+        passwordChange={passwordChange}
+        triggerPasswordChange={triggerPasswordChange}
       />
     </Backdrop>
-  )
+  );
 
   return (
     <div style={{ backgroundColor: props.color }} className="infoContainer">
@@ -44,6 +64,10 @@ const UserProfilesContainer = props => {
           value={role}
           saveDropdownChange={updateUserRole}
         />
+        <div className="roleUpdateStatus">
+          {success ? 'Updated Role Successfully' : null}
+          {error ? 'Unable to update role' : null}
+        </div>
       </div>
 
       <button className="changePasswordButton" onClick={triggerPasswordChange}>
@@ -52,7 +76,7 @@ const UserProfilesContainer = props => {
       <button className="deleteUserButton" onClick={triggerDelete}>
         Delete
       </button>
-      
+
       {changeModal}
     </div>
   );

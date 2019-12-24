@@ -3,6 +3,7 @@ import RequestService from '../../util/RequestService';
 import AuthContext from '../../AuthContext';
 import './QueueContainer.css';
 import Queue from './components/Queue';
+import { processActiveColors } from '../../util/ColorUtils';
 
 const QueueContainer = () => {
   const [loading, setLoading] = useState(false);
@@ -12,19 +13,27 @@ const QueueContainer = () => {
 
   useEffect(() => {
     setLoading(true);
-    RequestService.getActiveColors(
-      response => {
-        const data = response.data.data;
-        setLoading(false);
-        var colorList = [];
-        data.map(color => {
-          colorList.push(color.color);
-        });
-        setColors(colorList);
-      },
-      error => console.error(error),
-    );
+    const colorList = processActiveColors();
+    setColors(colorList);
+    setLoading(false);
   }, []);
+
+  useEffect(() => {
+    //Load initial data and set the loading only on first load
+    setLoading(true);
+    fetchQueueData();
+    setLoading(false);
+
+    //Sets an interval to re-fetch data on an interval.
+    const interval = setInterval(() => {
+      fetchQueueData();
+
+      //Time is in milliseconds (1000*60*5 = 5 mins)
+    }, 1000 * 60 * 5);
+
+    //Clean up function should remove the interval on the component unmount
+    return () => clearInterval(interval);
+  }, [statusView]);
 
   const returnCardStatus = cardStatus => {
     const failedStatuses = ['FAILED', 'REJECTED', 'COMPLETED', 'ARCHIVED'];
@@ -53,8 +62,7 @@ const QueueContainer = () => {
     RequestService.saveCard(updatedCard, onSaveCardSuccess, onFailure);
   };
 
-  useEffect(() => {
-    setLoading(true);
+  const fetchQueueData = () => {
     //TO DO: GET PRINT JOBS BASED ON STATUS, NOT ALL AT ONCE
     RequestService.getPrintJobs(
       response => {
@@ -74,11 +82,10 @@ const QueueContainer = () => {
           }
         });
         setFilteredData(activeCards);
-        setLoading(false);
       },
       error => console.error(error),
     );
-  }, [statusView]);
+  };
 
   const setStatus = view => {
     setStatusView(view);
