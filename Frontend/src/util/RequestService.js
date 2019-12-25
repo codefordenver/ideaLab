@@ -158,6 +158,28 @@ const RequestService = {
       .then(thenCallback)
       .catch(catchCallback);
   },
+
+  // This gets the email message from the backend based on a status sent in
+  getEmailMessage(type, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    const param = {
+      status: type,
+    };
+    backendInstance
+      .get(backendUrl + '/api/message', { params: param })
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
+  // This changes the email message on the backend. It expects a body that
+  // holds a status and an emailMessage
+  changeEmailMessage(payload, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .put(backendUrl + `/api/message`, payload)
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
 };
 
 export default RequestService;
