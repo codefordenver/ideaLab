@@ -72,7 +72,7 @@ public class ColorTypeControllerTest {
 
         // act
         String jsonString = mockMvc.perform(
-                MockMvcRequestBuilders.get("/colors")
+                MockMvcRequestBuilders.get("/api/colors/active")
                         .accept(MediaType.APPLICATION_JSON)
         )
         .andExpect(status().isAccepted())
@@ -91,7 +91,6 @@ public class ColorTypeControllerTest {
     @Test
     public void updateColorTypeStatusSuccess() throws Exception {
         ColorTypeUpdateRequest request = new ColorTypeUpdateRequest();
-        request.setEmployeeId(1);
         request.setAvailability(true);
 
         Integer colorId = 3;
@@ -105,7 +104,7 @@ public class ColorTypeControllerTest {
 
         when(operations.updateColorAvailability(colorId, request)).thenReturn(genericResponse);
 
-        String returnJson = mockMvc.perform(put("/colors/3/availability")
+        String returnJson = mockMvc.perform(put("/api/colors/3/availability")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(inputJson)
                 .accept(MediaType.APPLICATION_JSON))

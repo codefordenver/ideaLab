@@ -77,6 +77,14 @@ const RequestService = {
       .catch(catchCallback);
   },
 
+  changePassword(payload, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .post(backendUrl + '/users/password', payload)
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
   newPrintJob(payload, thenCallback, catchCallback) {
     const backendInstance = generateApiInstance();
     backendInstance
@@ -110,6 +118,14 @@ const RequestService = {
       .catch(catchCallback);
   },
 
+  getAllColors(thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .get(backendUrl + '/api/colors')
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
   updateUsers(payload, thenCallback, catchCallback) {
     const backendInstance = generateApiInstance();
     backendInstance
@@ -121,7 +137,7 @@ const RequestService = {
   getActiveColors(thenCallback, catchCallback) {
     const backendInstance = generateApiInstance();
     backendInstance
-      .get(backendUrl + '/colors')
+      .get(backendUrl + '/api/colors/active')
       .then(thenCallback)
       .catch(catchCallback);
   },
@@ -129,7 +145,16 @@ const RequestService = {
   getInactiveColors(thenCallback, catchCallback) {
     const backendInstance = generateApiInstance();
     backendInstance
-      .get(backendUrl + '/colors/inactive')
+      .get(backendUrl + '/api/colors/inactive')
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
+  putColorAvailability(payload, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    const color = payload['color'];
+    backendInstance
+      .put(backendUrl + `/api/colors/${color}/availability`, payload.body)
       .then(thenCallback)
       .catch(catchCallback);
   },

@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import './ProfileInfo.css';
+import Backdrop from '../../globalStyles/Backdrop/Backdrop';
+import ChangePasswordModal from './ChangePasswordModal/ChangePasswordModal';
 import StyledDropdown from '../../globalStyles/StyledDropdown';
 import RequestService from '../../../util/RequestService';
 
 const UserProfilesContainer = props => {
+  const [passwordChange, setPasswordChange] = useState(false);
+
   const { name, role } = props.userData;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -11,8 +15,12 @@ const UserProfilesContainer = props => {
 
   const titleOptions = ['ADMIN', 'STAFF'];
 
+  const triggerDelete = () => {
+    alert(`Are you sure you want to delete this profile? ${name}`);
+  };
+
   const triggerPasswordChange = () => {
-    window.confirm(`Are you sure you want to change your password? ${name}`);
+    setPasswordChange(!passwordChange);
   };
 
   const updateUserRole = newRole => {
@@ -36,6 +44,16 @@ const UserProfilesContainer = props => {
     setLoading(false);
   };
 
+  const changeModal = (
+    <Backdrop passwordChange={passwordChange}>
+      <ChangePasswordModal
+        username={name}
+        passwordChange={passwordChange}
+        triggerPasswordChange={triggerPasswordChange}
+      />
+    </Backdrop>
+  );
+
   return (
     <div style={{ backgroundColor: props.color }} className="infoContainer">
       <div className="employeeNameDisplay">{name}</div>
@@ -55,6 +73,11 @@ const UserProfilesContainer = props => {
       <button className="changePasswordButton" onClick={triggerPasswordChange}>
         Change Password
       </button>
+      <button className="deleteUserButton" onClick={triggerDelete}>
+        Delete
+      </button>
+
+      {changeModal}
     </div>
   );
 };

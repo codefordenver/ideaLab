@@ -20,6 +20,23 @@ public class ColorTypeOperations {
         this.colorTypeRepo = colorTypeRepo;
     }
 
+    public DataResponse<ColorType> getAllColors() {
+        DataResponse<ColorType> response = new DataResponse<ColorType>("Could not get color list");
+
+        List<ColorType> colors = colorTypeRepo.findAllByOrderByIdAsc();
+
+        if (colors == null || colors.isEmpty()){
+            ErrorType.COLOR_CANT_FIND_BY_TYPE.throwException();
+        }
+
+        response.setSuccess(true);
+        response.setMessage("Succesfully returned all available colors");
+        response.setData(colors);
+        response.setHttpStatus(HttpStatus.ACCEPTED);
+
+        return response;
+    }
+
     public DataResponse<ColorType> getActiveColors() {
         DataResponse<ColorType> response = new DataResponse<ColorType>("Could not get color list");
 
@@ -58,7 +75,8 @@ public class ColorTypeOperations {
         colorTypeRepo.save(color);
 
         response.setSuccess(true);
-        response.setMessage("Color availability updated");
+        response.setMessage("Color availability updated " + color.toString());
+        response.setHttpStatus(HttpStatus.ACCEPTED);
 
         return response;
     }
