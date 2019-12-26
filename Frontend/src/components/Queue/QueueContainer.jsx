@@ -1,15 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import RequestService from '../../util/RequestService';
+import React, { useEffect, useState } from 'react';
 import AuthContext from '../../AuthContext';
-import './QueueContainer.css';
-import Queue from './components/Queue';
 import { processActiveColors } from '../../util/ColorUtils';
+import RequestService from '../../util/RequestService';
+import Queue from './components/Queue';
+import Backdrop from '../globalStyles/Backdrop/Backdrop';
+import SendEmailModal from './components/SendEmailModal';
+import { ToastProvider, useToasts } from 'react-toast-notifications';
+import './QueueContainer.css';
 
 const QueueContainer = () => {
   const [loading, setLoading] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
   const [statusView, setStatusView] = useState('PENDING_REVIEW');
   const [colors, setColors] = useState();
+  const [showSendEmailModal, setShowSendEmailModal] = useState(false);
+  const [updatedCard, setUpdatedCard] = useState('');
+
+  const { addToast } = useToasts();
 
   useEffect(() => {
     setLoading(true);
@@ -52,15 +59,50 @@ const QueueContainer = () => {
     if (cardStatus !== statusView) {
       setStatusView(returnCardStatus(cardStatus));
     }
+
+    addToast('The card updated successfully.', {
+      appearance: 'success',
+      autoDismiss: true,
+    });
   };
 
   const onFailure = error => {
     console.log('ERROR SAVING CARD:', error);
+    addToast('The card did not update successfully.', {
+      appearance: 'warning',
+      autoDismiss: true,
+    });
+  };
+
+  const triggerShowSendEmailModal = () => {
+    setShowSendEmailModal(!showSendEmailModal);
+  };
+
+  const updateCardData = updatedCard => {
+    RequestService.saveCard(updatedCard, onSaveCardSuccess, onFailure);
   };
 
   const saveCard = updatedCard => {
-    RequestService.saveCard(updatedCard, onSaveCardSuccess, onFailure);
+    setUpdatedCard(updatedCard);
+    if (updatedCard.status === 'FAILED') {
+      setShowSendEmailModal(true);
+    } else {
+      updateCardData(updatedCard);
+    }
   };
+
+  const sendEmailModal = (
+    <ToastProvider>
+      <Backdrop showModal={showSendEmailModal}>
+        <SendEmailModal
+          updatedCard={updatedCard}
+          setShowSendEmailModal={triggerShowSendEmailModal}
+          showModal={showSendEmailModal}
+          updateStatus={updateCardData}
+        />
+      </Backdrop>
+    </ToastProvider>
+  );
 
   const fetchQueueData = () => {
     //TO DO: GET PRINT JOBS BASED ON STATUS, NOT ALL AT ONCE
@@ -92,22 +134,27 @@ const QueueContainer = () => {
   };
 
   return (
-    <AuthContext.Consumer>
-      {context => {
-        return (
-          <Queue
-            loading={loading}
-            statusView={statusView}
-            setStatus={setStatus}
-            filteredData={filteredData}
-            colors={colors}
-            saveCard={saveCard}
-            employeeId={context.employeeId}
-          />
-        );
-      }}
-    </AuthContext.Consumer>
+    <div>
+      <AuthContext.Consumer>
+        {context => {
+          return (
+            <Queue
+              loading={loading}
+              statusView={statusView}
+              setStatus={setStatus}
+              filteredData={filteredData}
+              colors={colors}
+              saveCard={saveCard}
+              employeeId={context.employeeId}
+            />
+          );
+        }}
+      </AuthContext.Consumer>
+      {sendEmailModal}
+    </div>
   );
 };
+
+//
 
 export default QueueContainer;

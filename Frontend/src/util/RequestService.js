@@ -180,6 +180,20 @@ const RequestService = {
       .then(thenCallback)
       .catch(catchCallback);
   },
+
+  // This sends an email for a print job status change
+  sendStatusChangeEmail(payload, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    const body = {
+      subject: '3D Print Job Status Change',
+      message: payload.message,
+      email: payload.email,
+    };
+    backendInstance
+      .post(backendUrl + '/api/mail', body)
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
 };
 
 export default RequestService;

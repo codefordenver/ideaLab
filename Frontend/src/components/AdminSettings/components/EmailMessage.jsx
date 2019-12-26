@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FiSave } from 'react-icons/fi';
-import { ToastProvider, useToasts } from 'react-toast-notifications';
+import { useToasts } from 'react-toast-notifications';
 import RequestService from '../../../util/RequestService';
 import './EmailMessage.css';
 
@@ -22,7 +22,6 @@ const EmailMessage = props => {
 
   const getEmailMessageSuccess = data => {
     setMessage(data.data.data.emailMessage);
-    console.log('Going through get email again');
     setUpdatedMessage(data.data.data.emailMessage);
   };
 

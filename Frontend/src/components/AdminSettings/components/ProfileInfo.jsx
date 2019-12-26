@@ -45,7 +45,7 @@ const UserProfilesContainer = props => {
   };
 
   const changeModal = (
-    <Backdrop passwordChange={passwordChange}>
+    <Backdrop showModal={passwordChange}>
       <ChangePasswordModal
         username={name}
         passwordChange={passwordChange}

@@ -3,7 +3,7 @@ import './AdminSettings.css';
 import ColorAvailability from './components/ColorAvailability';
 import EmailMessage from './components/EmailMessage';
 
-import { ToastProvider, useToasts } from 'react-toast-notifications';
+import { ToastProvider } from 'react-toast-notifications';
 
 const AdminSettings = () => {
   return (
