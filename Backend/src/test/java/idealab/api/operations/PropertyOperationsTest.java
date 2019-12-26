@@ -18,12 +18,12 @@ public class PropertyOperationsTest {
 
     @Before
     public void before() {
-        propertyOperations = new PropertyOperations(filePath);
+        propertyOperations = new PropertyOperations();
     }
 
     @Test
     public void updateDropboxToken() throws Exception {
-        propertyOperations.testUpdateDropboxToken("RANDOM", "dropbox.ACCESS_TOKEN", filePath);
+        propertyOperations.testUpdateDropboxToken("RANDOM", "dropbox.ACCESS_TOKEN");
     }
 
 }
