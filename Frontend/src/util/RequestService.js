@@ -158,6 +158,22 @@ const RequestService = {
       .then(thenCallback)
       .catch(catchCallback);
   },
+
+  updateEmailInfo(payload, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .post(backendUrl + '/api/mail/info', payload)
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
+  updateDropboxTokenInfo(payload, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .post(backendUrl + '/api/dropbox/token', payload)
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
 };
 
 export default RequestService;
