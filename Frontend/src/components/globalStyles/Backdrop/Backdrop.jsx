@@ -4,16 +4,16 @@ import './Backdrop.css';
 
 const Backdrop = props => {
   return (
-    <div 
+    <div
       className="Backdrop"
       style={{
-        opacity: props.passwordChange ? '1' : '0',
-        zIndex: props.passwordChange ? '100' : '-1'
+        opacity: props.showModal ? '1' : '0',
+        zIndex: props.showModal ? '100' : '-1',
       }}
     >
-      { props.children }   
+      {props.children}
     </div>
-  )
-}
+  );
+};
 
 export default Backdrop;

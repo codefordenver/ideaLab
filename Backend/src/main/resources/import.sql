@@ -42,8 +42,8 @@ INSERT INTO queue ("rank", fk_print_job_id, created_at, updated_at) VALUES
 (3,2, current_timestamp, current_timestamp);
 
  INSERT INTO email_message (email_message, created_at, updated_at, status) VALUES
- ('An old message', current_timestamp, current_timestamp, 'PRINTING'), 
- ('An old message', current_timestamp, current_timestamp, 'PENDING_REVIEW');
+ ('An old message', current_timestamp, current_timestamp, 'FAILED'), 
+ ('An old message', current_timestamp, current_timestamp, 'COMPLETED');
 
 /*
  INSERT INTO revinfo (rev, revtstmp) VALUES
