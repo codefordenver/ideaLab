@@ -194,6 +194,14 @@ const RequestService = {
       .then(thenCallback)
       .catch(catchCallback);
   },
+
+  getGraphDataByColors(thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .get(backendUrl + '/api/audit/print-jobs/year-colors')
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
 };
 
 export default RequestService;

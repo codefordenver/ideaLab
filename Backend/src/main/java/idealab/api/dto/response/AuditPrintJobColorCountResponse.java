@@ -1,19 +1,16 @@
 package idealab.api.dto.response;
 
-import idealab.api.dto.helper.PrintJobColorCount;
-
-import java.util.List;
 import java.util.Map;
 
 public class AuditPrintJobColorCountResponse extends GenericResponse {
 
-    private Map<String, List<PrintJobColorCount>> data;
+    private Map<String, Map<String,Integer>> data;
 
-    public Map<String, List<PrintJobColorCount>> getData() {
+    public Map<String, Map<String,Integer>> getData() {
         return data;
     }
 
-    public void setData(Map<String, List<PrintJobColorCount>> data) {
+    public void setData(Map<String, Map<String,Integer>> data) {
         this.data = data;
     }
 

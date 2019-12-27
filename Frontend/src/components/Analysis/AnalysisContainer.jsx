@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-// import RequestService from '../../util/RequestService';
+import RequestService from '../../util/RequestService';
 import AuthContext from '../../AuthContext';
 import './AnalysisContainer.css';
 import AnalysisGraph from './components/AnalysisGraph';
@@ -8,16 +8,18 @@ const AnalysisContainer = () => {
   const [loading, setLoading] = useState(false);
   const [graphData, setGraphData] = useState([]);
   const sampleGraphData = require('./sampleGraphData.json');
+
   useEffect(() => {
     setLoading(true);
-    // RequestService.getGraphData(
-    //   response => {
-    //     setGraphData(response.data);
-    //     setLoading(false);
-    //   },
-    //   error => console.error(error),
-    // );
-    setGraphData(sampleGraphData);
+    RequestService.getGraphDataByColors(
+      response => {
+        console.log(response.data.data);
+        setGraphData(response.data.data);
+        setLoading(false);
+      },
+      error => console.error('Error loading graph data: ' + error),
+    );
+    //setGraphData(sampleGraphData);
     setLoading(false);
   }, []);
 
