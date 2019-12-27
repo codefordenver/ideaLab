@@ -11,8 +11,6 @@ import SidebarNavigation from './SidebarNavigation';
 import PrivateRoute from './components/Routing/PrivateRoute';
 import { ToastProvider } from 'react-toast-notifications';
 
-import { ToastProvider } from 'react-toast-notifications';
-
 import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 import RequestService from './util/RequestService';
 import TokenParser from './util/TokenParser';
