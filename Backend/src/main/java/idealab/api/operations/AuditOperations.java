@@ -1,5 +1,6 @@
 package idealab.api.operations;
 
+import idealab.api.dto.helper.PrintJobColorCount;
 import idealab.api.dto.response.AuditPrintJobColorCountResponse;
 import idealab.api.dto.response.PrintJobAuditModel;
 import idealab.api.dto.response.PrintJobAuditResponse;
@@ -75,57 +76,30 @@ public class AuditOperations {
                 List<PrintJobColorCount> counter = data.get(month);
                 boolean isFound = false;
                 for(PrintJobColorCount count : counter) {
-                    if(count.color.equalsIgnoreCase(a.getColor())) {
-                        count.count += 1;
+                    if(count.getColor().equalsIgnoreCase(a.getColor())) {
+                        int sum = count.getCount();
+                        sum++;
+                        count.setCount(sum);
                         isFound = true;
                         break;
                     }
                 }
                 if(!isFound) {
                     PrintJobColorCount count = new PrintJobColorCount();
-                    count.color = a.getColor();
-                    count.count = 1;
+                    count.setColor(a.getColor());
+                    count.setCount(1);
                     counter.add(count);
                 }
                 data.put(month, counter);
             } else {
                 List<PrintJobColorCount> counter = new ArrayList<>();
                 PrintJobColorCount count = new PrintJobColorCount();
-                count.color = a.getColor();
-                count.count = 1;
+                count.setColor(a.getColor());
+                count.setCount(1);
                 counter.add(count);
                 data.put(month, counter);
             }
         });
         return data;
-    }
-
-    public class PrintJobColorCount {
-        private String color;
-        private Integer count;
-
-        public String getColor() {
-            return color;
-        }
-
-        public void setColor(String color) {
-            this.color = color;
-        }
-
-        public Integer getCount() {
-            return count;
-        }
-
-        public void setCount(Integer count) {
-            this.count = count;
-        }
-
-        @Override
-        public String toString() {
-            return "PrintJobColorCount{" +
-                    "color='" + color + '\'' +
-                    ", count=" + count +
-                    '}';
-        }
     }
 }
