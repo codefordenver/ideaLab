@@ -6,8 +6,8 @@ const StatusDropdown = ({ currentStatus, statusChanged, id }) => {
       <select name="status" defaultValue={currentStatus}>
         <option value="PENDING_REVIEW">Queueing</option>
         <option value="PRINTING">Printing</option>
-        <option value="FAILED">Failed</option>
         <option value="COMPLETED">Complete</option>
+        <option value="FAILED">Failed</option>
       </select>
     </form>
   );

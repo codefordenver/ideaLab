@@ -19,7 +19,7 @@ const QueueContainer = () => {
   }, []);
 
   const returnCardStatus = cardStatus => {
-    const failedStatuses = ['FAILED', 'REJECTED', 'COMPLETED', 'ARCHIVED'];
+    const failedStatuses = ['REJECTED', 'COMPLETED', 'ARCHIVED'];
     const waitingStatuses = ['PENDING_CUSTOMER_RESPONSE', 'PENDING_REVIEW'];
     if (cardStatus === 'FAILED') {
       return 'FAILED';
@@ -34,10 +34,6 @@ const QueueContainer = () => {
 
   const onSaveCardSuccess = response => {
     const cardStatus = response.data.data[0].status;
-
-    // MY CONSOLE LOGS
-    console.log('statusView: ', statusView);
-    console.log('cardStatus: ', cardStatus);
 
     if (cardStatus !== statusView) {
       setStatusView(returnCardStatus(cardStatus));
