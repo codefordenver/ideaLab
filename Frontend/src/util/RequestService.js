@@ -159,6 +159,14 @@ const RequestService = {
       .catch(catchCallback);
   },
 
+  updateEmailInfo(payload, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .post(backendUrl + '/api/mail/info', payload)
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
   // This gets the email message from the backend based on a status sent in
   getEmailMessage(type, thenCallback, catchCallback) {
     const backendInstance = generateApiInstance();
@@ -167,6 +175,14 @@ const RequestService = {
     };
     backendInstance
       .get(backendUrl + '/api/message', { params: param })
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
+  updateDropboxTokenInfo(payload, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .post(backendUrl + '/api/dropbox/token', payload)
       .then(thenCallback)
       .catch(catchCallback);
   },
