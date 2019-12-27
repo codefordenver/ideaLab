@@ -1,5 +1,6 @@
 package idealab.api.controller;
 
+import idealab.api.dto.response.AuditPrintJobColorCountResponse;
 import idealab.api.dto.response.PrintJobAuditResponse;
 import idealab.api.operations.AuditOperations;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class AuditController {
 
     @GetMapping("/print-jobs/year-colors")
     public ResponseEntity<?> getPrintJobAuditGroupedByColorForPassedYear() {
-        PrintJobAuditResponse response = auditOperations.printJobAuditColorsYearly();
+        AuditPrintJobColorCountResponse response = auditOperations.printJobAuditColorsYearly();
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
