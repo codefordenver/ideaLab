@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@PropertySource("classpath:dropbox.properties")
+@PropertySource("classpath:application.properties")
 public class DropboxConfiguration {
 
     @Value("${dropbox.ACCESS_TOKEN}")

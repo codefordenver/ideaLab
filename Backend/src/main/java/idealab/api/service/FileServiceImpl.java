@@ -96,7 +96,7 @@ public class FileServiceImpl implements FileService {
       in.close();
     }
     catch(Exception ex){
-      throw new IdeaLabApiException(DROPBOX_UPLOAD_FILE_ERROR);
+      throw new IdeaLabApiException(DROPBOX_UPLOAD_FILE_ERROR, "Error loading file: " + ex);
     }
 
     return data;
