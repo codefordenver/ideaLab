@@ -10,6 +10,8 @@ import AnalysisContainer from './components/Analysis/AnalysisContainer';
 import SidebarNavigation from './SidebarNavigation';
 import PrivateRoute from './components/Routing/PrivateRoute';
 
+import { ToastProvider } from 'react-toast-notifications';
+
 import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 import RequestService from './util/RequestService';
 import TokenParser from './util/TokenParser';
@@ -44,6 +46,14 @@ function App() {
     }
   }, []);
 
+  const queueContainer = () => {
+    return (
+      <ToastProvider>
+        <QueueContainer />
+      </ToastProvider>
+    );
+  };
+
   return (
     <div className="App grid-container">
       <AuthContext.Provider
@@ -63,7 +73,7 @@ function App() {
             }}
           />
           <Switch>
-            <PrivateRoute exact path="/queue" component={QueueContainer} />
+            <PrivateRoute exact path="/queue" component={queueContainer} />
             <PrivateRoute
               exact
               path="/manageaccounts"

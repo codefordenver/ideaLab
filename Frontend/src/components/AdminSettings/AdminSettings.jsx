@@ -1,9 +1,10 @@
 import React from 'react';
+import { ToastProvider } from 'react-toast-notifications';
 import './AdminSettings.css';
 import ColorAvailability from './components/ColorAvailability';
+import EmailMessage from './components/EmailMessage';
 import UpdateEmail from './components/UpdateEmail';
 import UpdateFileToken from './components/UpdateFileToken';
-import { ToastProvider } from 'react-toast-notifications';
 
 const AdminSettings = () => {
   return (
@@ -15,9 +16,14 @@ const AdminSettings = () => {
         </div>
       </div>
       <div className="sectionContainer">
-        <div className="adminSettingsSectionHeader">Current Locations</div>
-        <div className="currentLocationsContainer">
-          <div className="adminSettingsButton">Add Location</div>
+        <div className="adminSettingsSectionHeader">Email Messages</div>
+        <div className="emailMessageContainer">
+          <ToastProvider>
+            <EmailMessage status="FAILED" />
+          </ToastProvider>
+          <ToastProvider>
+            <EmailMessage status="COMPLETED" />
+          </ToastProvider>
         </div>
       </div>
       <div className="sectionContainer">
