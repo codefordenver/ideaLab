@@ -1,16 +1,5 @@
 package idealab.api.operations;
 
-import idealab.api.dto.helper.PrintJobColorCount;
-import idealab.api.dto.response.AuditPrintJobColorCountResponse;
-import idealab.api.dto.response.PrintJobAuditModel;
-import idealab.api.dto.response.PrintJobAuditResponse;
-import idealab.api.model.Status;
-import idealab.api.service.AuditService;
-import org.hibernate.envers.query.AuditEntity;
-import org.hibernate.envers.query.AuditQuery;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,6 +8,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.AuditQuery;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
+import idealab.api.dto.helper.PrintJobColorCount;
+import idealab.api.dto.response.AuditPrintJobColorCountResponse;
+import idealab.api.dto.response.PrintJobAuditModel;
+import idealab.api.dto.response.PrintJobAuditResponse;
+import idealab.api.model.Status;
+import idealab.api.service.AuditService;
 
 @Service
 public class AuditOperations {
@@ -58,7 +59,7 @@ public class AuditOperations {
         query.add(AuditEntity.revisionProperty("timestamp").ge(longDate));
 
         List<PrintJobAuditModel> auditList = auditService.processPrintJobAuditQuery(query);
-        Map<Integer, List<PrintJobColorCount>> data = groupPrintJobsByColorAndMonth(auditList);
+        Map<String, List<PrintJobColorCount>> data = groupPrintJobsByColorAndMonth(auditList);
         AuditPrintJobColorCountResponse response = new AuditPrintJobColorCountResponse();
         response.setData(data);
         response.setSuccess(true);
@@ -67,11 +68,11 @@ public class AuditOperations {
         return response;
     }
 
-    private Map<Integer, List<PrintJobColorCount>> groupPrintJobsByColorAndMonth(List<PrintJobAuditModel> auditList) {
-        Map<Integer, List<PrintJobColorCount>> data = new HashMap<>();
+    private Map<String, List<PrintJobColorCount>> groupPrintJobsByColorAndMonth(List<PrintJobAuditModel> auditList) {
+        Map<String, List<PrintJobColorCount>> data = new HashMap<>();
         auditList.forEach(a -> {
             LocalDate localDate = a.getRevisionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            Integer month = localDate.getMonth().getValue();
+            String month = localDate.getMonth().toString() + " " + localDate.getYear();
             if(data.containsKey(month)) {
                 List<PrintJobColorCount> counter = data.get(month);
                 boolean isFound = false;

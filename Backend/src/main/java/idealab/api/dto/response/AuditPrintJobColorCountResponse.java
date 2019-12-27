@@ -7,13 +7,13 @@ import java.util.Map;
 
 public class AuditPrintJobColorCountResponse extends GenericResponse {
 
-    private Map<Integer, List<PrintJobColorCount>> data;
+    private Map<String, List<PrintJobColorCount>> data;
 
-    public Map<Integer, List<PrintJobColorCount>> getData() {
+    public Map<String, List<PrintJobColorCount>> getData() {
         return data;
     }
 
-    public void setData(Map<Integer, List<PrintJobColorCount>> data) {
+    public void setData(Map<String, List<PrintJobColorCount>> data) {
         this.data = data;
     }
 
