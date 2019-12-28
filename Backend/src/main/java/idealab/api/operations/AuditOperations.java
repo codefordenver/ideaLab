@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +13,6 @@ import org.hibernate.envers.query.AuditQuery;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import idealab.api.dto.helper.PrintJobColorCount;
 import idealab.api.dto.response.AuditPrintJobColorCountResponse;
 import idealab.api.dto.response.PrintJobAuditModel;
 import idealab.api.dto.response.PrintJobAuditResponse;
@@ -59,7 +57,7 @@ public class AuditOperations {
         query.add(AuditEntity.revisionProperty("timestamp").ge(longDate));
 
         List<PrintJobAuditModel> auditList = auditService.processPrintJobAuditQuery(query);
-        Map<String, List<PrintJobColorCount>> data = groupPrintJobsByColorAndMonth(auditList);
+        Map<String, Map<String,Integer>> data = groupPrintJobsByColorAndMonth(auditList);
         AuditPrintJobColorCountResponse response = new AuditPrintJobColorCountResponse();
         response.setData(data);
         response.setSuccess(true);
@@ -68,36 +66,23 @@ public class AuditOperations {
         return response;
     }
 
-    private Map<String, List<PrintJobColorCount>> groupPrintJobsByColorAndMonth(List<PrintJobAuditModel> auditList) {
-        Map<String, List<PrintJobColorCount>> data = new HashMap<>();
+    private Map<String, Map<String,Integer>> groupPrintJobsByColorAndMonth(List<PrintJobAuditModel> auditList) {
+        Map<String, Map<String,Integer>> data = new HashMap<>();
         auditList.forEach(a -> {
             LocalDate localDate = a.getRevisionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             String month = localDate.getMonth().toString() + " " + localDate.getYear();
             if(data.containsKey(month)) {
-                List<PrintJobColorCount> counter = data.get(month);
-                boolean isFound = false;
-                for(PrintJobColorCount count : counter) {
-                    if(count.getColor().equalsIgnoreCase(a.getColor())) {
-                        int sum = count.getCount();
-                        sum++;
-                        count.setCount(sum);
-                        isFound = true;
-                        break;
-                    }
+                Map<String,Integer> counter = data.get(month);
+                if(counter.containsKey(a.getColor())) {
+                    counter.replace(a.getColor(), counter.get(a.getColor()) + 1);
+                    data.replace(month, counter);
+                } else {
+                    counter.put(a.getColor(), 1);
+                    data.put(month, counter);
                 }
-                if(!isFound) {
-                    PrintJobColorCount count = new PrintJobColorCount();
-                    count.setColor(a.getColor());
-                    count.setCount(1);
-                    counter.add(count);
-                }
-                data.put(month, counter);
             } else {
-                List<PrintJobColorCount> counter = new ArrayList<>();
-                PrintJobColorCount count = new PrintJobColorCount();
-                count.setColor(a.getColor());
-                count.setCount(1);
-                counter.add(count);
+                Map<String,Integer> counter = new HashMap<>();
+                counter.put(a.getColor(), 1);
                 data.put(month, counter);
             }
         });
