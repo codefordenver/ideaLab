@@ -15,10 +15,6 @@ const UserProfilesContainer = props => {
 
   const titleOptions = ['ADMIN', 'STAFF'];
 
-  const triggerDelete = () => {
-    alert(`Are you sure you want to delete this profile? ${name}`);
-  };
-
   const triggerPasswordChange = () => {
     setPasswordChange(!passwordChange);
   };
@@ -73,10 +69,6 @@ const UserProfilesContainer = props => {
       <button className="changePasswordButton" onClick={triggerPasswordChange}>
         Change Password
       </button>
-      <button className="deleteUserButton" onClick={triggerDelete}>
-        Delete
-      </button>
-
       {changeModal}
     </div>
   );

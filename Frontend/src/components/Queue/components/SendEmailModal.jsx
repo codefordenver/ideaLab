@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import RequestService from '../../../util/RequestService';
 import { useToasts } from 'react-toast-notifications';
 
