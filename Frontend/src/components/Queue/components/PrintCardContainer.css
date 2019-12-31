@@ -53,9 +53,10 @@
 }
 
 .commentSection {
+  border: 2px solid black;
   width: 41%;
   height: 100%;
-  border-radius: 5px;
+  border-radius: 10px;
 }
 
 .printAdditionalInfo {
