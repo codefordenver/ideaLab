@@ -67,11 +67,14 @@ const PrintCardContainer = props => {
         card.colorType.color !== updatedData.colorType.color
       ) {
         updatedSavedCard[key] = updatedData[key];
+      } else if (key === 'status') {
+        updatedSavedCard.status = updatedData.status;
       } else if (
-        key !== 'colorType' &&
-        (card[key] && card[key] !== updatedData[key])
+        key === 'comments' &&
+        card.comments &&
+        card.comments !== updatedData.comments
       ) {
-        updatedSavedCard[key] = updatedData[key];
+        updatedSavedCard.comments = updatedData.comments;
       }
     }
     saveCard(updatedSavedCard);
