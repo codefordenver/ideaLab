@@ -2,29 +2,14 @@
   font-family: 'Montserrat', sans-serif;
 }
 
-.container {
+.create-account-container {
   width: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
-
-.card {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 30%;
-}
-
-h1 {
-  margin-top: 3em;
-}
-
-.container input {
-  background-color: #00aeef;
-  border-color: #00aeef;
+  height: 100%;
+  margin-bottom: 2em;
 }
 
 .container > button {

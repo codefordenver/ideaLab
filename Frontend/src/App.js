@@ -5,7 +5,7 @@ import QueueContainer from './components/Queue/QueueContainer';
 import UploadContainer from './components/Upload/UploadContainer';
 import LoginManager from './components/Login/LoginManager';
 import AdminContainer from './components/AdminSettings/AdminContainer';
-import CreateAccountManager from './components/AdminSettings/CreateAccountManager';
+import CreateAccountManager from './components/CreateAccount/CreateAccountManager';
 import AnalysisContainer from './components/Analysis/AnalysisContainer';
 import SidebarNavigation from './SidebarNavigation';
 import PrivateRoute from './components/Routing/PrivateRoute';

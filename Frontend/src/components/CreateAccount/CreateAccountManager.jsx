@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import RequestService from '../../util/RequestService';
 import './CreateAccountManager.css';
 
-import ideaLABlogo from './../../ideaLABlogo.png';
+import ideaLABlogo from '../globalStyles/img/ideaLabLogo.png';
 
 const CreateAccountManager = () => {
   const [role, setRole] = useState('STAFF');
@@ -14,7 +14,6 @@ const CreateAccountManager = () => {
   const [errors, setErrors] = useState({});
 
   function onSuccess(response) {
-    // Maybe display the modal or some kind of redirect?
     console.log(response.data.message);
   }
 
@@ -37,30 +36,42 @@ const CreateAccountManager = () => {
     RequestService.signUp(payload, onSuccess, onFailure);
   };
 
-  function renderErrors() {
-    const errorMessages = [
-      'role',
-      'firstName',
-      'lastName',
-      'username',
-      'email',
-      'password',
-    ].map(field => {
-      if (errors[field]) {
-        return <p>{field + ' ' + errors[field]}</p>;
-      } else {
-        return null;
-      }
-    });
-    return errorMessages;
-  }
+  const renderErrors = () => {
+    return null;
+  };
+
+  const renderSuccessMessage = () => {
+    return null;
+  };
+
+  // function renderErrors() {
+  //   const errorMessages = [
+  //     'role',
+  //     'firstName',
+  //     'lastName',
+  //     'username',
+  //     'email',
+  //     'password',
+  //   ].map(field => {
+  //     if (errors[field]) {
+  //       return <p>{field + ' ' + errors[field]}</p>;
+  //     } else {
+  //       return null;
+  //     }
+  //   });
+  //   return errorMessages;
+  // }
 
   return (
-    <div className="container">
-      <div className="card">
+    <div className="create-account-container">
+      <div className="create-account-col-one">
         <img src={ideaLABlogo} alt="ideaLABLogo" />
         <h1>3D Printing and Upload Queue</h1>
         <h2>Create an Account</h2>
+        {renderErrors()}
+        {renderSuccessMessage()}
+      </div>
+      <div className="create-account-col-two">
         <form onSubmit={e => onSubmit(e)}>
           <input
             name="email"
@@ -123,7 +134,6 @@ const CreateAccountManager = () => {
               Admin
             </label>
           </div>
-          {renderErrors()}
           <button type="submit">Create Account</button>
         </form>
       </div>

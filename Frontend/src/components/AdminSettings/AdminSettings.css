@@ -33,10 +33,6 @@
   margin: 0 2em 1em 0;
 }
 
-#FFFFFF {
-  color: black;
-}
-
 .color-ex:hover {
   cursor: pointer;
 }
@@ -100,12 +96,12 @@ input::placeholder {
   cursor: pointer;
 }
 
-.ideaLabLogo {
-  width: 600px;
+.adminContainer .ideaLabLogo {
+  width: 300px;
   margin-top: 25px;
 }
 
 .adminContainer .statusMenu {
   margin-top: 20px;
-  margin-left: 40px;
+  margin-left: 7px;
 }
