@@ -11,16 +11,7 @@ import static idealab.api.exception.ErrorType.VALIDATION_ERROR;
  */
 public class ColorTypeUpdateRequest implements GenericRequest {
 
-    private Integer employeeId;
     private Boolean availability;
-
-    public Integer getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(Integer employeeId) {
-        this.employeeId = employeeId;
-    }
 
     public Boolean getAvailability() {
         return availability;
@@ -37,22 +28,18 @@ public class ColorTypeUpdateRequest implements GenericRequest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ColorTypeUpdateRequest that = (ColorTypeUpdateRequest) o;
-        return Objects.equals(employeeId, that.employeeId) &&
-                Objects.equals(availability, that.availability);
+        return Objects.equals(availability, that.availability);
     }
 
     @Override
     public String toString() {
         return "PrintJobUpdateRequest{" +
-                "employeeId=" + employeeId +
                 ", availability='" + availability + '\'' +
                 '}';
     }
 
     @Override
     public void validate() {
-        if(this.employeeId == null || this.employeeId < 0)
-            throw new IdeaLabApiException(VALIDATION_ERROR, "Employee Id is invalid");
         if(this.availability == null)
             throw new IdeaLabApiException(VALIDATION_ERROR, "Availability cannot be empty");
     }

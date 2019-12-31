@@ -2,7 +2,13 @@ import React from 'react';
 import AuthContext from './AuthContext';
 import './App.css';
 import { NavLink } from 'react-router-dom';
-import { FiUpload, FiUserPlus, FiList, FiLogOut } from 'react-icons/fi';
+import {
+  FiUpload,
+  FiUserPlus,
+  FiList,
+  FiLogOut,
+  FiLayers,
+} from 'react-icons/fi';
 
 class SidebarNavigation extends React.Component {
   render() {
@@ -23,6 +29,13 @@ class SidebarNavigation extends React.Component {
                   <NavLink to="/queue" activeClassName={'selected'}>
                     <div className="sidebarIcon" title="Queue">
                       <FiList />
+                    </div>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/analysis" activeClassName={'selected'}>
+                    <div className="sidebarIcon" title="Analysis">
+                      <FiLayers />
                     </div>
                   </NavLink>
                 </li>

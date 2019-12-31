@@ -77,6 +77,14 @@ const RequestService = {
       .catch(catchCallback);
   },
 
+  changePassword(payload, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .post(backendUrl + '/users/password', payload)
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
   newPrintJob(payload, thenCallback, catchCallback) {
     const backendInstance = generateApiInstance();
     backendInstance
@@ -110,6 +118,14 @@ const RequestService = {
       .catch(catchCallback);
   },
 
+  getAllColors(thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .get(backendUrl + '/api/colors')
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
   updateUsers(payload, thenCallback, catchCallback) {
     const backendInstance = generateApiInstance();
     backendInstance
@@ -121,7 +137,7 @@ const RequestService = {
   getActiveColors(thenCallback, catchCallback) {
     const backendInstance = generateApiInstance();
     backendInstance
-      .get(backendUrl + '/colors')
+      .get(backendUrl + '/api/colors/active')
       .then(thenCallback)
       .catch(catchCallback);
   },
@@ -129,7 +145,76 @@ const RequestService = {
   getInactiveColors(thenCallback, catchCallback) {
     const backendInstance = generateApiInstance();
     backendInstance
-      .get(backendUrl + '/colors/inactive')
+      .get(backendUrl + '/api/colors/inactive')
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
+  putColorAvailability(payload, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    const color = payload['color'];
+    backendInstance
+      .put(backendUrl + `/api/colors/${color}/availability`, payload.body)
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
+  updateEmailInfo(payload, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .post(backendUrl + '/api/mail/info', payload)
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
+  // This gets the email message from the backend based on a status sent in
+  getEmailMessage(type, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    const param = {
+      status: type,
+    };
+    backendInstance
+      .get(backendUrl + '/api/message', { params: param })
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
+  updateDropboxTokenInfo(payload, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .post(backendUrl + '/api/dropbox/token', payload)
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
+  // This changes the email message on the backend. It expects a body that
+  // holds a status and an emailMessage
+  changeEmailMessage(payload, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .put(backendUrl + `/api/message`, payload)
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
+  // This sends an email for a print job status change
+  sendStatusChangeEmail(payload, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    const body = {
+      subject: '3D Print Job Status Change',
+      message: payload.message,
+      email: payload.email,
+    };
+    backendInstance
+      .post(backendUrl + '/api/mail', body)
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
+  getGraphDataByColors(thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    backendInstance
+      .get(backendUrl + '/api/audit/print-jobs/year-colors')
       .then(thenCallback)
       .catch(catchCallback);
   },

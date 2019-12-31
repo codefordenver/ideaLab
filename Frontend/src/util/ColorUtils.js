@@ -5,7 +5,6 @@ const processActiveColors = () => {
 
   RequestService.getActiveColors(
     response => {
-      console.log(response);
       const data = response.data.data;
       data.map(color => {
         colorList.push(color.color);

@@ -15,7 +15,7 @@ import idealab.api.model.ColorType;
 import idealab.api.operations.ColorTypeOperations;
 
 @RestController
-@RequestMapping("/colors")
+@RequestMapping("/api/colors")
 public class ColorTypeController {
 
     private ColorTypeOperations colorOperations;
@@ -24,9 +24,16 @@ public class ColorTypeController {
         this.colorOperations = colorOperations;
     }
 
-    @GetMapping
+    @GetMapping("/active")
     public ResponseEntity<?> getActiveColors() {
         DataResponse<ColorType> response = colorOperations.getActiveColors();
+
+        return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllColors() {
+        DataResponse<ColorType> response = colorOperations.getAllColors();
 
         return new ResponseEntity<>(response, response.getHttpStatus());
     }

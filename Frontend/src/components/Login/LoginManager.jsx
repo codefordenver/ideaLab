@@ -4,6 +4,7 @@ import RequestService from '../../util/RequestService';
 import AuthContext from '../../AuthContext';
 import TokenParser from '../../util/TokenParser';
 import './LoginManager.css';
+import { useToasts } from 'react-toast-notifications';
 
 import ideaLABlogo from '../globalStyles/img/ideaLabLogo.png';
 
@@ -11,6 +12,8 @@ const LoginManager = props => {
   const [errors, setErrors] = useState({});
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const { addToast } = useToasts();
 
   function thenCallback(callbacks) {
     return function actualCallback(response) {
@@ -27,8 +30,9 @@ const LoginManager = props => {
         });
       } else {
         callbacks.setState({ authenticated: false });
-        setErrors({
-          form: 'Unable to log in with the information provided',
+        addToast('Unable to login with the information provided.', {
+          appearance: 'warning',
+          autoDismiss: true,
         });
       }
     };
@@ -66,7 +70,6 @@ const LoginManager = props => {
                 onSubmit(e, callbacks);
               }}
             >
-              <span>{errors.form ? errors.form : null}</span>
               <BasicInput
                 name="username"
                 placeHolder="username"

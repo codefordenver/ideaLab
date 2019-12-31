@@ -13,6 +13,15 @@ public class GenericResponse {
     @JsonIgnore
     private HttpStatus httpStatus;
 
+    public GenericResponse() {
+    }
+
+    public GenericResponse(boolean isSuccess, String message, HttpStatus httpStatus) {
+        this.isSuccess = isSuccess;
+        this.message = message;
+        this.httpStatus = httpStatus;
+    }
+
     public boolean isSuccess() {
         return isSuccess;
     }

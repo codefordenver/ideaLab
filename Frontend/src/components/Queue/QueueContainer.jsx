@@ -1,15 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import RequestService from '../../util/RequestService';
+import React, { useEffect, useState } from 'react';
 import AuthContext from '../../AuthContext';
-import './QueueContainer.css';
-import Queue from './components/Queue';
 import { processActiveColors } from '../../util/ColorUtils';
+import RequestService from '../../util/RequestService';
+import Queue from './components/Queue';
+import Backdrop from '../globalStyles/Backdrop/Backdrop';
+import SendEmailModal from './components/SendEmailModal';
+import { ToastProvider, useToasts } from 'react-toast-notifications';
+import './QueueContainer.css';
 
 const QueueContainer = () => {
   const [loading, setLoading] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
   const [statusView, setStatusView] = useState('PENDING_REVIEW');
   const [colors, setColors] = useState();
+  const [showSendEmailModal, setShowSendEmailModal] = useState(false);
+  const [updatedCard, setUpdatedCard] = useState('');
+
+  const { addToast } = useToasts();
 
   useEffect(() => {
     setLoading(true);
@@ -17,6 +24,23 @@ const QueueContainer = () => {
     setColors(colorList);
     setLoading(false);
   }, []);
+
+  useEffect(() => {
+    //Load initial data and set the loading only on first load
+    setLoading(true);
+    fetchQueueData();
+    setLoading(false);
+
+    //Sets an interval to re-fetch data on an interval.
+    const interval = setInterval(() => {
+      fetchQueueData();
+
+      //Time is in milliseconds (1000*60*5 = 5 mins)
+    }, 1000 * 60 * 5);
+
+    //Clean up function should remove the interval on the component unmount
+    return () => clearInterval(interval);
+  }, [statusView]);
 
   const returnCardStatus = cardStatus => {
     const failedStatuses = ['REJECTED', 'COMPLETED', 'ARCHIVED'];
@@ -38,18 +62,52 @@ const QueueContainer = () => {
     if (cardStatus !== statusView) {
       setStatusView(returnCardStatus(cardStatus));
     }
+
+    addToast('The card updated successfully.', {
+      appearance: 'success',
+      autoDismiss: true,
+    });
   };
 
   const onFailure = error => {
     console.log('ERROR SAVING CARD:', error);
+    addToast('The card did not update successfully.', {
+      appearance: 'warning',
+      autoDismiss: true,
+    });
   };
 
-  const saveCard = updatedCard => {
+  const triggerShowSendEmailModal = () => {
+    setShowSendEmailModal(!showSendEmailModal);
+  };
+
+  const updateCardData = updatedCard => {
     RequestService.saveCard(updatedCard, onSaveCardSuccess, onFailure);
   };
 
-  useEffect(() => {
-    setLoading(true);
+  const saveCard = updatedCard => {
+    setUpdatedCard(updatedCard);
+    if (updatedCard.status === 'FAILED') {
+      setShowSendEmailModal(true);
+    } else {
+      updateCardData(updatedCard);
+    }
+  };
+
+  const sendEmailModal = (
+    <ToastProvider>
+      <Backdrop showModal={showSendEmailModal}>
+        <SendEmailModal
+          updatedCard={updatedCard}
+          setShowSendEmailModal={triggerShowSendEmailModal}
+          showModal={showSendEmailModal}
+          updateStatus={updateCardData}
+        />
+      </Backdrop>
+    </ToastProvider>
+  );
+
+  const fetchQueueData = () => {
     //TO DO: GET PRINT JOBS BASED ON STATUS, NOT ALL AT ONCE
     RequestService.getPrintJobs(
       response => {
@@ -77,33 +135,37 @@ const QueueContainer = () => {
           }
         });
         setFilteredData(activeCards);
-        setLoading(false);
       },
       error => console.error(error),
     );
-  }, [statusView]);
+  };
 
   const setStatus = view => {
     setStatusView(view);
   };
 
   return (
-    <AuthContext.Consumer>
-      {context => {
-        return (
-          <Queue
-            loading={loading}
-            statusView={statusView}
-            setStatus={setStatus}
-            filteredData={filteredData}
-            colors={colors}
-            saveCard={saveCard}
-            employeeId={context.employeeId}
-          />
-        );
-      }}
-    </AuthContext.Consumer>
+    <div>
+      <AuthContext.Consumer>
+        {context => {
+          return (
+            <Queue
+              loading={loading}
+              statusView={statusView}
+              setStatus={setStatus}
+              filteredData={filteredData}
+              colors={colors}
+              saveCard={saveCard}
+              employeeId={context.employeeId}
+            />
+          );
+        }}
+      </AuthContext.Consumer>
+      {sendEmailModal}
+    </div>
   );
 };
+
+//
 
 export default QueueContainer;

@@ -1,0 +1,17 @@
+.emailMessageIndividualContainer {
+  width: 97%;
+  display: flex;
+  flex-direction: row;
+}
+
+.emailStatusTitle {
+  font-weight: bold;
+}
+
+.emailMessageSaveIcon {
+  transform: scale(1.5);
+}
+
+.emailMessageSaveIcon:hover {
+  cursor: pointer;
+}
