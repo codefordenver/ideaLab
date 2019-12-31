@@ -1,10 +1,12 @@
-import React, { useState, Fragment } from 'react';
-import './PrintCardContainer.css';
-import StatusDropdown from './StatusDropdown';
-import PrintDateAdded from './PrintDateAdded';
+import React, { Fragment, useState } from 'react';
+import { FiMail, FiSave } from 'react-icons/fi';
+import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
 import ColorPickerContainer from './ColorPickerContainer';
-import { IoIosArrowDown, IoIosArrowBack } from 'react-icons/io';
-import { FiSave, FiMail } from 'react-icons/fi';
+import './PrintCardContainer.css';
+import PrintDateAdded from './PrintDateAdded';
+import StatusDropdown from './StatusDropdown';
+import Backdrop from '../../globalStyles/Backdrop/Backdrop';
+import SendEmailModal from './SendEmailModal';
 
 const PrintCardContainer = props => {
   const [isToggled, setIsToggled] = useState(false);
@@ -16,6 +18,7 @@ const PrintCardContainer = props => {
   });
   const [colors] = useState(props.colors);
   const [isSaveIconShowing, setSaveIconShowing] = useState(false);
+
   const { saveCard } = props;
 
   const colorCircleStyle = {
@@ -53,18 +56,25 @@ const PrintCardContainer = props => {
   };
 
   const saveChanges = () => {
-    let updatedSavedCard = { id: card.id, employeeId: props.employeeId };
+    let updatedSavedCard = {
+      id: card.id,
+      employeeId: props.employeeId,
+      email: props.data.customerInfo.email,
+    };
     for (var key in updatedData) {
       if (
         key === 'colorType' &&
         card.colorType.color !== updatedData.colorType.color
       ) {
         updatedSavedCard[key] = updatedData[key];
+      } else if (key === 'status') {
+        updatedSavedCard.status = updatedData.status;
       } else if (
-        key !== 'colorType' &&
-        (card[key] && card[key] !== updatedData[key])
+        key === 'comments' &&
+        card.comments &&
+        card.comments !== updatedData.comments
       ) {
-        updatedSavedCard[key] = updatedData[key];
+        updatedSavedCard.comments = updatedData.comments;
       }
     }
     saveCard(updatedSavedCard);

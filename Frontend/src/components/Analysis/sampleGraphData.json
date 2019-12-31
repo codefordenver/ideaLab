@@ -1,0 +1,32 @@
+{
+  "January": {
+    "blue": 5,
+    "red": 6,
+    "green": 2
+  },
+  "February": {
+    "blue": 4,
+    "red": 1,
+    "green": 2
+  },
+  "March": {
+    "blue": 2,
+    "red": 9,
+    "green": 7
+  },
+  "April": {
+    "blue": 2,
+    "red": 4,
+    "green": 1
+  },
+  "May": {
+    "blue": 8,
+    "red": 2,
+    "green": 9
+  },
+  "June": {
+    "blue": 1,
+    "red": 7,
+    "green": 6
+  }
+}

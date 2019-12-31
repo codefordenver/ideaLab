@@ -6,8 +6,10 @@ import UploadContainer from './components/Upload/UploadContainer';
 import LoginManager from './components/Login/LoginManager';
 import AdminContainer from './components/AdminSettings/AdminContainer';
 import CreateAccountManager from './components/AdminSettings/CreateAccountManager';
+import AnalysisContainer from './components/Analysis/AnalysisContainer';
 import SidebarNavigation from './SidebarNavigation';
 import PrivateRoute from './components/Routing/PrivateRoute';
+import { ToastProvider } from 'react-toast-notifications';
 
 import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 import RequestService from './util/RequestService';
@@ -43,6 +45,14 @@ function App() {
     }
   }, []);
 
+  const queueContainer = () => {
+    return (
+      <ToastProvider>
+        <QueueContainer />
+      </ToastProvider>
+    );
+  };
+
   return (
     <div className="App grid-container">
       <AuthContext.Provider
@@ -62,7 +72,7 @@ function App() {
             }}
           />
           <Switch>
-            <PrivateRoute exact path="/queue" component={QueueContainer} />
+            <PrivateRoute exact path="/queue" component={queueContainer} />
             <PrivateRoute
               exact
               path="/manageaccounts"
@@ -75,13 +85,20 @@ function App() {
                 return state.authenticated ? (
                   <Redirect to={'/queue'} />
                 ) : (
-                  <LoginManager {...props} />
+                  <ToastProvider>
+                    <LoginManager {...props} />
+                  </ToastProvider>
                 );
               }}
             />
 
             <PrivateRoute path="/account" component={AdminContainer} />
             <PrivateRoute path="/create" component={CreateAccountManager} />
+            <PrivateRoute
+              exact
+              path="/analysis"
+              component={AnalysisContainer}
+            />
             <PrivateRoute path="/" component={QueueContainer} />
           </Switch>
         </HashRouter>

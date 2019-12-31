@@ -30,7 +30,6 @@ const CreateAccountManager = () => {
       RequestService.signUp(payload, onSuccess, onFailure);
     };
     function onSuccess(response) {
-      // Maybe display the modal or some kind of redirect?
       addToast('Saved Successfully', {
         appearance: 'success',
         autoDismiss: true,
