@@ -61,7 +61,7 @@ const LoginManager = props => {
             {context.authenticated}
             <img className="ideaLabLogo" src={ideaLABlogo} alt="ideaLABLogo" />
             <h4>3D Printing and Upload Queue</h4>
-            <h2>Sign In</h2>
+            {/* <h2>Sign In</h2> */}
             <form
               onSubmit={e => {
                 const callbacks = {
