@@ -10,6 +10,8 @@ services:
       - "8080:8080"
     volumes: 
       - "./Backend:/srv"
+    env_file:
+      - dev.env
     command: ash -c  'nodemon --legacy-watch --watch ./src --exec "gradle bootRun" --ext .java'
   postgres:
     image: postgres:11-alpine
