@@ -11,26 +11,23 @@ services:
     volumes: 
       - "./Backend:/srv"
     env_file:
-      - dev.env
+      - "./dev.env"
     command: ash -c  'nodemon --legacy-watch --watch ./src --exec "gradle bootRun" --ext .java'
   postgres:
     image: postgres:11-alpine
     hostname: postgres
     ports:
       - "5432:5432"
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
+    env_file:
+      - "./dev.env"
   pgadmin:
     image: dpage/pgadmin4
     depends_on:
       - postgres
     ports:
       - "5555:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
-      PGADMIN_DEFAULT_PASSWORD: admin
+    env_file:
+      - "./dev.env"
     restart: unless-stopped
   frontend:
     build:
@@ -42,6 +39,8 @@ services:
       - api
     environment:
       BACKEND: api:9000
+    env_file:
+      - "./dev.env"
     volumes:
       - ./Frontend:/srv
     command: ["npm", "run", "start"]
