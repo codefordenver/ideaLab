@@ -65,12 +65,16 @@ function App() {
         }}
       >
         <HashRouter>
-          <SidebarNavigation
-            logout={() => {
-              localStorage.removeItem('ideaLab');
-              setState(initialState);
-            }}
-          />
+          {state.authenticated ? (
+            <SidebarNavigation
+              logout={() => {
+                localStorage.removeItem('ideaLab');
+                setState(initialState);
+              }}
+            />
+            ) : (
+            <div className="dummyNavBar"></div>
+          )}
           <Switch>
             <PrivateRoute exact path="/queue" component={queueContainer} />
             <PrivateRoute
