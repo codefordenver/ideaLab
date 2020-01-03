@@ -17,6 +17,7 @@ const SearchBar = ({ filterByTerm }) => {
         type="text"
         placeholder="Search"
       />
+      <button type="submit" />
     </div>
   );
 };

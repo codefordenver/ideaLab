@@ -3,6 +3,8 @@ import MenuBar from '../../globalStyles/MenuBar';
 import { MenuTabs } from '../../globalStyles/MenuTabs';
 import Loader from '../../globalStyles/Loader';
 import PrintCardContainer from '../components/PrintCardContainer';
+import SearchBar from './SearchBar';
+import './Queue.css';
 
 const Queue = props => {
   const renderPrintCards = props.filteredData.map(card => (
@@ -23,14 +25,13 @@ const Queue = props => {
           setView={props.setStatus}
         />
         {props.loading ? (
-          <div className={'loader-container'}>
+          <div className="loader-container">
             Loading Fresh Data...
             <Loader />
           </div>
         ) : (
           false
         )}
-
         {/* <SearchBar filterByTerm={props.filterByTerm} /> */}
       </div>
       <table id="queueTable">

@@ -1,7 +1,3 @@
-.queueContainer {
-  margin: 0px 50px;
-}
-
 .queueBanner {
   list-style-type: none;
   text-align: left;
@@ -78,22 +74,6 @@ tr th:nth-child(5) {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-}
-
-.queueFilterInfo {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.search-container input {
-  padding: 2px;
-  border: none;
-  font-size: 14px;
-  background: white;
-  border: solid 1px #333;
-  border-radius: 6px;
-  text-align: left;
 }
 
 .queueBanner .col10 {

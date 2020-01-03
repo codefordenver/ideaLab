@@ -135,6 +135,7 @@ const QueueContainer = () => {
           }
         });
         setFilteredData(activeCards);
+        console.log(activeCards);
       },
       error => console.error(error),
     );

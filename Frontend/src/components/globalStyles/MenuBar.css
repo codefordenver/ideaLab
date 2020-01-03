@@ -2,7 +2,9 @@
   display: flex;
   flex-direction: row;
   list-style: none;
-  align-items: center;
+  align-items: flex-end;
+  margin: 0 auto;
+  padding-left: 0;
 }
 
 .statusMenu li {

@@ -10,7 +10,7 @@ const MenuBar = ({ selectedTab, tabOptions, setView }) => {
     );
   });
   return (
-    <div>
+    <div className="statusContainer">
       <ul className="statusMenu">{tabDisplay}</ul>
     </div>
   );
