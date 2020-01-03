@@ -14,6 +14,10 @@
       name: 'DONE',
       label: 'Recently Completed',
     },
+    {
+      name: 'FAILED',
+      label: 'Print Failed',
+    },
   ];
   ManageAccountTabs = [
     {

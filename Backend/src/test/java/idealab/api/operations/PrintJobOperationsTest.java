@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import idealab.api.dto.response.BasicPrintJob;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -225,7 +226,7 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findActive()).thenReturn(printJobs);
 
         // when
-        DataResponse<PrintJob> result = operations.getAllPrintJobs(null);
+        DataResponse<BasicPrintJob> result = operations.getAllPrintJobs(null);
 
         // assert
         Assert.assertEquals(result.getData().get(0).getId(), printJob.getId());
@@ -249,7 +250,7 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findPrintJobByStatus(Status.ARCHIVED)).thenReturn(printJobList);
         
         // when
-        DataResponse<PrintJob> result = operations.getAllPrintJobs(Status.ARCHIVED.getName());
+        DataResponse<BasicPrintJob> result = operations.getAllPrintJobs(Status.ARCHIVED.getName());
         
         // assert
         verify(printJobRepo, times(1)).findPrintJobByStatus(Status.ARCHIVED);
@@ -301,7 +302,7 @@ public class PrintJobOperationsTest {
         when(printJobRepo.findByStatusIn(deletableStatuses)).thenReturn(printJobs);
 
         // when
-        DataResponse<PrintJob> result = operations.getDeletablePrintJobs();
+        DataResponse<BasicPrintJob> result = operations.getDeletablePrintJobs();
 
         // assert
         Assert.assertEquals(result.getData().get(0).getId(), printJob.getId());
@@ -310,7 +311,7 @@ public class PrintJobOperationsTest {
 
     @Test
     public void createNewPrintJob() {
-        DataResponse<PrintJob> response = new DataResponse<PrintJob>();
+        DataResponse<BasicPrintJob> response = new DataResponse<BasicPrintJob>();
 
         byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
         MultipartFile file = new MockMultipartFile("something.stl", "something.stl", null ,a);
@@ -360,9 +361,11 @@ public class PrintJobOperationsTest {
         List<PrintJob> printJobs = new ArrayList<>();
         printJobs.addAll(printJobData);
 
+        List<BasicPrintJob> basicPrintJobs = new BasicPrintJob().ConvertPrintJobs(printJobs);
+
         response.setSuccess(true);
         response.setMessage("Successfully saved new file to database!");
-        response.setData(printJobs);
+        response.setData(basicPrintJobs);
         response.setHttpStatus(HttpStatus.ACCEPTED);
 
         when(customerInfoRepo.findByEmail(any())).thenReturn(customerInfo);
@@ -372,13 +375,13 @@ public class PrintJobOperationsTest {
         when(fileService.uploadFile(anyLong(), any())).thenReturn(data);
         when(emailHashUtil.MD5Hash(any())).thenReturn("fdslakjfs232");
 
-        DataResponse<PrintJob> opResponse = operations.newPrintJob(request, mockPrincipal);
+        DataResponse<BasicPrintJob> opResponse = operations.newPrintJob(request, mockPrincipal);
         assert(opResponse.equals(response));
     }
 
     @Test
     public void createNewPrintJobSaveAllNonExistentData() {
-        DataResponse<PrintJob> response = new DataResponse<PrintJob>();
+        DataResponse<BasicPrintJob> response = new DataResponse<BasicPrintJob>();
 
         byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
         MultipartFile file = new MockMultipartFile("something.stl", "something.stl", null ,a);
@@ -427,9 +430,11 @@ public class PrintJobOperationsTest {
         List<PrintJob> printJobs = new ArrayList<>();
         printJobs.addAll(printJobData);
 
+        List<BasicPrintJob> basicPrintJobs = new BasicPrintJob().ConvertPrintJobs(printJobs);
+
         response.setSuccess(true);
         response.setMessage("Successfully saved new file to database!");
-        response.setData(printJobs);
+        response.setData(basicPrintJobs);
         response.setHttpStatus(HttpStatus.ACCEPTED);
 
         when(customerInfoRepo.findByEmail(any())).thenReturn(null);
@@ -439,7 +444,7 @@ public class PrintJobOperationsTest {
         when(printJobRepo.save(any())).thenReturn(printJob);
         when(fileService.uploadFile(anyLong(), any())).thenReturn(data);
 
-        DataResponse<PrintJob> opResponse = operations.newPrintJob(request, mockPrincipal);
+        DataResponse<BasicPrintJob> opResponse = operations.newPrintJob(request, mockPrincipal);
 
         assert(opResponse.equals(response));
     }
@@ -471,7 +476,7 @@ public class PrintJobOperationsTest {
     
     @Test(expected = IdeaLabApiException.class)
     public void createNewPrintJobNullFile() {
-        DataResponse<PrintJob> response = new DataResponse<PrintJob>();
+        DataResponse<BasicPrintJob> response = new DataResponse<BasicPrintJob>();
         response.setHttpStatus(HttpStatus.BAD_REQUEST);
         response.setMessage("No file was submitted.  Please attach a file to the request");
         response.setSuccess(false);
@@ -492,7 +497,7 @@ public class PrintJobOperationsTest {
 
     @Test(expected = IdeaLabApiException.class)
     public void createNewPrintJob5JobError() {
-        DataResponse<PrintJob> response = new DataResponse<PrintJob>();
+        DataResponse<BasicPrintJob> response = new DataResponse<BasicPrintJob>();
 
         byte[] a = hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
         MultipartFile file = new MockMultipartFile("something.stl", "something.stl", null ,a);
@@ -539,9 +544,11 @@ public class PrintJobOperationsTest {
         printJobSet.addAll(printJobs);
         customerInfo.setPrintJobs(printJobSet);
 
+        List<BasicPrintJob> basicPrintJobs = new BasicPrintJob().ConvertPrintJobs(printJobs);
+
         response.setSuccess(true);
         response.setMessage("Successfully saved new file to database!");
-        response.setData(printJobs);
+        response.setData(basicPrintJobs);
         response.setHttpStatus(HttpStatus.ACCEPTED);
 
         when(customerInfoRepo.findByEmail(any())).thenReturn(customerInfo);
@@ -562,14 +569,19 @@ public class PrintJobOperationsTest {
 
         PrintJob printJob = new PrintJob();
         printJob.setId(999);
+        printJob.setFilePath("DROPBOX_PATH");
+        printJob.setFileSharableLink("http://testlink.com");
 
-        DataResponse<PrintJob> response = new DataResponse<PrintJob>();
+        DataResponse<BasicPrintJob> response = new DataResponse<BasicPrintJob>();
         response.setSuccess(true);
         response.setMessage("Successfully updated file to database!");
         response.setHttpStatus(HttpStatus.ACCEPTED);
         List<PrintJob> printJobs = new ArrayList<>();
         printJobs.add(printJob);
-        response.setData(printJobs);
+
+        List<BasicPrintJob> basicPrintJobs = new BasicPrintJob().ConvertPrintJobs(printJobs);
+
+        response.setData(basicPrintJobs);
 
         Map<String, String> data = new HashMap<>();
         data.put("filePath", "DROPBOX_PATH");
@@ -579,7 +591,7 @@ public class PrintJobOperationsTest {
         when(fileService.updateFile(printJob, request.getFile())).thenReturn(data);
         when(printJobRepo.save(printJob)).thenReturn(printJob);
 
-        DataResponse<PrintJob> opResponse = operations.updateModel(printJob.getId(), request);
+        DataResponse<BasicPrintJob> opResponse = operations.updateModel(printJob.getId(), request);
 
         assert(opResponse.equals(response));
     }
@@ -674,7 +686,7 @@ public class PrintJobOperationsTest {
         when(colorTypeRepo.findByColor("red")).thenReturn(newColorType);
         when(printJobRepo.save(printJob)).thenReturn(null);
 
-        DataResponse<PrintJob> response = operations.updatePrintJobProps(1, request);
+        DataResponse<BasicPrintJob> response = operations.updatePrintJobProps(1, request);
         assertTrue("response is null", response != null);
         assertTrue("comments are not equal", response.getData().get(0).getComments().equals(request.getComments()));
         assertTrue("status is not equal", response.getData().get(0).getStatus() == Status.fromValue(request.getStatus()));
@@ -707,7 +719,7 @@ public class PrintJobOperationsTest {
         when(colorTypeRepo.findByColor("red")).thenReturn(newColorType);
         when(printJobRepo.save(printJob)).thenReturn(null);
 
-        DataResponse<PrintJob> response = operations.updatePrintJobProps(1, request);
+        DataResponse<BasicPrintJob> response = operations.updatePrintJobProps(1, request);
         assertTrue("response is null", response != null);
         assertTrue("comments are not equal", response.getData().get(0).getComments().equals(printJob.getComments()));
         assertTrue("status is not equal", response.getData().get(0).getStatus() == printJob.getStatus());
@@ -740,7 +752,7 @@ public class PrintJobOperationsTest {
         when(colorTypeRepo.findByColor("red")).thenReturn(newColorType);
         when(printJobRepo.save(printJob)).thenReturn(null);
 
-        DataResponse<PrintJob> response = operations.updatePrintJobProps(1, request);
+        DataResponse<BasicPrintJob> response = operations.updatePrintJobProps(1, request);
         assertTrue("response is null", response != null);
         assertTrue("comments are not equal", response.getData().get(0).getComments().equals(printJob.getComments()));
         assertTrue("status is not equal", response.getData().get(0).getStatus() == Status.fromValue(request.getStatus()));
@@ -773,7 +785,7 @@ public class PrintJobOperationsTest {
         when(colorTypeRepo.findByColor("red")).thenReturn(newColorType);
         when(printJobRepo.save(printJob)).thenReturn(null);
 
-        DataResponse<PrintJob> response = operations.updatePrintJobProps(1, request);
+        DataResponse<BasicPrintJob> response = operations.updatePrintJobProps(1, request);
         assertTrue("response is null", response != null);
         assertTrue("comments are not equal", response.getData().get(0).getComments().equals(request.getComments()));
         assertTrue("status is not equal", response.getData().get(0).getStatus() == printJob.getStatus());
@@ -790,7 +802,7 @@ public class PrintJobOperationsTest {
         //When
         when(printJobRepo.findPrintJobById(anyInt())).thenReturn(printJob);
 
-        DataResponse<PrintJob> printJobResponse = operations.getPrintJobById(2);
+        DataResponse<BasicPrintJob> printJobResponse = operations.getPrintJobById(2);
 
         //Then
         assertTrue("Print job is returned with id=2", printJobResponse.getData().get(0).getId() == 2);
@@ -801,6 +813,6 @@ public class PrintJobOperationsTest {
         //When
         when(printJobRepo.findPrintJobById(anyInt())).thenReturn(null);
 
-        DataResponse<PrintJob> printJobResponse = operations.getPrintJobById(2);
+        DataResponse<BasicPrintJob> printJobResponse = operations.getPrintJobById(2);
     }
 }
