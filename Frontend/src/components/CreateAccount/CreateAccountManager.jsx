@@ -58,7 +58,6 @@ const CreateAccountManager = () => {
   return (
     <div className="container">
       <div className="card">
-        <img src={ideaLABlogo} alt="ideaLABLogo" />
         <h1>3D Printing and Upload Queue</h1>
         <h2>Create an Account</h2>
         <form onSubmit={e => onSubmit(e)}>

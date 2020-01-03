@@ -13,6 +13,7 @@ import org.hibernate.envers.query.AuditQuery;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import idealab.api.dto.response.PrintJobAuditForLastTwelveMonthsResponse;
 import idealab.api.dto.response.AuditPrintJobColorCountResponse;
 import idealab.api.dto.response.PrintJobAuditModel;
 import idealab.api.dto.response.PrintJobAuditResponse;
@@ -87,5 +88,41 @@ public class AuditOperations {
             }
         });
         return data;
+    }
+
+    //print number of all printing jobs per month
+    public PrintJobAuditForLastTwelveMonthsResponse printNumberOfAllPrintJobsForLastTwelveMonths() {
+      //get last twelve months data
+      LocalDateTime date = LocalDateTime.now().minusMonths(12).withDayOfMonth(1);
+      long startDate = Timestamp.valueOf(date).getTime();
+
+      AuditQuery query = auditService.getPrintJobAuditQuery();
+      query.addOrder(AuditEntity.revisionNumber().desc());
+
+      //add method allows filtering, this is the only difference between getting all print jobs
+      query.add(AuditEntity.revisionProperty("timestamp").gt(startDate));
+
+      //calculating number of all print jobs requested for last 12 months
+      List<PrintJobAuditModel> auditList = auditService.processPrintJobAuditQuery(query);
+      Map<String, Integer> counterMap = new HashMap<>();
+      auditList.forEach((item) -> {
+        LocalDate listDate = item.getRevisionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        String thisDate = listDate.getMonth()+" "+listDate.getYear();
+        Integer count = 0;
+        if(counterMap.containsKey(thisDate)) {
+          count = counterMap.get(thisDate) + 1;
+          counterMap.put(thisDate, count);
+        }
+        else {
+          count++;
+          counterMap.put(thisDate, count);
+        }
+      });
+      PrintJobAuditForLastTwelveMonthsResponse response = new PrintJobAuditForLastTwelveMonthsResponse();
+      response.setMessage("Successfully returned print job for last twelve months");
+      response.setSuccess(true);
+      response.setHttpStatus(HttpStatus.ACCEPTED);
+      response.setData(counterMap);
+      return response;
     }
 }

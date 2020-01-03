@@ -18,6 +18,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import idealab.api.dto.response.BasicPrintJob;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -188,10 +189,12 @@ public class PrintJobControllerTest {
 
         List<PrintJob> printJobList = Arrays.asList(printJob);
 
-        DataResponse<PrintJob> expectedResponse = new DataResponse<PrintJob>();
+        List<BasicPrintJob> basicPrintJobs = new BasicPrintJob().ConvertPrintJobs(printJobList);
+
+        DataResponse<BasicPrintJob> expectedResponse = new DataResponse<BasicPrintJob>();
         expectedResponse.setSuccess(true);
         expectedResponse.setMessage("Successfully returned all print jobs");
-        expectedResponse.setData(printJobList);
+        expectedResponse.setData(basicPrintJobs);
         expectedResponse.setHttpStatus(HttpStatus.ACCEPTED);
 
         Mockito.when(printJobOperations.getAllPrintJobs(null)).thenReturn(expectedResponse);
@@ -240,10 +243,12 @@ public class PrintJobControllerTest {
 
         List<PrintJob> printJobList = Arrays.asList(printJob);
 
-        DataResponse<PrintJob> expectedResponse = new DataResponse<PrintJob>();
+        List<BasicPrintJob> basicPrintJobs = new BasicPrintJob().ConvertPrintJobs(printJobList);
+
+        DataResponse<BasicPrintJob> expectedResponse = new DataResponse<BasicPrintJob>();
         expectedResponse.setSuccess(true);
         expectedResponse.setMessage("Successfully returned print jobs by " + Status.ARCHIVED.getName() + " status");
-        expectedResponse.setData(printJobList);
+        expectedResponse.setData(basicPrintJobs);
         expectedResponse.setHttpStatus(HttpStatus.ACCEPTED);
 
         Mockito.when(printJobOperations.getAllPrintJobs(Status.ARCHIVED.getName())).thenReturn(expectedResponse);
@@ -282,8 +287,16 @@ public class PrintJobControllerTest {
 		 printJob.setStatus(Status.PENDING_REVIEW);
 		 printJob.setEmployee(new Employee());
 		 printJob.setId(1);
-		
-		 DataResponse<PrintJob> expectedResponse = new DataResponse<PrintJob>(printJob);
+
+         List<PrintJob> printJobList = Arrays.asList(printJob);
+
+         List<BasicPrintJob> basicPrintJobs = new BasicPrintJob().ConvertPrintJobs(printJobList);
+
+         DataResponse<BasicPrintJob> expectedResponse = new DataResponse<BasicPrintJob>();
+         expectedResponse.setSuccess(true);
+         expectedResponse.setMessage("Successfully returned deletable printjobs.");
+         expectedResponse.setData(basicPrintJobs);
+         expectedResponse.setHttpStatus(HttpStatus.ACCEPTED);
 		
 		 Mockito.when(printJobOperations.getDeletablePrintJobs()).thenReturn(expectedResponse);
 		

@@ -15,7 +15,6 @@ const AdminContainer = () => {
       {context => {
         return context.role === 'ADMIN' ? (
           <div className="adminContainer">
-            <img src={ideaLABlogo} alt="ideaLABLogo" className="ideaLabLogo" />
             <MenuBar
               selectedTab={adminView}
               tabOptions={MenuTabs.ManageAccountTabs}
