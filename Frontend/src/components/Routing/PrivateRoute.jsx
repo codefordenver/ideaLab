@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
 import AuthContext from '../../AuthContext';
+import { Logo } from './Logo';
 
 function PrivateRoute({ component: Component, ...rest }) {
   return (
@@ -12,7 +13,10 @@ function PrivateRoute({ component: Component, ...rest }) {
             {...rest}
             render={props =>
               context.authenticated ? (
-                <Component {...props} />
+                <div>
+                  <Logo />
+                  <Component {...props} />
+                </div>
               ) : (
                 <Redirect
                   to={{
