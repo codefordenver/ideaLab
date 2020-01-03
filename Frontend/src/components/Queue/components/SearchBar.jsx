@@ -1,15 +1,22 @@
 import React, { useState } from 'react';
 
+import './SearchBar.css';
+
 const SearchBar = ({ filterByTerm }) => {
   const [search, setSearch] = useState('');
 
   const searchQuery = event => {
+    console.log(event.target.value);
     setSearch(event.target.value);
-    filterByTerm(event.target.value);
+    // filterByTerm(event.target.value);
+  };
+
+  const submitHandler = () => {
+    console.log(search, ' submitted');
   };
 
   return (
-    <div className="search-container">
+    <form className="search-container" onSubmit={submitHandler}>
       <input
         className="search-bar"
         value={search}
@@ -18,7 +25,7 @@ const SearchBar = ({ filterByTerm }) => {
         placeholder="Search"
       />
       <button type="submit" />
-    </div>
+    </form>
   );
 };
 

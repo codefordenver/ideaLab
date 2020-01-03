@@ -108,7 +108,6 @@ const QueueContainer = () => {
   );
 
   const fetchQueueData = () => {
-    //TO DO: GET PRINT JOBS BASED ON STATUS, NOT ALL AT ONCE
     RequestService.getPrintJobs(
       response => {
         const activeCards = response.data.data.filter(card => {
@@ -135,7 +134,6 @@ const QueueContainer = () => {
           }
         });
         setFilteredData(activeCards);
-        console.log(activeCards);
       },
       error => console.error(error),
     );
@@ -144,6 +142,8 @@ const QueueContainer = () => {
   const setStatus = view => {
     setStatusView(view);
   };
+
+  console.log('filtereddata: ', filteredData);
 
   return (
     <div>
@@ -166,7 +166,5 @@ const QueueContainer = () => {
     </div>
   );
 };
-
-//
 
 export default QueueContainer;

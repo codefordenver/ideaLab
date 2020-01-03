@@ -58,8 +58,6 @@ const SendEmailModal = props => {
     closeModal(e);
   };
 
-  console.log('pprops: ', props);
-
   return (
     <div
       className="form__container"
