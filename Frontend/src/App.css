@@ -103,6 +103,19 @@ body {
   color: white;
 }
 
+.dummyNavBar {
+  width: 0;
+  grid-column: 1;
+}
+
+.loginManagerContainer {
+  
+}
+
+.loginContainer { 
+  grid-column: 2;
+}
+
 .uploadContainer input,
 .loginContainer input {
   width: 100%;
