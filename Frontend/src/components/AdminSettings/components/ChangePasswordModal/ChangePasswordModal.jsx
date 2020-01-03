@@ -26,14 +26,14 @@ const ChangePasswordModal = props => {
     const payload = {
       username: props.username,
       newPassword: newPassword,
-      confirmNewPassword: confirmNewPassword
+      confirmNewPassword: confirmNewPassword,
     };
 
     if (newPassword === confirmNewPassword) {
-      return RequestService.changePassword(payload, onSuccess, onFailure)
+      return RequestService.changePassword(payload, onSuccess, onFailure);
     } else {
       setError(
-        'The new password and confirm new password do not match.  Please re-enter these values.'
+        'The new password and confirm new password do not match.  Please re-enter these values.',
       );
       e.target.elements.newPassword.value = '';
       e.target.elements.confirmNewPassword.value = '';
@@ -43,10 +43,7 @@ const ChangePasswordModal = props => {
   };
 
   const formBody = (
-    <form 
-      className="form"
-      onSubmit={onSubmit}
-    >
+    <form className="form" onSubmit={onSubmit}>
       <div className="form__item">
         <label htmlFor="newPassword">New Password:</label>
         <input
@@ -67,17 +64,17 @@ const ChangePasswordModal = props => {
           type="password"
         />
       </div>
-      <br/>
+      <br />
       <div className="form__action">
         <button type="submit">Submit</button>
         <button onClick={onCancel}>Cancel</button>
       </div>
-      <br/>
+      <br />
     </form>
   );
 
   const onAccept = () => {
-    setResponse(false)
+    setResponse(false);
     setSuccess(false);
     props.triggerPasswordChange();
   };
@@ -85,7 +82,7 @@ const ChangePasswordModal = props => {
   const successBody = (
     <div className="success">
       <h6>Password changed succesfully</h6>
-      <br/>
+      <br />
       <button onClick={onAccept}>Ok</button>
     </div>
   );
@@ -98,7 +95,7 @@ const ChangePasswordModal = props => {
   const failBody = (
     <div className="fail">
       <h6>An error has occurred. Please try again.</h6>
-      <br/>
+      <br />
       <button onClick={onAcceptErr}>Ok</button>
     </div>
   );
@@ -106,7 +103,7 @@ const ChangePasswordModal = props => {
   const loadingBody = (
     <div className="loading">
       <Loader />
-    </div> 
+    </div>
   );
 
   const onSuccess = response => {
@@ -122,36 +119,38 @@ const ChangePasswordModal = props => {
   };
 
   let errorMessage;
-  error ? errorMessage = (<span>{ error }</span>) : errorMessage = null;
+  error ? (errorMessage = <span>{error}</span>) : (errorMessage = null);
 
   const resetError = () => {
     const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
-      wait(8000).then(() => {
-        setError('');
-      });
+    wait(8000).then(() => {
+      setError('');
+    });
   };
 
   let divBody;
   if (loading) {
-    divBody = loadingBody
+    divBody = loadingBody;
   } else if (!response) {
-    divBody = formBody
+    divBody = formBody;
   } else if (response && success) {
-    divBody = successBody
+    divBody = successBody;
   } else if (response && fail) {
-    divBody = failBody
-  };
+    divBody = failBody;
+  }
 
   return (
-    <div 
+    <div
       className="form__container"
       style={{
         opacity: props.passwordChange ? '1' : '0',
-        transform: props.passwordChange ? 'translateY(0)' : 'translateY(-100vh)' 
+        transform: props.passwordChange
+          ? 'translateY(0)'
+          : 'translateY(-100vh)',
       }}
     >
       <h4>Change Password</h4>
-      <br/>
+      <br />
       {divBody}
       {errorMessage}
     </div>

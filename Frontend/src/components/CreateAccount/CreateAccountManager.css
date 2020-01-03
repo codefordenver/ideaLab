@@ -5,11 +5,11 @@
 .create-account-container {
   width: auto;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
   align-items: center;
+  justify-content: space-evenly;
   height: 100%;
-  margin-bottom: 2em;
+  margin: 2em;
 }
 
 .container > button {
@@ -56,4 +56,27 @@ button:hover {
   font-size: 1.5rem;
   color: #4b4b4b;
   vertical-align: middle;
+}
+
+.createAccountLogo {
+  width: 400px;
+  margin-bottom: 2em;
+}
+
+.create-account-col-two {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.create-account-col-two input {
+  margin: 2em auto;
+}
+
+.createNewAccountButton {
+  background-color: #577ca2;
+  border-radius: 6px;
+  color: #fff;
+  padding: 0.5em 0;
+  font-size: 14px;
 }

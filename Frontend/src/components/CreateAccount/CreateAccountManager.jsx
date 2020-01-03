@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import RequestService from '../../util/RequestService';
+import BasicInput from '../globalStyles/BasicInput';
 import './CreateAccountManager.css';
 
 import ideaLABlogo from '../globalStyles/img/ideaLabLogo.png';
@@ -65,52 +66,52 @@ const CreateAccountManager = () => {
   return (
     <div className="create-account-container">
       <div className="create-account-col-one">
-        <img src={ideaLABlogo} alt="ideaLABLogo" />
-        <h1>3D Printing and Upload Queue</h1>
+        <img
+          src={ideaLABlogo}
+          alt="ideaLABLogo"
+          className="createAccountLogo"
+        />
+        <h4>3D Printing and Upload Queue</h4>
         <h2>Create an Account</h2>
         {renderErrors()}
         {renderSuccessMessage()}
       </div>
-      <div className="create-account-col-two">
-        <form onSubmit={e => onSubmit(e)}>
-          <input
+      <div>
+        <form className="create-account-col-two" onSubmit={e => onSubmit(e)}>
+          <BasicInput
             name="email"
-            placeholder="email"
-            autoComplete="off"
-            autoFocus
+            placeHolder="email"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            type="email"
+            changeHandler={e => setEmail(e.target.value)}
           />
-          <input
+          <BasicInput
             name="username"
-            placeholder="username"
-            autoComplete="off"
+            placeHolder="username"
             value={username}
-            onChange={e => setUsername(e.target.value)}
+            type="text"
+            changeHandler={e => setUsername(e.target.value)}
           />
-          <input
+          <BasicInput
             name="password"
-            placeholder="password"
-            type="password"
-            autoComplete="off"
+            placeHolder="password"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            type="text"
+            changeHandler={e => setPassword(e.target.value)}
           />
-          <input
+          <BasicInput
             name="firstName"
-            placeholder="First Name"
-            type="input"
-            autoComplete="off"
+            placeHolder="First Name"
             value={firstName}
-            onChange={e => setFirstName(e.target.value)}
+            type="text"
+            changeHandler={e => setFirstName(e.target.value)}
           />
-          <input
+          <BasicInput
             name="lastName"
-            placeholder="Last Name"
-            type="input"
-            autoComplete="off"
+            placeHolder="Last Name"
             value={lastName}
-            onChange={e => setLastName(e.target.value)}
+            type="text"
+            changeHandler={e => setLastName(e.target.value)}
           />
           <div>
             <label>
@@ -134,7 +135,9 @@ const CreateAccountManager = () => {
               Admin
             </label>
           </div>
-          <button type="submit">Create Account</button>
+          <button className="createNewAccountButton" type="submit">
+            Create Account
+          </button>
         </form>
       </div>
     </div>

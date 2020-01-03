@@ -83,6 +83,10 @@ psql -U postgres
 
 Now you can run basic postgres commands.
 
+## Common docker errors for future devs
+1. ERROR: Couldn't find env file: /Users/.../dev.env
+  SOLUTION: Add an empty dev.env file in the top-level directory
+2. 
 
 ## Frontend
 1. The frontend is written in React.[If you need help with react, refer to its documentation.](https://reactjs.org/docs/getting-started.html "documentation")
