@@ -3,6 +3,7 @@ import MenuBar from '../../globalStyles/MenuBar';
 import { MenuTabs } from '../../globalStyles/MenuTabs';
 import Loader from '../../globalStyles/Loader';
 import PrintCardContainer from '../components/PrintCardContainer';
+import SearchBar from './SearchBar';
 
 const Queue = props => {
   const renderPrintCards = props.filteredData.map(card => (
@@ -30,8 +31,7 @@ const Queue = props => {
         ) : (
           false
         )}
-
-        {/* <SearchBar filterByTerm={props.filterByTerm} /> */}
+        <SearchBar filterByTerm={props.filterByTerm} />
       </div>
       <table id="queueTable">
         <thead>
