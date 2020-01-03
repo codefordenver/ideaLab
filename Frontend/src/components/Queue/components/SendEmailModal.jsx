@@ -58,6 +58,8 @@ const SendEmailModal = props => {
     closeModal(e);
   };
 
+  console.log('pprops: ', props);
+
   return (
     <div
       className="form__container"
@@ -68,8 +70,8 @@ const SendEmailModal = props => {
     >
       <h4>Confirm Email and Status Change</h4>
       <div className="modalText">
-        You are changing the status to {props.status}. Please confirm which of
-        the following you want to do:
+        You are changing the status to {props.updatedCard.status}. Please
+        confirm which of the following you want to do:
       </div>
       <button className="modalButton button" onClick={sendEmailAndStatus}>
         SEND EMAIL + CHANGE STATUS
