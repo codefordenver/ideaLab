@@ -26,7 +26,13 @@ const AnalysisContainer = () => {
   return (
     <AuthContext.Consumer>
       {context => {
-        return <AnalysisGraph loading={loading} graphData={graphData} />;
+        return (
+          <div className="analysisContainer">
+            <div className="flexbox">
+              <AnalysisGraph loading={loading} graphData={graphData} />
+            </div>
+          </div>
+        );
       }}
     </AuthContext.Consumer>
   );

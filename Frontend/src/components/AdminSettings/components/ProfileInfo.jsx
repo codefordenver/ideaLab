@@ -73,13 +73,10 @@ const UserProfilesContainer = props => {
         </div>
       </div>
 
-      <button
-        className="userProfileButton change"
-        onClick={triggerPasswordChange}
-      >
-        Change Password
+      <button className="profilesButton change" onClick={triggerPasswordChange}>
+        CHANGE PASSWORD
       </button>
-      <button className="userProfileButton delete" onClick={triggerDeleteUser}>
+      <button className="profilesButton delete" onClick={triggerDeleteUser}>
         Delete
       </button>
       {changeModal}

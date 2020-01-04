@@ -6,7 +6,6 @@ import { createBrowserHistory } from 'history';
 import Upload from './components/Upload';
 import BasicInput from '../globalStyles/BasicInput';
 import './UploadContainer.css';
-import ideaLABlogo from '../globalStyles/img/ideaLabLogo.png';
 import ColorPickerContainer from '../Queue/components/ColorPickerContainer';
 
 const history = createBrowserHistory();
@@ -97,7 +96,6 @@ function UploadContainer() {
           RequestService.newPrintJob(formData, onSuccess, onFailure);
         }}
       >
-        <img src={ideaLABlogo} alt={'ideaLab logo'}></img>
         <div className={'success'}>{success}</div>
         <Upload
           className={'upload'}

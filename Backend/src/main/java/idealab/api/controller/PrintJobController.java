@@ -2,6 +2,7 @@ package idealab.api.controller;
 
 import java.security.Principal;
 
+import idealab.api.dto.response.BasicPrintJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,7 @@ public class PrintJobController {
     @GetMapping
     public ResponseEntity<?> printJobGetAll(@RequestParam(required = false) String status) {
         LOGGER.info("Return all print jobs");
-        DataResponse<PrintJob> response = printJobOperations.getAllPrintJobs(status);
+        DataResponse<BasicPrintJob> response = printJobOperations.getAllPrintJobs(status);
 
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
@@ -49,14 +50,14 @@ public class PrintJobController {
     // TODO W.E. : add query param or boolean to model to accept mass upload (ignore 5 file max)
     @PostMapping
     public ResponseEntity<?> printJobNew(@ModelAttribute PrintJobNewRequest model, Principal principal) {
-        DataResponse<PrintJob> response = printJobOperations.newPrintJob(model, principal);
+        DataResponse<BasicPrintJob> response = printJobOperations.newPrintJob(model, principal);
 
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
     @GetMapping("/{print-id}")
     public ResponseEntity<?> printJobGetById(@PathVariable("print-id") Integer printId) {
-        DataResponse<PrintJob> response = printJobOperations.getPrintJobById(printId);
+        DataResponse<BasicPrintJob> response = printJobOperations.getPrintJobById(printId);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
@@ -65,7 +66,7 @@ public class PrintJobController {
                                                   @ModelAttribute PrintModelUpdateRequest model) {
 
         LOGGER.info("PrintJobUpdateModel request is job:" + printId.toString() + "| model: " + model.toString());
-        DataResponse<PrintJob> response = printJobOperations.updateModel(printId, model);
+        DataResponse<BasicPrintJob> response = printJobOperations.updateModel(printId, model);
 
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
@@ -101,7 +102,7 @@ public class PrintJobController {
     public ResponseEntity<?> getDeletablePrintJobs() {
         LOGGER.info("getDeletablePrintJobs ");
 
-        DataResponse<PrintJob> response = printJobOperations.getDeletablePrintJobs();
+        DataResponse<BasicPrintJob> response = printJobOperations.getDeletablePrintJobs();
 
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
@@ -109,7 +110,7 @@ public class PrintJobController {
     //Don't include the field in the JSON if you dont want it updated
     @PutMapping("/{print-id}")
     public ResponseEntity<?> updatePrintJobProperties(@PathVariable("print-id") Integer printId, @RequestBody UpdatePrintJobPropertiesRequest request, Principal principal) {
-        DataResponse<PrintJob> response = printJobOperations.updatePrintJobProps(printId, request);
+        DataResponse<BasicPrintJob> response = printJobOperations.updatePrintJobProps(printId, request);
         return new ResponseEntity<>(response, response.getHttpStatus());
     }
 }
