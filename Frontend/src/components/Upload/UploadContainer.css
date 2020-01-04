@@ -1,13 +1,7 @@
 .uploadContainer {
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: 1fr 600px 1fr;
   justify-content: center;
-}
-
-.uploadContainer img {
-  width: 50%;
-  margin: auto;
-  margin-top: 2rem;
 }
 
 .uploadContainer .upload {

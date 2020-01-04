@@ -74,7 +74,9 @@ const EmailMessage = props => {
 
   return (
     <div>
-      <div className="emailStatusTitle">Status Changes To: {props.status}</div>
+      <div className="emailStatusTitle">
+        Message sent when status is changed to: {props.status}
+      </div>
       <div className="emailMessageIndividualContainer">
         <textarea
           className="messageText"

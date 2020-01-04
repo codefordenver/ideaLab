@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import idealab.api.dto.response.PrintJobAuditForLastTwelveMonthsResponse;
 import idealab.api.dto.response.AuditPrintJobColorCountResponse;
 import idealab.api.dto.response.PrintJobAuditResponse;
 import idealab.api.operations.AuditOperations;
@@ -35,6 +36,12 @@ public class AuditController {
     public ResponseEntity<?> getPrintJobAuditGroupedByColorForPassedYear() {
         AuditPrintJobColorCountResponse response = auditOperations.printJobAuditColorsYearly();
         return new ResponseEntity<>(response, response.getHttpStatus());
+    }
+
+    @GetMapping("/bymonths")
+    public ResponseEntity<?> getNumberOfAllPrintJobs() {
+      PrintJobAuditForLastTwelveMonthsResponse response = auditOperations.printNumberOfAllPrintJobsForLastTwelveMonths();
+      return new ResponseEntity<>(response, response.getHttpStatus());
     }
 
 }
