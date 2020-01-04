@@ -8,7 +8,6 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-evenly;
-  height: 100%;
   margin: 2em;
 }
 
@@ -73,10 +72,36 @@ button:hover {
   margin: 2em auto;
 }
 
+.create-account-col-two .basicInput {
+  height: 100px;
+}
+
+.roleRadioButtons {
+  display: flex;
+}
+
+.roleRadioButtons label {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.roleRadioButtons label * {
+  padding: 0 1em;
+}
+
+.roleRadioButtons label span {
+  padding-right: 2em;
+}
+
 .createNewAccountButton {
   background-color: #577ca2;
   border-radius: 6px;
   color: #fff;
-  padding: 0.5em 0;
+  padding: 0.5em 1em;
   font-size: 14px;
+}
+
+.successCreateAccount {
+  color: #658b5a;
 }
