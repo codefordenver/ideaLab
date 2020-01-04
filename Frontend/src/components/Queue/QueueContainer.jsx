@@ -34,7 +34,6 @@ const QueueContainer = () => {
     //Sets an interval to re-fetch data on an interval.
     const interval = setInterval(() => {
       fetchQueueData();
-
       //Time is in milliseconds (1000*60*5 = 5 mins)
     }, 1000 * 60 * 5);
 
@@ -143,7 +142,34 @@ const QueueContainer = () => {
     setStatusView(view);
   };
 
-  console.log('filtereddata: ', filteredData);
+  const searchBarSubmitHandler = event => {
+    const input = event.target.input.value
+      .toLowerCase()
+      .split(' ')
+      .join('');
+
+    const activeCards = filteredData.filter(printJob => {
+      const comments = printJob.comments.toLowerCase().split(' ');
+      const commentsJoin = comments.join('');
+      const filePath = printJob.filePath;
+      const firstName = printJob.customerInfo.firstName;
+      const lastName = printJob.customerInfo.lastName;
+      const fullName = firstName + lastName;
+      const nameFull = lastName + firstName;
+
+      if (input === commentsJoin) return printJob;
+      if (input === firstName) return printJob;
+      if (input === lastName) return printJob;
+      if (input === fullName) return printJob;
+      if (input === nameFull) return printJob;
+      if (input === filePath) return printJob;
+      if (comments.includes(input)) return printJob;
+    });
+
+    setFilteredData(activeCards);
+    event.target.input.value = '';
+    event.preventDefault();
+  };
 
   return (
     <div>
@@ -153,7 +179,9 @@ const QueueContainer = () => {
             <Queue
               loading={loading}
               statusView={statusView}
+              searchBarSubmit={searchBarSubmitHandler}
               setStatus={setStatus}
+              fetchQueueData={fetchQueueData}
               filteredData={filteredData}
               colors={colors}
               saveCard={saveCard}
