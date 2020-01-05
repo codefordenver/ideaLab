@@ -33,7 +33,7 @@ const EmailMessage = props => {
 
   const changeEmailMessageFailure = error => {
     console.log(error);
-    addToast('Fail', { appearance: 'warning', autoDismiss: true });
+    addToast('Failed to Save', { appearance: 'warning', autoDismiss: true });
   };
 
   const onSave = () => {

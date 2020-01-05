@@ -10,6 +10,7 @@
   align-items: center;
   height: 100%;
   width: 100%;
+  padding-right: 8em;
 }
 
 .loginContainer form {
@@ -23,24 +24,6 @@ h4 {
   margin-top: 1em;
 }
 
-.loginContainer input {
-  display: block;
-  height: 2em;
-  width: 15em;
-  margin: 1rem;
-  border-radius: 2px;
-  border-color: #aaa;
-  outline: none;
-  border-style: solid;
-  font-size: 1.5rem;
-  padding-left: 0.5rem;
-  padding-bottom: 0.5rem;
-}
-
-.loginContainer input:focus {
-  border-color: #00aeef;
-}
-
 .accountSubmitButton {
   display: block;
   height: 2em;
@@ -52,36 +35,14 @@ h4 {
   font-size: 1.5rem;
   color: #fff;
   align-self: flex-end;
+  left: 0;
+  right: 0;
+  margin: auto;
+  box-shadow: 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .accountSubmitButton:hover {
   cursor: pointer;
-}
-
-.loginContainer > ::-webkit-input-placeholder {
-  font-size: 1.5rem;
-  color: #4b4b4b;
-  vertical-align: middle;
-}
-
-.loginContainer > :-moz-placeholder {
-  /* Firefox 18- */
-  font-size: 1.5rem;
-  color: #4b4b4b;
-  vertical-align: middle;
-}
-
-.loginContainer > ::-moz-placeholder {
-  /* Firefox 19+ */
-  font-size: 1.5rem;
-  color: #4b4b4b;
-  vertical-align: middle;
-}
-
-.loginContainer > :-ms-input-placeholder {
-  font-size: 1.5rem;
-  color: #4b4b4b;
-  vertical-align: middle;
 }
 
 .ideaLabLogo {

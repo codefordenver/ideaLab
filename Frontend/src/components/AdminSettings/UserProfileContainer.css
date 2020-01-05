@@ -1,7 +1,7 @@
 .profilesStyles {
   display: flex;
   flex-direction: column;
-  margin: 0 3em;
+  margin: 0 4.5em;
 }
 
 .userProfileContainer {
@@ -29,4 +29,3 @@
 .profilesContainer {
   width: 100%;
 }
-

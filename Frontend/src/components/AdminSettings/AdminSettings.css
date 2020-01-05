@@ -8,39 +8,6 @@
   margin: auto;
 }
 
-.sectionContainer > .colorPickerContainer > * {
-  width: 85% !important;
-}
-
-.colorPickerContainer {
-  padding: 5px;
-  margin-left: 0;
-  margin-bottom: 10px;
-  display: block;
-  width: auto;
-  min-width: 100%;
-  height: auto;
-  min-height: 100%;
-}
-
-.colorPickerContainer > * {
-  width: 90%;
-}
-
-.circle-picker > * {
-  display: flex;
-  padding-top: 1em;
-  margin: 0 2em 1em 0;
-}
-
-#FFFFFF {
-  color: black;
-}
-
-.color-ex:hover {
-  cursor: pointer;
-}
-
 .sectionContainer {
   font-size: 0.9em;
   display: block;
@@ -99,13 +66,12 @@ input::placeholder {
   cursor: pointer;
 }
 
-.ideaLabLogo {
-  width: 600px;
+.adminContainer .ideaLabLogo {
+  width: 300px;
   margin-top: 25px;
 }
 
 .adminContainer .statusMenu {
   margin-top: 20px;
-  margin-left: 40px;
+  margin-left: 2em;
 }
-

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import BasicInput from '../BasicInput';
+import BasicInput from '../globalStyles/BasicInput';
 import RequestService from '../../util/RequestService';
 import AuthContext from '../../AuthContext';
 import TokenParser from '../../util/TokenParser';

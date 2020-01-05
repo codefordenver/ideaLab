@@ -1,9 +1,41 @@
-.color-availability-mark {
-  border: none;
-  position: absolute;
-  color: gray;
-  align-self: baseline;
-  padding-top: 0.1em;
-  font-size: 2em;
-  padding-left: 0.5em;
+.adminColorPickerContainer {
+  margin-left: 0;
+  margin-bottom: 10px;
+}
+
+.colorGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(50px, 1fr));
+  grid-row-gap: 30px;
+}
+
+.colorGrid > * {
+  justify-self: center;
+}
+
+.adminColorPickerContainer > * > * > * > * {
+  border-radius: 50%;
+  border: 1px solid black;
+}
+
+.circle-picker > *:hover {
+  cursor: pointer;
+}
+
+.customCircle {
+  display: flex;
+  align-items: center;
+  justify-self: start;
+}
+
+.availRectDisplay {
+  border: solid 1px black;
+  border-radius: 4px;
+  margin-right: 1em;
+  height: 32px;
+  width: 40px;
+}
+
+.checkbox-original {
+  transform: scale(2);
 }
