@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ToastProvider } from 'react-toast-notifications';
 import './AdminSettings.css';
 import ColorAvailability from './components/ColorAvailability';
@@ -9,9 +9,9 @@ import UpdateFileToken from './components/UpdateFileToken';
 const AdminSettings = () => {
   return (
     <div className="adminSettingsContainer">
-      <div className="sectionContainer">
-        <div className="adminSettingsSectionHeader">Color Availability</div>
-        <div className="colorPickerContainer">
+      <div className="sectionContainer colorPicker">
+        <div className="adminSettingsSectionHeader">Colors</div>
+        <div className="adminColorPickerContainer">
           <ColorAvailability />
         </div>
       </div>

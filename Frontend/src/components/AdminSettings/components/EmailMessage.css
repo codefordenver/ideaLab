@@ -7,6 +7,7 @@
 
 .emailMessageIndividualContainer textarea {
   width: 50%;
+  height: 10em;
 }
 
 .emailStatusTitle {

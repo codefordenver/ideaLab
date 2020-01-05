@@ -5,6 +5,7 @@ import AuthContext from '../../AuthContext';
 import { Logo } from './Logo';
 
 function PrivateRoute({ component: Component, ...rest }) {
+  const logo = window.location.href.includes('/#/create') ? null : <Logo />;
   return (
     <AuthContext.Consumer>
       {context => {
@@ -14,7 +15,7 @@ function PrivateRoute({ component: Component, ...rest }) {
             render={props =>
               context.authenticated ? (
                 <div>
-                  <Logo />
+                  {logo}
                   <Component {...props} />
                 </div>
               ) : (

@@ -3,7 +3,6 @@ import { CirclePicker } from 'react-color';
 
 const ColorPickerContainer = props => {
   const { handleColorChange, color, colors, colorCircleStyle } = props;
-
   const [hoverState, setHoverState] = useState(false);
 
   return (
