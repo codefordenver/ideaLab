@@ -55,6 +55,11 @@
   text-align: left;
   margin-left: 0.5em;
 }
+
+.uploadContainer textarea::placeholder {
+  font-size: 1rem;
+}
+
 .uploadContainer button.shapedButton {
   background-color: var(--other-dark-blue);
   color: var(--white-text);

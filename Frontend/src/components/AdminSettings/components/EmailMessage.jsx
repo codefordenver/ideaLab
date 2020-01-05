@@ -12,7 +12,6 @@ import './EmailMessage.css';
 const EmailMessage = props => {
   const [message, setMessage] = useState('');
   const [updatedMessage, setUpdatedMessage] = useState('');
-  const [errors, setErrors] = useState({});
 
   const { addToast } = useToasts();
 
@@ -25,11 +24,6 @@ const EmailMessage = props => {
     setUpdatedMessage(data.data.data.emailMessage);
   };
 
-  const failure = error => {
-    const newErrorState = RequestService.validationErrorGetter(error);
-    setErrors(newErrorState);
-  };
-
   const changeEmailMessageSuccess = success => {
     addToast('Successfully changed the email message.', {
       appearance: 'success',
@@ -38,7 +32,7 @@ const EmailMessage = props => {
   };
 
   const changeEmailMessageFailure = error => {
-    failure(error);
+    console.log(error);
     addToast('Failed to Save', { appearance: 'warning', autoDismiss: true });
   };
 
@@ -60,16 +54,8 @@ const EmailMessage = props => {
     RequestService.getEmailMessage(
       props.status,
       getEmailMessageSuccess,
-      failure,
+      changeEmailMessageFailure,
     );
-  };
-
-  const renderError = () => {
-    // if (errors) {
-    //   return <p>{errors}</p>;
-    // } else {
-    return null;
-    // }
   };
 
   return (
@@ -87,7 +73,6 @@ const EmailMessage = props => {
         <div className="emailMessageSaveIcon" onClick={onSave}>
           <FiSave />
         </div>
-        {renderError()}
       </div>
     </div>
   );
