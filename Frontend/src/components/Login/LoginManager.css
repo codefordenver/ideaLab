@@ -24,24 +24,6 @@ h4 {
   margin-top: 1em;
 }
 
-.loginContainer input {
-  display: block;
-  height: 2em;
-  width: 15em;
-  margin: 1rem;
-  border-radius: 2px;
-  border-color: #aaa;
-  outline: none;
-  border-style: solid;
-  font-size: 1.5rem;
-  padding-left: 0.5rem;
-  padding-bottom: 0.5rem;
-}
-
-.loginContainer input:focus {
-  border-color: #00aeef;
-}
-
 .accountSubmitButton {
   display: block;
   height: 2em;
@@ -61,32 +43,6 @@ h4 {
 
 .accountSubmitButton:hover {
   cursor: pointer;
-}
-
-.loginContainer > ::-webkit-input-placeholder {
-  font-size: 1.5rem;
-  color: #4b4b4b;
-  vertical-align: middle;
-}
-
-.loginContainer > :-moz-placeholder {
-  /* Firefox 18- */
-  font-size: 1.5rem;
-  color: #4b4b4b;
-  vertical-align: middle;
-}
-
-.loginContainer > ::-moz-placeholder {
-  /* Firefox 19+ */
-  font-size: 1.5rem;
-  color: #4b4b4b;
-  vertical-align: middle;
-}
-
-.loginContainer > :-ms-input-placeholder {
-  font-size: 1.5rem;
-  color: #4b4b4b;
-  vertical-align: middle;
 }
 
 .ideaLabLogo {

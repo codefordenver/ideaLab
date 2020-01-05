@@ -39,7 +39,7 @@ const EmailMessage = props => {
 
   const changeEmailMessageFailure = error => {
     failure(error);
-    addToast('Fail', { appearance: 'warning', autoDismiss: true });
+    addToast('Failed to Save', { appearance: 'warning', autoDismiss: true });
   };
 
   const onSave = () => {
@@ -64,17 +64,19 @@ const EmailMessage = props => {
     );
   };
 
-  const rendorError = () => {
-    if (errors) {
-      return <p>{errors}</p>;
-    } else {
-      return null;
-    }
+  const renderError = () => {
+    // if (errors) {
+    //   return <p>{errors}</p>;
+    // } else {
+    return null;
+    // }
   };
 
   return (
     <div>
-      <div className="emailStatusTitle">Message sent when status is changed to: {props.status}</div>
+      <div className="emailStatusTitle">
+        Message sent when status is changed to: {props.status}
+      </div>
       <div className="emailMessageIndividualContainer">
         <textarea
           className="messageText"
@@ -85,7 +87,7 @@ const EmailMessage = props => {
         <div className="emailMessageSaveIcon" onClick={onSave}>
           <FiSave />
         </div>
-        {rendorError}
+        {renderError()}
       </div>
     </div>
   );

@@ -14,15 +14,7 @@ const UserProfilesContainer = () => {
     RequestService.getUsers(
       response => {
         if (response.data.data) {
-          const data = response.data.data;
-          console.log(data);
-          const formattedData = data.map(user => {
-            return {
-              name: user.username,
-              role: user.role,
-            };
-          });
-          setData(formattedData);
+          setData(response.data.data);
         }
         setLoading(false);
       },
@@ -32,10 +24,13 @@ const UserProfilesContainer = () => {
 
   return (
     <div className="profilesStyles">
-      <div className="createAccountButton">
-        <a href="#/create">
-          <button>CREATE ACCOUNT</button>
-        </a>
+      <div className="profilesHeader">
+        <h4 className="manageHeader">Manage Accounts</h4>
+        <div className="createAccountButton">
+          <a href="#/create">
+            <button>CREATE ACCOUNT</button>
+          </a>
+        </div>
       </div>
       {loading ? (
         <div className={'loader-container'}>

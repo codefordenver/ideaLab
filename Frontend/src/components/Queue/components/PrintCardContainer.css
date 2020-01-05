@@ -8,6 +8,11 @@
   height: fit-content;
 }
 
+.mouseOverColorPickerContainer {
+  display: flex;
+  align-items: center;
+}
+
 .colorContainer {
   display: flex;
   align-items: center;

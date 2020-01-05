@@ -1,8 +1,9 @@
 import React from 'react';
+import './BasicInput.css';
 
 const BasicInput = props => {
   return (
-    <div>
+    <div className="basicInput">
       <input
         value={props.value}
         onChange={e => props.changeHandler(e.target.value)}

@@ -119,7 +119,9 @@ const ChangePasswordModal = props => {
   };
 
   let errorMessage;
-  error ? (errorMessage = <span>{error}</span>) : (errorMessage = null);
+  error
+    ? (errorMessage = <span className="password-err">{error}</span>)
+    : (errorMessage = null);
 
   const resetError = () => {
     const wait = ms => new Promise(resolve => setTimeout(resolve, ms));

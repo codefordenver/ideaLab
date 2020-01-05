@@ -2,11 +2,12 @@
   width: 97%;
   display: flex;
   flex-direction: row;
-  margin-bottom:2rem;
+  margin-bottom: 2rem;
 }
 
 .emailMessageIndividualContainer textarea {
   width: 50%;
+  height: 10em;
 }
 
 .emailStatusTitle {
@@ -16,10 +17,9 @@
 .emailMessageSaveIcon {
   transform: scale(2);
   margin-left: 2rem;
-  margin-bottom:2.5rem;
+  margin-bottom: 2.5rem;
 }
 
 .emailMessageSaveIcon:hover {
   cursor: pointer;
 }
-
