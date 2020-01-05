@@ -4,7 +4,7 @@ import { processActiveColors } from '../../util/ColorUtils';
 import Loader from '../globalStyles/Loader';
 import { createBrowserHistory } from 'history';
 import Upload from './components/Upload';
-import BasicInput from '../BasicInput';
+import BasicInput from '../globalStyles/BasicInput';
 import './UploadContainer.css';
 import ColorPickerContainer from '../Queue/components/ColorPickerContainer';
 

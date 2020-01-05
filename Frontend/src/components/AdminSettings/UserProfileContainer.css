@@ -1,12 +1,22 @@
 .profilesStyles {
   display: flex;
   flex-direction: column;
-  margin: 0 3em;
+  margin: 0 4.5em;
 }
 
 .userProfileContainer {
   display: flex;
   justify-content: space-evenly;
+}
+
+.profilesHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.manageHeader {
+  text-align: left;
+  width: fit-content;
 }
 
 .createAccountButton {
@@ -29,4 +39,3 @@
 .profilesContainer {
   width: 100%;
 }
-
