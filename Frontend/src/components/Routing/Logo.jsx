@@ -5,7 +5,7 @@ import './Logo.css';
 const Logo = props => (
   <div>
     <img className="logo" src={ideaLABlogo} alt={'ideaLab logo'}></img>
-    <h1 className="header">{props.title}</h1>
+    <h2 className="header">{props.title}</h2>
   </div>
 );
 

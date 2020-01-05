@@ -92,7 +92,7 @@ function App() {
               exact
               path="/upload"
               component={UploadContainer}
-              title="Upload Print Job"
+              title="Upload a New Print Job"
             />
             <Route
               path="/login"
@@ -113,6 +113,7 @@ function App() {
               exact
               path="/analysis"
               component={AnalysisContainer}
+              title="Print Job Analysis"
             />
             <PrivateRoute path="/" component={QueueContainer} />
           </Switch>
