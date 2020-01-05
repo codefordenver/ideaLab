@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { CirclePicker } from 'react-color';
 import RequestService from '../../../util/RequestService';
 
 const ColorAvailability = () => {
@@ -16,24 +15,24 @@ const ColorAvailability = () => {
     console.log('The color availability status did not change succesfully.');
   };
 
-  const changeClicked = hue => {
-    // let index = allColors.findIndex(x => {
-    //   return (
-    //     x.substring(1).toUpperCase() === hue.hex.substring(1).toUpperCase()
-    //   );
-    // });
-    // var avail = allColorsAvailable[index];
-    // var id = allColorsId[index];
-    // const confirmedClicked = window.confirm(
-    //   'Please confirm you want to change the availability status of this color',
-    // );
-    // if (confirmedClicked) {
-    //   var data = {
-    //     color: id,
-    //     body: { availability: !avail },
-    //   };
-    //   RequestService.putColorAvailability(data, onSuccess(index), onFailure);
-    // }
+  const updateColorAvail = event => {
+    event.preventDefault();
+    const colorIndex = parseInt(event.target.name) + 1;
+    const isAvail = event.target.value;
+    const confirmedClicked = window.confirm(
+      'Please confirm you want to change the availability status of this color',
+    );
+    if (confirmedClicked) {
+      var data = {
+        color: colorIndex,
+        body: { availability: !isAvail },
+      };
+      RequestService.putColorAvailability(
+        data,
+        onSuccess(colorIndex),
+        onFailure,
+      );
+    }
   };
 
   useEffect(() => {
@@ -59,14 +58,20 @@ const ColorAvailability = () => {
 
   const renderCircles = () => {
     let circleRender = [];
-    allColors.map(color => {
+    allColors.map((color, i) => {
       const colorRectStyle = {
         backgroundColor: `${color.hue}`,
       };
       circleRender.push(
-        <div className="customCircle">
+        <div className="customCircle" key={i}>
           <div className="availRectDisplay" style={colorRectStyle} />
-          <input type="checkbox" checked={color.available}></input>
+          <input
+            type="checkbox"
+            name={i}
+            value={color.available}
+            checked={color.available}
+            onChange={event => updateColorAvail(event)}
+          ></input>
         </div>,
       );
     });

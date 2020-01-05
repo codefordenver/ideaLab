@@ -64,12 +64,12 @@ const EmailMessage = props => {
     );
   };
 
-  const rendorError = () => {
-    if (errors) {
-      return <p>{errors}</p>;
-    } else {
-      return null;
-    }
+  const renderError = () => {
+    // if (errors) {
+    //   return <p>{errors}</p>;
+    // } else {
+    return null;
+    // }
   };
 
   return (
@@ -87,7 +87,7 @@ const EmailMessage = props => {
         <div className="emailMessageSaveIcon" onClick={onSave}>
           <FiSave />
         </div>
-        {rendorError}
+        {renderError()}
       </div>
     </div>
   );
