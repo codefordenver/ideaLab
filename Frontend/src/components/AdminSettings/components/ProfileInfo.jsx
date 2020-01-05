@@ -67,7 +67,7 @@ const UserProfilesContainer = props => {
       </div>
 
       <button className="changePasswordButton" onClick={triggerPasswordChange}>
-        Change Password
+        CHANGE PASSWORD
       </button>
       {changeModal}
     </div>
