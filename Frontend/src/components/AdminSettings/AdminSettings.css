@@ -8,36 +8,6 @@
   margin: auto;
 }
 
-.adminColorPickerContainer {
-  margin-left: 0;
-  margin-bottom: 10px;
-}
-
-.colorGrid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(50px, 1fr));
-  grid-row-gap: 30px;
-}
-
-.colorGrid > * {
-  justify-self: center;
-}
-
-.adminColorPickerContainer > * > * > * > * {
-  border-radius: 50%;
-  border: 1px solid black;
-}
-
-.circle-picker > *:hover {
-  cursor: pointer;
-}
-
-.customCircle {
-  display: flex;
-  align-items: baseline;
-  justify-self: start;
-}
-
 .sectionContainer {
   font-size: 0.9em;
   display: block;
@@ -70,15 +40,6 @@
   padding: 1em 10px;
   width: 200px;
   margin: 0 1em 1em 0;
-}
-
-.availRectDisplay {
-  border: solid 1px black;
-  border-radius: 4px;
-  margin-bottom: 1em;
-  margin-right: 1em;
-  height: 32px;
-  width: 40px;
 }
 
 input::placeholder {

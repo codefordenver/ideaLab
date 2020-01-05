@@ -19,10 +19,10 @@ const AdminSettings = () => {
         <div className="adminSettingsSectionHeader">Email Messages</div>
         <div className="emailMessageContainer">
           <ToastProvider>
-            <EmailMessage status="FAILED" />
+            <EmailMessage status="COMPLETED" />
           </ToastProvider>
           <ToastProvider>
-            <EmailMessage status="COMPLETED" />
+            <EmailMessage status="FAILED" />
           </ToastProvider>
         </div>
       </div>

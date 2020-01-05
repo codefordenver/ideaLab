@@ -9,8 +9,14 @@
   justify-content: space-evenly;
 }
 
+.profilesHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
 .manageHeader {
-  float: left;
+  text-align: left;
+  width: fit-content;
 }
 
 .createAccountButton {
