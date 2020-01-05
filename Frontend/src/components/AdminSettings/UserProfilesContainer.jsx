@@ -24,6 +24,7 @@ const UserProfilesContainer = () => {
 
   return (
     <div className="profilesStyles">
+      <h4 className="manageHeader">Manage Accounts</h4>
       <div className="createAccountButton">
         <a href="#/create">
           <button>CREATE ACCOUNT</button>

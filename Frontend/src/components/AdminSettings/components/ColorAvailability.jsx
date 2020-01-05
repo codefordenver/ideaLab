@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import RequestService from '../../../util/RequestService';
+import './ColorAvailability.css';
 
 const ColorAvailability = () => {
   const [allColors, setAllColors] = useState([]);
   const [hexList, setHexList] = useState([]);
 
   const onSuccess = index => {
-    // var updatedColors = allColorsAvailable;
-    // updatedColors[index] = !updatedColors[index];
-    // setAllColors(updatedColors);
+    const colorIndex = index - 1;
+    let updatedColors = allColors;
+    updatedColors[colorIndex].available = !updatedColors[colorIndex].available;
+    console.log('updated colors:', updatedColors);
+    setAllColors(updatedColors);
   };
 
   const onFailure = () => {
@@ -19,6 +22,7 @@ const ColorAvailability = () => {
     event.preventDefault();
     const colorIndex = parseInt(event.target.name) + 1;
     const isAvail = event.target.value;
+    console.log('STATUS, INDEX:', event.target.value, colorIndex);
     const confirmedClicked = window.confirm(
       'Please confirm you want to change the availability status of this color',
     );
@@ -54,7 +58,7 @@ const ColorAvailability = () => {
       },
       error => console.error(error),
     );
-  }, []);
+  }, [allColors]);
 
   const renderCircles = () => {
     let circleRender = [];
@@ -65,13 +69,16 @@ const ColorAvailability = () => {
       circleRender.push(
         <div className="customCircle" key={i}>
           <div className="availRectDisplay" style={colorRectStyle} />
-          <input
-            type="checkbox"
-            name={i}
-            value={color.available}
-            checked={color.available}
-            onChange={event => updateColorAvail(event)}
-          ></input>
+          <div className="checkbox-wrapper">
+            <input
+              className="checkbox-original"
+              type="checkbox"
+              name={i}
+              value={color.available}
+              checked={color.available}
+              onChange={event => updateColorAvail(event)}
+            ></input>
+          </div>
         </div>,
       );
     });

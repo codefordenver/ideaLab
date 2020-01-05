@@ -9,6 +9,10 @@
   justify-content: space-evenly;
 }
 
+.manageHeader {
+  float: left;
+}
+
 .createAccountButton {
   align-self: flex-end;
 }
