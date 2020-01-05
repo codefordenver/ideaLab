@@ -10,7 +10,6 @@ const ColorAvailability = () => {
     const colorIndex = index - 1;
     let updatedColors = allColors;
     updatedColors[colorIndex].available = !updatedColors[colorIndex].available;
-    console.log('updated colors:', updatedColors);
     setAllColors(updatedColors);
   };
 
@@ -22,7 +21,6 @@ const ColorAvailability = () => {
     event.preventDefault();
     const colorIndex = parseInt(event.target.name) + 1;
     const isAvail = event.target.value;
-    console.log('STATUS, INDEX:', event.target.value, colorIndex);
     const confirmedClicked = window.confirm(
       'Please confirm you want to change the availability status of this color',
     );
