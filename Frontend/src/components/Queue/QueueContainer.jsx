@@ -23,6 +23,7 @@ const QueueContainer = () => {
     const colorList = processActiveColors();
     setColors(colorList);
     setLoading(false);
+    fetchQueueData();
   }, []);
 
   useEffect(() => {
@@ -156,6 +157,8 @@ const QueueContainer = () => {
       const lastName = printJob.customerInfo.lastName;
       const fullName = firstName + lastName;
       const nameFull = lastName + firstName;
+
+      console.log(comments);
 
       if (input === commentsJoin) return printJob;
       if (input === firstName) return printJob;

@@ -12,6 +12,7 @@ const Queue = props => {
       data={card}
       key={card.id}
       employeeId={props.employeeId}
+      fetchQueueData={props.fetchQueueData}
       colors={props.colors}
       saveCard={props.saveCard}
     />
