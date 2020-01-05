@@ -79,6 +79,24 @@ body {
   font-size: 2rem;
   list-style: none;
   text-align: left;
+  position: fixed;
+  width: 10.7%;
+}
+
+@media screen and (max-width: 1240px) {
+
+  .navList {
+    width: 10.6%;
+  } 
+  
+}
+
+@media screen and (max-width: 920px) {
+
+  .navList {
+    width: 10.5%;
+  } 
+  
 }
 
 .navList a,
