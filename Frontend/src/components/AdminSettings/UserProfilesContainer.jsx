@@ -24,13 +24,10 @@ const UserProfilesContainer = () => {
 
   return (
     <div className="profilesStyles">
-      <div className="profilesHeader">
-        <h4 className="manageHeader">Manage Accounts</h4>
-        <div className="createAccountButton">
-          <a href="#/create">
-            <button>CREATE ACCOUNT</button>
-          </a>
-        </div>
+      <div className="createAccountButton">
+        <a href="#/create">
+          <button>CREATE ACCOUNT</button>
+        </a>
       </div>
       {loading ? (
         <div className={'loader-container'}>

@@ -4,8 +4,10 @@ import { Route, Redirect } from 'react-router-dom';
 import AuthContext from '../../AuthContext';
 import { Logo } from './Logo';
 
-function PrivateRoute({ component: Component, ...rest }) {
-  const logo = window.location.href.includes('/#/create') ? null : <Logo />;
+function PrivateRoute({ component: Component, title, ...rest }) {
+  const logo = window.location.href.includes('/#/create') ? null : (
+    <Logo title={title} />
+  );
   return (
     <AuthContext.Consumer>
       {context => {
