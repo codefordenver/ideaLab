@@ -4,7 +4,7 @@ import { Route, Redirect } from 'react-router-dom';
 import AuthContext from '../../AuthContext';
 import { Logo } from './Logo';
 
-function PrivateRoute({ component: Component, ...rest }) {
+function PrivateRoute({ component: Component, title, ...rest }) {
   return (
     <AuthContext.Consumer>
       {context => {
@@ -14,7 +14,7 @@ function PrivateRoute({ component: Component, ...rest }) {
             render={props =>
               context.authenticated ? (
                 <div>
-                  <Logo />
+                  <Logo title={title} />
                   <Component {...props} />
                 </div>
               ) : (

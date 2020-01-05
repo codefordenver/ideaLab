@@ -72,17 +72,28 @@ function App() {
                 setState(initialState);
               }}
             />
-            ) : (
+          ) : (
             <div className="dummyNavBar"></div>
           )}
           <Switch>
-            <PrivateRoute exact path="/queue" component={queueContainer} />
+            <PrivateRoute
+              exact
+              path="/queue"
+              component={queueContainer}
+              title="Print Queue"
+            />
             <PrivateRoute
               exact
               path="/manageaccounts"
               component={AdminContainer}
+              title="Manage Accounts"
             />
-            <PrivateRoute exact path="/upload" component={UploadContainer} />
+            <PrivateRoute
+              exact
+              path="/upload"
+              component={UploadContainer}
+              title="Upload Print Job"
+            />
             <Route
               path="/login"
               render={props => {
