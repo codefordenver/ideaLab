@@ -9,16 +9,6 @@
   justify-content: space-evenly;
 }
 
-.profilesHeader {
-  display: flex;
-  justify-content: space-between;
-}
-
-.manageHeader {
-  text-align: left;
-  width: fit-content;
-}
-
 .createAccountButton {
   align-self: flex-end;
 }
