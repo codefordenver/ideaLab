@@ -115,6 +115,9 @@ const PrintCardContainer = props => {
 
   const secondRowContent = isToggled ? (
     <td id="secondRowContent">
+      <span className="uniqueId">
+        Unique ID: <b>{card.id}</b>
+      </span>
       <span
         onClick={triggerShowSendEmailAboutAnythingModal}
         className="emailRecipient"
