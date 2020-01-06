@@ -17,27 +17,23 @@
 }
 
 .basicInput > ::-webkit-input-placeholder {
-  font-size: 1.5rem;
   color: #4b4b4b;
   vertical-align: middle;
 }
 
 .basicInput > :-moz-placeholder {
   /* Firefox 18- */
-  font-size: 1.5rem;
   color: #4b4b4b;
   vertical-align: middle;
 }
 
 .basicInput > ::-moz-placeholder {
   /* Firefox 19+ */
-  font-size: 1.5rem;
   color: #4b4b4b;
   vertical-align: middle;
 }
 
 .basicInput > :-ms-input-placeholder {
-  font-size: 1.5rem;
   color: #4b4b4b;
   vertical-align: middle;
 }

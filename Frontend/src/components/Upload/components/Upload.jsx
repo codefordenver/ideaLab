@@ -10,7 +10,7 @@ function Upload(props) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
-    <div className={'upload'} {...getRootProps()}>
+    <div className="upload" {...getRootProps()}>
       <input {...getInputProps()} />
       {isDragActive ? <p>upload or drag STL files</p> : <p>upload STL files</p>}
       {props.filename ? <p>Filename: {props.filename}</p> : null}
