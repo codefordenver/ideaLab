@@ -2,11 +2,12 @@ import React, { Fragment, useState } from 'react';
 import { FiMail, FiSave } from 'react-icons/fi';
 import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
 import ColorPickerContainer from './ColorPickerContainer';
+import SendEmailAboutAnythingModal from './SendEmailAboutAnythingModal';
 import './PrintCardContainer.css';
 import PrintDateAdded from './PrintDateAdded';
 import StatusDropdown from './StatusDropdown';
+import { ToastProvider, useToasts } from 'react-toast-notifications';
 import Backdrop from '../../globalStyles/Backdrop/Backdrop';
-import SendEmailModal from './SendEmailModal';
 
 const PrintCardContainer = props => {
   const [isToggled, setIsToggled] = useState(false);
@@ -18,11 +19,19 @@ const PrintCardContainer = props => {
   });
   const [colors] = useState(props.colors);
   const [isSaveIconShowing, setSaveIconShowing] = useState(false);
+  const [
+    showSendEmailAboutAnythingModal,
+    setShowSendEmailAboutAnythingModal,
+  ] = useState(false);
 
   const { saveCard } = props;
 
   const colorCircleStyle = {
     backgroundColor: `${updatedData.colorType}`,
+  };
+
+  const triggerShowSendEmailAboutAnythingModal = () => {
+    setShowSendEmailAboutAnythingModal(!showSendEmailAboutAnythingModal);
   };
 
   const handleColorChange = hue => {
@@ -54,6 +63,18 @@ const PrintCardContainer = props => {
   const dropItDown = () => {
     setIsToggled(!isToggled);
   };
+
+  const sendEmailAboutAnythingModal = (
+    <ToastProvider>
+      <Backdrop showModal={showSendEmailAboutAnythingModal}>
+        <SendEmailAboutAnythingModal
+          email={props.data.customerInfo.email}
+          setShowSendEmailModal={triggerShowSendEmailAboutAnythingModal}
+          showModal={showSendEmailAboutAnythingModal}
+        />
+      </Backdrop>
+    </ToastProvider>
+  );
 
   const saveChanges = () => {
     let updatedSavedCard = {
@@ -94,11 +115,12 @@ const PrintCardContainer = props => {
 
   const secondRowContent = isToggled ? (
     <td id="secondRowContent">
-      <span className="uniqueId">
-        Unique ID: <b>{card.id}</b>
-      </span>
-      <span className="emailRecipient">
-        Contact {card.customerInfo.firstName} <FiMail />
+      <span
+        onClick={triggerShowSendEmailAboutAnythingModal}
+        className="emailRecipient"
+      >
+        Contact {card.customerInfo.firstName + ' ' + card.customerInfo.lastName}{' '}
+        <FiMail />
       </span>
       <textarea
         onChange={updateComment}
@@ -124,40 +146,43 @@ const PrintCardContainer = props => {
   };
 
   return (
-    <tbody className="printCardContainer">
-      <tr>
-        <td className="printFileName">
-          <a href={updateFileUrlParams(card.fileSharableLink)}>
-            {card.filePath}
-          </a>
-        </td>
-        <td className="colorContainer" colSpan="3">
-          <ColorPickerContainer
-            handleColorChange={handleColorChange}
-            color={card.colorType.color}
-            colors={colors}
-            colorCircleStyle={colorCircleStyle}
-          />
-        </td>
-        <td className="submitDate">
-          <PrintDateAdded submitted={card.createdAt} />
-        </td>
-        <td>
-          <StatusDropdown
-            currentStatus={card.status}
-            statusChanged={updatePrintingStatus}
-            id={card.id}
-          />
-        </td>
-        <td className="printAdditionalInfo">
-          <div className="toggleArrow" onClick={dropItDown}>
-            {toggleArrow}
-          </div>
-          {saveButton}
-        </td>
-      </tr>
-      <tr>{secondRowContent}</tr>
-    </tbody>
+    <div>
+      <tbody className="printCardContainer">
+        <tr>
+          <td className="printFileName">
+            <a href={updateFileUrlParams(card.fileSharableLink)}>
+              {card.filePath}
+            </a>
+          </td>
+          <td className="colorContainer" colSpan="3">
+            <ColorPickerContainer
+              handleColorChange={handleColorChange}
+              color={card.colorType.color}
+              colors={colors}
+              colorCircleStyle={colorCircleStyle}
+            />
+          </td>
+          <td className="submitDate">
+            <PrintDateAdded submitted={card.createdAt} />
+          </td>
+          <td>
+            <StatusDropdown
+              currentStatus={card.status}
+              statusChanged={updatePrintingStatus}
+              id={card.id}
+            />
+          </td>
+          <td className="printAdditionalInfo">
+            <div className="toggleArrow" onClick={dropItDown}>
+              {toggleArrow}
+            </div>
+            {saveButton}
+          </td>
+        </tr>
+        <tr>{secondRowContent}</tr>
+      </tbody>
+      {sendEmailAboutAnythingModal}
+    </div>
   );
 };
 

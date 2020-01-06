@@ -211,6 +211,20 @@ const RequestService = {
       .catch(catchCallback);
   },
 
+  // Sends an email about anything
+  sendEmailAboutAnything(payload, thenCallback, catchCallback) {
+    const backendInstance = generateApiInstance();
+    const body = {
+      subject: payload.subject,
+      message: payload.message,
+      email: payload.email,
+    };
+    backendInstance
+      .post(backendUrl + '/api/mail', body)
+      .then(thenCallback)
+      .catch(catchCallback);
+  },
+
   getGraphDataByColors(thenCallback, catchCallback) {
     const backendInstance = generateApiInstance();
     backendInstance

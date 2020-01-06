@@ -87,7 +87,7 @@ const QueueContainer = () => {
 
   const saveCard = updatedCard => {
     setUpdatedCard(updatedCard);
-    if (updatedCard.status === 'FAILED') {
+    if (updatedCard.status === 'FAILED' || updatedCard.status === 'COMPLETED') {
       setShowSendEmailModal(true);
     } else {
       updateCardData(updatedCard);
