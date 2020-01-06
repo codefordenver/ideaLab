@@ -136,6 +136,7 @@ function UploadContainer() {
                 color={color}
                 colors={colors}
                 colorCircleStyle={colorCircleStyle}
+                allowBlank={true}
               />
             </div>
             <div>

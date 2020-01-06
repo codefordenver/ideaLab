@@ -1,23 +1,41 @@
 import React, { Fragment, useState } from 'react';
 import { CirclePicker } from 'react-color';
+import './ColorPickerContainer.css';
 
 const ColorPickerContainer = props => {
-  const { handleColorChange, color, colors, colorCircleStyle } = props;
+  const {
+    handleColorChange,
+    color,
+    colors,
+    colorCircleStyle,
+    allowBlank,
+  } = props;
   const [hoverState, setHoverState] = useState(false);
+
+  const returnNoColorSymbol = () => {
+    if (allowBlank && color === '') {
+      return ' ✗ ';
+    }
+    return '';
+  };
 
   return (
     <div
       className="mouseOverColorPickerContainer"
       onMouseLeave={() => setHoverState(false)}
     >
-      <div
-        className="colorCircle"
-        style={colorCircleStyle}
-        onMouseEnter={() => setHoverState(true)}
-      />
+      <div>
+        <div
+          className="colorCircle"
+          style={colorCircleStyle}
+          onMouseEnter={() => setHoverState(true)}
+        >
+          {returnNoColorSymbol()}
+        </div>
+      </div>
 
       <div className="colorSelectionStatus">
-        {color ? null : 'No Color Selected'}
+        {color ? null : ' No Color Selected'}
       </div>
 
       {hoverState ? (
