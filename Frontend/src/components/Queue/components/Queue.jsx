@@ -32,7 +32,7 @@ const Queue = props => {
         ) : (
           false
         )}
-        <SearchBar filterByTerm={props.filterByTerm} />
+        <SearchBar submit={props.searchBarSubmit} />
       </div>
       <table id="queueTable">
         <thead>

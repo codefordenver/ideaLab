@@ -144,6 +144,33 @@ const QueueContainer = () => {
     setStatusView(view);
   };
 
+  const searchBarSubmitHandler = event => {
+    const input = event.target.input.value
+      .toLowerCase()
+      .split(' ')
+      .join('');
+
+    const activeCards = filteredData.filter(printJob => {
+      const comments = printJob.comments.toLowerCase().split(' ');
+      const commentsJoin = comments.join('');
+      const filePath = printJob.filePath;
+      const firstName = printJob.customerInfo.firstName;
+      const lastName = printJob.customerInfo.lastName;
+      const fullName = firstName + lastName;
+      const nameFull = lastName + firstName;
+
+      console.log(comments);
+
+      if (input === commentsJoin) return printJob;
+      if (input === firstName) return printJob;
+      if (input === lastName) return printJob;
+      if (input === fullName) return printJob;
+      if (input === nameFull) return printJob;
+      if (input === filePath) return printJob;
+      if (comments.includes(input)) return printJob;
+    });
+  };
+
   return (
     <div>
       <AuthContext.Consumer>
@@ -152,6 +179,7 @@ const QueueContainer = () => {
             <Queue
               loading={loading}
               statusView={statusView}
+              searchBarSubmit={searchBarSubmitHandler}
               setStatus={setStatus}
               filteredData={filteredData}
               colors={colors}
@@ -165,7 +193,5 @@ const QueueContainer = () => {
     </div>
   );
 };
-
-//
 
 export default QueueContainer;
