@@ -26,6 +26,41 @@ const QueueContainer = () => {
   }, []);
 
   useEffect(() => {
+    const fetchQueueData = () => {
+      //TO DO: GET PRINT JOBS BASED ON STATUS, NOT ALL AT ONCE
+      RequestService.getPrintJobs(
+        response => {
+          const activeCards = response.data.data.filter(card => {
+            if (
+              statusView === 'DONE' &&
+              returnCardStatus(card.status) === 'DONE'
+            ) {
+              return card;
+            } else if (
+              statusView === 'PENDING_REVIEW' &&
+              returnCardStatus(card.status) === 'PENDING_REVIEW'
+            ) {
+              return card;
+            } else if (
+              statusView === 'PRINTING' &&
+              returnCardStatus(card.status) === 'PRINTING'
+            ) {
+              return card;
+            } else if (
+              statusView === 'FAILED' &&
+              returnCardStatus(card.status) === 'FAILED'
+            ) {
+              return card;
+            } else {
+              return null;
+            }
+          });
+          setFilteredData(activeCards);
+        },
+        error => console.error(error),
+      );
+    };
+
     //Load initial data and set the loading only on first load
     setLoading(true);
     fetchQueueData();
@@ -106,39 +141,6 @@ const QueueContainer = () => {
       </Backdrop>
     </ToastProvider>
   );
-
-  const fetchQueueData = () => {
-    //TO DO: GET PRINT JOBS BASED ON STATUS, NOT ALL AT ONCE
-    RequestService.getPrintJobs(
-      response => {
-        const activeCards = response.data.data.filter(card => {
-          if (
-            statusView === 'DONE' &&
-            returnCardStatus(card.status) === 'DONE'
-          ) {
-            return card;
-          } else if (
-            statusView === 'PENDING_REVIEW' &&
-            returnCardStatus(card.status) === 'PENDING_REVIEW'
-          ) {
-            return card;
-          } else if (
-            statusView === 'PRINTING' &&
-            returnCardStatus(card.status) === 'PRINTING'
-          ) {
-            return card;
-          } else if (
-            statusView === 'FAILED' &&
-            returnCardStatus(card.status) === 'FAILED'
-          ) {
-            return card;
-          }
-        });
-        setFilteredData(activeCards);
-      },
-      error => console.error(error),
-    );
-  };
 
   const setStatus = view => {
     setStatusView(view);

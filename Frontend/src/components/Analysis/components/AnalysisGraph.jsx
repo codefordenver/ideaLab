@@ -11,7 +11,7 @@ const AnalysisGraph = props => {
       labels.push(key);
       for (var colorKey in props.graphData[key]) {
         if (props.graphData[key].hasOwnProperty(colorKey)) {
-          if (datasets[colorKey] != undefined) {
+          if (datasets[colorKey] !== undefined) {
             datasets[colorKey].push(props.graphData[key][colorKey]);
           } else {
             datasets[colorKey] = [props.graphData[key][colorKey]];

@@ -4,7 +4,6 @@ import './ColorAvailability.css';
 
 const ColorAvailability = () => {
   const [allColors, setAllColors] = useState([]);
-  const [hexList, setHexList] = useState([]);
 
   const onSuccess = index => {
     const colorIndex = index - 1;
@@ -38,33 +37,28 @@ const ColorAvailability = () => {
   };
 
   useEffect(() => {
-    let colorList = [];
-    let hexArray = [];
     RequestService.getAllColors(
       response => {
         const data = response.data.data;
-        data.map((color, i) => {
-          colorList.push({
+        const colorList = data.map((color, i) => {
+          return {
             hue: color.color,
             available: color.available,
             id: i,
-          });
-          hexArray.push(color.color);
+          };
         });
         setAllColors(colorList);
-        setHexList(hexArray);
       },
       error => console.error(error),
     );
   }, [allColors]);
 
   const renderCircles = () => {
-    let circleRender = [];
-    allColors.map((color, i) => {
+    const circleRender = allColors.map((color, i) => {
       const colorRectStyle = {
         backgroundColor: `${color.hue}`,
       };
-      circleRender.push(
+      return (
         <div className="customCircle" key={i}>
           <div className="availRectDisplay" style={colorRectStyle} />
           <div className="checkbox-wrapper">
@@ -77,7 +71,7 @@ const ColorAvailability = () => {
               onChange={event => updateColorAvail(event)}
             ></input>
           </div>
-        </div>,
+        </div>
       );
     });
     return circleRender;
