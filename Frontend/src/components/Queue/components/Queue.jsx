@@ -34,6 +34,7 @@ const Queue = props => {
         )}
         <SearchBar
           fetchQueueData={props.fetchQueueData}
+          filteredData={props.filteredData}
           submit={props.searchBarSubmit}
         />
       </div>
@@ -55,7 +56,7 @@ const Queue = props => {
         ) : (
           <tbody>
             <tr>
-              <td>No cards fit this criteria</td>
+              <td>No cards fit this criteria.</td>
             </tr>
           </tbody>
         )}

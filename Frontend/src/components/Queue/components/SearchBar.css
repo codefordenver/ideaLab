@@ -58,7 +58,7 @@
 
 .go-back-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   height: 2.5rem;
   padding-left: 1rem;

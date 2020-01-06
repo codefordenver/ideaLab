@@ -158,8 +158,6 @@ const QueueContainer = () => {
       const fullName = firstName + lastName;
       const nameFull = lastName + firstName;
 
-      console.log(comments);
-
       if (input === commentsJoin) return printJob;
       if (input === firstName) return printJob;
       if (input === lastName) return printJob;

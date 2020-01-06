@@ -22,6 +22,8 @@ const SearchBar = props => {
     props.fetchQueueData();
   };
 
+  console.log('FD: ', props.filteredData);
+
   let searchDiv, goBack;
   if (!searched) {
     searchDiv = (
@@ -37,7 +39,7 @@ const SearchBar = props => {
         <button type="submit" />
       </div>
     );
-  } else if (searched) {
+  } else {
     goBack = (
       <div className="go-back-container" onClick={goBackHandler}>
         <button onClick={goBackHandler} />
