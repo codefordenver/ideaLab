@@ -1,0 +1,14 @@
+.queueContainer {
+  margin: 0px 50px;
+}
+
+.queueFilterInfo {
+  width: 100%;
+  margin: 2rem 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.queueContainer table {
+  margin: 0;
+}

@@ -3,6 +3,8 @@ import MenuBar from '../../globalStyles/MenuBar';
 import { MenuTabs } from '../../globalStyles/MenuTabs';
 import Loader from '../../globalStyles/Loader';
 import PrintCardContainer from '../components/PrintCardContainer';
+import SearchBar from './SearchBar';
+import './Queue.css';
 
 const Queue = props => {
   const renderPrintCards = props.filteredData.map(card => (
@@ -30,8 +32,10 @@ const Queue = props => {
         ) : (
           false
         )}
-
-        {/* <SearchBar filterByTerm={props.filterByTerm} /> */}
+        <SearchBar
+          fetchQueueData={props.fetchQueueData}
+          submit={props.searchBarSubmit}
+        />
       </div>
       <table id="queueTable">
         <thead>

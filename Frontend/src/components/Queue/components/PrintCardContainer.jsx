@@ -78,6 +78,7 @@ const PrintCardContainer = props => {
       }
     }
     saveCard(updatedSavedCard);
+    // props.fetchQueueData();
     setSaveIconShowing(false);
   };
 
