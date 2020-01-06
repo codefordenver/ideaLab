@@ -7,7 +7,6 @@ import AnalysisGraph from './components/AnalysisGraph';
 const AnalysisContainer = () => {
   const [loading, setLoading] = useState(false);
   const [graphData, setGraphData] = useState([]);
-  const sampleGraphData = require('./sampleGraphData.json');
 
   useEffect(() => {
     setLoading(true);

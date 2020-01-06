@@ -9,7 +9,6 @@ const UserProfilesContainer = props => {
   const [passwordChange, setPasswordChange] = useState(false);
 
   const { username, firstName, lastName, role } = props.userData;
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -24,7 +23,6 @@ const UserProfilesContainer = props => {
   };
 
   const updateUserRole = newRole => {
-    setLoading(true);
     setError(false);
     setSuccess(false);
     RequestService.updateUsers(
@@ -41,7 +39,6 @@ const UserProfilesContainer = props => {
         setError(true);
       },
     );
-    setLoading(false);
   };
 
   const changeModal = (

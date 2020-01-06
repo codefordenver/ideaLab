@@ -5,8 +5,6 @@ import ColorPickerContainer from './ColorPickerContainer';
 import './PrintCardContainer.css';
 import PrintDateAdded from './PrintDateAdded';
 import StatusDropdown from './StatusDropdown';
-import Backdrop from '../../globalStyles/Backdrop/Backdrop';
-import SendEmailModal from './SendEmailModal';
 
 const PrintCardContainer = props => {
   const [isToggled, setIsToggled] = useState(false);

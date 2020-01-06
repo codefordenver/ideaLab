@@ -9,6 +9,7 @@ import './EmailMessage.css';
  * that is sent via email. It requires the status.
  * @param {status} props
  */
+
 const EmailMessage = props => {
   const [message, setMessage] = useState('');
   const [updatedMessage, setUpdatedMessage] = useState('');
@@ -16,8 +17,16 @@ const EmailMessage = props => {
   const { addToast } = useToasts();
 
   useEffect(() => {
+    const fetchData = () => {
+      RequestService.getEmailMessage(
+        props.status,
+        getEmailMessageSuccess,
+        changeEmailMessageFailure,
+      );
+    };
+
     fetchData();
-  }, []);
+  });
 
   const getEmailMessageSuccess = data => {
     setMessage(data.data.data.emailMessage);
@@ -48,14 +57,6 @@ const EmailMessage = props => {
         changeEmailMessageFailure,
       );
     }
-  };
-
-  const fetchData = () => {
-    RequestService.getEmailMessage(
-      props.status,
-      getEmailMessageSuccess,
-      changeEmailMessageFailure,
-    );
   };
 
   return (

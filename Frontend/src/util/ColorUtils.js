@@ -7,7 +7,7 @@ const processActiveColors = () => {
     response => {
       const data = response.data.data;
       data.map(color => {
-        activeColorList.push(color.color);
+        return activeColorList.push(color.color);
       });
     },
     error => console.error(error),

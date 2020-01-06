@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const StyledDropdown = props => {
   const [currentVal, updateValue] = useState(props.value);
-  const { value, dropdownOptions, saveDropdownChange } = props;
+  const { dropdownOptions, saveDropdownChange } = props;
   const dropdownUpdated = event => {
     updateValue(event.target.value);
     saveDropdownChange(event.target.value);
