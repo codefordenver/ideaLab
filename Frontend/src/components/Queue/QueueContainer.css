@@ -86,16 +86,6 @@ tr th:nth-child(5) {
   align-items: center;
 }
 
-.search-container input {
-  padding: 2px;
-  border: none;
-  font-size: 14px;
-  background: white;
-  border: solid 1px #333;
-  border-radius: 6px;
-  text-align: left;
-}
-
 .queueBanner .col10 {
   width: 5%;
 }

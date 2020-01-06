@@ -1,0 +1,58 @@
+.search-container {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  height: 2.5rem;
+  width: 24rem;
+  border: 1px solid black;
+  border-radius: 4px;
+  padding-left: 1rem;
+}
+
+.search-container button {
+  height: 2rem;
+  width: 2rem;
+  border: none;
+  background-image: url('../../../images/search-icon.svg');
+  background-position: center;
+  background-size: cover;
+}
+
+.search-container button:active,
+.search-container button:focus {
+  outline: none;
+}
+
+.search-bar {
+  height: 100%;
+  width: 90%;
+  border: none;
+  outline: none;
+}
+
+.search-container > ::-webkit-input-placeholder {
+  font-size: 1rem;
+  color: #4b4b4b;
+  vertical-align: middle;
+}
+
+.search-container > :-moz-placeholder {
+  /* Firefox 18- */
+  font-size: 1rem;
+  color: #4b4b4b;
+  vertical-align: middle;
+}
+
+.search-container > ::-moz-placeholder {
+  /* Firefox 19+ */
+  font-size: 1rem;
+  color: #4b4b4b;
+  vertical-align: middle;
+}
+
+.search-container > :-ms-input-placeholder {
+  font-size: 1rem;
+  color: #4b4b4b;
+  vertical-align: middle;
+  border: none;
+}
