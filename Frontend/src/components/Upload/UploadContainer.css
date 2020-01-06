@@ -54,6 +54,7 @@
 .uploadContainer textarea::placeholder {
   text-align: left;
   margin-left: 0.5em;
+  color: #888888;
 }
 
 .uploadContainer textarea::placeholder {
@@ -70,6 +71,7 @@
 
 .colorTitle {
   text-align: left;
+  color: #888888;
 }
 
 .colorContainerUpload {

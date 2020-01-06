@@ -130,7 +130,7 @@ function UploadContainer() {
             />
 
             <div className="colorContainerUpload">
-              <p className="colorTitle">Color:</p>
+              <p className="colorTitle">Color</p>
               <ColorPickerContainer
                 handleColorChange={handleColorChange}
                 color={color}
