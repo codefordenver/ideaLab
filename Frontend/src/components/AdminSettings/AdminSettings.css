@@ -8,39 +8,6 @@
   margin: auto;
 }
 
-.sectionContainer > .colorPickerContainer > * {
-  width: 85% !important;
-}
-
-.colorPickerContainer {
-  padding: 5px;
-  margin-left: 0;
-  margin-bottom: 10px;
-  display: block;
-  width: auto;
-  min-width: 100%;
-  height: auto;
-  min-height: 100%;
-}
-
-.colorPickerContainer > * {
-  width: 90%;
-}
-
-.circle-picker > * {
-  display: flex;
-  padding-top: 1em;
-  margin: 0 2em 1em 0;
-}
-
-#FFFFFF {
-  color: black;
-}
-
-.color-ex:hover {
-  cursor: pointer;
-}
-
 .sectionContainer {
   font-size: 0.9em;
   display: block;
@@ -68,31 +35,30 @@
 }
 
 .adminSettingsInput {
-  background-color: #577ba1;
-  color: white;
-  border: 1px solid black;
-  border-radius: 3px;
+  border: 2px solid black;
+  border-radius: 10px;
   padding: 1em 10px;
   width: 200px;
   margin: 0 1em 1em 0;
 }
 
 input::placeholder {
-  color: white;
   font-size: 14px;
   text-align: left;
 }
 
 .adminSettingsButton {
+  text-align: center;
   background-color: #658b5a;
-  width: fit-content;
-  border-radius: 3px;
+  width: 200px;
+  border-radius: 10px;
   color: white;
-  padding: 5px;
-  box-shadow: 4px 3px rgba(0, 0, 0, 0.5);
+  padding: 0.5rem;
+  box-shadow: 2px 2px rgba(0, 0, 0, 0.5);
 }
 
 .emailSettingsButton {
+  margin-top: 15px;
   align-self: flex-end;
 }
 
@@ -100,12 +66,12 @@ input::placeholder {
   cursor: pointer;
 }
 
-.ideaLabLogo {
-  width: 600px;
+.adminContainer .ideaLabLogo {
+  width: 300px;
   margin-top: 25px;
 }
 
 .adminContainer .statusMenu {
   margin-top: 20px;
-  margin-left: 40px;
+  margin-left: 2em;
 }

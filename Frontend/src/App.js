@@ -5,7 +5,7 @@ import QueueContainer from './components/Queue/QueueContainer';
 import UploadContainer from './components/Upload/UploadContainer';
 import LoginManager from './components/Login/LoginManager';
 import AdminContainer from './components/AdminSettings/AdminContainer';
-import CreateAccountManager from './components/AdminSettings/CreateAccountManager';
+import CreateAccountManager from './components/CreateAccount/CreateAccountManager';
 import AnalysisContainer from './components/Analysis/AnalysisContainer';
 import SidebarNavigation from './SidebarNavigation';
 import PrivateRoute from './components/Routing/PrivateRoute';
@@ -65,20 +65,35 @@ function App() {
         }}
       >
         <HashRouter>
-          <SidebarNavigation
-            logout={() => {
-              localStorage.removeItem('ideaLab');
-              setState(initialState);
-            }}
-          />
+          {state.authenticated ? (
+            <SidebarNavigation
+              logout={() => {
+                localStorage.removeItem('ideaLab');
+                setState(initialState);
+              }}
+            />
+          ) : (
+            <div className="dummyNavBar"></div>
+          )}
           <Switch>
-            <PrivateRoute exact path="/queue" component={queueContainer} />
+            <PrivateRoute
+              exact
+              path="/queue"
+              component={queueContainer}
+              title="Print Queue"
+            />
             <PrivateRoute
               exact
               path="/manageaccounts"
               component={AdminContainer}
+              title="Manage Accounts"
             />
-            <PrivateRoute exact path="/upload" component={UploadContainer} />
+            <PrivateRoute
+              exact
+              path="/upload"
+              component={UploadContainer}
+              title="Upload a New Print Job"
+            />
             <Route
               path="/login"
               render={props => {
@@ -98,6 +113,7 @@ function App() {
               exact
               path="/analysis"
               component={AnalysisContainer}
+              title="Print Job Analysis"
             />
             <PrivateRoute path="/" component={QueueContainer} />
           </Switch>

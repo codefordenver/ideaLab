@@ -16,7 +16,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import idealab.api.dto.response.BasicPrintJob;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -66,9 +68,9 @@ public class PrintJobOperations {
         this.emailHashUtil = emailHashUtil;
     }
 
-    public DataResponse<PrintJob> newPrintJob(PrintJobNewRequest printJobNewRequest, Principal principal) {
+    public DataResponse<BasicPrintJob> newPrintJob(PrintJobNewRequest printJobNewRequest, Principal principal) {
         printJobNewRequest.validate();
-        DataResponse<PrintJob> response = new DataResponse<PrintJob>("File could not be uploaded");
+        DataResponse<BasicPrintJob> response = new DataResponse<BasicPrintJob>("File could not be uploaded");
 
         if (printJobNewRequest.getFile() == null) {
             throw new IdeaLabApiException(DROPBOX_UPLOAD_FILE_ERROR);
@@ -139,9 +141,9 @@ public class PrintJobOperations {
         return getPrintJobResponse(response, printJob, data, "Successfully saved new file to database!");
     }
 
-    public DataResponse<PrintJob> updateModel(Integer printId, PrintModelUpdateRequest model){
+    public DataResponse<BasicPrintJob> updateModel(Integer printId, PrintModelUpdateRequest model){
         model.validate();
-        DataResponse<PrintJob> response = new DataResponse<PrintJob>("Model could not be updated");
+        DataResponse<BasicPrintJob> response = new DataResponse<BasicPrintJob>("Model could not be updated");
 
         PrintJob printJob = printJobRepo.findPrintJobById(printId);
         if(printJob == null) {
@@ -158,12 +160,14 @@ public class PrintJobOperations {
         return getPrintJobResponse(response, printJob, data, "Successfully updated file to database!");
     }
 
-    private DataResponse<PrintJob> getPrintJobResponse(DataResponse<PrintJob> response, PrintJob printJob, Map<String, String> data, String s) {
+    private DataResponse<BasicPrintJob> getPrintJobResponse(DataResponse<BasicPrintJob> response, PrintJob printJob, Map<String, String> data, String s) {
         List<PrintJob> printJobData = Arrays.asList(printJob);
+
+        List<BasicPrintJob> basicPrintJobs = new BasicPrintJob().ConvertPrintJobs(printJobData);
 
         response.setSuccess(true);
         response.setMessage(s);
-        response.setData(printJobData);
+        response.setData(basicPrintJobs);
 
         response.setHttpStatus(HttpStatus.ACCEPTED);
         return response;
@@ -271,8 +275,8 @@ public class PrintJobOperations {
      * @param status
      * @return
      */
-    public DataResponse<PrintJob> getAllPrintJobs(String status) {
-        DataResponse<PrintJob> response = new DataResponse<PrintJob>("Could not get all print jobs");
+    public DataResponse<BasicPrintJob> getAllPrintJobs(String status) {
+        DataResponse<BasicPrintJob> response = new DataResponse<BasicPrintJob>("Could not get all print jobs");
 
         List<PrintJob> printJobs = status == null? printJobRepo.findActive() : printJobRepo.findPrintJobByStatus(Status.fromValue(status));
 
@@ -280,16 +284,18 @@ public class PrintJobOperations {
             ErrorType.PRINT_JOBS_NOT_EXIST.throwException();
         }
 
+        List<BasicPrintJob> basicPrintJobs = new BasicPrintJob().ConvertPrintJobs(printJobs);
+
         response.setSuccess(true);
         response.setMessage(status == null? "Successfully returned all print jobs" : "Successfully returned print jobs by " + status + " status");
-        response.setData(printJobs);
+        response.setData(basicPrintJobs);
         response.setHttpStatus(HttpStatus.ACCEPTED);
 
         return response;
     }
 
-    public DataResponse<PrintJob> getDeletablePrintJobs() {
-        DataResponse<PrintJob> response = new DataResponse<PrintJob>("Could not get deletable print jobs");
+    public DataResponse<BasicPrintJob> getDeletablePrintJobs() {
+        DataResponse<BasicPrintJob> response = new DataResponse<BasicPrintJob>("Could not get deletable print jobs");
         List<Status> deletableStatuses = Arrays.asList(Status.PENDING_REVIEW,
             Status.FAILED,
             Status.PENDING_CUSTOMER_RESPONSE,
@@ -298,15 +304,17 @@ public class PrintJobOperations {
             Status.ARCHIVED);
         List<PrintJob> printJobs = printJobRepo.findByStatusIn(deletableStatuses);
 
+        List<BasicPrintJob> basicPrintJobs = new BasicPrintJob().ConvertPrintJobs(printJobs);
+
         response.setSuccess(true);
         response.setMessage("Successfully returned deletable print jobs");
-        response.setData(printJobs);
+        response.setData(basicPrintJobs);
         response.setHttpStatus(HttpStatus.ACCEPTED);
 
         return response;
     }
 
-    public DataResponse<PrintJob> updatePrintJobProps(Integer printJobId, UpdatePrintJobPropertiesRequest request) {
+    public DataResponse<BasicPrintJob> updatePrintJobProps(Integer printJobId, UpdatePrintJobPropertiesRequest request) {
         request.validate();
         boolean isChanged = false;
         PrintJob printJob = printJobRepo.findPrintJobById(printJobId);
@@ -342,16 +350,18 @@ public class PrintJobOperations {
         List<PrintJob> printJobs = new ArrayList<>();
         printJobs.add(printJob);
 
-        DataResponse<PrintJob> response = new DataResponse<PrintJob>();
+        DataResponse<BasicPrintJob> response = new DataResponse<BasicPrintJob>();
+        List<BasicPrintJob> basicPrintJobs = new BasicPrintJob().ConvertPrintJobs(printJobs);
+
         response.setSuccess(true);
         response.setMessage("Print job properties updated successfully");
         response.setHttpStatus(HttpStatus.ACCEPTED);
-        response.setData(printJobs);
+        response.setData(basicPrintJobs);
 
         return response;
     }
 
-    public DataResponse<PrintJob> getPrintJobById(Integer printJobId){
+    public DataResponse<BasicPrintJob> getPrintJobById(Integer printJobId){
         PrintJob printJob = printJobRepo.findPrintJobById(printJobId);
         if(printJob == null)
             throw new IdeaLabApiException(PRINT_JOB_CANT_FIND_BY_ID);
@@ -359,11 +369,12 @@ public class PrintJobOperations {
         List<PrintJob> printJobs = new ArrayList<>();
         printJobs.add(printJob);
 
-        DataResponse<PrintJob> response = new DataResponse<PrintJob>();
+        DataResponse<BasicPrintJob> response = new DataResponse<BasicPrintJob>();
+        List<BasicPrintJob> basicPrintJobs = new BasicPrintJob().ConvertPrintJobs(printJobs);
         response.setSuccess(true);
         response.setMessage("Print job returned successfully");
         response.setHttpStatus(HttpStatus.ACCEPTED);
-        response.setData(printJobs);
+        response.setData(basicPrintJobs);
 
         return response;
     }

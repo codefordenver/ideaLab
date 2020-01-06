@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import RequestService from '../../util/RequestService';
+import BasicInput from '../globalStyles/BasicInput';
 import './CreateAccountManager.css';
 
-import ideaLABlogo from './../../ideaLABlogo.png';
+import ideaLABlogo from '../globalStyles/img/ideaLabLogo.png';
 
 const CreateAccountManager = () => {
   const [role, setRole] = useState('STAFF');
@@ -12,10 +13,11 @@ const CreateAccountManager = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
+  const [showingSuccess, showSuccess] = useState(false);
 
-  function onSuccess(response) {
-    // Maybe display the modal or some kind of redirect?
-    console.log(response.data.message);
+  function onSuccess() {
+    showSuccess(true);
+    setTimeout(() => showSuccess(false), 3000);
   }
 
   function onFailure(error) {
@@ -33,8 +35,14 @@ const CreateAccountManager = () => {
       role: role,
       username: username,
     };
-
     RequestService.signUp(payload, onSuccess, onFailure);
+  };
+
+  const renderSuccessMessage = () => {
+    const message = showingSuccess ? (
+      <h3 className="successCreateAccount">Successfully Created Account!</h3>
+    ) : null;
+    return message;
   };
 
   function renderErrors() {
@@ -56,52 +64,56 @@ const CreateAccountManager = () => {
   }
 
   return (
-    <div className="container">
-      <div className="card">
-        <img src={ideaLABlogo} alt="ideaLABLogo" />
-        <h1>3D Printing and Upload Queue</h1>
+    <div className="create-account-container">
+      <div className="create-account-col-one">
+        <img
+          src={ideaLABlogo}
+          alt="ideaLABLogo"
+          className="createAccountLogo"
+        />
+        <h4>3D Printing and Upload Queue</h4>
         <h2>Create an Account</h2>
-        <form onSubmit={e => onSubmit(e)}>
-          <input
+        {renderErrors()}
+        {renderSuccessMessage()}
+      </div>
+      <div>
+        <form className="create-account-col-two" onSubmit={e => onSubmit(e)}>
+          <BasicInput
             name="email"
-            placeholder="email"
-            autoComplete="off"
-            autoFocus
+            placeHolder="email"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            type="email"
+            changeHandler={e => setEmail(e)}
           />
-          <input
+          <BasicInput
             name="username"
-            placeholder="username"
-            autoComplete="off"
+            placeHolder="username"
             value={username}
-            onChange={e => setUsername(e.target.value)}
+            type="text"
+            changeHandler={e => setUsername(e)}
           />
-          <input
+          <BasicInput
             name="password"
-            placeholder="password"
-            type="password"
-            autoComplete="off"
+            placeHolder="password"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            type="text"
+            changeHandler={e => setPassword(e)}
           />
-          <input
+          <BasicInput
             name="firstName"
-            placeholder="First Name"
-            type="input"
-            autoComplete="off"
+            placeHolder="first name"
             value={firstName}
-            onChange={e => setFirstName(e.target.value)}
+            type="text"
+            changeHandler={e => setFirstName(e)}
           />
-          <input
+          <BasicInput
             name="lastName"
-            placeholder="Last Name"
-            type="input"
-            autoComplete="off"
+            placeHolder="last name"
             value={lastName}
-            onChange={e => setLastName(e.target.value)}
+            type="text"
+            changeHandler={e => setLastName(e)}
           />
-          <div>
+          <div className="roleRadioButtons">
             <label>
               <input
                 name="role"
@@ -110,7 +122,7 @@ const CreateAccountManager = () => {
                 value={'STAFF'}
                 onChange={e => setRole(e.target.value)}
               />
-              Staff
+              <span>STAFF</span>
             </label>
             <label>
               <input
@@ -120,11 +132,12 @@ const CreateAccountManager = () => {
                 value={'ADMIN'}
                 onChange={e => setRole(e.target.value)}
               />
-              Admin
+              <span>ADMIN</span>
             </label>
           </div>
-          {renderErrors()}
-          <button type="submit">Create Account</button>
+          <button className="createNewAccountButton" type="submit">
+            CREATE ACCOUNT
+          </button>
         </form>
       </div>
     </div>

@@ -2,8 +2,12 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
 import AuthContext from '../../AuthContext';
+import { Logo } from './Logo';
 
-function PrivateRoute({ component: Component, ...rest }) {
+function PrivateRoute({ component: Component, title, ...rest }) {
+  const logo = window.location.href.includes('/#/create') ? null : (
+    <Logo title={title} />
+  );
   return (
     <AuthContext.Consumer>
       {context => {
@@ -12,7 +16,10 @@ function PrivateRoute({ component: Component, ...rest }) {
             {...rest}
             render={props =>
               context.authenticated ? (
-                <Component {...props} />
+                <div>
+                  {logo}
+                  <Component {...props} />
+                </div>
               ) : (
                 <Redirect
                   to={{

@@ -8,7 +8,7 @@ import RequestService from '../../../util/RequestService';
 const UserProfilesContainer = props => {
   const [passwordChange, setPasswordChange] = useState(false);
 
-  const { name, role } = props.userData;
+  const { username, firstName, lastName, role } = props.userData;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -17,6 +17,10 @@ const UserProfilesContainer = props => {
 
   const triggerPasswordChange = () => {
     setPasswordChange(!passwordChange);
+  };
+
+  const triggerDeleteUser = () => {
+    alert('placeholder delete user logic goes here');
   };
 
   const updateUserRole = newRole => {
@@ -43,7 +47,7 @@ const UserProfilesContainer = props => {
   const changeModal = (
     <Backdrop showModal={passwordChange}>
       <ChangePasswordModal
-        username={name}
+        username={username}
         passwordChange={passwordChange}
         triggerPasswordChange={triggerPasswordChange}
       />
@@ -52,7 +56,10 @@ const UserProfilesContainer = props => {
 
   return (
     <div style={{ backgroundColor: props.color }} className="infoContainer">
-      <div className="employeeNameDisplay">{name}</div>
+      <div className="employeeNameDisplay">{username}</div>
+      <div className="userFullNameDisplay">
+        {firstName} {lastName}
+      </div>
       <div className="dropdownContainer">
         <StyledDropdown
           dropdownOptions={titleOptions}
@@ -66,8 +73,11 @@ const UserProfilesContainer = props => {
         </div>
       </div>
 
-      <button className="changePasswordButton" onClick={triggerPasswordChange}>
-        Change Password
+      <button className="profilesButton change" onClick={triggerPasswordChange}>
+        CHANGE PASSWORD
+      </button>
+      <button className="profilesButton delete" onClick={triggerDeleteUser}>
+        Delete
       </button>
       {changeModal}
     </div>

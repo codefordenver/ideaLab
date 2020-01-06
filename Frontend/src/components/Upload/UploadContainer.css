@@ -1,19 +1,13 @@
 .uploadContainer {
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: 1fr 600px 1fr;
   justify-content: center;
-}
-
-.uploadContainer img {
-  width: 50%;
-  margin: auto;
-  margin-top: 2rem;
 }
 
 .uploadContainer .upload {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   border-style: dashed;
   border-width: 2px;
@@ -60,7 +54,13 @@
 .uploadContainer textarea::placeholder {
   text-align: left;
   margin-left: 0.5em;
+  color: #888888;
 }
+
+.uploadContainer textarea::placeholder {
+  font-size: 1rem;
+}
+
 .uploadContainer button.shapedButton {
   background-color: var(--other-dark-blue);
   color: var(--white-text);
@@ -71,6 +71,7 @@
 
 .colorTitle {
   text-align: left;
+  color: #888888;
 }
 
 .colorContainerUpload {
@@ -84,4 +85,8 @@
   margin-left: 0;
   margin-right: 0;
   background-color: white;
+}
+
+.upload p {
+  margin-bottom: 0;
 }

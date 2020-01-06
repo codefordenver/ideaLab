@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import RequestService from '../../util/RequestService';
-import { processActiveColors } from '../../util/ColorUtils';
-import Loader from '../globalStyles/Loader';
 import { createBrowserHistory } from 'history';
-import Upload from './components/Upload';
-import BasicInput from '../BasicInput';
-import './UploadContainer.css';
-import ideaLABlogo from '../globalStyles/img/ideaLabLogo.png';
+import React, { useEffect, useState } from 'react';
+import { processActiveColors } from '../../util/ColorUtils';
+import RequestService from '../../util/RequestService';
+import BasicInput from '../globalStyles/BasicInput';
+import CommentsInput from '../globalStyles/CommentsInput';
+import Loader from '../globalStyles/Loader';
 import ColorPickerContainer from '../Queue/components/ColorPickerContainer';
+import Upload from './components/Upload';
+import './UploadContainer.css';
 
 const history = createBrowserHistory();
 function UploadContainer() {
@@ -97,7 +97,6 @@ function UploadContainer() {
           RequestService.newPrintJob(formData, onSuccess, onFailure);
         }}
       >
-        <img src={ideaLABlogo} alt={'ideaLab logo'}></img>
         <div className={'success'}>{success}</div>
         <Upload
           className={'upload'}
@@ -131,18 +130,18 @@ function UploadContainer() {
             />
 
             <div className="colorContainerUpload">
-              <p className="colorTitle">Color:</p>
+              <p className="colorTitle">Color</p>
               <ColorPickerContainer
                 handleColorChange={handleColorChange}
                 color={color}
                 colors={colors}
                 colorCircleStyle={colorCircleStyle}
+                allowBlank={true}
               />
             </div>
             <div>
-              <textarea
-                onChange={e => setComments(e.target.value)}
-                name="comments"
+              <CommentsInput
+                changeHandler={setComments}
                 rows="3"
                 value={comments}
                 placeholder={'Comments'}

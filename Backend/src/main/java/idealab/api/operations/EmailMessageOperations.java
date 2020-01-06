@@ -36,10 +36,9 @@ public class EmailMessageOperations {
 
     public EmailMessageResponse updateMessage(EmailMessageUpdateRequest req){
         req.validate();
-
+        
         Status requestStatus = Status.fromValue(req.getStatus());
         EmailMessage emailMessage = emailMessageRepo.findEmailMessageByStatus(requestStatus);
-
         if(emailMessage == null){
             ErrorType.MESSAGE_NOT_FOUND.throwException();
         }

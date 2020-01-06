@@ -42,7 +42,7 @@ const UpdateFileToken = () => {
         />
       </div>
       <div className="adminSettingsButton emailSettingsButton" onClick={onSave}>
-        Save
+        SAVE
       </div>
       <div>
         *The application will need to be restarted in order to take effect.

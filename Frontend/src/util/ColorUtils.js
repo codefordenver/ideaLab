@@ -1,19 +1,19 @@
 import RequestService from './RequestService';
 
 const processActiveColors = () => {
-  let colorList = [];
+  let activeColorList = [];
 
   RequestService.getActiveColors(
     response => {
       const data = response.data.data;
       data.map(color => {
-        colorList.push(color.color);
+        activeColorList.push(color.color);
       });
     },
     error => console.error(error),
   );
 
-  return colorList;
+  return activeColorList;
 };
 
 export { processActiveColors };

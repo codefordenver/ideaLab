@@ -28,6 +28,8 @@ body {
   height: 100%;
   background-image: url('images/idealabBackground.svg');
   background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 
 #root {
@@ -52,6 +54,8 @@ body {
 
 .navList li {
   display: flex;
+  height: 4em;
+  align-items: center;
 }
 
 .hidden {
@@ -79,6 +83,20 @@ body {
   font-size: 2rem;
   list-style: none;
   text-align: left;
+  position: fixed;
+  width: 10.7%;
+}
+
+@media screen and (max-width: 1240px) {
+  .navList {
+    width: 10.6%;
+  }
+}
+
+@media screen and (max-width: 920px) {
+  .navList {
+    width: 10.5%;
+  }
 }
 
 .navList a,
@@ -101,6 +119,18 @@ body {
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.dummyNavBar {
+  width: 0;
+  grid-column: 1;
+}
+
+.loginManagerContainer {
+}
+
+.loginContainer {
+  grid-column: 2;
 }
 
 .uploadContainer input,

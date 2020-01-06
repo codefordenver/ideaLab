@@ -1,0 +1,39 @@
+.basicInput input {
+  display: block;
+  height: 2em;
+  width: 15em;
+  margin: 1rem;
+  border-radius: 4px;
+  border-color: #aaa;
+  outline: none;
+  border-style: solid;
+  font-size: 1.5rem;
+  padding-left: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.basicInput input:focus {
+  border-color: #00aeef;
+}
+
+.basicInput > ::-webkit-input-placeholder {
+  color: #4b4b4b;
+  vertical-align: middle;
+}
+
+.basicInput > :-moz-placeholder {
+  /* Firefox 18- */
+  color: #4b4b4b;
+  vertical-align: middle;
+}
+
+.basicInput > ::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #4b4b4b;
+  vertical-align: middle;
+}
+
+.basicInput > :-ms-input-placeholder {
+  color: #4b4b4b;
+  vertical-align: middle;
+}
