@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FaSearch, FaBackspace } from 'react-icons/fa';
 
 import './SearchBar.css';
 
@@ -22,8 +23,6 @@ const SearchBar = props => {
     props.fetchQueueData();
   };
 
-  console.log('FD: ', props.filteredData);
-
   let searchDiv, goBack;
   if (!searched) {
     searchDiv = (
@@ -36,20 +35,24 @@ const SearchBar = props => {
           type="text"
           placeholder="Search"
         />
-        <button type="submit" />
+        <button type="submit">
+          <FaSearch />
+        </button>
       </div>
     );
   } else {
     goBack = (
-      <div className="go-back-container" onClick={goBackHandler}>
-        <button onClick={goBackHandler} />
-        <p>Go Back</p>
+      <div className="search-container back" onClick={goBackHandler}>
+        <button onClick={goBackHandler}>
+          <FaBackspace />
+        </button>
+        <p className="search-go-back-text">Back</p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={submit}>
+    <form className="search-bar-form" onSubmit={submit}>
       {searchDiv}
       {goBack}
     </form>

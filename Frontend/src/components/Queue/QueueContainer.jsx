@@ -155,15 +155,11 @@ const QueueContainer = () => {
       const filePath = printJob.filePath;
       const firstName = printJob.customerInfo.firstName;
       const lastName = printJob.customerInfo.lastName;
-      const fullName = firstName + lastName;
-      const nameFull = lastName + firstName;
 
-      if (input === commentsJoin) return printJob;
-      if (input === firstName) return printJob;
-      if (input === lastName) return printJob;
-      if (input === fullName) return printJob;
-      if (input === nameFull) return printJob;
-      if (input === filePath) return printJob;
+      if (commentsJoin.includes(input)) return printJob;
+      if (firstName.includes(input)) return printJob;
+      if (lastName.includes(input)) return printJob;
+      if (filePath.includes(input)) return printJob;
       if (comments.includes(input)) return printJob;
     });
 
