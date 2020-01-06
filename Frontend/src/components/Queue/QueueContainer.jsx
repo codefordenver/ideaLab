@@ -108,7 +108,6 @@ const QueueContainer = () => {
   );
 
   const fetchQueueData = () => {
-    //TO DO: GET PRINT JOBS BASED ON STATUS, NOT ALL AT ONCE
     RequestService.getPrintJobs(
       response => {
         const activeCards = response.data.data.filter(card => {
@@ -169,6 +168,10 @@ const QueueContainer = () => {
       if (input === filePath) return printJob;
       if (comments.includes(input)) return printJob;
     });
+
+    setFilteredData(activeCards);
+    event.target.input.value = '';
+    event.preventDefault();
   };
 
   return (
@@ -181,6 +184,7 @@ const QueueContainer = () => {
               statusView={statusView}
               searchBarSubmit={searchBarSubmitHandler}
               setStatus={setStatus}
+              fetchQueueData={fetchQueueData}
               filteredData={filteredData}
               colors={colors}
               saveCard={saveCard}

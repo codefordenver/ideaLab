@@ -55,3 +55,28 @@
   color: #4b4b4b;
   vertical-align: middle;
 }
+
+.go-back-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 2.5rem;
+  padding-left: 1rem;
+}
+
+.go-back-container:hover {
+  cursor: pointer;
+}
+
+.go-back-container button {
+  height: 2rem;
+  width: 2rem;
+  border: none;
+  background-image: url('../../../images/go-back-icon.svg');
+  background-position: center;
+  background-size: cover;
+}
+
+.go-back-container p {
+  margin: 0;
+}

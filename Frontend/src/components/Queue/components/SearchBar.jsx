@@ -17,34 +17,39 @@ const SearchBar = props => {
     event.preventDefault();
   };
 
-  const goBack = () => {
+  const goBackHandler = () => {
     setSearched(false);
     props.fetchQueueData();
   };
 
-  let submitBtn, goBackBtn;
+  let searchDiv, goBack;
   if (!searched) {
-    submitBtn = <button type="submit" />;
+    searchDiv = (
+      <div className="search-container">
+        <input
+          className="search-bar"
+          name="input"
+          value={search}
+          onChange={searchQuery}
+          type="text"
+          placeholder="Search"
+        />
+        <button type="submit" />
+      </div>
+    );
   } else if (searched) {
-    goBackBtn = (
-      <button style={{ background: 'red' }} onClick={goBack}>
-        Go Back
-      </button>
+    goBack = (
+      <div className="go-back-container" onClick={goBackHandler}>
+        <button onClick={goBackHandler} />
+        <p>Go Back</p>
+      </div>
     );
   }
 
   return (
-    <form className="search-container" onSubmit={submit}>
-      <input
-        className="search-bar"
-        name="input"
-        value={search}
-        onChange={searchQuery}
-        type="text"
-        placeholder="Search"
-      />
-      {submitBtn}
-      {goBackBtn}
+    <form onSubmit={submit}>
+      {searchDiv}
+      {goBack}
     </form>
   );
 };
