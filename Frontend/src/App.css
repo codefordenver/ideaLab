@@ -38,6 +38,8 @@ body {
   height: 100%;
   display: grid;
   grid-template-columns: 1fr 8fr;
+  position: absolute;
+  left: 10%;
 }
 
 .grid-container:nth-child(2) {
@@ -48,6 +50,8 @@ body {
   border-right: solid;
   background-color: white;
   opacity: 60%;
+  position: fixed;
+  left: 10px;
 }
 
 .navList li {
@@ -79,6 +83,7 @@ body {
   font-size: 2rem;
   list-style: none;
   text-align: left;
+  position: fixed;
 }
 
 .navList a,
