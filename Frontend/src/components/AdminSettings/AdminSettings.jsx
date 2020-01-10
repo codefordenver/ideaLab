@@ -9,7 +9,7 @@ import UpdateFileToken from './components/UpdateFileToken';
 const AdminSettings = () => {
   const [toggleGoogle, setToggleGoogle] = useState(false);
 
-  let tokenDiv;
+  let tokenDiv, styles;
 
   if (!toggleGoogle) {
     tokenDiv = (
@@ -29,6 +29,7 @@ const AdminSettings = () => {
         </ToastProvider>
       </div>
     );
+    styles = { color: '#577ba1' };
   }
 
   return (
@@ -66,7 +67,7 @@ const AdminSettings = () => {
           />
           <span className="slider"></span>
         </label>
-        <p>Google Token Settings</p>
+        <p style={styles}>Google Token Settings</p>
       </div>
       {tokenDiv}
     </div>

@@ -118,6 +118,7 @@ input::placeholder {
   margin-top: 0.35rem;
   margin-left: 0.25rem;
   font-size: 0.9rem;
+  color: #888;
 }
 
 .switch {
