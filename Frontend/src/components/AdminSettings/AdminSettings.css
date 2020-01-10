@@ -110,9 +110,18 @@ input::placeholder {
   margin-left: 40px;
 }
 
+.toggleContainer {
+  display: flex;
+}
+
+.toggleContainer p {
+  margin-top: 0.35rem;
+  margin-left: 0.25rem;
+  font-size: 0.9rem;
+}
+
 .switch {
   position: relative;
-  display: block;
   width: 3.75rem;
   height: 2.1rem;
 }

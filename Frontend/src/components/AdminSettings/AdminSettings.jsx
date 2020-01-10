@@ -9,6 +9,28 @@ import UpdateFileToken from './components/UpdateFileToken';
 const AdminSettings = () => {
   const [toggleGoogle, setToggleGoogle] = useState(false);
 
+  let tokenDiv;
+
+  if (!toggleGoogle) {
+    tokenDiv = (
+      <div className="sectionContainer">
+        <div className="adminSettingsSectionHeader">Dropbox Token Settings</div>
+        <ToastProvider>
+          <UpdateFileToken />
+        </ToastProvider>
+      </div>
+    );
+  } else {
+    tokenDiv = (
+      <div className="sectionContainer">
+        <div className="adminSettingsSectionHeader">Google Token Settings</div>
+        <ToastProvider>
+          <UpdateFileToken />
+        </ToastProvider>
+      </div>
+    );
+  }
+
   return (
     <div className="adminSettingsContainer">
       <div className="sectionContainer">
@@ -34,24 +56,19 @@ const AdminSettings = () => {
           <UpdateEmail />
         </ToastProvider>
       </div>
-
-      <label className="switch">
-        <input type="checkbox" name="tokenType" id="tokenType" />
-        <span className="slider"></span>
-      </label>
-
-      <div className="sectionContainer">
-        <div className="adminSettingsSectionHeader">Dropbox Token Settings</div>
-        <ToastProvider>
-          <UpdateFileToken />
-        </ToastProvider>
+      <div className="toggleContainer">
+        <label className="switch">
+          <input
+            type="checkbox"
+            name="tokenType"
+            id="tokenType"
+            onClick={() => setToggleGoogle(!toggleGoogle)}
+          />
+          <span className="slider"></span>
+        </label>
+        <p>Google Token Settings</p>
       </div>
-      <div className="sectionContainer">
-        <div className="adminSettingsSectionHeader">Google Token Settings</div>
-        <ToastProvider>
-          <UpdateFileToken />
-        </ToastProvider>
-      </div>
+      {tokenDiv}
     </div>
   );
 };
