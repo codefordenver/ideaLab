@@ -109,3 +109,48 @@ input::placeholder {
   margin-top: 20px;
   margin-left: 40px;
 }
+
+.switch {
+  position: relative;
+  display: block;
+  width: 3.75rem;
+  height: 2.1rem;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  border-radius: 34px;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 1.65rem;
+  width: 1.65rem;
+  left: 0.25rem;
+  bottom: 0.25rem;
+  border-radius: 50%;
+  background-color: white;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #577ba1;
+}
+
+input:checked + .slider:before {
+  transform: translateX(1.6rem);
+}

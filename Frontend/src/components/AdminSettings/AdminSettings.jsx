@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ToastProvider } from 'react-toast-notifications';
 import './AdminSettings.css';
 import ColorAvailability from './components/ColorAvailability';
@@ -7,6 +7,8 @@ import UpdateEmail from './components/UpdateEmail';
 import UpdateFileToken from './components/UpdateFileToken';
 
 const AdminSettings = () => {
+  const [toggleGoogle, setToggleGoogle] = useState(false);
+
   return (
     <div className="adminSettingsContainer">
       <div className="sectionContainer">
@@ -32,8 +34,20 @@ const AdminSettings = () => {
           <UpdateEmail />
         </ToastProvider>
       </div>
+
+      <label className="switch">
+        <input type="checkbox" name="tokenType" id="tokenType" />
+        <span className="slider"></span>
+      </label>
+
       <div className="sectionContainer">
         <div className="adminSettingsSectionHeader">Dropbox Token Settings</div>
+        <ToastProvider>
+          <UpdateFileToken />
+        </ToastProvider>
+      </div>
+      <div className="sectionContainer">
+        <div className="adminSettingsSectionHeader">Google Token Settings</div>
         <ToastProvider>
           <UpdateFileToken />
         </ToastProvider>
