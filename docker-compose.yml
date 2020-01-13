@@ -8,6 +8,7 @@ services:
       dockerfile: gradle.dockerfile
     ports:
       - "8080:8080"
+      - "8443:8443"
     volumes: 
       - "./Backend:/srv"
     env_file:
