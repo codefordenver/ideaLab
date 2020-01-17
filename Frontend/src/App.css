@@ -49,7 +49,7 @@ body {
 .grid-item-nav {
   border-right: solid;
   background-color: white;
-  opacity: 60%;
+  opacity: .6;
 }
 
 .navList li {
