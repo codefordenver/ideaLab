@@ -18,7 +18,7 @@ alter table if exists queue add constraint FKsg4hqrp3p9kuww6pvxx11u3tk foreign k
 INSERT INTO color_type (color, available, created_at, updated_at) VALUES 
 ('#FFFFFF', true, current_timestamp, current_timestamp),
 ('#FFCC00', true, current_timestamp, current_timestamp),
-('#336600', true, current_timestamp, current_timestamp),
+('#008000', true, current_timestamp, current_timestamp),
 ('#6600CC', true, current_timestamp, current_timestamp),
 ('#CC0000', true, current_timestamp, current_timestamp),
 ('#CC6600', true, current_timestamp, current_timestamp),
@@ -26,6 +26,7 @@ INSERT INTO color_type (color, available, created_at, updated_at) VALUES
 ('#40E0D0', true, current_timestamp, current_timestamp),
 ('#996633', true, current_timestamp, current_timestamp),
 ('#800080', true, current_timestamp, current_timestamp),
+('#0000FF', true, current_timestamp, current_timestamp),
 ('#000000', true, current_timestamp, current_timestamp);
 -- Create a base admin employee with a username admin and a password of password
 INSERT INTO employee (first_name, last_name, "password", "role", username, created_at, updated_at) VALUES 
