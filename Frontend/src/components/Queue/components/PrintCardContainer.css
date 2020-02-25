@@ -4,6 +4,7 @@
   border-radius: 4px;
   text-align: left;
   height: fit-content;
+  overflow: visible;
 }
 
 .mouseOverColorPickerContainer {
@@ -64,7 +65,6 @@
 
 .printAdditionalInfo {
   display: flex;
-  overflow: overlay;
 }
 
 .emailRecipient {
